@@ -27,6 +27,12 @@ export function tmdbDetailsToDomainTitle(details: TmdbTitleDetails): Title {
   const keywords = details.keywords.map((keyword) => keyword.toLowerCase());
   const editorial = editorialClassification(details.mediaType, details.providerId);
 
+  // For curated titles the primary editorial family is authoritative for the
+  // broad mood gate. Raw TMDB genres remain the fallback for titles that have
+  // not been curated yet. Secondary family remains explicit metadata rather
+  // than silently becoming an equal-strength primary mood classification.
+  const genres = editorial ? [editorial.primaryFamily] : details.genres.map((genre) => genre.name);
+
   return {
     id: details.externalId,
     name: details.title,
@@ -38,7 +44,7 @@ export function tmdbDetailsToDomainTitle(details: TmdbTitleDetails): Title {
     seasons: details.seasonCount ?? undefined,
     completed: details.completed ?? undefined,
     serialized: details.mediaType === "tv",
-    genres: details.genres.map((genre) => genre.name),
+    genres,
     subgenres: editorial
       ? [editorial.primarySubgenre, ...(editorial.secondarySubgenre ? [editorial.secondarySubgenre] : [])]
       : keywords.slice(0, 8),
