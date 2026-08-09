@@ -1,0 +1,497 @@
+{
+  "warning": "DO NOT upload this file to any model. It de-anonymizes the A/B/C proposals in adjudication-input.json.",
+  "seed": "what-to-watch-pass2-v1",
+  "generated_at": "2026-08-09T21:44:40.416Z",
+  "entries": [
+    {
+      "tmdb_id": 634649,
+      "media_type": "movie",
+      "title": "Spider-Man: No Way Home",
+      "mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 980431,
+      "media_type": "movie",
+      "title": "Avatar Aang: The Last Airbender",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 569094,
+      "media_type": "movie",
+      "title": "Spider-Man: Across the Spider-Verse",
+      "mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 1226863,
+      "media_type": "movie",
+      "title": "The Super Mario Galaxy Movie",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1598,
+      "media_type": "movie",
+      "title": "Cape Fear",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 559,
+      "media_type": "movie",
+      "title": "Spider-Man 3",
+      "mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 687163,
+      "media_type": "movie",
+      "title": "Project Hail Mary",
+      "mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 238,
+      "media_type": "movie",
+      "title": "The Godfather",
+      "mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 652,
+      "media_type": "movie",
+      "title": "Troy",
+      "mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 1510795,
+      "media_type": "movie",
+      "title": "Shake, Rattle & Roll: Evil Origins",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 24428,
+      "media_type": "movie",
+      "title": "The Avengers",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 102382,
+      "media_type": "movie",
+      "title": "The Amazing Spider-Man 2",
+      "mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 1361774,
+      "media_type": "movie",
+      "title": "The Dink",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 361743,
+      "media_type": "movie",
+      "title": "Top Gun: Maverick",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1668364,
+      "media_type": "movie",
+      "title": "Desire",
+      "mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 98894,
+      "media_type": "movie",
+      "title": "Jessica",
+      "mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1259102,
+      "media_type": "movie",
+      "title": "Eternity",
+      "mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 680,
+      "media_type": "movie",
+      "title": "Pulp Fiction",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 21484,
+      "media_type": "movie",
+      "title": "Possession",
+      "mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 19995,
+      "media_type": "movie",
+      "title": "Avatar",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 83533,
+      "media_type": "movie",
+      "title": "Avatar: Fire and Ash",
+      "mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 1325734,
+      "media_type": "movie",
+      "title": "The Drama",
+      "mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 755898,
+      "media_type": "movie",
+      "title": "War of the Worlds",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 5920,
+      "media_type": "tv",
+      "title": "The Mentalist",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 65334,
+      "media_type": "tv",
+      "title": "Miraculous: Tales of Ladybug & Cat Noir",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 125988,
+      "media_type": "tv",
+      "title": "Silo",
+      "mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 4614,
+      "media_type": "tv",
+      "title": "NCIS",
+      "mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 456,
+      "media_type": "tv",
+      "title": "The Simpsons",
+      "mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 60625,
+      "media_type": "tv",
+      "title": "Rick and Morty",
+      "mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1622,
+      "media_type": "tv",
+      "title": "Supernatural",
+      "mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 1434,
+      "media_type": "tv",
+      "title": "Family Guy",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1399,
+      "media_type": "tv",
+      "title": "Game of Thrones",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 108978,
+      "media_type": "tv",
+      "title": "Reacher",
+      "mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 278624,
+      "media_type": "tv",
+      "title": "Lucky",
+      "mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 1431,
+      "media_type": "tv",
+      "title": "CSI: Crime Scene Investigation",
+      "mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 106841,
+      "media_type": "tv",
+      "title": "Blossoms Shanghai",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1396,
+      "media_type": "tv",
+      "title": "Breaking Bad",
+      "mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 1408,
+      "media_type": "tv",
+      "title": "House",
+      "mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1413,
+      "media_type": "tv",
+      "title": "American Horror Story",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 894,
+      "media_type": "tv",
+      "title": "The Prisoner",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 34307,
+      "media_type": "tv",
+      "title": "Shameless",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 45140,
+      "media_type": "tv",
+      "title": "Teen Titans Go!",
+      "mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 1911,
+      "media_type": "tv",
+      "title": "Bones",
+      "mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 241609,
+      "media_type": "tv",
+      "title": "Your Friends & Neighbors",
+      "mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 64099,
+      "media_type": "tv",
+      "title": "War and Peace",
+      "mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 66732,
+      "media_type": "tv",
+      "title": "Stranger Things",
+      "mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 215072,
+      "media_type": "tv",
+      "title": "A Shop for Killers",
+      "mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 502,
+      "media_type": "tv",
+      "title": "Sesame Street",
+      "mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    }
+  ]
+}

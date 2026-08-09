@@ -1,0 +1,839 @@
+{
+"ontology_version": "0.1.1",
+"pass": 2,
+"adjudications": [
+{
+"tmdb_id": 634649,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["earnest", "tense"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "The high-stakes identity crisis, escalating danger, and moral self-definition directly support earnestness and tension. The context does not establish the simultaneous resolution-and-loss required for bittersweet or a clearly uplifting trajectory."
+}
+]
+},
+{
+"tmdb_id": 980431,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["warm", "uplifting", "earnest"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Aang undertakes the quest with friends to save his culture and preserve peace, while the keywords explicitly signal comforting and hopeful qualities. That supports warm, uplifting, and earnest more directly than playful."
+}
+]
+},
+{
+"tmdb_id": 569094,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["earnest", "tense"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Miles is pitted against other Spider-People and must act alone to save loved ones, which strongly supports earnest and tense. Animation alone does not establish stylized or playful tone under the ontology."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "adventure-action",
+"human_review": true,
+"severity": "minor",
+"reason": "The multiverse-spanning movement and quest-like action make adventure-action a useful secondary to the superhero premise. Null is also defensible because the superhero classification already absorbs much of that action-adventure information."
+}
+]
+},
+{
+"tmdb_id": 454639,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "epic-fantasy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The story is set in the secondary world of Eternia and centers on restoring a shattered realm and saving the world, which matches epic-fantasy's large-scale stakes and mythic structure. Sword-and-sorcery is defined around more personal-scale conflict."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["earnest", "menacing"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Adam's destiny and mission to save family and world support an earnest register, while Skeletor's fiendish rule provides a specific threatening presence. Warm and uplifting are not established by the supplied trajectory."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "sword-and-sorcery",
+"human_review": false,
+"severity": "minor",
+"reason": "Despite the world-scale epic frame, the Sword of Power, small-band allies, warrior imagery, and magical foe make sword-and-sorcery informative as a secondary action mode."
+}
+]
+},
+{
+"tmdb_id": 1226863,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "adventure-action",
+"human_review": false,
+"severity": "fundamental",
+"reason": "The brothers travel across the stars with companions to stop Bowser Jr., a clear journey prioritizing adventure and momentum. Animated-family should not displace a more precise content subgenre merely because the film is animated."
+}
+]
+},
+{
+"tmdb_id": 1598,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "crime-thriller",
+"human_review": false,
+"severity": "fundamental",
+"reason": "The suspense is organized around a released criminal antagonist stalking and threatening a lawyer's family. The context does not describe uncertainty about perception or mental reliability, so psychological-thriller is not the best fit."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "revenge-thriller",
+"human_review": false,
+"severity": "meaningful",
+"reason": "Cady's explicit intention to punish Bowden for the old case makes retribution a defining secondary mechanism. Psychological-thriller remains unsupported by the ontology's mental-state criterion."
+}
+]
+},
+{
+"tmdb_id": 559,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["earnest", "tense"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Multiple villains, altered powers, and interpersonal conflict support sustained tension, while forgiveness and Peter's personal struggles support earnestness. The context does not establish a bittersweet resolution or deliberate sentimentality."
+}
+]
+},
+{
+"tmdb_id": 687163,
+"media_type": "movie",
+"fields": [
+{
+"field": "secondary_subgenre",
+"preferred_value": "puzzle-mystery",
+"human_review": true,
+"severity": "meaningful",
+"reason": "The mission is explicitly framed as solving the riddle of a mysterious substance through scientific reasoning, which supports puzzle-mystery. Alien-first-contact is also plausible from the alien and language-barrier keywords, but the synopsis does not describe that encounter clearly enough to make it definitive."
+}
+]
+},
+{
+"tmdb_id": 238,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "organized-crime",
+"human_review": true,
+"severity": "minor",
+"reason": "The overview frames the film as a chronicle of the Corleone crime family, with patriarchal succession and mafia-family politics, which fits organized-crime's institutional focus. Gangster is also reasonable because Michael's move into violent criminal leadership suggests an individual rise within that hierarchy."
+}
+]
+},
+{
+"tmdb_id": 652,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "historical-drama",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The Bronze Age setting, dynastic conflict, and Trojan War materially structure the entire story, matching historical-drama. The synopsis includes war and battle but is not primarily framed around the frontline physical experience required for combat-film."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["visceral", "tense"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Large armies, sword fighting, battlefield conflict, and imminent war support physical intensity and anticipatory tension. Bittersweet and gritty require tonal evidence not present in the supplied context."
+}
+]
+},
+{
+"tmdb_id": 1510795,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["menacing", "tense", "visceral"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Each segment centers on a concrete lethal threat—released evil, a serial killer, or aswang—supporting menacing and tense. Survival attacks and serial-killer violence also support a visceral component more than gritty or bleak."
+}
+]
+},
+{
+"tmdb_id": 24428,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["earnest", "tense"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "The global-security threat and effort to assemble a team to avert disaster directly support earnest stakes and tension. The factual packet does not independently establish a playful or uplifting overall tone."
+}
+]
+},
+{
+"tmdb_id": 102382,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["earnest", "romantic", "tense"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Peter's love for Gwen and promise to her father support romantic and earnest tones, while the arrival of Electro, Harry, and new revelations adds tension. A bittersweet tone depends on an outcome not supplied in the context."
+}
+]
+},
+{
+"tmdb_id": 1361774,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "absurdist-comedy",
+"human_review": true,
+"severity": "fundamental",
+"reason": "The sports-comedy setup treats the supposedly unthinkable act of playing pickleball as a heightened comic premise, making absurdist-comedy the closest available controlled term. The ontology lacks a sports-comedy leaf, while workplace-comedy and sports-drama do not match the described comic engine cleanly."
+}
+]
+},
+{
+"tmdb_id": 361743,
+"media_type": "movie",
+"fields": [
+{
+"field": "secondary_subgenre",
+"preferred_value": null,
+"human_review": false,
+"severity": "fundamental",
+"reason": "The military aviation mission is already captured by the likely primary action classification, and the context does not establish a separate sustained thriller structure strongly enough to force action-thriller. Sports-drama is a clear mismatch because the training and competition are military, not athletic."
+}
+]
+},
+{
+"tmdb_id": 1668364,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "erotic-thriller",
+"human_review": false,
+"severity": "meaningful",
+"reason": "Lucero's consuming relationship, secrecy, desire, and jealousy are the mechanisms that create escalating danger inside the family, matching erotic-thriller more specifically than relationship-drama."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["romantic", "tense", "unsettling"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Longing and attraction are central, while secrecy, jealousy, and collapsing family boundaries produce tension and diffuse discomfort. No specific external threatening force is identified strongly enough for menacing, and persistent wistful sadness is not established."
+}
+]
+},
+{
+"tmdb_id": 98894,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "sex-comedy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "Sexual desire, abstinence, procreation, and village-wide sexual conflict are the central comic engine, which directly matches sex-comedy. The romance subplot is present but not as dominant as the sexual premise, and screwball conventions are not evidenced."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "romantic-comedy",
+"human_review": false,
+"severity": "minor",
+"reason": "Jessica's falling for the recluse adds a genuine romantic-comedy strand beyond the broader sex-comedy premise. It provides more information than null without duplicating the primary."
+}
+]
+},
+{
+"tmdb_id": 1259102,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "romantic-comedy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The story is explicitly tagged romcom and centers on an impossible romantic choice in a fantastical afterlife. That supports romantic-comedy over a purely dramatic romance classification."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["romantic", "bittersweet", "warm"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "The central choice between a lifelong husband and a first love makes romantic feeling dominant, while death, waiting, and competing attachments create simultaneous love and loss. The loving relationships also support warmth more directly than the pacing-dependent meditative tag."
+}
+]
+},
+{
+"tmdb_id": 680,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "dark-comedy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The overview explicitly describes a comedic crime caper and the keywords identify dark comedy, fitting serious criminal material played for laughs. The context does not establish the bleak or misanthropic worldview required for black-comedy."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["stylized", "wry"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "The deliberately nonlinear, interlocking structure supports a heightened formal style, while the comedic crime-caper framing supports a dry, knowing attitude. The packet does not establish an irrational world for absurdist or enough pervasive institutional distrust for cynical."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "neo-noir",
+"human_review": true,
+"severity": "meaningful",
+"reason": "The keywords explicitly identify neo-noir, which adds crime-aesthetic information without simply restating the dark-comedy primary. Gangster is plausible from the hit men and crime boss, so the secondary remains a real judgment call."
+}
+]
+},
+{
+"tmdb_id": 21484,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "supernatural-horror",
+"human_review": true,
+"severity": "meaningful",
+"reason": "Possession and monster keywords, together with bizarre incidents beyond an ordinary affair, support a paranormal threat. Psychological-horror is also reasonable from obsession, hysteria, and marital deterioration, so the supplied packet permits both readings."
+}
+]
+},
+{
+"tmdb_id": 19995,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "adventure-action",
+"human_review": true,
+"severity": "meaningful",
+"reason": "The mission to Pandora, alien-world setting, battle, and large physical conflict support an action-adventure frame. Space-opera and alien-first-contact are also plausible science-fiction readings, but the synopsis emphasizes the protagonist's mission and conflict more than multi-faction space scope or the first moment of contact."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["earnest", "romantic", "visceral"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "The moral choice between orders and protecting an alien civilization supports earnestness, the love-affair keyword supports romantic tone, and battle supports visceral physical intensity. An uplifting resolution is not stated."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "alien-first-contact",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The protagonist's interaction with an alien civilization is a central source of culture clash and divided loyalty, making alien-first-contact an informative science-fiction secondary. Space-opera is broader and less specifically supported by the one-world synopsis."
+}
+]
+},
+{
+"tmdb_id": 83533,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "space-opera",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The story continues a large-scale alien-world conflict involving rival peoples, war, survival, and the future of Pandora, which fits sweeping space-opera stakes better than a journey-centered adventure-action structure."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["tense", "visceral", "melancholic"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "A violent new enemy and survival conflict support tension and visceral intensity, while the story begins in the aftermath of devastating war and the loss of a son, supporting melancholic grief. Bittersweet and gritty are not established by the supplied resolution or texture."
+}
+]
+},
+{
+"tmdb_id": 1325734,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["romantic", "tense"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "The engaged couple and wedding-week crisis make romantic attachment central, while infidelity, trust issues, and a relationship put to the test create tension. The packet does not establish sentimental technique or a broadly playful mood."
+}
+]
+},
+{
+"tmdb_id": 755898,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "conspiracy-thriller",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The protagonist begins to suspect that the government is concealing the truth behind an attack, which directly matches uncovering a hidden coordinated plot. Surveillance technology is central to his job but not clearly the primary threat."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["tense", "menacing"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "An unknown attacking entity and possible government concealment create uncertainty and a concrete sense of threat. The context does not establish enough pervasive distrust for cynical or idea-first emphasis for cerebral."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "tech-thriller",
+"human_review": false,
+"severity": "meaningful",
+"reason": "Mass surveillance, cybersecurity, screenlife, and privacy concerns make technology a meaningful tool and source of suspense alongside the conspiracy. Tech-sci-fi is less precise because the packet frames those systems as thriller mechanisms rather than speculative social consequences."
+}
+]
+},
+{
+"tmdb_id": 5920,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "detective",
+"human_review": true,
+"severity": "meaningful",
+"reason": "Patrick Jane's distinctive observation and people-reading skills are explicitly the engine by which crimes are solved, which fits detective better than routine police methods. Procedural and police-procedural remain plausible TV-format readings, but the packet does not describe episodic structure in enough detail to settle that fully."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["cerebral"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "The defining feature supplied is Jane's razor-sharp observation and interpretive reasoning, directly supporting cerebral. Wry, playful, and tense are not established by the factual packet."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": null,
+"human_review": false,
+"severity": "minor",
+"reason": "With detective as the best-supported primary, neither a second detective label nor an unsupported episodic-procedural assumption adds reliable information. Null is preferable to a redundant or weak secondary."
+}
+]
+},
+{
+"tmdb_id": 65334,
+"media_type": "tv",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["playful", "warm", "romantic"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "The teen-superhero, comedy, friendship, and secret-identity setup supports playful energy and warm relationships, while the romance keyword supports romantic tone. An uplifting overall trajectory is not established as clearly as those relationship and mood signals."
+}
+]
+},
+{
+"tmdb_id": 125988,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "dystopian-sci-fi",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The silo's rigid rules, hidden powers, systemic corruption, and residents' ignorance make social control inside a degraded future the primary science-fiction conflict. Post-apocalyptic describes the setting but not the central institutional mechanism as precisely."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["cynical", "tense", "unsettling"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Systemic corruption and hidden powers support cynical distrust, mysterious deaths and investigation create tension, and concealed truths produce diffuse unease. Bleak is too strong because the synopsis still centers on active discovery rather than near-total absence of hope."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "post-apocalyptic",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The ruined, toxic future and explicit post-apocalyptic keyword make post-apocalyptic a useful setting-level secondary to dystopian-sci-fi. It adds distinct world-state information rather than forcing a weaker conspiracy label."
+}
+]
+},
+{
+"tmdb_id": 4614,
+"media_type": "tv",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["earnest", "tense"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "The team handles murder, espionage, terrorism, and other serious military-linked crimes, supporting an earnest professional register and recurring tension. Wry humor and gritty realism are not established in the supplied context."
+}
+]
+},
+{
+"tmdb_id": 456,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "family-sitcom",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The series is organized around the Simpson household's everyday antics in Springfield and is explicitly tagged sitcom and family. Satire is a major mode but is better treated as an additional lens than the core series structure."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "satire",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The overview explicitly highlights a fearless satirical take on politics, media, and American life, so satire adds important content information beyond the family-sitcom structure. Adult-animation is an audience-medium signal and is less informative here."
+}
+]
+},
+{
+"tmdb_id": 60625,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "absurdist-comedy",
+"human_review": true,
+"severity": "meaningful",
+"reason": "The comedy is built around extreme science-fiction adventures involving a sociopathic scientist, time travel, aliens, and multiple dimensions, making absurdist-comedy the closest content-based option. Adult-animation describes audience/medium rather than the comic mechanism, but the packet is too thin to prove fundamentally irrational world-logic with confidence."
+}
+]
+},
+{
+"tmdb_id": 1622,
+"media_type": "tv",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["menacing", "tense", "earnest"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Demons, monsters, possession, and other named paranormal threats create a menacing presence and repeated danger, while the brothers' trained mission gives the conflict an earnest register. Bittersweet and gritty are not established by the packet."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "urban-fantasy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The brothers encounter magical and mythic forces while traveling through recognizable contemporary America, matching urban-fantasy's real-world setting. Adventure-action is less specifically informative than the supernatural-in-modern-world framework."
+}
+]
+},
+{
+"tmdb_id": 1434,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "family-sitcom",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The series is organized around the dysfunctional Griffin household and its recurring family adventures, directly matching family-sitcom. Satire is clearly present in the keywords but functions as an additional comic mode rather than the basic series structure."
+}
+]
+},
+{
+"tmdb_id": 1399,
+"media_type": "tv",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["gritty", "cynical", "menacing"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Dynastic warfare and power struggles support a gritty and cynical political texture, while the awakening ancient evil supplies a concrete menacing force. Bleak is not justified because the synopsis does not show a near-total absence of hope."
+}
+]
+},
+{
+"tmdb_id": 108978,
+"media_type": "tv",
+"fields": [
+{
+"field": "secondary_subgenre",
+"preferred_value": "conspiracy-thriller",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The conspiracy keyword, assassins, police connections, and Reacher's investigator background support a hidden-plot thriller strand. It is more specific than generic crime-thriller and adds more plot information than detective alone."
+}
+]
+},
+{
+"tmdb_id": 278624,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "crime-thriller",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The heist has already gone wrong when the main premise begins, and the story is driven by pursuit from the FBI and a crime boss while Lucky fights to survive. That makes crime-thriller more central than the planning and execution focus required for heist."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "heist",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The failed multi-million-dollar heist is the defining catalyst and remains important crime-story information even though the pursuit drives the main thriller arc. It is more specific than a general survival-thriller secondary."
+}
+]
+},
+{
+"tmdb_id": 1431,
+"media_type": "tv",
+"fields": [
+{
+"field": "secondary_subgenre",
+"preferred_value": null,
+"human_review": false,
+"severity": "minor",
+"reason": "The forensic case-solving described is already inherent in the likely procedural primary, so adding detective or another generic procedural label would be redundant. No separate secondary is needed."
+}
+]
+},
+{
+"tmdb_id": 106841,
+"media_type": "tv",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": ["melancholic", "romantic"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Longing, a troubled past, and entanglement with women representing love and other life pursuits support melancholic and romantic tones. The packet does not establish dream logic, conspicuous formal stylization, or an unhurried contemplative mode strongly enough for the other tags."
+}
+]
+},
+{
+"tmdb_id": 1396,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "crime-drama",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The synopsis centers on a teacher entering the drug world to secure his family's future and facing the consequences of crime. The packet does not yet frame the story specifically as the rise or fall of a figure inside an underworld hierarchy, so gangster is narrower than the evidence supports."
+}
+]
+},
+{
+"tmdb_id": 1408,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "procedural",
+"human_review": false,
+"severity": "meaningful",
+"reason": "House leads diagnosticians whose defining work is solving difficult medical cases through diagnosis, matching a recurring problem-solving procedural engine. Workplace-drama is broader and less precise than the case-based structure implied by the context and keywords."
+}
+]
+},
+{
+"tmdb_id": 1413,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "anthology",
+"human_review": false,
+"severity": "fundamental",
+"reason": "The overview explicitly calls it an anthology with different characters and locations across distinct horror scenarios. Supernatural-horror cannot serve as the primary because the listed seasons span multiple horror modes, including cult, slasher, asylum, and apocalypse."
+}
+]
+},
+{
+"tmdb_id": 894,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "espionage-thriller",
+"human_review": true,
+"severity": "fundamental",
+"reason": "The protagonist is a former secret agent abducted by warders who demand information, so intelligence and coercive espionage are the clearest supplied thriller mechanisms. Neither psychological-thriller's mental-state uncertainty nor dystopian-sci-fi's future-society criterion is firmly established, leaving a genuine ontology judgment call."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": null,
+"human_review": true,
+"severity": "meaningful",
+"reason": "The Kafkaesque prison village suggests psychological or dystopian overtones, but the packet does not establish either ontology definition strongly enough to force a secondary. Null is preferable, though a human could reasonably read those overtones as substantial."
+}
+]
+},
+{
+"tmdb_id": 34307,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "dramedy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The show combines family hardship, alcoholism, and self-destruction with overtly comic narration and is classified as both Drama and Comedy, matching a sustained co-equal dramedy register. Family-drama describes the subject matter but not the dual tonal structure as precisely."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["gritty", "warm"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Poverty, alcoholism, and family dysfunction support an unvarnished gritty texture, while the siblings' resilience and family bonds support warmth. Bleak is too strong and raunchy is not established by the supplied packet."
+}
+]
+},
+{
+"tmdb_id": 45140,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "parody-spoof",
+"human_review": true,
+"severity": "meaningful",
+"reason": "The series turns an established superhero team into madcap domestic comedy and is explicitly tagged parody, supporting direct genre/franchise exaggeration as the comic engine. Superhero remains a plausible reading because the characters still save the world, so human review is warranted."
+}
+]
+},
+{
+"tmdb_id": 1911,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "police-procedural",
+"human_review": false,
+"severity": "minor",
+"reason": "The Jeffersonian team works with an FBI agent on murder investigations through repeatable forensic methods, making police-procedural more specific than the generic TV procedural label."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["cerebral", "tense"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "Forensic science and difficult identification work support an ideas-and-reasoning emphasis, while murder investigations naturally create uncertainty and stakes. Wry banter and gritty texture are not established in the factual packet."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "murder-mystery",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The cases are explicitly murder investigations centered on identifying victims and solving killings, so murder-mystery adds substantive case-content information beyond the procedural structure. Generic procedural would be redundant."
+}
+]
+},
+{
+"tmdb_id": 241609,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "black-comedy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The premise mixes divorce, job loss, theft from wealthy neighbors, exhilaration in wrongdoing, and a deadly web, while the keywords explicitly identify black comedy. Heist is less accurate because the synopsis does not center on planning and executing a single robbery."
+}
+]
+},
+{
+"tmdb_id": 64099,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "historical-drama",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The romance is explicitly interwoven with Napoleon's 1812 invasion, and the historical era and war materially shape the story. Period-romance captures one strand but is too narrow for the broader historical-drama frame."
+}
+]
+},
+{
+"tmdb_id": 66732,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "supernatural-horror",
+"human_review": true,
+"severity": "meaningful",
+"reason": "The overview explicitly identifies terrifying supernatural forces, while the keywords also call out supernatural horror, monsters, and a parallel world. Secret experiments and the strange girl's powers make sci-fi-horror a genuinely reasonable competing reading, so the hybrid warrants review."
+},
+{
+"field": "tone_tags",
+"preferred_value": ["tense", "menacing", "warm"],
+"human_review": false,
+"severity": "meaningful",
+"reason": "The disappearance, monster, and supernatural forces create sustained tension and a concrete threatening presence, while friendship supports genuine warmth among the young characters. Unsettling is less specific than menacing once the threat is identified."
+}
+]
+},
+{
+"tmdb_id": 215072,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "action-thriller",
+"human_review": true,
+"severity": "meaningful",
+"reason": "Guns, killers, being surrounded, and the niece's danger indicate an action-forward thriller, while her uncle's mysterious death and hidden truth supply a major mystery component. The packet is too brief to determine confidently which of those two engines dominates."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "mystery-thriller",
+"human_review": false,
+"severity": "meaningful",
+"reason": "If action-thriller is primary, the mysterious death and newly uncovered truth make mystery-thriller a distinct, informative secondary. Hacking and dark-web elements are present but not clearly central enough for tech-thriller."
+}
+]
+},
+{
+"tmdb_id": 502,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "sketch-comedy",
+"human_review": false,
+"severity": "fundamental",
+"reason": "The program uses comedy, cartoons, games, songs, and short educational segments rather than a continuous narrative, making sketch-comedy the closest TV-specific form available. Animated-family is a clear mismatch because the series is not primarily an animated work and animation should not replace a more precise format classification."
+}
+]
+}
+]
+}

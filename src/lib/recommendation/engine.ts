@@ -218,6 +218,7 @@ interface AffinityResult {
   evidenceCount: number;
   person?: string;
   averageRating?: number;
+  savedFavorite?: boolean;
 }
 
 export function recommendForProfile({
@@ -386,8 +387,10 @@ function scoreTitle(
     const fact =
       result.person && result.evidenceCount >= config.thresholds.creatorMinimumEvidence
         ? `${result.evidenceCount} ${result.person} titles you rated average ${result.averageRating?.toFixed(1)}/10.`
-        : result.person && result.value > 0
+        : result.person && result.savedFavorite
           ? `${result.person} is in your saved favorites.`
+          : result.person && result.evidenceCount > 0 && result.value > 0
+            ? `${result.person} appeared in a title you rated ${result.averageRating?.toFixed(1)}/10, so the creator signal is still tentative.`
           : undefined;
     add(feature, weight * result.value, fact);
   }
@@ -585,6 +588,7 @@ function creatorAffinity(
       person,
       evidenceCount,
       averageRating,
+      savedFavorite,
       value: clamp(observed * confidence + (savedFavorite ? 0.45 : 0), -1, 1),
     };
   });

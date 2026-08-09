@@ -1,0 +1,1157 @@
+{
+    "ontology_version": "0.1.1",
+    "classifications": [
+        {
+            "tmdb_id": 1284041,
+            "media_type": "movie",
+            "primary_subgenre": "survival-horror",
+            "secondary_subgenre": "creature-feature",
+            "tone_tags": [
+                "tense",
+                "menacing"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 557,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "coming-of-age-drama",
+            "tone_tags": [
+                "earnest",
+                "playful"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 634649,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "adventure-action",
+            "tone_tags": [
+                "earnest",
+                "tense"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 931285,
+            "media_type": "movie",
+            "primary_subgenre": "martial-arts",
+            "secondary_subgenre": "adventure-action",
+            "tone_tags": [
+                "visceral",
+                "tense",
+                "menacing"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1481343,
+            "media_type": "movie",
+            "primary_subgenre": "survival-horror",
+            "secondary_subgenre": "creature-feature",
+            "tone_tags": [
+                "tense",
+                "menacing",
+                "visceral"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 911430,
+            "media_type": "movie",
+            "primary_subgenre": "sports-drama",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "uplifting",
+                "earnest"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 980431,
+            "media_type": "movie",
+            "primary_subgenre": "epic-fantasy",
+            "secondary_subgenre": "adventure-action",
+            "tone_tags": [
+                "warm",
+                "uplifting",
+                "earnest"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1339713,
+            "media_type": "movie",
+            "primary_subgenre": "supernatural-horror",
+            "secondary_subgenre": "psychological-horror",
+            "tone_tags": [
+                "unsettling",
+                "menacing",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 346,
+            "media_type": "movie",
+            "primary_subgenre": "historical-drama",
+            "secondary_subgenre": "adventure-action",
+            "tone_tags": [
+                "gritty",
+                "earnest"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 315635,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "coming-of-age-drama",
+            "tone_tags": [
+                "playful",
+                "earnest",
+                "warm"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1314481,
+            "media_type": "movie",
+            "primary_subgenre": "workplace-comedy",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "wry"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 429617,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "adventure-action",
+            "tone_tags": [
+                "playful",
+                "earnest"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 569094,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "adventure-action",
+            "tone_tags": [
+                "earnest",
+                "tense"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 454639,
+            "media_type": "movie",
+            "primary_subgenre": "epic-fantasy",
+            "secondary_subgenre": "sword-and-sorcery",
+            "tone_tags": [
+                "earnest",
+                "menacing"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 950396,
+            "media_type": "movie",
+            "primary_subgenre": "survival-thriller",
+            "secondary_subgenre": "romantic-drama",
+            "tone_tags": [
+                "tense",
+                "romantic",
+                "menacing"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 157336,
+            "media_type": "movie",
+            "primary_subgenre": "hard-sci-fi",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "cerebral",
+                "earnest",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1226863,
+            "media_type": "movie",
+            "primary_subgenre": "adventure-action",
+            "secondary_subgenre": "animated-family",
+            "tone_tags": [
+                "playful",
+                "warm",
+                "uplifting"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1598,
+            "media_type": "movie",
+            "primary_subgenre": "crime-thriller",
+            "secondary_subgenre": "psychological-thriller",
+            "tone_tags": [
+                "tense",
+                "menacing",
+                "gritty"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1630409,
+            "media_type": "movie",
+            "primary_subgenre": "action-thriller",
+            "secondary_subgenre": "crime-thriller",
+            "tone_tags": [
+                "gritty",
+                "tense"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 559,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "tense",
+                "earnest"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1930,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "coming-of-age-drama",
+            "tone_tags": [
+                "earnest",
+                "romantic"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1304313,
+            "media_type": "movie",
+            "primary_subgenre": "supernatural-horror",
+            "secondary_subgenre": "mystery-thriller",
+            "tone_tags": [
+                "menacing",
+                "unsettling",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 687163,
+            "media_type": "movie",
+            "primary_subgenre": "hard-sci-fi",
+            "secondary_subgenre": "puzzle-mystery",
+            "tone_tags": [
+                "cerebral",
+                "earnest"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1698575,
+            "media_type": "movie",
+            "primary_subgenre": "animated-family",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "warm",
+                "playful",
+                "uplifting"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 238,
+            "media_type": "movie",
+            "primary_subgenre": "gangster",
+            "secondary_subgenre": "organized-crime",
+            "tone_tags": [
+                "gritty",
+                "cynical",
+                "menacing"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 652,
+            "media_type": "movie",
+            "primary_subgenre": "combat-film",
+            "secondary_subgenre": "historical-drama",
+            "tone_tags": [
+                "visceral",
+                "tense"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 3782,
+            "media_type": "movie",
+            "primary_subgenre": "psychological-drama",
+            "secondary_subgenre": "workplace-drama",
+            "tone_tags": [
+                "melancholic",
+                "meditative",
+                "earnest"
+            ],
+            "pacing": "slow"
+        },
+        {
+            "tmdb_id": 1510795,
+            "media_type": "movie",
+            "primary_subgenre": "supernatural-horror",
+            "secondary_subgenre": "slasher",
+            "tone_tags": [
+                "menacing",
+                "tense",
+                "visceral"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 24428,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "adventure-action",
+            "tone_tags": [
+                "earnest",
+                "tense"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 102382,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "romantic-drama",
+            "tone_tags": [
+                "earnest",
+                "romantic",
+                "tense"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 155,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "crime-thriller",
+            "tone_tags": [
+                "tense",
+                "menacing",
+                "gritty"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1263532,
+            "media_type": "movie",
+            "primary_subgenre": "dystopian-sci-fi",
+            "secondary_subgenre": "action-thriller",
+            "tone_tags": [
+                "tense",
+                "visceral",
+                "gritty"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1361774,
+            "media_type": "movie",
+            "primary_subgenre": "workplace-comedy",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "playful",
+                "earnest"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 361743,
+            "media_type": "movie",
+            "primary_subgenre": "military-action",
+            "secondary_subgenre": "action-thriller",
+            "tone_tags": [
+                "earnest",
+                "tense",
+                "uplifting"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 671,
+            "media_type": "movie",
+            "primary_subgenre": "urban-fantasy",
+            "secondary_subgenre": "adventure-action",
+            "tone_tags": [
+                "warm",
+                "playful",
+                "earnest"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 5879,
+            "media_type": "movie",
+            "primary_subgenre": "erotic-romance",
+            "secondary_subgenre": "tragic-romance",
+            "tone_tags": [
+                "romantic",
+                "unsettling",
+                "visceral"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1668364,
+            "media_type": "movie",
+            "primary_subgenre": "erotic-thriller",
+            "secondary_subgenre": "relationship-drama",
+            "tone_tags": [
+                "romantic",
+                "tense",
+                "unsettling"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1726,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "tech-sci-fi",
+            "tone_tags": [
+                "earnest",
+                "tense"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 299536,
+            "media_type": "movie",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "space-opera",
+            "tone_tags": [
+                "tense",
+                "menacing",
+                "visceral"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 122,
+            "media_type": "movie",
+            "primary_subgenre": "epic-fantasy",
+            "secondary_subgenre": "adventure-action",
+            "tone_tags": [
+                "earnest",
+                "tense"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 98894,
+            "media_type": "movie",
+            "primary_subgenre": "romantic-comedy",
+            "secondary_subgenre": "sex-comedy",
+            "tone_tags": [
+                "playful",
+                "romantic"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1259102,
+            "media_type": "movie",
+            "primary_subgenre": "romantic-comedy",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "romantic",
+                "bittersweet",
+                "warm"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 680,
+            "media_type": "movie",
+            "primary_subgenre": "crime-drama",
+            "secondary_subgenre": "black-comedy",
+            "tone_tags": [
+                "cynical",
+                "visceral",
+                "wry"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 603,
+            "media_type": "movie",
+            "primary_subgenre": "cyberpunk",
+            "secondary_subgenre": "martial-arts",
+            "tone_tags": [
+                "cerebral",
+                "tense",
+                "stylized"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 21484,
+            "media_type": "movie",
+            "primary_subgenre": "supernatural-horror",
+            "secondary_subgenre": "psychological-horror",
+            "tone_tags": [
+                "unsettling",
+                "visceral",
+                "bleak"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 949838,
+            "media_type": "movie",
+            "primary_subgenre": "buddy-comedy",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "playful"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 19995,
+            "media_type": "movie",
+            "primary_subgenre": "adventure-action",
+            "secondary_subgenre": "alien-first-contact",
+            "tone_tags": [
+                "earnest",
+                "romantic",
+                "tense"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 83533,
+            "media_type": "movie",
+            "primary_subgenre": "adventure-action",
+            "secondary_subgenre": "family-drama",
+            "tone_tags": [
+                "tense",
+                "melancholic",
+                "earnest"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1325734,
+            "media_type": "movie",
+            "primary_subgenre": "romantic-comedy",
+            "secondary_subgenre": "dark-comedy",
+            "tone_tags": [
+                "romantic",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 755898,
+            "media_type": "movie",
+            "primary_subgenre": "conspiracy-thriller",
+            "secondary_subgenre": "tech-thriller",
+            "tone_tags": [
+                "tense",
+                "cerebral",
+                "menacing"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1416,
+            "media_type": "tv",
+            "primary_subgenre": "workplace-drama",
+            "secondary_subgenre": "relationship-drama",
+            "tone_tags": [
+                "earnest"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 5920,
+            "media_type": "tv",
+            "primary_subgenre": "procedural",
+            "secondary_subgenre": "detective",
+            "tone_tags": [
+                "cerebral"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 65334,
+            "media_type": "tv",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "animated-family",
+            "tone_tags": [
+                "playful",
+                "romantic",
+                "warm"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 94997,
+            "media_type": "tv",
+            "primary_subgenre": "epic-fantasy",
+            "secondary_subgenre": "political-drama",
+            "tone_tags": [
+                "bleak",
+                "melancholic",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 113962,
+            "media_type": "tv",
+            "primary_subgenre": "espionage-thriller",
+            "secondary_subgenre": "military-action",
+            "tone_tags": [
+                "tense",
+                "earnest",
+                "gritty"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 125988,
+            "media_type": "tv",
+            "primary_subgenre": "dystopian-sci-fi",
+            "secondary_subgenre": "conspiracy-thriller",
+            "tone_tags": [
+                "cynical",
+                "bleak",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 4614,
+            "media_type": "tv",
+            "primary_subgenre": "police-procedural",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "earnest"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 2734,
+            "media_type": "tv",
+            "primary_subgenre": "police-procedural",
+            "secondary_subgenre": "courtroom-crime",
+            "tone_tags": [
+                "gritty",
+                "tense",
+                "earnest"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 32419,
+            "media_type": "tv",
+            "primary_subgenre": "sketch-comedy",
+            "secondary_subgenre": "parody-spoof",
+            "tone_tags": [
+                "playful"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 549,
+            "media_type": "tv",
+            "primary_subgenre": "police-procedural",
+            "secondary_subgenre": "courtroom-crime",
+            "tone_tags": [
+                "gritty",
+                "earnest",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 79744,
+            "media_type": "tv",
+            "primary_subgenre": "police-procedural",
+            "secondary_subgenre": "dramedy",
+            "tone_tags": [
+                "earnest",
+                "uplifting"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 456,
+            "media_type": "tv",
+            "primary_subgenre": "family-sitcom",
+            "secondary_subgenre": "adult-animation",
+            "tone_tags": [
+                "satirical",
+                "wry",
+                "playful"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 60625,
+            "media_type": "tv",
+            "primary_subgenre": "absurdist-comedy",
+            "secondary_subgenre": "adult-animation",
+            "tone_tags": [
+                "absurdist",
+                "cynical",
+                "playful"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1622,
+            "media_type": "tv",
+            "primary_subgenre": "supernatural-horror",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "menacing",
+                "tense",
+                "earnest"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 97546,
+            "media_type": "tv",
+            "primary_subgenre": "workplace-comedy",
+            "secondary_subgenre": "dramedy",
+            "tone_tags": [
+                "warm",
+                "uplifting",
+                "earnest"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 4057,
+            "media_type": "tv",
+            "primary_subgenre": "police-procedural",
+            "secondary_subgenre": "psychological-thriller",
+            "tone_tags": [
+                "tense",
+                "gritty",
+                "menacing"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 22980,
+            "media_type": "tv",
+            "primary_subgenre": "late-night-talk-show",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "playful"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1095,
+            "media_type": "tv",
+            "primary_subgenre": "cyberpunk",
+            "secondary_subgenre": "police-procedural",
+            "tone_tags": [
+                "cerebral",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 291496,
+            "media_type": "tv",
+            "primary_subgenre": "romantic-comedy",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "romantic",
+                "playful",
+                "warm"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1434,
+            "media_type": "tv",
+            "primary_subgenre": "family-sitcom",
+            "secondary_subgenre": "adult-animation",
+            "tone_tags": [
+                "satirical",
+                "raunchy",
+                "absurdist"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 138502,
+            "media_type": "tv",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "social-drama",
+            "tone_tags": [
+                "tense",
+                "earnest"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1399,
+            "media_type": "tv",
+            "primary_subgenre": "epic-fantasy",
+            "secondary_subgenre": "political-drama",
+            "tone_tags": [
+                "gritty",
+                "cynical",
+                "menacing"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 108978,
+            "media_type": "tv",
+            "primary_subgenre": "action-thriller",
+            "secondary_subgenre": "conspiracy-thriller",
+            "tone_tags": [
+                "gritty",
+                "tense"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 278624,
+            "media_type": "tv",
+            "primary_subgenre": "crime-thriller",
+            "secondary_subgenre": "survival-thriller",
+            "tone_tags": [
+                "tense",
+                "gritty"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1431,
+            "media_type": "tv",
+            "primary_subgenre": "police-procedural",
+            "secondary_subgenre": "detective",
+            "tone_tags": [
+                "cerebral",
+                "tense",
+                "gritty"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 59941,
+            "media_type": "tv",
+            "primary_subgenre": "late-night-talk-show",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "playful"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 106841,
+            "media_type": "tv",
+            "primary_subgenre": "historical-drama",
+            "secondary_subgenre": "relationship-drama",
+            "tone_tags": [
+                "melancholic",
+                "romantic"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1396,
+            "media_type": "tv",
+            "primary_subgenre": "gangster",
+            "secondary_subgenre": "psychological-drama",
+            "tone_tags": [
+                "cynical",
+                "tense",
+                "bleak"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1408,
+            "media_type": "tv",
+            "primary_subgenre": "procedural",
+            "secondary_subgenre": "workplace-drama",
+            "tone_tags": [
+                "cerebral",
+                "cynical",
+                "wry"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1413,
+            "media_type": "tv",
+            "primary_subgenre": "anthology",
+            "secondary_subgenre": "supernatural-horror",
+            "tone_tags": [
+                "menacing",
+                "unsettling",
+                "visceral"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 1668,
+            "media_type": "tv",
+            "primary_subgenre": "sitcom",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "warm",
+                "playful",
+                "romantic"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 76479,
+            "media_type": "tv",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "satire",
+            "tone_tags": [
+                "satirical",
+                "cynical",
+                "visceral"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 203744,
+            "media_type": "tv",
+            "primary_subgenre": "neo-noir",
+            "secondary_subgenre": "detective",
+            "tone_tags": [
+                "enigmatic",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 63770,
+            "media_type": "tv",
+            "primary_subgenre": "late-night-talk-show",
+            "secondary_subgenre": "satire",
+            "tone_tags": [
+                "satirical",
+                "wry",
+                "playful"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 61818,
+            "media_type": "tv",
+            "primary_subgenre": "late-night-talk-show",
+            "secondary_subgenre": "satire",
+            "tone_tags": [
+                "satirical",
+                "wry",
+                "playful"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 894,
+            "media_type": "tv",
+            "primary_subgenre": "psychological-thriller",
+            "secondary_subgenre": "espionage-thriller",
+            "tone_tags": [
+                "enigmatic",
+                "unsettling",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 34307,
+            "media_type": "tv",
+            "primary_subgenre": "family-drama",
+            "secondary_subgenre": "dramedy",
+            "tone_tags": [
+                "gritty",
+                "warm"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 94664,
+            "media_type": "tv",
+            "primary_subgenre": "isekai",
+            "secondary_subgenre": "epic-fantasy",
+            "tone_tags": [
+                "playful",
+                "raunchy",
+                "earnest"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 60572,
+            "media_type": "tv",
+            "primary_subgenre": "anime-action",
+            "secondary_subgenre": "adventure-action",
+            "tone_tags": [
+                "playful",
+                "warm",
+                "uplifting"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 45140,
+            "media_type": "tv",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "parody-spoof",
+            "tone_tags": [
+                "absurdist",
+                "playful"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1911,
+            "media_type": "tv",
+            "primary_subgenre": "procedural",
+            "secondary_subgenre": "murder-mystery",
+            "tone_tags": [
+                "cerebral",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 241609,
+            "media_type": "tv",
+            "primary_subgenre": "black-comedy",
+            "secondary_subgenre": "crime-drama",
+            "tone_tags": [
+                "cynical",
+                "wry",
+                "tense"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 2224,
+            "media_type": "tv",
+            "primary_subgenre": "news-satire",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "satirical",
+                "wry",
+                "playful"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 1421,
+            "media_type": "tv",
+            "primary_subgenre": "family-sitcom",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "warm",
+                "playful",
+                "wry"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 64099,
+            "media_type": "tv",
+            "primary_subgenre": "period-romance",
+            "secondary_subgenre": "historical-drama",
+            "tone_tags": [
+                "romantic",
+                "earnest",
+                "melancholic"
+            ],
+            "pacing": "moderate"
+        },
+        {
+            "tmdb_id": 66732,
+            "media_type": "tv",
+            "primary_subgenre": "supernatural-horror",
+            "secondary_subgenre": "mystery-thriller",
+            "tone_tags": [
+                "tense",
+                "menacing"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 30984,
+            "media_type": "tv",
+            "primary_subgenre": "anime-action",
+            "secondary_subgenre": "urban-fantasy",
+            "tone_tags": [
+                "earnest",
+                "visceral"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 215072,
+            "media_type": "tv",
+            "primary_subgenre": "mystery-thriller",
+            "secondary_subgenre": "action-thriller",
+            "tone_tags": [
+                "tense",
+                "gritty",
+                "enigmatic"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 502,
+            "media_type": "tv",
+            "primary_subgenre": "sketch-comedy",
+            "secondary_subgenre": null,
+            "tone_tags": [
+                "warm",
+                "playful",
+                "earnest"
+            ],
+            "pacing": "fast"
+        },
+        {
+            "tmdb_id": 2661,
+            "media_type": "tv",
+            "primary_subgenre": "superhero",
+            "secondary_subgenre": "martial-arts",
+            "tone_tags": [
+                "earnest",
+                "menacing"
+            ],
+            "pacing": "fast"
+        }
+    ]
+}

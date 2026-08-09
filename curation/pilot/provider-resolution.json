@@ -1,0 +1,101 @@
+[
+  {
+    "requested": "Netflix",
+    "movie_provider": {
+      "id": 8,
+      "name": "Netflix"
+    },
+    "tv_provider": {
+      "id": 8,
+      "name": "Netflix"
+    }
+  },
+  {
+    "requested": "Hulu",
+    "movie_provider": {
+      "id": 15,
+      "name": "Hulu"
+    },
+    "tv_provider": {
+      "id": 15,
+      "name": "Hulu"
+    }
+  },
+  {
+    "requested": "Disney Plus",
+    "movie_provider": {
+      "id": 337,
+      "name": "Disney Plus"
+    },
+    "tv_provider": {
+      "id": 337,
+      "name": "Disney Plus"
+    }
+  },
+  {
+    "requested": "HBO Max",
+    "movie_provider": {
+      "id": 1899,
+      "name": "HBO Max"
+    },
+    "tv_provider": {
+      "id": 1899,
+      "name": "HBO Max"
+    }
+  },
+  {
+    "requested": "Amazon Prime Video",
+    "movie_provider": {
+      "id": 9,
+      "name": "Amazon Prime Video"
+    },
+    "tv_provider": {
+      "id": 9,
+      "name": "Amazon Prime Video"
+    }
+  },
+  {
+    "requested": "Apple TV Plus",
+    "movie_provider": {
+      "id": 350,
+      "name": "Apple TV"
+    },
+    "tv_provider": {
+      "id": 350,
+      "name": "Apple TV"
+    }
+  },
+  {
+    "requested": "Paramount Plus",
+    "movie_provider": {
+      "id": 2303,
+      "name": "Paramount Plus Premium"
+    },
+    "tv_provider": {
+      "id": 2303,
+      "name": "Paramount Plus Premium"
+    }
+  },
+  {
+    "requested": "Peacock Premium",
+    "movie_provider": {
+      "id": 386,
+      "name": "Peacock Premium"
+    },
+    "tv_provider": {
+      "id": 386,
+      "name": "Peacock Premium"
+    }
+  },
+  {
+    "requested": "Criterion Channel",
+    "movie_provider": {
+      "id": 258,
+      "name": "Criterion Channel"
+    },
+    "tv_provider": {
+      "id": 258,
+      "name": "Criterion Channel"
+    }
+  }
+]

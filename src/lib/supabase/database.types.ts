@@ -145,6 +145,53 @@ export type Database = {
         source_context: string | null;
         created_at: string;
       }>;
+      questionnaire_dimensions: Table<{
+        id: string;
+        slug: string;
+        display_name: string;
+        description: string;
+        min_value: number;
+        max_value: number;
+      }>;
+      questionnaire_questions: Table<{
+        id: string;
+        questionnaire_version_id: string;
+        code: string;
+        prompt: string;
+        help_text: string | null;
+        question_type: "likert_5" | "scale_7" | "forced_choice" | "multi_select" | "genre_matrix";
+        response_schema: Json;
+        reverse_scored: boolean;
+        sort_order: number;
+        required: boolean;
+      }>;
+      questionnaire_sessions: Table<{
+        id: string;
+        profile_id: string;
+        questionnaire_version_id: string;
+        status: "in_progress" | "completed" | "skipped" | "abandoned";
+        started_at: string;
+        completed_at: string | null;
+      }>;
+      questionnaire_responses: Table<{
+        id: string;
+        profile_id: string;
+        session_id: string;
+        question_id: string;
+        response: Json;
+        answered_at: string;
+      }>;
+      profile_dimensions: Table<{
+        profile_id: string;
+        dimension_id: string;
+        questionnaire_value: number | null;
+        questionnaire_confidence: number;
+        behavioral_value: number | null;
+        behavioral_confidence: number;
+        effective_value: number | null;
+        evidence_count: number;
+        updated_at: string;
+      }>;
       recommendation_feedback: Table<{
         id: string;
         profile_id: string;
@@ -210,6 +257,42 @@ export type Database = {
         Returns: Database["public"]["Tables"]["model_versions"]["Row"];
       };
       owns_profile: { Args: { target_profile_id: string }; Returns: boolean };
+      set_profile_streaming_services: {
+        Args: { target_profile_id: string; service_slugs: string[] };
+        Returns: undefined;
+      };
+      save_profile_questionnaire: {
+        Args: { target_profile_id: string; questionnaire_scores: Json };
+        Returns: string;
+      };
+      save_profile_rating: {
+        Args: {
+          target_profile_id: string;
+          external_tmdb_id: number;
+          external_media_type: "movie" | "tv";
+          rating_score: number;
+          rating_source: "onboarding" | "search" | "recommendation" | "import";
+        };
+        Returns: string;
+      };
+      save_profile_recommendation: {
+        Args: {
+          target_profile_id: string;
+          recommendation_moods: string[];
+          recommendation_vibes: string[];
+          ranked_items: Json;
+        };
+        Returns: Json;
+      };
+      save_recommendation_feedback: {
+        Args: {
+          target_profile_id: string;
+          target_recommendation_item_id: string;
+          feedback_score?: number | null;
+          feedback_reason?: string | null;
+        };
+        Returns: string;
+      };
       are_friends: {
         Args: { first_profile_id: string; second_profile_id: string };
         Returns: boolean;

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -39,11 +40,25 @@ import {
   X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { User } from "@supabase/supabase-js";
+
+import {
+  createCloudProfile,
+  deleteCloudProfile,
+  loadCloudProfiles,
+  persistCloudProfile,
+  persistCloudQuestionnaire,
+  persistCloudRating,
+  persistRecommendationFeedback,
+  type CloudProfile,
+} from "@/lib/supabase/cloud-store";
+import { createSupabaseBrowserClient } from "@/lib/supabase";
+import type { TitleSearchResult, WatchProviderKind } from "@/lib/tmdb/types";
 
 type Screen = "home" | "results" | "rate" | "taste" | "settings";
 type ContentKind = "Movie" | "Series" | "Stand-up";
-type AvailabilityType = "subscription" | "free" | "rental";
+type AvailabilityType = "subscription" | "free" | "rental" | "purchase";
 type RentalMode = "never" | "exceptional" | "always";
 type ShareMode = "ratings_and_reviews" | "ratings_only" | "nothing";
 type FriendshipStatus = "pending" | "accepted" | "declined" | "blocked";
@@ -60,6 +75,8 @@ type ModelWeights = {
 
 type Title = {
   id: string;
+  tmdbId?: number;
+  tmdbMediaType?: "movie" | "tv";
   name: string;
   year: number;
   kind: ContentKind;
@@ -79,6 +96,16 @@ type Title = {
   canonical?: string[];
   popularity: number;
   baseline: number;
+  availability?: LiveAvailability[];
+  availabilityLink?: string;
+};
+
+type LiveAvailability = {
+  serviceId: string;
+  providerName: string;
+  providerId: number;
+  kind: WatchProviderKind;
+  logoUrl?: string | null;
 };
 
 type ViewerProfile = {
@@ -151,6 +178,8 @@ type Recommendation = {
   match: number;
   explanation: string;
   rental: boolean;
+  recommendationItemId?: string;
+  primaryAvailability?: LiveAvailability;
   friendContext?: FriendContext;
 };
 
@@ -194,16 +223,36 @@ const WEIGHT_LIMITS: Record<keyof ModelWeights, [number, number]> = {
 };
 
 const services = [
-  { id: "Netflix", mark: "N" },
-  { id: "Hulu", mark: "h" },
-  { id: "Disney+", mark: "D+" },
-  { id: "Apple TV+", mark: "tv+" },
-  { id: "Prime Video", mark: "prime" },
-  { id: "Max", mark: "max" },
-  { id: "Peacock", mark: "P" },
-  { id: "Paramount+", mark: "P+" },
-  { id: "Criterion Channel", mark: "C" },
+  { id: "Netflix", slug: "netflix", mark: "N" },
+  { id: "Hulu", slug: "hulu", mark: "h" },
+  { id: "Disney+", slug: "disney-plus", mark: "D+" },
+  { id: "Apple TV+", slug: "apple-tv-plus", mark: "tv+" },
+  { id: "Prime Video", slug: "prime-video", mark: "prime" },
+  { id: "Max", slug: "max", mark: "max" },
+  { id: "Peacock", slug: "peacock", mark: "P" },
+  { id: "Paramount+", slug: "paramount-plus", mark: "P+" },
+  { id: "Criterion Channel", slug: "criterion-channel", mark: "C" },
 ];
+
+function serviceKey(value: string) {
+  const normalized = value.trim().toLowerCase().replaceAll("+", "-plus").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  if (["amazon-prime-video", "prime-video", "prime"].includes(normalized)) return "prime-video";
+  if (["apple-tv-plus", "apple-tvplus"].includes(normalized)) return "apple-tv-plus";
+  return normalized;
+}
+
+function profileHasService(profile: ViewerProfile, providerOrSlug: string) {
+  const expected = serviceKey(providerOrSlug);
+  return profile.subscriptions.some((subscription) => serviceKey(subscription) === expected);
+}
+
+function asCloudProfile(profile: ViewerProfile, user: User): CloudProfile {
+  return {
+    ...profile,
+    accountId: user.id,
+    guest: false,
+  };
+}
 
 const moods: { id: string; label: string; icon: LucideIcon }[] = [
   { id: "Comedy", label: "Comedy", icon: Sparkles },
@@ -230,6 +279,23 @@ const vibes = [
   { id: "Friends", label: "Friend’s Picks", eyebrow: "TRUSTED TASTE" },
   { id: "Surprise", label: "Surprise me", eyebrow: "NO RULES" },
 ];
+
+const liveVibeByUiId: Record<string, string> = {
+  Favorite: "rewatch-favorite",
+  Classic: "rediscover-classic",
+  New: "try-something-new",
+  International: "popular-international",
+  Binge: "bingeable-tv",
+  Trending: "trending-series",
+  Hidden: "hidden-gem",
+  Director: "complete-director",
+  Criterion: "criterion-pick",
+  FilmSchool: "film-school-night",
+  BlindSpot: "blind-spot",
+  Deeper: "go-deeper",
+  Friends: "friends-picks",
+  Surprise: "surprise-me",
+};
 
 const catalog: Title[] = [
   {
@@ -959,7 +1025,7 @@ function buildRecommendations(
         : 2;
       const included =
         title.availabilityType === "subscription" &&
-        title.providers.some((provider) => profile.subscriptions.includes(provider));
+        title.providers.some((provider) => profileHasService(profile, provider));
       const availabilityScore = included && title.availabilityType === "subscription" ? 10 : title.availabilityType === "free" ? 4 : -8;
       const directorCount = directorEvidence.get(title.director) ?? 0;
       const directorScore = directorCount * 3.5 * weights.directorAffinity;
@@ -1064,15 +1130,149 @@ function buildRecommendations(
   });
 }
 
-function displayProvider(profile: ViewerProfile, title: Title) {
-  const included = title.providers.find((provider) => profile.subscriptions.includes(provider));
-  if (included && title.availabilityType === "subscription") return { label: "Demo availability", provider: included };
-  if (title.availabilityType === "rental") return { label: "Demo rental option", provider: title.providers[0] };
-  return { label: "Check availability", provider: title.providers[0] };
+function displayProvider(profile: ViewerProfile, title: Title, preferred?: LiveAvailability) {
+  const live = preferred ?? title.availability?.find((offer) => offer.kind === "subscription" && profileHasService(profile, offer.serviceId)) ?? title.availability?.find((offer) => offer.kind === "free") ?? title.availability?.find((offer) => offer.kind === "rental") ?? title.availability?.find((offer) => offer.kind === "purchase");
+  if (live) return {
+    label: live.kind === "subscription" ? "Included with subscription" : live.kind === "free" ? "Free / ad-supported" : live.kind === "rental" ? "Rental option" : "Purchase option",
+    provider: live.providerName,
+    kind: live.kind,
+  };
+  const included = title.providers.find((provider) => profileHasService(profile, provider));
+  if (included && title.availabilityType === "subscription") return { label: "Demo availability", provider: included, kind: "subscription" as const };
+  if (title.availabilityType === "rental") return { label: "Demo rental option", provider: title.providers[0], kind: "rental" as const };
+  return { label: "Check availability", provider: title.providers[0] ?? "Unavailable", kind: title.availabilityType };
 }
 
 function titleById(id: string) {
   return catalog.find((title) => title.id === id);
+}
+
+function searchResultToTitle(result: TitleSearchResult): Title {
+  const isMovie = result.contentType === "movie";
+  return {
+    id: result.externalId,
+    tmdbId: result.providerId,
+    tmdbMediaType: isMovie ? "movie" : "tv",
+    name: result.title,
+    year: result.releaseYear ?? 0,
+    kind: isMovie ? "Movie" : "Series",
+    runtime: isMovie ? "Movie" : "TV series",
+    poster: result.posterUrl ?? "",
+    backdrop: result.backdropUrl ?? result.posterUrl ?? "",
+    synopsis: result.overview ?? "TMDB has no synopsis for this title yet.",
+    genres: [],
+    tags: [],
+    director: "",
+    writers: [],
+    cast: [],
+    providers: [],
+    availabilityType: "subscription",
+    popularity: result.popularity,
+    baseline: Math.max(50, Math.min(98, 55 + (result.voteAverage ?? 0) * 4)),
+  };
+}
+
+type LiveApiAvailability = {
+  serviceId: string;
+  providerName?: string;
+  providerId?: number;
+  logoUrl?: string | null;
+  kind: WatchProviderKind;
+};
+
+type LiveApiTitle = {
+  id: string;
+  name: string;
+  year: number;
+  contentType: "movie" | "series" | "tv_series" | "stand-up" | "standup_special";
+  synopsis: string;
+  runtimeMinutes?: number;
+  episodeRuntimeMinutes?: number;
+  seasons?: number;
+  genres: string[];
+  subgenres?: string[];
+  toneTags?: string[];
+  directors?: string[];
+  writers?: string[];
+  cinematographers?: string[];
+  actors?: string[];
+  popularity: number;
+  canonicalScore?: number;
+  criterionCollection?: boolean;
+  canonicalMemberships?: Array<{ list: string }>;
+  posterUrl?: string;
+  backdropUrl?: string;
+  availability?: LiveApiAvailability[];
+  availabilityLink?: string;
+};
+
+type LiveApiRecommendation = {
+  rank: number;
+  lane: string;
+  title: LiveApiTitle;
+  matchScore: number;
+  explanation: string;
+  requiresPayment: boolean;
+  primaryAvailability: LiveApiAvailability;
+  recommendationItemId?: string;
+};
+
+function apiAvailability(offer: LiveApiAvailability): LiveAvailability {
+  return {
+    serviceId: offer.serviceId,
+    providerName: offer.providerName ?? offer.serviceId.replaceAll("-", " "),
+    providerId: offer.providerId ?? 0,
+    kind: offer.kind,
+    logoUrl: offer.logoUrl,
+  };
+}
+
+function apiTitleToTitle(title: LiveApiTitle): Title {
+  const parsedId = /^tmdb:(movie|tv):(\d+)$/.exec(title.id);
+  const isSeries = title.contentType === "series" || title.contentType === "tv_series";
+  const primaryKind = title.availability?.[0]?.kind ?? "subscription";
+  return {
+    id: title.id,
+    tmdbId: parsedId ? Number.parseInt(parsedId[2], 10) : undefined,
+    tmdbMediaType: parsedId?.[1] as "movie" | "tv" | undefined,
+    name: title.name,
+    year: title.year,
+    kind: title.contentType === "stand-up" || title.contentType === "standup_special" ? "Stand-up" : isSeries ? "Series" : "Movie",
+    runtime: isSeries
+      ? `${title.seasons ?? "?"} season${title.seasons === 1 ? "" : "s"} · ${title.episodeRuntimeMinutes ?? "?"}m episodes`
+      : title.runtimeMinutes ? `${Math.floor(title.runtimeMinutes / 60)}h ${title.runtimeMinutes % 60}m` : "Runtime unavailable",
+    poster: title.posterUrl ?? "",
+    backdrop: title.backdropUrl ?? title.posterUrl ?? "",
+    synopsis: title.synopsis,
+    genres: title.genres,
+    tags: [...(title.subgenres ?? []), ...(title.toneTags ?? [])],
+    director: title.directors?.[0] ?? "",
+    writers: title.writers ?? [],
+    cinematographer: title.cinematographers?.[0],
+    cast: title.actors ?? [],
+    providers: (title.availability ?? []).map((offer) => offer.providerName ?? offer.serviceId),
+    availabilityType: primaryKind,
+    criterion: title.criterionCollection,
+    canonical: title.canonicalMemberships?.map((membership) => membership.list),
+    popularity: title.popularity,
+    baseline: Math.max(50, Math.min(98, title.canonicalScore ?? 70)),
+    availability: title.availability?.map(apiAvailability),
+    availabilityLink: title.availabilityLink,
+  };
+}
+
+function apiRecommendationToRecommendation(value: LiveApiRecommendation): Recommendation {
+  const title = apiTitleToTitle(value.title);
+  return {
+    rank: value.rank,
+    lane: value.lane,
+    title,
+    match: value.matchScore,
+    explanation: value.explanation,
+    rental: value.primaryAvailability.kind === "rental",
+    primaryAvailability: apiAvailability(value.primaryAvailability),
+    recommendationItemId: value.recommendationItemId,
+  };
 }
 
 function ProfileAvatar({ profile, large = false }: { profile: ViewerProfile; large?: boolean }) {
@@ -1094,9 +1294,10 @@ function Logo({ compact = false }: { compact?: boolean }) {
 
 function Poster({ title, priority = false }: { title: Title; priority?: boolean }) {
   const [failed, setFailed] = useState(false);
+  const unavailable = failed || !title.poster;
   return (
-    <div className={`poster ${failed ? "poster--failed" : ""}`}>
-      {!failed ? (
+    <div className={`poster ${unavailable ? "poster--failed" : ""}`}>
+      {!unavailable ? (
         <Image
           src={title.poster}
           alt={`${title.name} poster`}
@@ -1144,11 +1345,13 @@ function ProfilePicker({
   onSelect,
   onCreate,
   onEdit,
+  authenticated,
 }: {
   profiles: ViewerProfile[];
   onSelect: (profile: ViewerProfile) => void;
   onCreate: () => void;
   onEdit: () => void;
+  authenticated: boolean;
 }) {
   return (
     <main className="profile-picker">
@@ -1171,9 +1374,12 @@ function ProfilePicker({
             <span>Start a fresh taste model</span>
           </button>
         </div>
-        <button className="text-button profile-picker__edit" onClick={onEdit}>
+        {profiles.length > 0 && <button className="text-button profile-picker__edit" onClick={onEdit}>
           <UsersRound size={16} /> Manage profiles
-        </button>
+        </button>}
+        <Link className="text-button profile-picker__edit" href="/account">
+          <CircleUserRound size={16} /> {authenticated ? "Account & sign out" : "Sign in for Supabase sync"}
+        </Link>
       </div>
       <p className="profile-picker__privacy"><LockKeyhole size={13} /> Profiles never influence one another.</p>
     </main>
@@ -1187,6 +1393,7 @@ function ProfileEditor({
   onSave,
   onUpdate,
   onDelete,
+  allowGuest,
 }: {
   profiles: ViewerProfile[];
   mode: "create" | "manage";
@@ -1194,6 +1401,7 @@ function ProfileEditor({
   onSave: (profile: ViewerProfile) => void;
   onUpdate: (profile: ViewerProfile) => void;
   onDelete: (id: string) => void;
+  allowGuest: boolean;
 }) {
   const [name, setName] = useState("");
   const [cloneFrom, setCloneFrom] = useState("");
@@ -1229,7 +1437,7 @@ function ProfileEditor({
             <label>Display name<input autoFocus value={name} onChange={(event) => setName(event.target.value)} placeholder="Who is this for?" /></label>
             <label>Start with household settings<select value={cloneFrom} onChange={(event) => setCloneFrom(event.target.value)}><option value="">Start fresh</option>{profiles.filter((profile) => !profile.guest).map((profile) => <option key={profile.id} value={profile.id}>Copy {profile.name}&apos;s services and region</option>)}</select></label>
             <p className="form-note"><ShieldCheck size={16} /> Ratings, taste, and history are never copied.</p>
-            <label className="toggle-row"><span><strong>Guest profile</strong><small>Does not train anyone else&apos;s model.</small></span><button type="button" className={`switch ${guest ? "is-on" : ""}`} onClick={() => setGuest(!guest)} aria-pressed={guest}><span /></button></label>
+            {allowGuest && <label className="toggle-row"><span><strong>Guest profile</strong><small>Stays private to this browser.</small></span><button type="button" className={`switch ${guest ? "is-on" : ""}`} onClick={() => setGuest(!guest)} aria-pressed={guest}><span /></button></label>}
             <button className="primary-button" onClick={create} disabled={!name.trim()}>Continue <ChevronRight size={18} /></button>
           </div>
         ) : (
@@ -1249,7 +1457,7 @@ function ProfileEditor({
   );
 }
 
-function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; onChange: (profile: ViewerProfile) => void; onFinish: () => void }) {
+function Onboarding({ profile, onChange, onFinish, onQuestionnaire, live }: { profile: ViewerProfile; onChange: (profile: ViewerProfile) => void; onFinish: () => void; onQuestionnaire: (scores: Record<string, number>) => void; live: boolean }) {
   const [step, setStep] = useState<"welcome" | "services" | "questionnaire" | "genres" | "tradeoffs" | "calibrate" | "summary">("welcome");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
@@ -1275,6 +1483,7 @@ function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; o
     genreMatrix.forEach((genre) => { questionnaireScores[`genre:${genre}`] = Math.round(((genreAnswers[genre] ?? 4) - 1) * (100 / 6)); });
     tradeoffAnswers.forEach((choice, index) => { questionnaireScores[`tradeoff:${index}`] = choice === 0 ? 25 : 75; });
     onChange({ ...profile, questionnaire: questionnaireScores, ratings, onboardingCompleted: true });
+    onQuestionnaire(questionnaireScores);
     onFinish();
   };
   return (
@@ -1296,8 +1505,9 @@ function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; o
           <p className="kicker">STEP 1</p><h1>Where do you watch?</h1><p className="lede">Choose the services available to {profile.name}. We use these as a hard filter before recommending.</p>
           <div className="service-grid">
             {services.map((service) => {
-              const active = profile.subscriptions.includes(service.id);
-              return <button key={service.id} className={`service-card ${active ? "is-active" : ""}`} onClick={() => onChange({ ...profile, subscriptions: active ? profile.subscriptions.filter((id) => id !== service.id) : [...profile.subscriptions, service.id] })}><span className="service-mark">{service.mark}</span><strong>{service.id}</strong>{active && <Check size={17} />}</button>;
+              const active = profileHasService(profile, service.slug);
+              const storedValue = live ? service.slug : service.id;
+              return <button key={service.id} className={`service-card ${active ? "is-active" : ""}`} onClick={() => onChange({ ...profile, subscriptions: active ? profile.subscriptions.filter((id) => serviceKey(id) !== service.slug) : [...profile.subscriptions, storedValue] })}><span className="service-mark">{service.mark}</span><strong>{service.id}</strong>{active && <Check size={17} />}</button>;
             })}
           </div>
           <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("welcome")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("questionnaire")}>Build my taste <ChevronRight size={18} /></button></div>
@@ -1330,7 +1540,7 @@ function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; o
           <div className="tradeoff-list">
             {forcedChoices.map((choice, index) => <fieldset key={choice[0]}><legend>Tonight, which would you choose?</legend>{choice.map((option, optionIndex) => <button type="button" key={option} className={tradeoffAnswers[index] === optionIndex ? "is-active" : ""} onClick={() => setTradeoffAnswers((current) => { const next = [...current]; next[index] = optionIndex; return next; })}><span>{optionIndex === 0 ? "A" : "B"}</span><strong>{option}</strong>{tradeoffAnswers[index] === optionIndex && <Check size={16} />}</button>)}</fieldset>)}
           </div>
-          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("genres")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("calibrate")}>Rate some titles <ChevronRight size={18} /></button></div>
+          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("genres")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep(live ? "summary" : "calibrate")}>{live ? "See my starting taste" : "Rate some titles"} <ChevronRight size={18} /></button></div>
         </section>
       )}
       {step === "calibrate" && (
@@ -1392,6 +1602,7 @@ function HomeScreen({
   selectedVibe,
   setSelectedVibe,
   onFind,
+  finding,
 }: {
   profile: ViewerProfile;
   selectedMoods: string[];
@@ -1399,6 +1610,7 @@ function HomeScreen({
   selectedVibe: string;
   setSelectedVibe: (vibe: string) => void;
   onFind: () => void;
+  finding: boolean;
 }) {
   const ratingCount = Object.keys(profile.ratings).length;
   return (
@@ -1424,27 +1636,27 @@ function HomeScreen({
           {vibes.map((vibe) => <button key={vibe.id} className={`vibe-card ${selectedVibe === vibe.id ? "is-active" : ""}`} onClick={() => setSelectedVibe(vibe.id)}><span>{vibe.eyebrow}</span><strong>{vibe.label}</strong><ChevronRight size={16} /></button>)}
         </div>
       </section>
-      <button className="find-button" onClick={onFind}><span><Sparkles size={19} /> Find something</span><small>{ratingCount > 0 ? `Tuned from ${ratingCount} ratings` : "Using your starting taste"}</small></button>
+      <button className="find-button" onClick={onFind} disabled={finding}><span><Sparkles size={19} /> {finding ? "Finding real matches…" : "Find something"}</span><small>{ratingCount > 0 ? `Tuned from ${ratingCount} ratings` : "Using your starting taste"}</small></button>
       <div className="home-trust"><ShieldCheck size={15} /><p><strong>No chatbot. No taste feed.</strong> Ten considered picks from an explainable model.</p></div>
     </main>
   );
 }
 
-function ResultsScreen({ profile, recommendations, onBack, onDetails, onFeedback }: { profile: ViewerProfile; recommendations: Recommendation[]; onBack: () => void; onDetails: (title: Title) => void; onFeedback: (message: string, title?: Title) => void }) {
+function ResultsScreen({ profile, recommendations, onBack, onDetails, onFeedback, live }: { profile: ViewerProfile; recommendations: Recommendation[]; onBack: () => void; onDetails: (title: Title) => void; onFeedback: (message: string, title?: Title) => void; live: boolean }) {
   return (
     <main className="results-screen page-content">
       <div className="results-heading"><button className="icon-button" onClick={onBack} aria-label="Back"><ArrowLeft size={20} /></button><div><p className="kicker">TOP {recommendations.length} · ONE GOOD NIGHT</p><h1>{recommendations.length === 10 ? "Here’s your top ten." : `${recommendations.length} picks fit tonight.`}</h1></div><button className="icon-button" onClick={onBack} aria-label="Adjust choices"><RefreshCw size={18} /></button></div>
       <div className="recommendation-stack">
         {recommendations.map((recommendation, index) => <RecommendationCard key={recommendation.title.id} profile={profile} recommendation={recommendation} priority={index === 0} onDetails={onDetails} onFeedback={onFeedback} />)}
       </div>
-      <p className="availability-disclaimer"><Info size={14} /> Provider labels use demo seed data until a TMDB key is connected. The production data layer rechecks region and availability type.</p>
+      <p className="availability-disclaimer"><Info size={14} /> {live ? "US provider data is checked live through TMDB/JustWatch and can change. Rental and purchase prices are intentionally not inferred." : "Demo provider labels are illustrative browser-local data, not live availability."}</p>
     </main>
   );
 }
 
 function RecommendationCard({ profile, recommendation, priority, onDetails, onFeedback }: { profile: ViewerProfile; recommendation: Recommendation; priority: boolean; onDetails: (title: Title) => void; onFeedback: (message: string, title?: Title) => void }) {
   const { title } = recommendation;
-  const availability = displayProvider(profile, title);
+  const availability = displayProvider(profile, title, recommendation.primaryAvailability);
   return (
     <article className={`recommendation-card ${priority ? "recommendation-card--hero" : ""}`}>
       <div className="recommendation-card__label"><span>#{String(recommendation.rank).padStart(2, "0")} · {recommendation.lane}</span><small>{priority ? "Highest confidence" : recommendation.lane === "Wild Card" ? "Most adventurous" : recommendation.rank < 5 ? "Strong personal fit" : "A wider orbit"}</small></div>
@@ -1453,7 +1665,7 @@ function RecommendationCard({ profile, recommendation, priority, onDetails, onFe
         <div className="title-meta"><span>{title.year}</span><span>{title.kind}</span><span>{title.runtime}</span></div>
         <div className="title-row"><h2>{title.name}</h2><button className="icon-button" onClick={() => onFeedback("Saved to your watchlist")} aria-label="Save"><Bookmark size={19} /></button></div>
         <p className="recommendation-reason">{recommendation.explanation}</p>
-        <div className="availability-row"><span className="provider-mark">{availability.provider.slice(0, 2)}</span><div><small>{availability.label}</small><strong>{availability.provider}</strong></div>{recommendation.rental && <span className="rental-note">Rental</span>}</div>
+        <div className="availability-row"><span className="provider-mark">{availability.provider.slice(0, 2)}</span><div><small>{availability.label}</small><strong>{availability.provider}</strong></div>{availability.kind === "rental" && <span className="rental-note">Rental</span>}</div>
         {recommendation.friendContext && <FriendBanner context={recommendation.friendContext} />}
         <div className="card-actions"><button className="secondary-button" onClick={() => onDetails(title)}>Details</button><button className="ghost-button" onClick={() => onFeedback("Not interested", title)}>Not interested</button><button className="more-button" onClick={() => onFeedback("Tell us how this pick landed", title)} aria-label="More feedback"><MoreHorizontal size={20} /></button></div>
       </div>
@@ -1487,14 +1699,14 @@ function DetailsSheet({ profile, title, friendContext, onClose, onPerson, onRate
     <div className="modal-scrim modal-scrim--full" role="dialog" aria-modal="true" aria-label={`${title.name} details`}>
       <article className="details-sheet">
         <div className="details-hero">
-          <Image className="details-backdrop" src={title.backdrop} alt="" fill sizes="100vw" onError={(event) => { event.currentTarget.style.display = "none"; }} />
+          {title.backdrop && <Image className="details-backdrop" src={title.backdrop} alt="" fill sizes="100vw" onError={(event) => { event.currentTarget.style.display = "none"; }} />}
           <div className="details-hero__shade" /><button className="icon-button details-close" onClick={onClose} aria-label="Close"><X size={20} /></button>
           <div className="details-hero__content"><p className="kicker">{title.kind.toUpperCase()} · {title.year}</p><h1>{title.name}</h1><div className="title-meta"><span>{title.runtime}</span>{title.genres.slice(0, 2).map((genre) => <span key={genre}>{genre}</span>)}</div></div>
         </div>
         <div className="details-body">
           <div className="details-rating"><div><span>Your rating</span><strong>{profile.ratings[title.id] ? `${profile.ratings[title.id]}/10` : "Not rated"}</strong></div><RatingPicker value={profile.ratings[title.id]} onRate={onRate} /></div>
           <p className="details-synopsis">{title.synopsis}</p>
-          <div className="details-availability"><span className="provider-mark">{availability.provider.slice(0, 2)}</span><div><small>{availability.label}</small><strong>{availability.provider}</strong></div>{title.availabilityType === "rental" && <span className="rental-note">Rental</span>}</div>
+          <div className="details-availability"><span className="provider-mark">{availability.provider.slice(0, 2)}</span><div><small>{availability.label}</small><strong>{availability.provider}</strong></div>{availability.kind === "rental" && <span className="rental-note">Rental</span>}</div>
           {friendContext && <FriendBanner context={friendContext} />}
           <dl className="credits-list"><div><dt>Director</dt><dd><button onClick={() => onPerson(title.director)}>{title.director}</button></dd></div><div><dt>Written by</dt><dd>{title.writers.map((writer) => <button key={writer} onClick={() => onPerson(writer)}>{writer}</button>)}</dd></div>{title.cinematographer && <div><dt>Cinematography</dt><dd><button onClick={() => onPerson(title.cinematographer!)}>{title.cinematographer}</button></dd></div>}<div><dt>Featuring</dt><dd>{title.cast.map((actor) => <button key={actor} onClick={() => onPerson(actor)}>{actor}</button>)}</dd></div></dl>
           {(title.criterion || title.canonical?.length) && <div className="editorial-signals">{title.criterion && <span>Criterion associated</span>}{title.canonical?.map((list) => <span key={list}>{list}</span>)}</div>}
@@ -1522,10 +1734,47 @@ function PersonSheet({ person, profile, onClose, onTitle }: { person: string; pr
   );
 }
 
-function RateScreen({ profile, onRate, onDetails }: { profile: ViewerProfile; onRate: (id: string, score: number) => void; onDetails: (title: Title) => void }) {
+function RateScreen({ profile, onRate, onDetails, live, knownTitles, onTitles }: { profile: ViewerProfile; onRate: (title: Title, score: number) => void; onDetails: (title: Title) => void; live: boolean; knownTitles: Record<string, Title>; onTitles: (titles: Title[]) => void }) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<"all" | "rated">("all");
-  const filtered = catalog.filter((title) => title.name.toLowerCase().includes(query.toLowerCase()) && (filter === "all" || profile.ratings[title.id]));
+  const [searchResults, setSearchResults] = useState<Title[]>([]);
+  const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState("");
+
+  useEffect(() => {
+    if (!live || filter === "rated" || query.trim().length < 2) {
+      return;
+    }
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => {
+      setSearching(true);
+      setSearchError("");
+      void fetch(`/api/tmdb/search?query=${encodeURIComponent(query.trim())}`, { signal: controller.signal })
+        .then(async (response) => {
+          if (!response.ok) throw new Error("TMDB search is temporarily unavailable.");
+          const payload = await response.json() as { results?: TitleSearchResult[] };
+          const titles = (payload.results ?? []).map(searchResultToTitle);
+          setSearchResults(titles);
+          onTitles(titles);
+        })
+        .catch((error: unknown) => {
+          if (error instanceof DOMException && error.name === "AbortError") return;
+          setSearchError(error instanceof Error ? error.message : "TMDB search failed.");
+        })
+        .finally(() => setSearching(false));
+    }, 300);
+    return () => {
+      controller.abort();
+      window.clearTimeout(timer);
+    };
+  }, [filter, live, onTitles, query]);
+
+  const hasLiveQuery = live && filter === "all" && query.trim().length >= 2;
+  const filtered = live
+    ? filter === "rated"
+      ? Object.keys(profile.ratings).flatMap((id) => knownTitles[id] ? [knownTitles[id]] : [])
+      : hasLiveQuery ? searchResults : []
+    : catalog.filter((title) => title.name.toLowerCase().includes(query.toLowerCase()) && (filter === "all" || profile.ratings[title.id]));
   return (
     <main className="rate-screen page-content">
       <div className="page-heading"><p className="kicker">TEACH THE MODEL</p><h1>Rate what you&apos;ve seen.</h1><p>Every real rating matters more than a questionnaire answer.</p></div>
@@ -1534,18 +1783,20 @@ function RateScreen({ profile, onRate, onDetails }: { profile: ViewerProfile; on
       <div className="rating-list">
         {filtered.map((title) => (
           <article className="rating-row" key={title.id}>
-            <button className="rating-row__title" onClick={() => onDetails(title)}><span className="rating-thumb"><Image src={title.poster} alt="" fill sizes="54px" /></span><span><strong>{title.name}</strong><small>{title.year} · {title.kind} · {title.runtime}</small></span></button>
-            <RatingPicker value={profile.ratings[title.id]} onRate={(score) => onRate(title.id, score)} compact />
+            <button className="rating-row__title" onClick={() => onDetails(title)}><span className="rating-thumb">{title.poster ? <Image src={title.poster} alt="" fill sizes="54px" /> : <Film size={18} />}</span><span><strong>{title.name}</strong><small>{title.year || "—"} · {title.kind} · {title.runtime}</small></span></button>
+            <RatingPicker value={profile.ratings[title.id]} onRate={(score) => onRate(title, score)} compact />
           </article>
         ))}
-        {!filtered.length && <div className="empty-state"><Search size={24} /><strong>No title in the demo catalog</strong><p>Connect a TMDB key to search the complete movie and TV catalog.</p></div>}
+        {hasLiveQuery && searching && <div className="empty-state"><Search size={24} /><strong>Searching TMDB…</strong><p>Looking across real movies and TV shows.</p></div>}
+        {hasLiveQuery && !searching && searchError && <div className="empty-state"><Info size={24} /><strong>Search unavailable</strong><p>{searchError}</p></div>}
+        {(!hasLiveQuery || (!searching && !searchError)) && !filtered.length && <div className="empty-state"><Search size={24} /><strong>{live ? filter === "rated" ? "No hydrated ratings yet" : query.trim().length < 2 ? "Search the TMDB catalog" : "No matching movie or show" : "No title in the demo catalog"}</strong><p>{live ? filter === "rated" ? "Your persisted ratings will appear as their live metadata loads." : "Enter at least two characters to find real movies and TV shows." : "Demo mode uses a small browser-local catalog."}</p></div>}
       </div>
     </main>
   );
 }
 
-function TasteScreen({ profile, onRate }: { profile: ViewerProfile; onRate: () => void }) {
-  const ratedTitles = Object.entries(profile.ratings).map(([id, score]) => ({ title: titleById(id), score })).filter((item): item is { title: Title; score: number } => Boolean(item.title));
+function TasteScreen({ profile, onRate, knownTitles }: { profile: ViewerProfile; onRate: () => void; knownTitles: Record<string, Title> }) {
+  const ratedTitles = Object.entries(profile.ratings).map(([id, score]) => ({ title: knownTitles[id] ?? titleById(id), score })).filter((item): item is { title: Title; score: number } => Boolean(item.title));
   const average = ratedTitles.length ? ratedTitles.reduce((sum, item) => sum + item.score, 0) / ratedTitles.length : 0;
   const genreScores = new Map<string, number[]>();
   ratedTitles.forEach(({ title, score }) => title.genres.forEach((genre) => genreScores.set(genre, [...(genreScores.get(genre) ?? []), score])));
@@ -1632,7 +1883,7 @@ function SettingsScreen({ profile, feedback, store, onChange, onProfiles, onToas
       onToast(`Configuration imported as model v${profile.modelVersion + 1}. Raw history was untouched.`);
     } catch { onToast("That file is not a valid tuning configuration"); }
   };
-  if (section === "services") return <SettingsSubpage title="Streaming services" onBack={() => setSection("main")}><p className="settings-intro">Availability is filtered for this profile only.</p><div className="settings-service-list">{services.map((service) => { const active = profile.subscriptions.includes(service.id); return <button key={service.id} onClick={() => onChange({ ...profile, subscriptions: active ? profile.subscriptions.filter((id) => id !== service.id) : [...profile.subscriptions, service.id] })}><span className="service-mark">{service.mark}</span><strong>{service.id}</strong><span className={`check-circle ${active ? "is-active" : ""}`}>{active && <Check size={14} />}</span></button>; })}</div></SettingsSubpage>;
+  if (section === "services") return <SettingsSubpage title="Streaming services" onBack={() => setSection("main")}><p className="settings-intro">Availability is filtered for this profile only.</p><div className="settings-service-list">{services.map((service) => { const active = profileHasService(profile, service.slug); return <button key={service.id} onClick={() => onChange({ ...profile, subscriptions: active ? profile.subscriptions.filter((id) => serviceKey(id) !== service.slug) : [...profile.subscriptions, service.slug] })}><span className="service-mark">{service.mark}</span><strong>{service.id}</strong><span className={`check-circle ${active ? "is-active" : ""}`}>{active && <Check size={14} />}</span></button>; })}</div></SettingsSubpage>;
   if (section === "friends") return <SettingsSubpage title="Friends" onBack={() => setSection("main")}><FriendsSettingsContent acceptedFriends={acceptedFriends} incomingRequests={incomingRequests} outgoingIds={outgoingIds} suggestedFriends={suggestedFriends} store={store} onFriendship={onFriendship} /></SettingsSubpage>;
   if (section === "algorithm") return <SettingsSubpage title="Algorithm Lab" onBack={() => setSection("main")}><p className="settings-intro">Tune the model without ever rewriting your ratings or watch history.</p><div className="model-card"><div><p className="kicker">CURRENT</p><h3>Model v{profile.modelVersion}</h3><span>Deterministic · profile isolated</span></div><strong>{Object.keys(profile.ratings).length}<small> ratings</small></strong></div><div className="performance-grid"><div><strong>{feedback.length}</strong><span>Feedback events</span></div><div><strong>{Object.keys(profile.questionnaire).length}</strong><span>Taste signals</span></div><div><strong>10</strong><span>Ranked lanes</span></div></div><button className="settings-action" onClick={exportData}><span><Download size={18} /><span><strong>Export training package</strong><small>Ratings, predictions, signals, and current weights</small></span></span><ChevronRight size={17} /></button><button className="settings-action" onClick={() => importRef.current?.click()}><span><Upload size={18} /><span><strong>Import tuned configuration</strong><small>Only approved weights and thresholds can change</small></span></span><ChevronRight size={17} /></button><input ref={importRef} className="visually-hidden" type="file" accept="application/json" onChange={(event) => importConfig(event.target.files?.[0])} /><div className="safety-note"><ShieldCheck size={18} /><p><strong>History safety is enforced.</strong> Imported files cannot overwrite ratings, watched history, recommendation history, or raw feedback.</p></div></SettingsSubpage>;
   if (section === "privacy") return <SettingsSubpage title="Privacy" onBack={() => setSection("main")}><PrivacySettingsContent profile={profile} onChange={onChange} /></SettingsSubpage>;
@@ -1683,8 +1934,13 @@ function FeedbackSheet({ title, onClose, onSubmit }: { title?: Title; onClose: (
 }
 
 export function WhatToWatchApp() {
+  const supabase = createSupabaseBrowserClient();
   const [store, setStore] = useState<AppStore>({ profiles: seedProfiles, feedback: [], friendProfiles: seedFriendProfiles, friendships: seedFriendships, friendReviews: seedFriendReviews, friendRecommendations: seedFriendRecommendations });
   const [hydrated, setHydrated] = useState(false);
+  const [persistenceMode, setPersistenceMode] = useState<"demo" | "authenticated">("demo");
+  const [user, setUser] = useState<User | null>(null);
+  const [liveTitles, setLiveTitles] = useState<Record<string, Title>>({});
+  const [finding, setFinding] = useState(false);
   const [activeProfileId, setActiveProfileId] = useState<string | null>(null);
   const [showProfiles, setShowProfiles] = useState(true);
   const [profileEditor, setProfileEditor] = useState<"create" | "manage" | null>(null);
@@ -1700,37 +1956,178 @@ export function WhatToWatchApp() {
   const [toast, setToast] = useState("");
 
   useEffect(() => {
-    const initialize = window.setTimeout(() => {
+    let cancelled = false;
+    const loadDemo = () => {
+      let nextStore: AppStore = { profiles: seedProfiles, feedback: [], friendProfiles: seedFriendProfiles, friendships: seedFriendships, friendReviews: seedFriendReviews, friendRecommendations: seedFriendRecommendations };
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
           const parsed = JSON.parse(saved) as Partial<AppStore>;
-          if (Array.isArray(parsed.profiles)) setStore({
+          if (Array.isArray(parsed.profiles)) nextStore = {
             profiles: parsed.profiles.map((savedProfile) => ({ ...savedProfile, shareWithFriends: savedProfile.shareWithFriends ?? "ratings_and_reviews" })),
             feedback: Array.isArray(parsed.feedback) ? parsed.feedback : [],
             friendProfiles: Array.isArray(parsed.friendProfiles) ? parsed.friendProfiles : seedFriendProfiles,
             friendships: Array.isArray(parsed.friendships) ? parsed.friendships : seedFriendships,
             friendReviews: Array.isArray(parsed.friendReviews) ? parsed.friendReviews : seedFriendReviews,
             friendRecommendations: Array.isArray(parsed.friendRecommendations) ? parsed.friendRecommendations : seedFriendRecommendations,
-          });
+          };
         }
       } catch { /* Keep safe seed state if local storage is unavailable. */ }
+      if (cancelled) return;
+      setUser(null);
+      setPersistenceMode("demo");
+      setStore(nextStore);
+      setActiveProfileId(null);
+      setShowProfiles(true);
       setHydrated(true);
+    };
+    const loadAuthenticated = async (nextUser: User) => {
+      if (!supabase) return;
+      try {
+        const profiles = await loadCloudProfiles(supabase, nextUser);
+        if (cancelled) return;
+        setUser(nextUser);
+        setPersistenceMode("authenticated");
+        setStore({ profiles, feedback: [], friendProfiles: [], friendships: [], friendReviews: [], friendRecommendations: [] });
+        setActiveProfileId(null);
+        setShowProfiles(true);
+      } catch {
+        if (cancelled) return;
+        setUser(nextUser);
+        setPersistenceMode("authenticated");
+        setStore({ profiles: [], feedback: [], friendProfiles: [], friendships: [], friendReviews: [], friendRecommendations: [] });
+        setToast("Could not load Supabase profiles. Your browser demo data was not used.");
+      } finally {
+        if (!cancelled) setHydrated(true);
+      }
+    };
+    const initialize = window.setTimeout(() => {
+      if (!supabase) {
+        loadDemo();
+        return;
+      }
+      void supabase.auth.getUser().then(({ data }) => {
+        if (data.user) return loadAuthenticated(data.user);
+        loadDemo();
+      });
     }, 0);
+    const authSubscription = supabase?.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session?.user) {
+        window.setTimeout(() => void loadAuthenticated(session.user), 0);
+      } else if (event === "SIGNED_OUT") {
+        window.setTimeout(loadDemo, 0);
+      }
+    });
     if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => undefined);
-    return () => window.clearTimeout(initialize);
-  }, []);
-  useEffect(() => { if (hydrated) localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }, [store, hydrated]);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(initialize);
+      authSubscription?.data.subscription.unsubscribe();
+    };
+  }, [supabase]);
+  useEffect(() => { if (hydrated && persistenceMode === "demo") localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }, [store, hydrated, persistenceMode]);
   useEffect(() => { if (!toast) return; const timer = window.setTimeout(() => setToast(""), 2800); return () => window.clearTimeout(timer); }, [toast]);
+  const rememberTitles = useCallback((titles: Title[]) => {
+    setLiveTitles((current) => ({ ...current, ...Object.fromEntries(titles.map((title) => [title.id, title])) }));
+  }, []);
 
   const profile = store.profiles.find((item) => item.id === activeProfileId) ?? null;
-  const updateProfile = (next: ViewerProfile) => setStore((current) => ({ ...current, profiles: current.profiles.map((item) => item.id === next.id ? next : item) }));
+  useEffect(() => {
+    if (persistenceMode !== "authenticated" || !profile) return;
+    const missing = Object.keys(profile.ratings).filter((id) => !liveTitles[id]).slice(0, 50);
+    if (!missing.length) return;
+    const controller = new AbortController();
+    void Promise.all(missing.map(async (externalId) => {
+      const match = /^tmdb:(movie|tv):(\d+)$/.exec(externalId);
+      if (!match) return null;
+      const response = await fetch(`/api/tmdb/title?mediaType=${match[1]}&id=${match[2]}&region=US`, { signal: controller.signal });
+      if (!response.ok) return null;
+      const payload = await response.json() as { title: LiveApiTitle } | LiveApiTitle;
+      const value = "id" in payload ? payload : payload.title;
+      return value ? apiTitleToTitle(value) : null;
+    })).then((titles) => rememberTitles(titles.filter((title): title is Title => title !== null))).catch((error: unknown) => {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+    });
+    return () => controller.abort();
+  }, [liveTitles, persistenceMode, profile, rememberTitles]);
+  const updateProfile = (next: ViewerProfile) => {
+    setStore((current) => ({ ...current, profiles: current.profiles.map((item) => item.id === next.id ? next : item) }));
+    if (persistenceMode === "authenticated" && supabase && user) {
+      void persistCloudProfile(supabase, asCloudProfile(next, user)).catch(() => setToast("Supabase could not save that profile change."));
+    }
+  };
   const chooseProfile = (next: ViewerProfile) => { setActiveProfileId(next.id); setShowProfiles(false); setScreen("home"); };
-  const addProfile = (next: ViewerProfile) => { setStore((current) => ({ ...current, profiles: [...current.profiles, next] })); setActiveProfileId(next.id); setProfileEditor(null); setShowProfiles(false); };
-  const deleteProfile = (id: string) => { if (store.profiles.length <= 1) { setToast("Keep at least one profile"); return; } setStore((current) => ({ ...current, profiles: current.profiles.filter((item) => item.id !== id), feedback: current.feedback.filter((item) => item.profileId !== id), friendships: current.friendships.filter((item) => item.requesterProfileId !== id && item.addresseeProfileId !== id), friendReviews: current.friendReviews.filter((item) => item.authorProfileId !== id), friendRecommendations: current.friendRecommendations.filter((item) => item.senderProfileId !== id && item.recipientProfileId !== id) })); if (activeProfileId === id) { setActiveProfileId(null); setShowProfiles(true); } };
-  const rate = (id: string, score: number) => { if (!profile) return; const title = titleById(id); updateProfile({ ...profile, ratings: { ...profile.ratings, [id]: score } }); setToast(`${title?.name ?? "Title"} rated ${score}/10`); if (title && score >= 8) setPostRating({ title, rating: score }); };
-  const find = () => { if (!profile) return; const result = buildRecommendations(profile, selectedMoods, selectedVibe || "Surprise", store); setRecommendations(result); setScreen("results"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const addProfile = (next: ViewerProfile) => {
+    if (persistenceMode === "authenticated" && supabase && user) {
+      void createCloudProfile(supabase, user, next).then((created) => {
+        const configured = { ...created, region: next.region, subscriptions: next.subscriptions, rentalMode: next.rentalMode };
+        setStore((current) => ({ ...current, profiles: [...current.profiles, configured] }));
+        if (configured.subscriptions.length) void persistCloudProfile(supabase, configured).catch(() => setToast("Profile created, but household services were not copied."));
+        setActiveProfileId(configured.id);
+        setProfileEditor(null);
+        setShowProfiles(false);
+      }).catch(() => setToast("Supabase could not create that profile."));
+      return;
+    }
+    setStore((current) => ({ ...current, profiles: [...current.profiles, next] })); setActiveProfileId(next.id); setProfileEditor(null); setShowProfiles(false);
+  };
+  const deleteProfileFromStore = (id: string) => {
+    if (store.profiles.length <= 1) { setToast("Keep at least one profile"); return; }
+    if (persistenceMode === "authenticated" && supabase) void deleteCloudProfile(supabase, id).catch(() => setToast("Supabase could not delete that profile."));
+    setStore((current) => ({ ...current, profiles: current.profiles.filter((item) => item.id !== id), feedback: current.feedback.filter((item) => item.profileId !== id), friendships: current.friendships.filter((item) => item.requesterProfileId !== id && item.addresseeProfileId !== id), friendReviews: current.friendReviews.filter((item) => item.authorProfileId !== id), friendRecommendations: current.friendRecommendations.filter((item) => item.senderProfileId !== id && item.recipientProfileId !== id) }));
+    if (activeProfileId === id) { setActiveProfileId(null); setShowProfiles(true); }
+  };
+  const rate = (titleOrId: Title | string, score: number) => {
+    if (!profile) return;
+    const title = typeof titleOrId === "string" ? liveTitles[titleOrId] ?? titleById(titleOrId) : titleOrId;
+    const id = typeof titleOrId === "string" ? titleOrId : titleOrId.id;
+    setStore((current) => ({ ...current, profiles: current.profiles.map((item) => item.id === profile.id ? { ...item, ratings: { ...item.ratings, [id]: score } } : item) }));
+    if (title) setLiveTitles((current) => ({ ...current, [title.id]: title }));
+    if (persistenceMode === "authenticated" && supabase) {
+      void persistCloudRating(supabase, profile.id, id, score).catch(() => setToast("Supabase could not save that rating."));
+    }
+    setToast(`${title?.name ?? "Title"} rated ${score}/10`);
+    if (title && score >= 8 && persistenceMode === "demo") setPostRating({ title, rating: score });
+  };
+  const find = () => {
+    if (!profile) return;
+    if (persistenceMode === "demo") {
+      const result = buildRecommendations(profile, selectedMoods, selectedVibe || "Surprise", store);
+      setRecommendations(result);
+      setScreen("results");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    setFinding(true);
+    void fetch("/api/recommendations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        profileId: profile.id,
+        moods: selectedMoods.map((mood) => mood.toLowerCase()),
+        vibes: [liveVibeByUiId[selectedVibe || "Surprise"] ?? "surprise-me"],
+        region: "US",
+      }),
+    }).then(async (response) => {
+      const payload = await response.json() as { recommendations?: LiveApiRecommendation[]; error?: { message?: string } };
+      if (!response.ok) throw new Error(payload.error?.message ?? "Real recommendations are temporarily unavailable.");
+      const result = (payload.recommendations ?? []).map(apiRecommendationToRecommendation);
+      if (!result.length) throw new Error("No currently available title cleared your profile and availability filters.");
+      rememberTitles(result.map((recommendation) => recommendation.title));
+      setRecommendations(result);
+      setScreen("results");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }).catch((error: unknown) => {
+      setToast(error instanceof Error ? error.message : "Real recommendations failed.");
+    }).finally(() => setFinding(false));
+  };
   const feedback = (message: string, title?: Title) => {
+    if (title && persistenceMode === "authenticated" && supabase && profile && message === "Not interested") {
+      const item = recommendations.find((recommendation) => recommendation.title.id === title.id);
+      if (item?.recommendationItemId) void persistRecommendationFeedback(supabase, profile.id, item.recommendationItemId, { reason: message }).catch(() => setToast("Supabase could not save that feedback."));
+      setToast(`${title.name} removed from future picks`);
+      return;
+    }
     if (title && message === "Not interested" && profile) {
       setStore((current) => ({ ...current, feedback: [...current.feedback, { id: crypto.randomUUID(), profileId: profile.id, titleId: title.id, reason: message, createdAt: new Date().toISOString() }] }));
       setToast(`${title.name} removed from future picks`);
@@ -1768,23 +2165,29 @@ export function WhatToWatchApp() {
   };
 
   if (!hydrated) return <div className="app-loading"><Logo /><span /></div>;
-  if (showProfiles || !profile) return <><ProfilePicker profiles={store.profiles} onSelect={chooseProfile} onCreate={() => setProfileEditor("create")} onEdit={() => setProfileEditor("manage")} />{profileEditor && <ProfileEditor profiles={store.profiles} mode={profileEditor} onClose={() => setProfileEditor(null)} onSave={addProfile} onUpdate={updateProfile} onDelete={deleteProfile} />}{toast && <div className="toast"><Check size={16} />{toast}</div>}</>;
-  if (!profile.onboardingCompleted) return <Onboarding profile={profile} onChange={updateProfile} onFinish={() => setScreen("home")} />;
+  if (showProfiles || !profile) return <><ProfilePicker profiles={store.profiles} onSelect={chooseProfile} onCreate={() => setProfileEditor("create")} onEdit={() => setProfileEditor("manage")} authenticated={persistenceMode === "authenticated"} />{profileEditor && <ProfileEditor profiles={store.profiles} mode={profileEditor} onClose={() => setProfileEditor(null)} onSave={addProfile} onUpdate={updateProfile} onDelete={deleteProfileFromStore} allowGuest={persistenceMode === "demo"} />}{toast && <div className="toast"><Check size={16} />{toast}</div>}</>;
+  if (!profile.onboardingCompleted) return <Onboarding profile={profile} onChange={updateProfile} onFinish={() => setScreen("home")} live={persistenceMode === "authenticated"} onQuestionnaire={(scores) => {
+    if (persistenceMode === "authenticated" && supabase) void persistCloudQuestionnaire(supabase, profile.id, scores).catch(() => setToast("Supabase could not save the questionnaire."));
+  }} />;
 
   return (
     <div className="app-shell">
       <AppHeader profile={profile} onProfiles={() => setShowProfiles(true)} onMenu={() => setScreen("settings")} />
-      {screen === "home" && <HomeScreen profile={profile} selectedMoods={selectedMoods} setSelectedMoods={setSelectedMoods} selectedVibe={selectedVibe} setSelectedVibe={setSelectedVibe} onFind={find} />}
-      {screen === "results" && <ResultsScreen profile={profile} recommendations={recommendations.length ? recommendations : buildRecommendations(profile, selectedMoods, selectedVibe, store)} onBack={() => setScreen("home")} onDetails={setDetailsTitle} onFeedback={feedback} />}
-      {screen === "rate" && <RateScreen profile={profile} onRate={rate} onDetails={setDetailsTitle} />}
-      {screen === "taste" && <TasteScreen profile={profile} onRate={() => setScreen("rate")} />}
+      {screen === "home" && <HomeScreen profile={profile} selectedMoods={selectedMoods} setSelectedMoods={setSelectedMoods} selectedVibe={selectedVibe} setSelectedVibe={setSelectedVibe} onFind={find} finding={finding} />}
+      {screen === "results" && <ResultsScreen profile={profile} recommendations={recommendations.length ? recommendations : persistenceMode === "demo" ? buildRecommendations(profile, selectedMoods, selectedVibe, store) : []} onBack={() => setScreen("home")} onDetails={setDetailsTitle} onFeedback={feedback} live={persistenceMode === "authenticated"} />}
+      {screen === "rate" && <RateScreen profile={profile} onRate={rate} onDetails={setDetailsTitle} live={persistenceMode === "authenticated"} knownTitles={liveTitles} onTitles={rememberTitles} />}
+      {screen === "taste" && <TasteScreen profile={profile} onRate={() => setScreen("rate")} knownTitles={liveTitles} />}
       {screen === "settings" && <SettingsScreen profile={profile} feedback={store.feedback.filter((item) => item.profileId === profile.id)} store={store} onChange={updateProfile} onProfiles={() => setProfileEditor("manage")} onToast={setToast} onFriendship={changeFriendship} />}
       <BottomNav screen={screen} onChange={(next) => { setScreen(next); window.scrollTo({ top: 0, behavior: "smooth" }); }} />
-      {detailsTitle && <DetailsSheet profile={profile} title={detailsTitle} friendContext={friendEvidence(profile, detailsTitle.id, store).context} onClose={() => setDetailsTitle(null)} onPerson={(name) => { setPerson(name); setDetailsTitle(null); }} onRate={(score) => rate(detailsTitle.id, score)} onRecommend={() => setPostRating({ title: detailsTitle, rating: profile.ratings[detailsTitle.id] })} />}
+      {detailsTitle && <DetailsSheet profile={profile} title={detailsTitle} friendContext={friendEvidence(profile, detailsTitle.id, store).context} onClose={() => setDetailsTitle(null)} onPerson={(name) => { setPerson(name); setDetailsTitle(null); }} onRate={(score) => rate(detailsTitle, score)} onRecommend={() => setPostRating({ title: detailsTitle, rating: profile.ratings[detailsTitle.id] })} />}
       {person && <PersonSheet person={person} profile={profile} onClose={() => setPerson(null)} onTitle={(title) => { setPerson(null); setDetailsTitle(title); }} />}
-      {profileEditor && <ProfileEditor profiles={store.profiles} mode={profileEditor} onClose={() => setProfileEditor(null)} onSave={addProfile} onUpdate={updateProfile} onDelete={deleteProfile} />}
+      {profileEditor && <ProfileEditor profiles={store.profiles} mode={profileEditor} onClose={() => setProfileEditor(null)} onSave={addProfile} onUpdate={updateProfile} onDelete={deleteProfileFromStore} allowGuest={persistenceMode === "demo"} />}
       {showFeedback && <FeedbackSheet title={feedbackTitle} onClose={() => setShowFeedback(false)} onSubmit={(message) => {
-        if (feedbackTitle) setStore((current) => ({ ...current, feedback: [...current.feedback, { id: crypto.randomUUID(), profileId: profile.id, titleId: feedbackTitle.id, reason: message, createdAt: new Date().toISOString() }] }));
+        if (feedbackTitle && persistenceMode === "authenticated" && supabase) {
+          const item = recommendations.find((recommendation) => recommendation.title.id === feedbackTitle.id);
+          const scoreMatch = /^Recommendation rated (\d+)\/10$/.exec(message);
+          if (item?.recommendationItemId) void persistRecommendationFeedback(supabase, profile.id, item.recommendationItemId, scoreMatch ? { recommendationScore: Number(scoreMatch[1]) } : { reason: message }).catch(() => setToast("Supabase could not save that feedback."));
+        } else if (feedbackTitle) setStore((current) => ({ ...current, feedback: [...current.feedback, { id: crypto.randomUUID(), profileId: profile.id, titleId: feedbackTitle.id, reason: message, createdAt: new Date().toISOString() }] }));
         setShowFeedback(false);
         setToast(`Feedback saved: ${message}`);
       }} />}

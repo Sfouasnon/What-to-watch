@@ -1,0 +1,941 @@
+{
+"ontology_version": "0.1.1",
+"pass": 2,
+"adjudications": [
+{
+"tmdb_id": 634649,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"earnest",
+"tense",
+"bittersweet"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The film's core involves sincere hero themes (earnest), high-stakes multiverse danger (tense), and the profound loss Peter experiences (bittersweet)."
+}
+]
+},
+{
+"tmdb_id": 980431,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"earnest",
+"playful",
+"uplifting"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The Avatar franchise balances sincere, high-stakes storytelling (earnest) with lighthearted humor (playful) and hopeful, friendship-driven themes (uplifting)."
+}
+]
+},
+{
+"tmdb_id": 569094,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"stylized",
+"tense",
+"earnest"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The film is heavily defined by its groundbreaking visual aesthetic (stylized), the sincere emotional core of Miles' family relationships (earnest), and the high-stakes conflict with the Spider Society (tense)."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": null,
+"human_review": false,
+"severity": "minor",
+"reason": "The primary superhero subgenre adequately captures the film's premise; a secondary subgenre is not strictly necessary to define the work."
+}
+]
+},
+{
+"tmdb_id": 454639,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "sword-and-sorcery",
+"human_review": false,
+"severity": "minor",
+"reason": "He-Man fundamentally aligns with sword-and-sorcery, centering on a muscular hero and close allies fighting magical and monstrous threats."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"earnest",
+"uplifting"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The narrative of embracing a true heroic destiny to save family and world supports an earnest and uplifting tone."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": null,
+"human_review": false,
+"severity": "minor",
+"reason": "With sword-and-sorcery as the primary, a secondary subgenre is redundant and unnecessary."
+}
+]
+},
+{
+"tmdb_id": 1226863,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "adventure-action",
+"human_review": false,
+"severity": "meaningful",
+"reason": "Animation is a medium, not a genre; the plot describes a clear journey/quest across the stars, aligning perfectly with adventure-action."
+}
+]
+},
+{
+"tmdb_id": 1598,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "psychological-thriller",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The film focuses on Cady's methodical terrorization and mind games played on the Bowden family, fitting psychological-thriller best."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "revenge-thriller",
+"human_review": false,
+"severity": "minor",
+"reason": "Cady's explicit motivation is retribution for the lawyer's past actions, making revenge-thriller a highly accurate secondary."
+}
+]
+},
+{
+"tmdb_id": 559,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"earnest",
+"bittersweet",
+"tense"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "Raimi's Spider-Man films are highly earnest, while the concluding chapter carries a bittersweet sense of loss alongside tense villain showdowns."
+}
+]
+},
+{
+"tmdb_id": 687163,
+"media_type": "movie",
+"fields": [
+{
+"field": "secondary_subgenre",
+"preferred_value": "alien-first-contact",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The keywords 'alien' and 'language barrier' point directly to the story's core plot of encountering and cooperating with non-human intelligence, making alien-first-contact the ideal secondary subgenre."
+}
+]
+},
+{
+"tmdb_id": 238,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "organized-crime",
+"human_review": false,
+"severity": "minor",
+"reason": "The film is a sprawling chronicle of the Corleone family's operations, politics, and culture as an institution, fitting organized-crime perfectly alongside Michael's gangster arc."
+}
+]
+},
+{
+"tmdb_id": 652,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "historical-drama",
+"human_review": false,
+"severity": "meaningful",
+"reason": "While it features large-scale battles, the film is primarily driven by the political and interpersonal conflicts of a defined past era, making historical-drama the strongest fit."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"earnest",
+"visceral",
+"bittersweet"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The tone captures the grand, sincere tragedy of the myth (earnest, bittersweet) along with the intense, bloody physical combat (visceral)."
+}
+]
+},
+{
+"tmdb_id": 1510795,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"menacing",
+"tense",
+"visceral"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The presence of serial killers and monsters across multiple timelines implies an atmosphere of locatable threats (menacing), suspense (tense), and bloody violence (visceral)."
+}
+]
+},
+{
+"tmdb_id": 24428,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"playful",
+"earnest",
+"uplifting"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The film is defined by its witty, banter-heavy dialogue (playful), its sincere comic-book heroics (earnest), and its rousing, triumphant team-up resolution (uplifting)."
+}
+]
+},
+{
+"tmdb_id": 102382,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"romantic",
+"bittersweet",
+"tense"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The narrative relies heavily on Peter and Gwen's idealized relationship (romantic), high-stakes action sequences (tense), and culminates in a famously tragic resolution (bittersweet)."
+}
+]
+},
+{
+"tmdb_id": 1361774,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": null,
+"human_review": true,
+"severity": "meaningful",
+"reason": "The ontology lacks a 'sports-comedy' subgenre. 'sports-drama' captures the athletic stakes but clashes with the film's purely comedic genre, making null the safest choice while flagging for review."
+}
+]
+},
+{
+"tmdb_id": 361743,
+"media_type": "movie",
+"fields": [
+{
+"field": "secondary_subgenre",
+"preferred_value": null,
+"human_review": false,
+"severity": "minor",
+"reason": "Assuming the primary subgenre captures the military action, a secondary subgenre is not strictly required, as the film does not strongly overlay a separate genre structure."
+}
+]
+},
+{
+"tmdb_id": 1668364,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "erotic-thriller",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The emphasis on secrecy, a dangerous emotional triangle, and a consuming, risky affair aligns perfectly with the mechanics of an erotic-thriller."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"tense",
+"unsettling"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The narrative promises psychological friction and boundary collapse (unsettling) along with the suspense of a dangerous affair being discovered (tense)."
+}
+]
+},
+{
+"tmdb_id": 98894,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "sex-comedy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The central comic engine revolves entirely around sexual desire, frustration, and the wives withholding sex from their husbands, perfectly defining a sex-comedy."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "romantic-comedy",
+"human_review": false,
+"severity": "minor",
+"reason": "While the broader town conflict is a sex-comedy, Jessica's own storyline of falling for a tricky recluse adds a distinct romantic-comedy arc."
+}
+]
+},
+{
+"tmdb_id": 1259102,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "romantic-comedy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The keyword 'romcom' and the presence of the Comedy genre indicate this afterlife love triangle is structurally a romantic-comedy, despite its deeper themes."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"meditative",
+"romantic",
+"bittersweet"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The reflective nature of the afterlife choice (meditative), the idealized focus on two loves (romantic), and the inherent loss in choosing one over the other (bittersweet) define the tone."
+}
+]
+},
+{
+"tmdb_id": 680,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "crime-drama",
+"human_review": false,
+"severity": "meaningful",
+"reason": "Pulp Fiction is primarily structured around criminal acts and the underworld (crime-drama), heavily inflected by dark comedy and neo-noir elements."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"wry",
+"stylized",
+"visceral"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The film is famous for its distinctive, heightened dialogue and nonlinear structure (stylized), understated dark humor (wry), and sudden bursts of graphic violence (visceral)."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "dark-comedy",
+"human_review": false,
+"severity": "minor",
+"reason": "The film's defining characteristic beyond its crime structure is how it plays violence and taboo subjects for laughs, making dark-comedy a perfect secondary label."
+}
+]
+},
+{
+"tmdb_id": 21484,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "psychological-horror",
+"human_review": false,
+"severity": "meaningful",
+"reason": "While it features a literal monster, the film's terror is fundamentally rooted in hysteria, emotional breakdown, and the mental deterioration of a dissolving marriage, making psychological-horror the strongest fit."
+}
+]
+},
+{
+"tmdb_id": 19995,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "space-opera",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The film's sweeping stakes, planetary-scale battles, and clash between human military and alien factions perfectly embody the space-opera subgenre."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"earnest",
+"visceral",
+"romantic"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The film combines sincere, unironic messaging about nature (earnest), intense and tactile action sequences (visceral), and a central, idealized love story (romantic)."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "adventure-action",
+"human_review": false,
+"severity": "minor",
+"reason": "Adventure-action perfectly captures the film's emphasis on journey, exploration of a new world, and high-momentum spectacle."
+}
+]
+},
+{
+"tmdb_id": 83533,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "space-opera",
+"human_review": false,
+"severity": "minor",
+"reason": "Continues the grand, planetary-scale conflicts and sweeping stakes of the franchise, fitting space-opera."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"tense",
+"visceral",
+"melancholic"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The focus on violent survival against a ruthless tribe brings suspense and intense action (tense, visceral), while the lingering grief over a lost son adds a melancholic layer."
+}
+]
+},
+{
+"tmdb_id": 1325734,
+"media_type": "movie",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"tense",
+"wry",
+"romantic"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The narrative of a wedding week derailed by dark-comedic turns and trust issues suggests a blend of suspense (tense), dark humor (wry), and relationship focus (romantic)."
+}
+]
+},
+{
+"tmdb_id": 755898,
+"media_type": "movie",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "conspiracy-thriller",
+"human_review": false,
+"severity": "minor",
+"reason": "The plot is driven by a protagonist uncovering hidden government secrets and questioning official narratives, which is the definition of a conspiracy-thriller."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"tense",
+"unsettling",
+"cynical"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The themes of mass surveillance and government cover-ups invite a distrustful worldview (cynical), while the unknown threat provides suspense and unease (tense, unsettling)."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "tech-thriller",
+"human_review": false,
+"severity": "minor",
+"reason": "The heavy emphasis on mass surveillance, cybersecurity, and the screenlife format makes tech-thriller a highly accurate secondary subgenre."
+}
+]
+},
+{
+"tmdb_id": 5920,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "procedural",
+"human_review": false,
+"severity": "meaningful",
+"reason": "As an episodic TV show resolving a new criminal case each week, procedural is the most accurate structural subgenre."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"cerebral",
+"wry",
+"playful"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "Patrick Jane's character defines the show's tone: he is highly observant and intellectual (cerebral), while constantly mocking and manipulating suspects with an understated, mischievous humor (wry, playful)."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "detective",
+"human_review": false,
+"severity": "minor",
+"reason": "Jane's specific role as a consultant whose unique investigative process solves the crimes makes detective a perfect secondary classification."
+}
+]
+},
+{
+"tmdb_id": 65334,
+"media_type": "tv",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"playful",
+"romantic",
+"warm"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The series thrives on lighthearted superhero action (playful), deep friendship dynamics (warm), and the central, dramatic love-square between the oblivious leads (romantic)."
+}
+]
+},
+{
+"tmdb_id": 125988,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "dystopian-sci-fi",
+"human_review": false,
+"severity": "minor",
+"reason": "While set after an apocalypse, the narrative engine is fundamentally about uncovering the secrets and oppressive control of the society governing the silo, fitting dystopian-sci-fi best."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"tense",
+"cynical",
+"bleak"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The toxic outside world and strict internal control create despair (bleak), the systemic corruption fosters distrust (cynical), and the dangerous investigation generates suspense (tense)."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "conspiracy-thriller",
+"human_review": false,
+"severity": "minor",
+"reason": "Juliette's primary plotline of investigating murders to uncover a coordinated, hidden plot by the silo's leaders perfectly aligns with conspiracy-thriller."
+}
+]
+},
+{
+"tmdb_id": 4614,
+"media_type": "tv",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"earnest",
+"wry",
+"tense"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "NCIS balances sincere dedication to duty and victims (earnest), suspenseful criminal investigations (tense), and frequent workplace banter (wry)."
+}
+]
+},
+{
+"tmdb_id": 456,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "family-sitcom",
+"human_review": false,
+"severity": "meaningful",
+"reason": "Structurally, the show is a half-hour comedy organized entirely around a household's everyday adventures, making family-sitcom the most foundational classification."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "satire",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The show is universally recognized for its irony and exaggeration used to critique real-world targets like politics and media, making satire an essential secondary tag."
+}
+]
+},
+{
+"tmdb_id": 60625,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "absurdist-comedy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "Animation is a medium; while the show is adult-targeted, its core narrative engine and humor are driven by irrational sci-fi premises and chaotic universe logic, fitting absurdist-comedy best."
+}
+]
+},
+{
+"tmdb_id": 1622,
+"media_type": "tv",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"earnest",
+"tense",
+"menacing"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The tone is driven by sincere, unironic brotherly devotion (earnest), suspenseful hunts (tense), and the felt presence of literal monsters and demons (menacing)."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "urban-fantasy",
+"human_review": false,
+"severity": "minor",
+"reason": "The series consistently places magical, mythical, and demonic entities deeply into the setting of modern-day America, perfectly defining urban-fantasy."
+}
+]
+},
+{
+"tmdb_id": 1434,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "family-sitcom",
+"human_review": false,
+"severity": "minor",
+"reason": "Despite its extreme humor, the show's foundational structure is a recurring ensemble half-hour comedy organized around a household, making family-sitcom the most accurate primary subgenre."
+}
+]
+},
+{
+"tmdb_id": 1399,
+"media_type": "tv",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"gritty",
+"cynical",
+"menacing"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The show is defined by its unvarnished realism and violence (gritty), its assumption of self-interested political motives (cynical), and the looming threat of the White Walkers (menacing)."
+}
+]
+},
+{
+"tmdb_id": 108978,
+"media_type": "tv",
+"fields": [
+{
+"field": "secondary_subgenre",
+"preferred_value": "detective",
+"human_review": false,
+"severity": "minor",
+"reason": "Reacher's role as a former military police investigator solving local cases grounds the action firmly in the investigative process, supporting detective as a strong secondary."
+}
+]
+},
+{
+"tmdb_id": 278624,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "crime-thriller",
+"human_review": false,
+"severity": "minor",
+"reason": "Since the heist itself has already gone sideways and the plot focuses on her being pursued by the FBI and a crime boss, crime-thriller best captures the dominant suspense and pursuit narrative."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "survival-thriller",
+"human_review": false,
+"severity": "minor",
+"reason": "With the protagonist actively on the run and fighting for her life against both law enforcement and the underworld, survival-thriller captures the extreme stakes of her evasion."
+}
+]
+},
+{
+"tmdb_id": 1431,
+"media_type": "tv",
+"fields": [
+{
+"field": "secondary_subgenre",
+"preferred_value": "procedural",
+"human_review": false,
+"severity": "minor",
+"reason": "As the quintessential show about self-contained weekly cases resolved by a recurring team, procedural is a highly accurate tag to pair with its crime-solving focus."
+}
+]
+},
+{
+"tmdb_id": 106841,
+"media_type": "tv",
+"fields": [
+{
+"field": "tone_tags",
+"preferred_value": [
+"stylized",
+"romantic",
+"melancholic"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "Directed by Wong Kar-Wai, the series leans heavily on a distinct, gorgeous aesthetic (stylized), themes of longing and love (romantic), and a persistent wistfulness (melancholic)."
+}
+]
+},
+{
+"tmdb_id": 1396,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "crime-drama",
+"human_review": false,
+"severity": "minor",
+"reason": "While Walter's arc resembles a gangster rise, the show's meticulous focus on the commission, mechanics, and consequences of his crimes firmly roots it as a crime-drama."
+}
+]
+},
+{
+"tmdb_id": 1408,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "procedural",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The narrative engine revolves entirely around diagnosing and resolving a new, self-contained medical mystery each episode, perfectly defining a TV procedural."
+}
+]
+},
+{
+"tmdb_id": 1413,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "anthology",
+"human_review": false,
+"severity": "minor",
+"reason": "The show's defining structural format is that each season is entirely self-contained with a new story, making the TV-specific anthology subgenre the most accurate primary label."
+}
+]
+},
+{
+"tmdb_id": 894,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "psychological-thriller",
+"human_review": false,
+"severity": "minor",
+"reason": "The constant mind games, Kafkaesque nature of the village, and the protagonist's struggle to maintain his sanity and trust make psychological-thriller the strongest primary fit."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "espionage-thriller",
+"human_review": false,
+"severity": "minor",
+"reason": "The protagonist's background as a secret agent and the interrogations focused on extracting classified information firmly support espionage-thriller."
+}
+]
+},
+{
+"tmdb_id": 34307,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "dramedy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The show famously oscillates equally between extreme, absurd comedy and devastating dramatic consequences, fitting the TV-specific dramedy definition perfectly."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"gritty",
+"warm",
+"raunchy"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The show is characterized by its unvarnished poverty (gritty), the genuine, fierce loyalty among the siblings (warm), and its reliance on explicit/crude situations for humor (raunchy)."
+}
+]
+},
+{
+"tmdb_id": 45140,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "parody-spoof",
+"human_review": false,
+"severity": "minor",
+"reason": "The show explicitly exaggerates and mocks the conventions of its own superhero franchise and characters for comedic effect, functioning essentially as a parody-spoof."
+}
+]
+},
+{
+"tmdb_id": 1911,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "procedural",
+"human_review": false,
+"severity": "minor",
+"reason": "As a heavily episodic TV series resolving a distinct, self-contained murder case every week, procedural is the most accurate structural term."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"cerebral",
+"wry",
+"gritty"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The show relies heavily on forensic science and logic (cerebral), features highly decomposed bodies (gritty), and uses understated, character-based humor (wry)."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "murder-mystery",
+"human_review": false,
+"severity": "minor",
+"reason": "Every episode revolves around solving a specific killing and identifying the culprit, making murder-mystery an accurate secondary descriptor."
+}
+]
+},
+{
+"tmdb_id": 241609,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "black-comedy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "With keywords citing 'black comedy' and a plot about a bitter, fired man finding exhilaration in robbing his own friends, the tone and worldview point strongly to black-comedy."
+}
+]
+},
+{
+"tmdb_id": 64099,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "historical-drama",
+"human_review": false,
+"severity": "minor",
+"reason": "While romance is central, the overarching narrative is profoundly shaped by the societal shifts and military conflicts of the 1812 Napoleonic invasion, fitting historical-drama."
+}
+]
+},
+{
+"tmdb_id": 66732,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "sci-fi-horror",
+"human_review": false,
+"severity": "meaningful",
+"reason": "The threats emerge from a government lab, scientific experiments, and alternate dimensions, rooting the terror firmly in sci-fi-horror premises rather than pure magic."
+},
+{
+"field": "tone_tags",
+"preferred_value": [
+"tense",
+"menacing",
+"warm"
+],
+"human_review": false,
+"severity": "minor",
+"reason": "The show blends the palpable threat of monsters (menacing) and high suspense (tense) with a deep, genuine affection among the core group of friends (warm)."
+}
+]
+},
+{
+"tmdb_id": 215072,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "action-thriller",
+"human_review": false,
+"severity": "minor",
+"reason": "With assassins closing in and constant physical danger, the show balances high-stakes suspense with sustained combat, fitting action-thriller."
+},
+{
+"field": "secondary_subgenre",
+"preferred_value": "mystery-thriller",
+"human_review": false,
+"severity": "minor",
+"reason": "Uncovering the hidden truth about her uncle's death and secret business adds a strong layer of puzzle-solving amidst the danger, fitting mystery-thriller."
+}
+]
+},
+{
+"tmdb_id": 502,
+"media_type": "tv",
+"fields": [
+{
+"field": "primary_subgenre",
+"preferred_value": "sketch-comedy",
+"human_review": false,
+"severity": "meaningful",
+"reason": "Structurally, the show relies on a sequence of short, unconnected comedic, musical, and educational segments, fitting the definition of sketch-comedy."
+}
+]
+}
+]
+}

@@ -48,6 +48,9 @@ export interface StreamingService {
 
 export interface AvailabilityOption {
   serviceId: string;
+  providerId?: number;
+  providerName?: string;
+  logoUrl?: string | null;
   region: string;
   kind: AvailabilityKind;
   checkedAt: string;

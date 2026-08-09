@@ -1,0 +1,16 @@
+tmdb_id,media_type,title,field,resolution,consensus_type,resolved_value,human_review_requests,chatgpt_value,claude_value,gemini_value,chatgpt_severity,claude_severity,gemini_severity,proposal_a,proposal_b,proposal_c
+980431,movie,Avatar Aang: The Last Airbender,tone_tags,HUMAN_REVIEW,none,,0,warm|uplifting|earnest,uplifting|warm|playful,earnest|playful|uplifting,meaningful,minor,minor,warm|uplifting|earnest,earnest|playful,uplifting|warm|playful
+454639,movie,Masters of the Universe,tone_tags,HUMAN_REVIEW,none,,0,earnest|menacing,earnest|warm|menacing,earnest|uplifting,meaningful,meaningful,minor,earnest|menacing,earnest,earnest|warm|uplifting
+454639,movie,Masters of the Universe,secondary_subgenre,HUMAN_REVIEW,none,,0,sword-and-sorcery,epic-fantasy,,minor,minor,minor,sword-and-sorcery,,epic-fantasy
+559,movie,Spider-Man 3,tone_tags,HUMAN_REVIEW,none,,0,earnest|tense,sentimental|bittersweet|earnest,earnest|bittersweet|tense,meaningful,meaningful,minor,earnest,sentimental|bittersweet|earnest,tense|earnest
+652,movie,Troy,tone_tags,HUMAN_REVIEW,none,,0,visceral|tense,visceral|tense|bittersweet,earnest|visceral|bittersweet,meaningful,meaningful,minor,earnest|visceral,visceral|tense,bittersweet|gritty|tense
+24428,movie,The Avengers,tone_tags,HUMAN_REVIEW,none,,0,earnest|tense,uplifting|playful|tense,playful|earnest|uplifting,meaningful,minor,minor,earnest|tense,uplifting|playful|tense,playful|earnest
+1361774,movie,The Dink,primary_subgenre,HUMAN_REVIEW,none,,2,absurdist-comedy,workplace-comedy,,fundamental,meaningful,meaningful,workplace-comedy,absurdist-comedy,sports-drama
+21484,movie,Possession,primary_subgenre,HUMAN_REVIEW,two_of_three,,2,supernatural-horror,psychological-horror,psychological-horror,meaningful,meaningful,meaningful,psychological-horror,supernatural-horror,psychological-horror
+19995,movie,Avatar,primary_subgenre,HUMAN_REVIEW,none,,1,adventure-action,alien-first-contact,space-opera,meaningful,meaningful,meaningful,adventure-action,alien-first-contact,space-opera
+1325734,movie,The Drama,tone_tags,HUMAN_REVIEW,none,,0,romantic|tense,tense|sentimental|romantic,tense|wry|romantic,meaningful,meaningful,minor,wry|tense|sentimental,romantic|tense,tense|playful
+755898,movie,War of the Worlds,tone_tags,HUMAN_REVIEW,none,,0,tense|menacing,tense|menacing|cynical,tense|unsettling|cynical,meaningful,meaningful,minor,tense|cerebral|menacing,tense|unsettling|cynical,tense|menacing
+5920,tv,The Mentalist,secondary_subgenre,HUMAN_REVIEW,none,,0,,procedural,detective,minor,minor,minor,detective,,procedural
+4614,tv,NCIS,tone_tags,HUMAN_REVIEW,none,,0,earnest|tense,wry|earnest,earnest|wry|tense,meaningful,minor,minor,wry|earnest,earnest|tense|gritty,earnest
+106841,tv,Blossoms Shanghai,tone_tags,HUMAN_REVIEW,none,,0,melancholic|romantic,stylized|melancholic|dreamlike,stylized|romantic|melancholic,meaningful,minor,minor,melancholic|romantic,stylized|melancholic|dreamlike,meditative|stylized|melancholic
+1911,tv,Bones,tone_tags,HUMAN_REVIEW,none,,0,cerebral|tense,wry|cerebral|tense,cerebral|wry|gritty,meaningful,minor,minor,wry|earnest,cerebral|tense,wry|cerebral|gritty

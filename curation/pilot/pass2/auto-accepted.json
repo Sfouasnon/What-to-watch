@@ -1,0 +1,1418 @@
+{
+  "ontology_version": "0.1.1",
+  "items": [
+    {
+      "tmdb_id": 1226863,
+      "media_type": "movie",
+      "title": "The Super Mario Galaxy Movie",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "adventure-action",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 1,
+        "fundamental": 2
+      },
+      "proposals": {
+        "proposal_a": "adventure-action",
+        "proposal_b": "adventure-action",
+        "proposal_c": "animated-family"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "adventure-action",
+          "human_review": false,
+          "severity": "fundamental",
+          "reason": "The brothers travel across the stars with companions to stop Bowser Jr., a clear journey prioritizing adventure and momentum. Animated-family should not displace a more precise content subgenre merely because the film is animated."
+        },
+        "claude": {
+          "preferred_value": "adventure-action",
+          "human_review": false,
+          "severity": "fundamental",
+          "reason": "The ontology explicitly warns against defaulting to an Animation-family term just because a title is animated; the galaxy-spanning quest, buddy-comedy dynamic, and spectacle-driven momentum are precisely what adventure-action describes, and it captures the content more precisely than animated-family."
+        },
+        "gemini": {
+          "preferred_value": "adventure-action",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Animation is a medium, not a genre; the plot describes a clear journey/quest across the stars, aligning perfectly with adventure-action."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1598,
+      "media_type": "movie",
+      "title": "Cape Fear",
+      "field": "secondary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "revenge-thriller",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "psychological-thriller",
+        "proposal_b": "revenge-thriller",
+        "proposal_c": null
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "revenge-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Cady's explicit intention to punish Bowden for the old case makes retribution a defining secondary mechanism. Psychological-thriller remains unsupported by the ontology's mental-state criterion."
+        },
+        "claude": {
+          "preferred_value": "revenge-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Cady's entire campaign is explicit retribution for a wrong committed 14 years earlier ('revenge' is a direct keyword); this adds real information about the plot's driving engine beyond the psychological-thriller primary."
+        },
+        "gemini": {
+          "preferred_value": "revenge-thriller",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Cady's explicit motivation is retribution for the lawyer's past actions, making revenge-thriller a highly accurate secondary."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 652,
+      "media_type": "movie",
+      "title": "Troy",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "historical-drama",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "historical-drama",
+        "proposal_b": "combat-film",
+        "proposal_c": "historical-drama"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "historical-drama",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The Bronze Age setting, dynastic conflict, and Trojan War materially structure the entire story, matching historical-drama. The synopsis includes war and battle but is not primarily framed around the frontline physical experience required for combat-film."
+        },
+        "claude": {
+          "preferred_value": "historical-drama",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The story is a sweeping account of a mythic-historical era (the Trojan War) shaping the fates of several major characters -- love, honor, political ambition -- rather than being centered narrowly on frontline combat experience, which combat-film would require."
+        },
+        "gemini": {
+          "preferred_value": "historical-drama",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "While it features large-scale battles, the film is primarily driven by the political and interpersonal conflicts of a defined past era, making historical-drama the strongest fit."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 1510795,
+      "media_type": "movie",
+      "title": "Shake, Rattle & Roll: Evil Origins",
+      "field": "tone_tags",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": [
+        "menacing",
+        "tense",
+        "visceral"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "menacing",
+          "tense",
+          "visceral"
+        ],
+        "proposal_b": [
+          "menacing",
+          "visceral"
+        ],
+        "proposal_c": [
+          "menacing",
+          "gritty",
+          "bleak"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "menacing",
+            "tense",
+            "visceral"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Each segment centers on a concrete lethal threat—released evil, a serial killer, or aswang—supporting menacing and tense. Survival attacks and serial-killer violence also support a visceral component more than gritty or bleak."
+        },
+        "claude": {
+          "preferred_value": [
+            "menacing",
+            "tense",
+            "visceral"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "All three proposals agree on menacing; horror-anthology structure across colonial, present-day, and apocalyptic segments supports sustained anticipatory dread (tense) and physical, immediate threat (visceral) over the more specific 'gritty' or 'bleak,' which the thin context doesn't clearly support."
+        },
+        "gemini": {
+          "preferred_value": [
+            "menacing",
+            "tense",
+            "visceral"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The presence of serial killers and monsters across multiple timelines implies an atmosphere of locatable threats (menacing), suspense (tense), and bloody violence (visceral)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 1668364,
+      "media_type": "movie",
+      "title": "Desire",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "erotic-thriller",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "erotic-thriller",
+        "proposal_b": "relationship-drama",
+        "proposal_c": "erotic-thriller"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "erotic-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Lucero's consuming relationship, secrecy, desire, and jealousy are the mechanisms that create escalating danger inside the family, matching erotic-thriller more specifically than relationship-drama."
+        },
+        "claude": {
+          "preferred_value": "erotic-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The overview explicitly frames the affair's secrecy, desire, and jealousy as what is 'dangerous' and threatens to 'shatter' the family -- sexual desire generating danger and suspense is precisely the erotic-thriller mechanism, not merely an intimate relationship drama."
+        },
+        "gemini": {
+          "preferred_value": "erotic-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The emphasis on secrecy, a dangerous emotional triangle, and a consuming, risky affair aligns perfectly with the mechanics of an erotic-thriller."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 98894,
+      "media_type": "movie",
+      "title": "Jessica",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "sex-comedy",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "screwball-comedy",
+        "proposal_b": "romantic-comedy",
+        "proposal_c": "sex-comedy"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "sex-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Sexual desire, abstinence, procreation, and village-wide sexual conflict are the central comic engine, which directly matches sex-comedy. The romance subplot is present but not as dominant as the sexual premise, and screwball conventions are not evidenced."
+        },
+        "claude": {
+          "preferred_value": "sex-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The entire plot engine is sexual obsession and a village-wide sex strike over one woman's desirability -- textbook sexual pursuit/desire/awkwardness as the comic engine -- rather than rapid-fire farce (screwball) or a simple central-couple romance arc."
+        },
+        "gemini": {
+          "preferred_value": "sex-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The central comic engine revolves entirely around sexual desire, frustration, and the wives withholding sex from their husbands, perfectly defining a sex-comedy."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 98894,
+      "media_type": "movie",
+      "title": "Jessica",
+      "field": "secondary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "romantic-comedy",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 3,
+        "meaningful": 0,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "romantic-comedy",
+        "proposal_b": "sex-comedy",
+        "proposal_c": null
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "romantic-comedy",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Jessica's falling for the recluse adds a genuine romantic-comedy strand beyond the broader sex-comedy premise. It provides more information than null without duplicating the primary."
+        },
+        "claude": {
+          "preferred_value": "romantic-comedy",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Jessica's own romance with the recluse is a real, distinct plot thread beyond the village's sexual-obsession comedy, adding genuine information as a secondary."
+        },
+        "gemini": {
+          "preferred_value": "romantic-comedy",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "While the broader town conflict is a sex-comedy, Jessica's own storyline of falling for a tricky recluse adds a distinct romantic-comedy arc."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1259102,
+      "media_type": "movie",
+      "title": "Eternity",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "romantic-comedy",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "romantic-drama",
+        "proposal_b": "romantic-comedy",
+        "proposal_c": "romantic-comedy"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "romantic-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The story is explicitly tagged romcom and centers on an impossible romantic choice in a fantastical afterlife. That supports romantic-comedy over a purely dramatic romance classification."
+        },
+        "claude": {
+          "preferred_value": "romantic-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "TMDB's own keyword is literally 'romcom,' the film is billed and cast with comedic actors, and Comedy is an explicit genre alongside Romance and Drama -- the afterlife premise is played through a comic lens more than as a straight romantic drama."
+        },
+        "gemini": {
+          "preferred_value": "romantic-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The keyword 'romcom' and the presence of the Comedy genre indicate this afterlife love triangle is structurally a romantic-comedy, despite its deeper themes."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 83533,
+      "media_type": "movie",
+      "title": "Avatar: Fire and Ash",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "space-opera",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "space-opera",
+        "proposal_b": "space-opera",
+        "proposal_c": "adventure-action"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "space-opera",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The story continues a large-scale alien-world conflict involving rival peoples, war, survival, and the future of Pandora, which fits sweeping space-opera stakes better than a journey-centered adventure-action structure."
+        },
+        "claude": {
+          "preferred_value": "space-opera",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Keywords 'space war' and 'space adventure' point to a large-scale, multi-faction conflict (the Sully family, the Ash People, remnants of earlier factions) that fits space-opera's sweeping-stakes definition more specifically than the generic 'adventure-action.'"
+        },
+        "gemini": {
+          "preferred_value": "space-opera",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Continues the grand, planetary-scale conflicts and sweeping stakes of the franchise, fitting space-opera."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 83533,
+      "media_type": "movie",
+      "title": "Avatar: Fire and Ash",
+      "field": "tone_tags",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": [
+        "tense",
+        "visceral",
+        "melancholic"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "tense",
+          "bittersweet",
+          "gritty"
+        ],
+        "proposal_b": [
+          "tense",
+          "visceral"
+        ],
+        "proposal_c": [
+          "tense",
+          "melancholic",
+          "earnest"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "tense",
+            "visceral",
+            "melancholic"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "A violent new enemy and survival conflict support tension and visceral intensity, while the story begins in the aftermath of devastating war and the loss of a son, supporting melancholic grief. Bittersweet and gritty are not established by the supplied resolution or texture."
+        },
+        "claude": {
+          "preferred_value": [
+            "tense",
+            "melancholic",
+            "visceral"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Tense is shared by all three proposals; the family is still processing the recent loss of their eldest son, a persistent, lower-grade sadness that coexists with the fight ahead (melancholic) rather than a fully hope-denying bleakness; the large-scale war spectacle supports visceral more than the naturalistic-realism sense of 'gritty.'"
+        },
+        "gemini": {
+          "preferred_value": [
+            "tense",
+            "visceral",
+            "melancholic"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The focus on violent survival against a ruthless tribe brings suspense and intense action (tense, visceral), while the lingering grief over a lost son adds a melancholic layer."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 755898,
+      "media_type": "movie",
+      "title": "War of the Worlds",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "conspiracy-thriller",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "conspiracy-thriller",
+        "proposal_b": "conspiracy-thriller",
+        "proposal_c": "tech-thriller"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "conspiracy-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The protagonist begins to suspect that the government is concealing the truth behind an attack, which directly matches uncovering a hidden coordinated plot. Surveillance technology is central to his job but not clearly the primary threat."
+        },
+        "claude": {
+          "preferred_value": "conspiracy-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The overview's core hook is the analyst coming to suspect the government is 'hiding something' -- uncovering a hidden coordinated plot -- which is the defining conspiracy-thriller engine, while the surveillance/cybersecurity elements function as the tool for that investigation rather than being the threat itself."
+        },
+        "gemini": {
+          "preferred_value": "conspiracy-thriller",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The plot is driven by a protagonist uncovering hidden government secrets and questioning official narratives, which is the definition of a conspiracy-thriller."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 755898,
+      "media_type": "movie",
+      "title": "War of the Worlds",
+      "field": "secondary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "tech-thriller",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "tech-thriller",
+        "proposal_b": "tech-sci-fi",
+        "proposal_c": "sci-fi-horror"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "tech-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Mass surveillance, cybersecurity, screenlife, and privacy concerns make technology a meaningful tool and source of suspense alongside the conspiracy. Tech-sci-fi is less precise because the packet frames those systems as thriller mechanisms rather than speculative social consequences."
+        },
+        "claude": {
+          "preferred_value": "tech-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The film's distinctive 'screenlife'/found-footage format is built entirely around surveillance, cybersecurity, and online-privacy technology as both narrative device and plot mechanism, adding real information beyond the conspiracy-thriller primary."
+        },
+        "gemini": {
+          "preferred_value": "tech-thriller",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The heavy emphasis on mass surveillance, cybersecurity, and the screenlife format makes tech-thriller a highly accurate secondary subgenre."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 65334,
+      "media_type": "tv",
+      "title": "Miraculous: Tales of Ladybug & Cat Noir",
+      "field": "tone_tags",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": [
+        "playful",
+        "warm",
+        "romantic"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "playful",
+          "romantic",
+          "warm"
+        ],
+        "proposal_b": [
+          "playful",
+          "earnest"
+        ],
+        "proposal_c": [
+          "playful",
+          "warm",
+          "uplifting"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "playful",
+            "warm",
+            "romantic"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The teen-superhero, comedy, friendship, and secret-identity setup supports playful energy and warm relationships, while the romance keyword supports romantic tone. An uplifting overall trajectory is not established as clearly as those relationship and mood signals."
+        },
+        "claude": {
+          "preferred_value": [
+            "playful",
+            "romantic",
+            "warm"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Playful is shared by all three; the explicit 'romance' keyword and the show's central secret-identity-crush hook support romantic, and the friendship-driven, kid-audience warmth is well supported by the keywords 'friendship' and the overall magical-girl-school premise."
+        },
+        "gemini": {
+          "preferred_value": [
+            "playful",
+            "romantic",
+            "warm"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The series thrives on lighthearted superhero action (playful), deep friendship dynamics (warm), and the central, dramatic love-square between the oblivious leads (romantic)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 125988,
+      "media_type": "tv",
+      "title": "Silo",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "dystopian-sci-fi",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "post-apocalyptic",
+        "proposal_b": "dystopian-sci-fi",
+        "proposal_c": "dystopian-sci-fi"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "dystopian-sci-fi",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The silo's rigid rules, hidden powers, systemic corruption, and residents' ignorance make social control inside a degraded future the primary science-fiction conflict. Post-apocalyptic describes the setting but not the central institutional mechanism as precisely."
+        },
+        "claude": {
+          "preferred_value": "dystopian-sci-fi",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The keywords emphasize corruption, politics, systemic control, and societal ignorance far more than survival-against-the-elements; the silo's rule-bound, secret-keeping social order controlling its residents is precisely what dystopian-sci-fi names, with the post-apocalyptic setting as backdrop rather than the story's engine."
+        },
+        "gemini": {
+          "preferred_value": "dystopian-sci-fi",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "While set after an apocalypse, the narrative engine is fundamentally about uncovering the secrets and oppressive control of the society governing the silo, fitting dystopian-sci-fi best."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 456,
+      "media_type": "tv",
+      "title": "The Simpsons",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "family-sitcom",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "family-sitcom",
+        "proposal_b": "family-sitcom",
+        "proposal_c": "satire"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "family-sitcom",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The series is organized around the Simpson household's everyday antics in Springfield and is explicitly tagged sitcom and family. Satire is a major mode but is better treated as an additional lens than the core series structure."
+        },
+        "claude": {
+          "preferred_value": "family-sitcom",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The show's core organizing structure is a household sitcom about the Simpson family (direct 'sitcom' keyword, family unit at the center), with its celebrated satire functioning as the comedic mode layered on top of that structure rather than replacing it."
+        },
+        "gemini": {
+          "preferred_value": "family-sitcom",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Structurally, the show is a half-hour comedy organized entirely around a household's everyday adventures, making family-sitcom the most foundational classification."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 456,
+      "media_type": "tv",
+      "title": "The Simpsons",
+      "field": "secondary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "satire",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "satire",
+        "proposal_b": "adult-animation",
+        "proposal_c": "family-sitcom"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "satire",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The overview explicitly highlights a fearless satirical take on politics, media, and American life, so satire adds important content information beyond the family-sitcom structure. Adult-animation is an audience-medium signal and is less informative here."
+        },
+        "claude": {
+          "preferred_value": "satire",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The overview explicitly foregrounds the show's 'fearless satirical take on politics, media and American life,' and 'satire'/'social satire' are direct keywords -- this adds real information about the show's comedic mode beyond the family-sitcom structural primary."
+        },
+        "gemini": {
+          "preferred_value": "satire",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The show is universally recognized for its irony and exaggeration used to critique real-world targets like politics and media, making satire an essential secondary tag."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 60625,
+      "media_type": "tv",
+      "title": "Rick and Morty",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "absurdist-comedy",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 2,
+        "fundamental": 1
+      },
+      "proposals": {
+        "proposal_a": "absurdist-comedy",
+        "proposal_b": "absurdist-comedy",
+        "proposal_c": "adult-animation"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "absurdist-comedy",
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "The comedy is built around extreme science-fiction adventures involving a sociopathic scientist, time travel, aliens, and multiple dimensions, making absurdist-comedy the closest content-based option. Adult-animation describes audience/medium rather than the comic mechanism, but the packet is too thin to prove fundamentally irrational world-logic with confidence."
+        },
+        "claude": {
+          "preferred_value": "absurdist-comedy",
+          "human_review": false,
+          "severity": "fundamental",
+          "reason": "The show's humor is driven by illogical, irrational sci-fi premises (multiversal chaos, morally deranged inventions) -- the definition of absurdist-comedy; the ontology explicitly instructs that 'adult-animation' should be paired with a content subgenre rather than used alone as primary, which C's answer directly contradicts."
+        },
+        "gemini": {
+          "preferred_value": "absurdist-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Animation is a medium; while the show is adult-targeted, its core narrative engine and humor are driven by irrational sci-fi premises and chaotic universe logic, fitting absurdist-comedy best."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1622,
+      "media_type": "tv",
+      "title": "Supernatural",
+      "field": "tone_tags",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": [
+        "menacing",
+        "tense",
+        "earnest"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "menacing",
+          "bittersweet",
+          "tense"
+        ],
+        "proposal_b": [
+          "tense",
+          "gritty"
+        ],
+        "proposal_c": [
+          "menacing",
+          "tense",
+          "earnest"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "menacing",
+            "tense",
+            "earnest"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Demons, monsters, possession, and other named paranormal threats create a menacing presence and repeated danger, while the brothers' trained mission gives the conflict an earnest register. Bittersweet and gritty are not established by the packet."
+        },
+        "claude": {
+          "preferred_value": [
+            "menacing",
+            "tense",
+            "earnest"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Demons and monsters are a concrete, locatable threat (menacing); the hunt structure sustains tension; the brothers' sincere devotion to each other and their late mother ('bromance,' family loyalty) is played straight rather than obliquely, supporting earnest."
+        },
+        "gemini": {
+          "preferred_value": [
+            "earnest",
+            "tense",
+            "menacing"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The tone is driven by sincere, unironic brotherly devotion (earnest), suspenseful hunts (tense), and the felt presence of literal monsters and demons (menacing)."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 1622,
+      "media_type": "tv",
+      "title": "Supernatural",
+      "field": "secondary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "urban-fantasy",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "urban-fantasy",
+        "proposal_b": "adventure-action",
+        "proposal_c": null
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "urban-fantasy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The brothers encounter magical and mythic forces while traveling through recognizable contemporary America, matching urban-fantasy's real-world setting. Adventure-action is less specifically informative than the supernatural-in-modern-world framework."
+        },
+        "claude": {
+          "preferred_value": "urban-fantasy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The show's defining conceit -- a hidden supernatural world layered over a recognizably contemporary America -- is precisely urban-fantasy, adding real information about the story's world-type beyond a horror primary."
+        },
+        "gemini": {
+          "preferred_value": "urban-fantasy",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The series consistently places magical, mythical, and demonic entities deeply into the setting of modern-day America, perfectly defining urban-fantasy."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 1434,
+      "media_type": "tv",
+      "title": "Family Guy",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "family-sitcom",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "family-sitcom",
+        "proposal_b": "satire",
+        "proposal_c": "family-sitcom"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "family-sitcom",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The series is organized around the dysfunctional Griffin household and its recurring family adventures, directly matching family-sitcom. Satire is clearly present in the keywords but functions as an additional comic mode rather than the basic series structure."
+        },
+        "claude": {
+          "preferred_value": "family-sitcom",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Like The Simpsons, the show's core structure is a household sitcom about the Griffin family, with its satire functioning as comedic mode rather than structural identity."
+        },
+        "gemini": {
+          "preferred_value": "family-sitcom",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Despite its extreme humor, the show's foundational structure is a recurring ensemble half-hour comedy organized around a household, making family-sitcom the most accurate primary subgenre."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 278624,
+      "media_type": "tv",
+      "title": "Lucky",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "crime-thriller",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "crime-thriller",
+        "proposal_b": "heist",
+        "proposal_c": "crime-thriller"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "crime-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The heist has already gone wrong when the main premise begins, and the story is driven by pursuit from the FBI and a crime boss while Lucky fights to survive. That makes crime-thriller more central than the planning and execution focus required for heist."
+        },
+        "claude": {
+          "preferred_value": "crime-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The heist itself goes wrong early ('heist gone wrong' keyword) and most of the story is described as being pursued and fighting for her life -- suspense and pursuit organized around a criminal antagonist and act, which is crime-thriller, rather than a planning-and-execution heist caper."
+        },
+        "gemini": {
+          "preferred_value": "crime-thriller",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Since the heist itself has already gone sideways and the plot focuses on her being pursued by the FBI and a crime boss, crime-thriller best captures the dominant suspense and pursuit narrative."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 1396,
+      "media_type": "tv",
+      "title": "Breaking Bad",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "crime-drama",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "crime-drama",
+        "proposal_b": "crime-drama",
+        "proposal_c": "gangster"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "crime-drama",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The synopsis centers on a teacher entering the drug world to secure his family's future and facing the consequences of crime. The packet does not yet frame the story specifically as the rise or fall of a figure inside an underworld hierarchy, so gangster is narrower than the evidence supports."
+        },
+        "claude": {
+          "preferred_value": "crime-drama",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The show is fundamentally a character study of Walter White's personal moral transformation and its consequences for his family, not the rise/fall of a figure within an organized underworld hierarchy the way 'gangster' implies."
+        },
+        "gemini": {
+          "preferred_value": "crime-drama",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "While Walter's arc resembles a gangster rise, the show's meticulous focus on the commission, mechanics, and consequences of his crimes firmly roots it as a crime-drama."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 1408,
+      "media_type": "tv",
+      "title": "House",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "procedural",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "workplace-drama",
+        "proposal_b": "procedural",
+        "proposal_c": "procedural"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "procedural",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "House leads diagnosticians whose defining work is solving difficult medical cases through diagnosis, matching a recurring problem-solving procedural engine. Workplace-drama is broader and less precise than the case-based structure implied by the context and keywords."
+        },
+        "claude": {
+          "preferred_value": "procedural",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The show's defining, signature structure is the case-of-the-week diagnostic mystery, resolved largely within each episode -- exactly what the TV-specific 'procedural' term describes -- more than a general workplace-hierarchy drama."
+        },
+        "gemini": {
+          "preferred_value": "procedural",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The narrative engine revolves entirely around diagnosing and resolving a new, self-contained medical mystery each episode, perfectly defining a TV procedural."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1413,
+      "media_type": "tv",
+      "title": "American Horror Story",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "anthology",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 1,
+        "fundamental": 1
+      },
+      "proposals": {
+        "proposal_a": "anthology",
+        "proposal_b": "anthology",
+        "proposal_c": "supernatural-horror"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "anthology",
+          "human_review": false,
+          "severity": "fundamental",
+          "reason": "The overview explicitly calls it an anthology with different characters and locations across distinct horror scenarios. Supernatural-horror cannot serve as the primary because the listed seasons span multiple horror modes, including cult, slasher, asylum, and apocalypse."
+        },
+        "claude": {
+          "preferred_value": "anthology",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The overview explicitly describes the show as 'an anthology horror drama series' with self-contained seasons connected by theme, not continuing plot -- the show's single most defining structural trait, which the TV-specific 'anthology' term is built to capture."
+        },
+        "gemini": {
+          "preferred_value": "anthology",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The show's defining structural format is that each season is entirely self-contained with a new story, making the TV-specific anthology subgenre the most accurate primary label."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 34307,
+      "media_type": "tv",
+      "title": "Shameless",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "dramedy",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "family-drama",
+        "proposal_b": "family-drama",
+        "proposal_c": "dramedy"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "dramedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The show combines family hardship, alcoholism, and self-destruction with overtly comic narration and is classified as both Drama and Comedy, matching a sustained co-equal dramedy register. Family-drama describes the subject matter but not the dual tonal structure as precisely."
+        },
+        "claude": {
+          "preferred_value": "dramedy",
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "The show's genres explicitly list both Drama and Comedy, and it sustains a dark-comic register alongside real family hardship in roughly equal measure across episodes -- the defining trait of dramedy -- but the family unit's struggles are also clearly central, so a family-drama reading is genuinely defensible; this is a real judgment call between a content-focused and a tone-focused reading."
+        },
+        "gemini": {
+          "preferred_value": "dramedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The show famously oscillates equally between extreme, absurd comedy and devastating dramatic consequences, fitting the TV-specific dramedy definition perfectly."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1911,
+      "media_type": "tv",
+      "title": "Bones",
+      "field": "secondary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "murder-mystery",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": null,
+        "proposal_b": "murder-mystery",
+        "proposal_c": "procedural"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "murder-mystery",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The cases are explicitly murder investigations centered on identifying victims and solving killings, so murder-mystery adds substantive case-content information beyond the procedural structure. Generic procedural would be redundant."
+        },
+        "claude": {
+          "preferred_value": "murder-mystery",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Each case is literally the solving of a specific killing via forensic clues -- a precise match for murder-mystery's definition -- adding real information beyond the police-procedural primary; 'procedural' as secondary would be largely redundant with that primary."
+        },
+        "gemini": {
+          "preferred_value": "murder-mystery",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Every episode revolves around solving a specific killing and identifying the culprit, making murder-mystery an accurate secondary descriptor."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 241609,
+      "media_type": "tv",
+      "title": "Your Friends & Neighbors",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "black-comedy",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "heist",
+        "proposal_b": "black-comedy",
+        "proposal_c": "black-comedy"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "black-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The premise mixes divorce, job loss, theft from wealthy neighbors, exhilaration in wrongdoing, and a deadly web, while the keywords explicitly identify black comedy. Heist is less accurate because the synopsis does not center on planning and executing a single robbery."
+        },
+        "claude": {
+          "preferred_value": "black-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "'Black comedy' is a direct TMDB keyword, and the show's ongoing, morally-rotten crime-as-coping-mechanism premise for a disgraced financial elite fits a sustained bleak/misanthropic comic worldview better than a single-target heist-planning frame."
+        },
+        "gemini": {
+          "preferred_value": "black-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "With keywords citing 'black comedy' and a plot about a bitter, fired man finding exhilaration in robbing his own friends, the tone and worldview point strongly to black-comedy."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 64099,
+      "media_type": "tv",
+      "title": "War and Peace",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "historical-drama",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "historical-drama",
+        "proposal_b": "historical-drama",
+        "proposal_c": "period-romance"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "historical-drama",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The romance is explicitly interwoven with Napoleon's 1812 invasion, and the historical era and war materially shape the story. Period-romance captures one strand but is too narrow for the broader historical-drama frame."
+        },
+        "claude": {
+          "preferred_value": "historical-drama",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "'Historical drama' is a direct TMDB keyword, and the show interweaves the central romance with the sweeping historical scope of the Napoleonic invasion and Russian aristocracy -- broader than a relationship-centered period-romance, whose social conventions would need to be the material shaping force."
+        },
+        "gemini": {
+          "preferred_value": "historical-drama",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "While romance is central, the overarching narrative is profoundly shaped by the societal shifts and military conflicts of the 1812 Napoleonic invasion, fitting historical-drama."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 502,
+      "media_type": "tv",
+      "title": "Sesame Street",
+      "field": "primary_subgenre",
+      "resolution": "AUTO_ACCEPT",
+      "consensus_type": "unanimous",
+      "resolved_value": "sketch-comedy",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 2,
+        "fundamental": 1
+      },
+      "proposals": {
+        "proposal_a": "animated-family",
+        "proposal_b": "sketch-comedy",
+        "proposal_c": "sketch-comedy"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "sketch-comedy",
+          "human_review": false,
+          "severity": "fundamental",
+          "reason": "The program uses comedy, cartoons, games, songs, and short educational segments rather than a continuous narrative, making sketch-comedy the closest TV-specific form available. Animated-family is a clear mismatch because the series is not primarily an animated work and animation should not replace a more precise format classification."
+        },
+        "claude": {
+          "preferred_value": "sketch-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The show is puppetry and live-action, not animation, so 'animated-family' misdescribes even the medium; its variety format of self-contained comedic vignettes, songs, and games -- with no recurring host-interview structure -- is the closest available match to sketch-comedy, even though no term in this ontology precisely captures an educational preschool variety show."
+        },
+        "gemini": {
+          "preferred_value": "sketch-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Structurally, the show relies on a sequence of short, unconnected comedic, musical, and educational segments, fitting the definition of sketch-comedy."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    }
+  ]
+}

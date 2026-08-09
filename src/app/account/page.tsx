@@ -30,7 +30,7 @@ export default function AccountPage() {
     setMessage("Sending a secure sign-in link…");
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=/account` },
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=/` },
     });
     setMessage(error ? error.message : "Check your inbox for the sign-in link.");
   };
@@ -61,6 +61,7 @@ export default function AccountPage() {
           <div className={styles.signedIn}>
             <span>Signed in as</span>
             <strong>{user.email}</strong>
+            <Link href="/">Open your profiles</Link>
             <button type="button" onClick={signOut}>Sign out</button>
           </div>
         ) : null}

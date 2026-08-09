@@ -12,9 +12,9 @@
 .form { display: grid; gap: 10px; margin-top: 28px; }
 .form label { color: #d8d2c8; font-size: .72rem; font-weight: 750; }
 .form input { min-height: 52px; padding: 0 15px; border: 1px solid rgba(255,255,255,.12); border-radius: 9px; color: #f4f0e8; background: #171715; font: inherit; }
-.form button, .signedIn button { min-height: 50px; margin-top: 4px; border: 0; border-radius: 9px; color: #130e09; background: #c98143; font: inherit; font-size: .76rem; font-weight: 850; }
+.form button, .signedIn button, .signedIn a { min-height: 50px; margin-top: 4px; border: 0; border-radius: 9px; color: #130e09; background: #c98143; font: inherit; font-size: .76rem; font-weight: 850; display: grid; place-items: center; text-decoration: none; }
 .form p { color: #77766f; font-size: .67rem; line-height: 1.5; }
-.signedIn button { margin-top: 12px; }
+.signedIn button { margin-top: 4px; background: transparent; color: #aaa89f; border: 1px solid rgba(255,255,255,.12); }
 .message { margin-top: 16px; color: #d69a60; font-size: .75rem; line-height: 1.5; }
 .privacy { margin-top: 26px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.07); }
 @media (max-width: 420px) { .card { padding: 24px 20px; border-radius: 16px; } }

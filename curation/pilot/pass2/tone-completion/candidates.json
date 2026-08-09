@@ -1,0 +1,1183 @@
+{
+  "ontology_version": "0.1.1",
+  "generated_at": "2026-08-09T22:54:19.136Z",
+  "policy": "Prefer three tones when a genuinely descriptive third exists; candidate tones must have appeared in prior model/adjudicator evidence and are never auto-applied.",
+  "counts": {
+    "total_candidates": 38,
+    "with_1_current_tone": 1,
+    "with_2_current_tones": 37,
+    "with_proposed_third_tone": 35,
+    "with_no_prior_third_tone_evidence": 3
+  },
+  "candidates": [
+    {
+      "tmdb_id": 1284041,
+      "media_type": "movie",
+      "title": "The Last House",
+      "current_tone_tags": [
+        "tense",
+        "menacing"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": null,
+      "evidence": {
+        "support_count": 0,
+        "considered_source_count": 3,
+        "appeared_in": [],
+        "ranked_candidates": []
+      }
+    },
+    {
+      "tmdb_id": 557,
+      "media_type": "movie",
+      "title": "Spider-Man",
+      "current_tone_tags": [
+        "earnest",
+        "playful"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "bittersweet",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "bittersweet",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "romantic",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 931285,
+      "media_type": "movie",
+      "title": "Mortal Kombat II",
+      "current_tone_tags": [
+        "visceral",
+        "tense"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "menacing",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:chatgpt"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "menacing",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1481343,
+      "media_type": "movie",
+      "title": "The Devil's Mouth",
+      "current_tone_tags": [
+        "tense",
+        "visceral"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "menacing",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:chatgpt"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "menacing",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 911430,
+      "media_type": "movie",
+      "title": "F1",
+      "current_tone_tags": [
+        "uplifting",
+        "earnest"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "tense",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:gemini"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "tense",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:gemini"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 346,
+      "media_type": "movie",
+      "title": "Seven Samurai",
+      "current_tone_tags": [
+        "gritty",
+        "earnest"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "bittersweet",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "bittersweet",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "tense",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:gemini"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 315635,
+      "media_type": "movie",
+      "title": "Spider-Man: Homecoming",
+      "current_tone_tags": [
+        "playful",
+        "earnest"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "uplifting",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "uplifting",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "warm",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1314481,
+      "media_type": "movie",
+      "title": "The Devil Wears Prada 2",
+      "current_tone_tags": [
+        "wry",
+        "playful"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "satirical",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "satirical",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 429617,
+      "media_type": "movie",
+      "title": "Spider-Man: Far From Home",
+      "current_tone_tags": [
+        "playful",
+        "earnest"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "romantic",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "romantic",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "tense",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "current_tone_tags": [
+        "earnest",
+        "menacing"
+      ],
+      "current_source": "human-review",
+      "tag_count": 2,
+      "proposed_third_tone": "uplifting",
+      "evidence": {
+        "support_count": 2,
+        "considered_source_count": 6,
+        "appeared_in": [
+          "pass1:claude",
+          "pass2:gemini"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "uplifting",
+            "support_count": 2,
+            "appeared_in": [
+              "pass1:claude",
+              "pass2:gemini"
+            ]
+          },
+          {
+            "tone": "warm",
+            "support_count": 2,
+            "appeared_in": [
+              "pass1:claude",
+              "pass2:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1598,
+      "media_type": "movie",
+      "title": "Cape Fear",
+      "current_tone_tags": [
+        "tense",
+        "menacing"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "gritty",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:chatgpt"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "gritty",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          },
+          {
+            "tone": "unsettling",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1630409,
+      "media_type": "movie",
+      "title": "The Debt Collector",
+      "current_tone_tags": [
+        "gritty",
+        "tense"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "bleak",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "bleak",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1930,
+      "media_type": "movie",
+      "title": "The Amazing Spider-Man",
+      "current_tone_tags": [
+        "earnest",
+        "romantic"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "bittersweet",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "bittersweet",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1304313,
+      "media_type": "movie",
+      "title": "Lee Cronin's The Mummy",
+      "current_tone_tags": [
+        "menacing",
+        "unsettling"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "bleak",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "bleak",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "tense",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 687163,
+      "media_type": "movie",
+      "title": "Project Hail Mary",
+      "current_tone_tags": [
+        "cerebral",
+        "earnest"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "uplifting",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "uplifting",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "warm",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 238,
+      "media_type": "movie",
+      "title": "The Godfather",
+      "current_tone_tags": [
+        "gritty",
+        "menacing"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "cynical",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:chatgpt"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "cynical",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          },
+          {
+            "tone": "tense",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1263532,
+      "media_type": "movie",
+      "title": "Beast Race",
+      "current_tone_tags": [
+        "tense",
+        "gritty"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "bleak",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "bleak",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "visceral",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1361774,
+      "media_type": "movie",
+      "title": "The Dink",
+      "current_tone_tags": [
+        "playful",
+        "wry"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "earnest",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:chatgpt"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "earnest",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 5879,
+      "media_type": "movie",
+      "title": "In the Realm of the Senses",
+      "current_tone_tags": [
+        "unsettling",
+        "visceral"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "bleak",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "bleak",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "romantic",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1726,
+      "media_type": "movie",
+      "title": "Iron Man",
+      "current_tone_tags": [
+        "earnest",
+        "tense"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "playful",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:gemini"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "playful",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:gemini"
+            ]
+          },
+          {
+            "tone": "uplifting",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 949838,
+      "media_type": "movie",
+      "title": "72 HOURS",
+      "current_tone_tags": [
+        "playful",
+        "raunchy"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "absurdist",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "absurdist",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1416,
+      "media_type": "tv",
+      "title": "Grey's Anatomy",
+      "current_tone_tags": [
+        "earnest",
+        "sentimental"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "tense",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "tense",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 32419,
+      "media_type": "tv",
+      "title": "Horrible Histories",
+      "current_tone_tags": [
+        "playful",
+        "absurdist"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "satirical",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "satirical",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 79744,
+      "media_type": "tv",
+      "title": "The Rookie",
+      "current_tone_tags": [
+        "earnest",
+        "playful"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "tense",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "tense",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "uplifting",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 22980,
+      "media_type": "tv",
+      "title": "Watch What Happens Live with Andy Cohen",
+      "current_tone_tags": [
+        "playful"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 1,
+      "proposed_third_tone": "wry",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:gemini"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "wry",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:gemini"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1095,
+      "media_type": "tv",
+      "title": "Ghost in the Shell: Stand Alone Complex",
+      "current_tone_tags": [
+        "cerebral",
+        "tense"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "stylized",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "stylized",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 138502,
+      "media_type": "tv",
+      "title": "X-Men '97",
+      "current_tone_tags": [
+        "tense",
+        "earnest"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "bittersweet",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "bittersweet",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 278624,
+      "media_type": "tv",
+      "title": "Lucky",
+      "current_tone_tags": [
+        "tense",
+        "gritty"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "playful",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:gemini"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "playful",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:gemini"
+            ]
+          },
+          {
+            "tone": "visceral",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 59941,
+      "media_type": "tv",
+      "title": "The Tonight Show Starring Jimmy Fallon",
+      "current_tone_tags": [
+        "playful",
+        "warm"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": null,
+      "evidence": {
+        "support_count": 0,
+        "considered_source_count": 3,
+        "appeared_in": [],
+        "ranked_candidates": []
+      }
+    },
+    {
+      "tmdb_id": 1668,
+      "media_type": "tv",
+      "title": "Friends",
+      "current_tone_tags": [
+        "warm",
+        "playful"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "romantic",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:chatgpt"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "romantic",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          },
+          {
+            "tone": "uplifting",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 203744,
+      "media_type": "tv",
+      "title": "Sugar",
+      "current_tone_tags": [
+        "enigmatic",
+        "stylized"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "melancholic",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "melancholic",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "tense",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 45140,
+      "media_type": "tv",
+      "title": "Teen Titans Go!",
+      "current_tone_tags": [
+        "absurdist",
+        "playful"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": null,
+      "evidence": {
+        "support_count": 0,
+        "considered_source_count": 3,
+        "appeared_in": [],
+        "ranked_candidates": []
+      }
+    },
+    {
+      "tmdb_id": 2224,
+      "media_type": "tv",
+      "title": "The Daily Show",
+      "current_tone_tags": [
+        "satirical",
+        "wry"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "playful",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:chatgpt"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "playful",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 1421,
+      "media_type": "tv",
+      "title": "Modern Family",
+      "current_tone_tags": [
+        "warm",
+        "playful"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "sentimental",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "sentimental",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "wry",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 64099,
+      "media_type": "tv",
+      "title": "War and Peace",
+      "current_tone_tags": [
+        "earnest",
+        "melancholic"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "bittersweet",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "bittersweet",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          },
+          {
+            "tone": "romantic",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 30984,
+      "media_type": "tv",
+      "title": "Bleach",
+      "current_tone_tags": [
+        "earnest",
+        "visceral"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "tense",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "tense",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 215072,
+      "media_type": "tv",
+      "title": "A Shop for Killers",
+      "current_tone_tags": [
+        "tense",
+        "gritty"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "enigmatic",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:chatgpt"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "enigmatic",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:chatgpt"
+            ]
+          },
+          {
+            "tone": "unsettling",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tmdb_id": 2661,
+      "media_type": "tv",
+      "title": "Kamen Rider",
+      "current_tone_tags": [
+        "earnest",
+        "menacing"
+      ],
+      "current_source": "pass1-majority-tags",
+      "tag_count": 2,
+      "proposed_third_tone": "tense",
+      "evidence": {
+        "support_count": 1,
+        "considered_source_count": 3,
+        "appeared_in": [
+          "pass1:claude"
+        ],
+        "ranked_candidates": [
+          {
+            "tone": "tense",
+            "support_count": 1,
+            "appeared_in": [
+              "pass1:claude"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

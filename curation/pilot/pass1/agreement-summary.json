@@ -1,0 +1,57 @@
+{
+  "ontology_version": "0.1.1",
+  "generated_at": "2026-08-09T21:37:46.110Z",
+  "input_title_count": 100,
+  "comparable_title_count": 100,
+  "validation": {
+    "chatgpt": {
+      "error_count": 0,
+      "errors": [],
+      "classified_count": 100,
+      "missing_titles": [],
+      "duplicate_titles": [],
+      "unexpected_title_count": 0
+    },
+    "claude": {
+      "error_count": 0,
+      "errors": [],
+      "classified_count": 100,
+      "missing_titles": [],
+      "duplicate_titles": [],
+      "unexpected_title_count": 0
+    },
+    "gemini": {
+      "error_count": 0,
+      "errors": [],
+      "classified_count": 100,
+      "missing_titles": [],
+      "duplicate_titles": [],
+      "unexpected_title_count": 0
+    }
+  },
+  "agreement": {
+    "severity_counts": {
+      "none": 11,
+      "low": 34,
+      "moderate": 50,
+      "major": 5
+    },
+    "primary_subgenre": {
+      "full": 68,
+      "majority": 27,
+      "none": 5
+    },
+    "secondary_subgenre": {
+      "full": 27,
+      "majority": 54,
+      "none": 19
+    },
+    "pacing": {
+      "full": 71,
+      "majority": 29,
+      "none": 0
+    },
+    "avg_tone_jaccard": 0.544
+  },
+  "ready_for_review": true
+}

@@ -1,7 +1,6 @@
 import "server-only";
 
 import { createServerClient } from "@supabase/ssr";
-import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
 import { getPublicSupabaseConfig } from "./config";
@@ -28,15 +27,3 @@ export async function createSupabaseServerClient() {
     },
   });
 }
-
-/** Server-only elevated client for explicit cache/maintenance work. */
-export function createSupabaseAdminClient() {
-  const config = getPublicSupabaseConfig();
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
-  if (!config || !serviceRoleKey) return null;
-
-  return createClient<Database>(config.url, serviceRoleKey, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
-}
-

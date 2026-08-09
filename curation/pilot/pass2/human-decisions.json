@@ -1,0 +1,195 @@
+{
+  "ontology_version": "0.1.1",
+  "updated_at": "2026-08-09T22:21:29.642Z",
+  "decisions": [
+    {
+      "key": "movie:980431:tone_tags",
+      "tmdb_id": 980431,
+      "media_type": "movie",
+      "title": "Avatar Aang: The Last Airbender",
+      "field": "tone_tags",
+      "choice": "A",
+      "value": [
+        "warm",
+        "uplifting",
+        "earnest"
+      ],
+      "decided_at": "2026-08-09T22:19:46.265Z"
+    },
+    {
+      "key": "movie:454639:tone_tags",
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "field": "tone_tags",
+      "choice": "A",
+      "value": [
+        "earnest",
+        "menacing"
+      ],
+      "decided_at": "2026-08-09T22:19:52.399Z"
+    },
+    {
+      "key": "movie:454639:secondary_subgenre",
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "field": "secondary_subgenre",
+      "choice": "A",
+      "value": "sword-and-sorcery",
+      "decided_at": "2026-08-09T22:19:57.890Z"
+    },
+    {
+      "key": "movie:559:tone_tags",
+      "tmdb_id": 559,
+      "media_type": "movie",
+      "title": "Spider-Man 3",
+      "field": "tone_tags",
+      "choice": "B",
+      "value": [
+        "sentimental",
+        "bittersweet",
+        "earnest"
+      ],
+      "decided_at": "2026-08-09T22:20:05.371Z"
+    },
+    {
+      "key": "movie:652:tone_tags",
+      "tmdb_id": 652,
+      "media_type": "movie",
+      "title": "Troy",
+      "field": "tone_tags",
+      "choice": "C",
+      "value": [
+        "bittersweet",
+        "gritty",
+        "tense"
+      ],
+      "decided_at": "2026-08-09T22:20:13.963Z"
+    },
+    {
+      "key": "movie:24428:tone_tags",
+      "tmdb_id": 24428,
+      "media_type": "movie",
+      "title": "The Avengers",
+      "field": "tone_tags",
+      "choice": "B",
+      "value": [
+        "uplifting",
+        "playful",
+        "tense"
+      ],
+      "decided_at": "2026-08-09T22:20:20.099Z"
+    },
+    {
+      "key": "movie:1361774:primary_subgenre",
+      "tmdb_id": 1361774,
+      "media_type": "movie",
+      "title": "The Dink",
+      "field": "primary_subgenre",
+      "choice": "B",
+      "value": "absurdist-comedy",
+      "decided_at": "2026-08-09T22:20:27.076Z"
+    },
+    {
+      "key": "movie:21484:primary_subgenre",
+      "tmdb_id": 21484,
+      "media_type": "movie",
+      "title": "Possession",
+      "field": "primary_subgenre",
+      "choice": "B",
+      "value": "supernatural-horror",
+      "decided_at": "2026-08-09T22:20:35.118Z"
+    },
+    {
+      "key": "movie:19995:primary_subgenre",
+      "tmdb_id": 19995,
+      "media_type": "movie",
+      "title": "Avatar",
+      "field": "primary_subgenre",
+      "choice": "B",
+      "value": "alien-first-contact",
+      "decided_at": "2026-08-09T22:20:50.367Z"
+    },
+    {
+      "key": "movie:1325734:tone_tags",
+      "tmdb_id": 1325734,
+      "media_type": "movie",
+      "title": "The Drama",
+      "field": "tone_tags",
+      "choice": "A",
+      "value": [
+        "wry",
+        "tense",
+        "sentimental"
+      ],
+      "decided_at": "2026-08-09T22:20:55.889Z"
+    },
+    {
+      "key": "movie:755898:tone_tags",
+      "tmdb_id": 755898,
+      "media_type": "movie",
+      "title": "War of the Worlds",
+      "field": "tone_tags",
+      "choice": "B",
+      "value": [
+        "tense",
+        "unsettling",
+        "cynical"
+      ],
+      "decided_at": "2026-08-09T22:21:04.099Z"
+    },
+    {
+      "key": "tv:5920:secondary_subgenre",
+      "tmdb_id": 5920,
+      "media_type": "tv",
+      "title": "The Mentalist",
+      "field": "secondary_subgenre",
+      "choice": "C",
+      "value": "procedural",
+      "decided_at": "2026-08-09T22:21:10.150Z"
+    },
+    {
+      "key": "tv:4614:tone_tags",
+      "tmdb_id": 4614,
+      "media_type": "tv",
+      "title": "NCIS",
+      "field": "tone_tags",
+      "choice": "B",
+      "value": [
+        "earnest",
+        "tense",
+        "gritty"
+      ],
+      "decided_at": "2026-08-09T22:21:18.597Z"
+    },
+    {
+      "key": "tv:106841:tone_tags",
+      "tmdb_id": 106841,
+      "media_type": "tv",
+      "title": "Blossoms Shanghai",
+      "field": "tone_tags",
+      "choice": "B",
+      "value": [
+        "stylized",
+        "melancholic",
+        "dreamlike"
+      ],
+      "decided_at": "2026-08-09T22:21:25.023Z"
+    },
+    {
+      "key": "tv:1911:tone_tags",
+      "tmdb_id": 1911,
+      "media_type": "tv",
+      "title": "Bones",
+      "field": "tone_tags",
+      "choice": "C",
+      "value": [
+        "wry",
+        "cerebral",
+        "gritty"
+      ],
+      "decided_at": "2026-08-09T22:21:29.642Z"
+    }
+  ]
+}

@@ -1,0 +1,510 @@
+{
+  "ontology_version_reviewed_against": "0.1.1",
+  "generated_at": "2026-08-09T22:24:35.362Z",
+  "source_file": "curation/pilot/pass2/final-classifications.json",
+  "policy_reviewed_against": "tone-tag preference policy (prefer exactly 3; 2 only when a 3rd would be weak/redundant/speculative/misleading; 0-1 rare, requires genuinely insufficient evidence)",
+  "methodology": "Every title in final-classifications.json with fewer than 3 tone_tags is listed below. None of these tag counts were originally decided against the new preference wording (Pass 1 majority consensus and the one human Pass-2 adjudication predate this policy), so no automated judgment is made about whether the existing tag count is actually justified. needs_editorial_review is therefore set to true for every listed title: this report identifies candidates for a human editor to check against the new policy, it does not itself certify or reject the existing tag counts. No tone tags were invented, removed, or added by this report.",
+  "title_count_total": 100,
+  "tone_tag_count_summary": {
+    "3_tags": 62,
+    "2_tags": 37,
+    "1_tag": 1,
+    "0_or_null_tags": 0
+  },
+  "titles_needing_editorial_review_count": 38,
+  "titles_needing_editorial_review": [
+    {
+      "tmdb_id": 22980,
+      "media_type": "tv",
+      "title": "Watch What Happens Live with Andy Cohen",
+      "tone_tags": [
+        "playful"
+      ],
+      "tag_count": 1,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 949838,
+      "media_type": "movie",
+      "title": "72 HOURS",
+      "tone_tags": [
+        "playful",
+        "raunchy"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 215072,
+      "media_type": "tv",
+      "title": "A Shop for Killers",
+      "tone_tags": [
+        "tense",
+        "gritty"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1263532,
+      "media_type": "movie",
+      "title": "Beast Race",
+      "tone_tags": [
+        "tense",
+        "gritty"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 30984,
+      "media_type": "tv",
+      "title": "Bleach",
+      "tone_tags": [
+        "earnest",
+        "visceral"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1598,
+      "media_type": "movie",
+      "title": "Cape Fear",
+      "tone_tags": [
+        "tense",
+        "menacing"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 911430,
+      "media_type": "movie",
+      "title": "F1",
+      "tone_tags": [
+        "uplifting",
+        "earnest"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1668,
+      "media_type": "tv",
+      "title": "Friends",
+      "tone_tags": [
+        "warm",
+        "playful"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1095,
+      "media_type": "tv",
+      "title": "Ghost in the Shell: Stand Alone Complex",
+      "tone_tags": [
+        "cerebral",
+        "tense"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1416,
+      "media_type": "tv",
+      "title": "Grey's Anatomy",
+      "tone_tags": [
+        "earnest",
+        "sentimental"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 32419,
+      "media_type": "tv",
+      "title": "Horrible Histories",
+      "tone_tags": [
+        "playful",
+        "absurdist"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 5879,
+      "media_type": "movie",
+      "title": "In the Realm of the Senses",
+      "tone_tags": [
+        "unsettling",
+        "visceral"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1726,
+      "media_type": "movie",
+      "title": "Iron Man",
+      "tone_tags": [
+        "earnest",
+        "tense"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 2661,
+      "media_type": "tv",
+      "title": "Kamen Rider",
+      "tone_tags": [
+        "earnest",
+        "menacing"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1304313,
+      "media_type": "movie",
+      "title": "Lee Cronin's The Mummy",
+      "tone_tags": [
+        "menacing",
+        "unsettling"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 278624,
+      "media_type": "tv",
+      "title": "Lucky",
+      "tone_tags": [
+        "tense",
+        "gritty"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "tone_tags": [
+        "earnest",
+        "menacing"
+      ],
+      "tag_count": 2,
+      "source": "human-review",
+      "review_origin": "Human Review",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1421,
+      "media_type": "tv",
+      "title": "Modern Family",
+      "tone_tags": [
+        "warm",
+        "playful"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 931285,
+      "media_type": "movie",
+      "title": "Mortal Kombat II",
+      "tone_tags": [
+        "visceral",
+        "tense"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 687163,
+      "media_type": "movie",
+      "title": "Project Hail Mary",
+      "tone_tags": [
+        "cerebral",
+        "earnest"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 346,
+      "media_type": "movie",
+      "title": "Seven Samurai",
+      "tone_tags": [
+        "gritty",
+        "earnest"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 557,
+      "media_type": "movie",
+      "title": "Spider-Man",
+      "tone_tags": [
+        "earnest",
+        "playful"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 429617,
+      "media_type": "movie",
+      "title": "Spider-Man: Far From Home",
+      "tone_tags": [
+        "playful",
+        "earnest"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 315635,
+      "media_type": "movie",
+      "title": "Spider-Man: Homecoming",
+      "tone_tags": [
+        "playful",
+        "earnest"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 203744,
+      "media_type": "tv",
+      "title": "Sugar",
+      "tone_tags": [
+        "enigmatic",
+        "stylized"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 45140,
+      "media_type": "tv",
+      "title": "Teen Titans Go!",
+      "tone_tags": [
+        "absurdist",
+        "playful"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1930,
+      "media_type": "movie",
+      "title": "The Amazing Spider-Man",
+      "tone_tags": [
+        "earnest",
+        "romantic"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 2224,
+      "media_type": "tv",
+      "title": "The Daily Show",
+      "tone_tags": [
+        "satirical",
+        "wry"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1630409,
+      "media_type": "movie",
+      "title": "The Debt Collector",
+      "tone_tags": [
+        "gritty",
+        "tense"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1314481,
+      "media_type": "movie",
+      "title": "The Devil Wears Prada 2",
+      "tone_tags": [
+        "wry",
+        "playful"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1481343,
+      "media_type": "movie",
+      "title": "The Devil's Mouth",
+      "tone_tags": [
+        "tense",
+        "visceral"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1361774,
+      "media_type": "movie",
+      "title": "The Dink",
+      "tone_tags": [
+        "playful",
+        "wry"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 238,
+      "media_type": "movie",
+      "title": "The Godfather",
+      "tone_tags": [
+        "gritty",
+        "menacing"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 1284041,
+      "media_type": "movie",
+      "title": "The Last House",
+      "tone_tags": [
+        "tense",
+        "menacing"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 79744,
+      "media_type": "tv",
+      "title": "The Rookie",
+      "tone_tags": [
+        "earnest",
+        "playful"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 59941,
+      "media_type": "tv",
+      "title": "The Tonight Show Starring Jimmy Fallon",
+      "tone_tags": [
+        "playful",
+        "warm"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 64099,
+      "media_type": "tv",
+      "title": "War and Peace",
+      "tone_tags": [
+        "earnest",
+        "melancholic"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    },
+    {
+      "tmdb_id": 138502,
+      "media_type": "tv",
+      "title": "X-Men '97",
+      "tone_tags": [
+        "tense",
+        "earnest"
+      ],
+      "tag_count": 2,
+      "source": "pass1-majority-tags",
+      "review_origin": "Pass 1",
+      "needs_editorial_review": true
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "ontology_version": "0.1.1",
+  "pass": 2,
+  "generated_at": "2026-08-09T22:15:51.186Z",
+  "input_dir": "curation/pilot/pass2",
+  "disputed_title_count": 49,
+  "disputed_field_count": 77,
+  "validation": {
+    "chatgpt": {
+      "error_count": 0,
+      "errors": []
+    },
+    "claude": {
+      "error_count": 0,
+      "errors": []
+    },
+    "gemini": {
+      "error_count": 0,
+      "errors": []
+    }
+  },
+  "resolution_counts": {
+    "AUTO_ACCEPT": 29,
+    "PROVISIONAL_ACCEPT": 33,
+    "HUMAN_REVIEW": 15
+  },
+  "field_breakdown": {
+    "tone_tags": {
+      "AUTO_ACCEPT": 4,
+      "PROVISIONAL_ACCEPT": 12,
+      "HUMAN_REVIEW": 10
+    },
+    "secondary_subgenre": {
+      "AUTO_ACCEPT": 6,
+      "PROVISIONAL_ACCEPT": 11,
+      "HUMAN_REVIEW": 2
+    },
+    "primary_subgenre": {
+      "AUTO_ACCEPT": 19,
+      "PROVISIONAL_ACCEPT": 10,
+      "HUMAN_REVIEW": 3
+    }
+  },
+  "ready": true
+}

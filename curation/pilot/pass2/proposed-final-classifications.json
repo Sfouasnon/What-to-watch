@@ -1,0 +1,2830 @@
+{
+  "ontology_version": "0.1.1",
+  "generated_at": "2026-08-09T22:15:51.196Z",
+  "title_count": 100,
+  "pending_human_review_field_count": 15,
+  "classifications": [
+    {
+      "tmdb_id": 1284041,
+      "media_type": "movie",
+      "title": "The Last House",
+      "primary_subgenre": {
+        "value": "survival-horror",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "creature-feature",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "menacing"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 557,
+      "media_type": "movie",
+      "title": "Spider-Man",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "coming-of-age-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "playful"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 634649,
+      "media_type": "movie",
+      "title": "Spider-Man: No Way Home",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "tense",
+          "bittersweet"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 931285,
+      "media_type": "movie",
+      "title": "Mortal Kombat II",
+      "primary_subgenre": {
+        "value": "martial-arts",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "adventure-action",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "visceral",
+          "tense"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1481343,
+      "media_type": "movie",
+      "title": "The Devil's Mouth",
+      "primary_subgenre": {
+        "value": "survival-horror",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "creature-feature",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "visceral"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 911430,
+      "media_type": "movie",
+      "title": "F1",
+      "primary_subgenre": {
+        "value": "sports-drama",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "uplifting",
+          "earnest"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 980431,
+      "media_type": "movie",
+      "title": "Avatar Aang: The Last Airbender",
+      "primary_subgenre": {
+        "value": "epic-fantasy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "animated-family",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1339713,
+      "media_type": "movie",
+      "title": "Obsession",
+      "primary_subgenre": {
+        "value": "supernatural-horror",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "psychological-horror",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "unsettling",
+          "menacing",
+          "tense"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 346,
+      "media_type": "movie",
+      "title": "Seven Samurai",
+      "primary_subgenre": {
+        "value": "historical-drama",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "martial-arts",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "gritty",
+          "earnest"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "slow",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 315635,
+      "media_type": "movie",
+      "title": "Spider-Man: Homecoming",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "coming-of-age-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful",
+          "earnest"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1314481,
+      "media_type": "movie",
+      "title": "The Devil Wears Prada 2",
+      "primary_subgenre": {
+        "value": "workplace-comedy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "wry",
+          "playful"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 429617,
+      "media_type": "movie",
+      "title": "Spider-Man: Far From Home",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful",
+          "earnest"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 569094,
+      "media_type": "movie",
+      "title": "Spider-Man: Across the Spider-Verse",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "adventure-action",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "stylized",
+          "tense",
+          "earnest"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "primary_subgenre": {
+        "value": "sword-and-sorcery",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "tone_tags": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 950396,
+      "media_type": "movie",
+      "title": "The Gorge",
+      "primary_subgenre": {
+        "value": "survival-thriller",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "romantic-drama",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "romantic",
+          "menacing"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 157336,
+      "media_type": "movie",
+      "title": "Interstellar",
+      "primary_subgenre": {
+        "value": "hard-sci-fi",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "cerebral",
+          "earnest",
+          "tense"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1226863,
+      "media_type": "movie",
+      "title": "The Super Mario Galaxy Movie",
+      "primary_subgenre": {
+        "value": "adventure-action",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "animated-family",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful",
+          "warm",
+          "uplifting"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1598,
+      "media_type": "movie",
+      "title": "Cape Fear",
+      "primary_subgenre": {
+        "value": "psychological-thriller",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "revenge-thriller",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "menacing"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1630409,
+      "media_type": "movie",
+      "title": "The Debt Collector",
+      "primary_subgenre": {
+        "value": "action-thriller",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "crime-thriller",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "gritty",
+          "tense"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 559,
+      "media_type": "movie",
+      "title": "Spider-Man 3",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1930,
+      "media_type": "movie",
+      "title": "The Amazing Spider-Man",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "coming-of-age-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "romantic"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1304313,
+      "media_type": "movie",
+      "title": "Lee Cronin's The Mummy",
+      "primary_subgenre": {
+        "value": "supernatural-horror",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "mystery-thriller",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "menacing",
+          "unsettling"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 687163,
+      "media_type": "movie",
+      "title": "Project Hail Mary",
+      "primary_subgenre": {
+        "value": "hard-sci-fi",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "alien-first-contact",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "cerebral",
+          "earnest"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1698575,
+      "media_type": "movie",
+      "title": "Snoopy Presents: There's No Place Like Home, Snoopy",
+      "primary_subgenre": {
+        "value": "animated-family",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "warm",
+          "playful",
+          "uplifting"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 238,
+      "media_type": "movie",
+      "title": "The Godfather",
+      "primary_subgenre": {
+        "value": "organized-crime",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "organized-crime",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "gritty",
+          "menacing"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "slow",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 652,
+      "media_type": "movie",
+      "title": "Troy",
+      "primary_subgenre": {
+        "value": "historical-drama",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "combat-film",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 3782,
+      "media_type": "movie",
+      "title": "Ikiru",
+      "primary_subgenre": {
+        "value": "psychological-drama",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "social-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "melancholic",
+          "meditative",
+          "bittersweet"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "slow",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1510795,
+      "media_type": "movie",
+      "title": "Shake, Rattle & Roll: Evil Origins",
+      "primary_subgenre": {
+        "value": "supernatural-horror",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "slasher",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "menacing",
+          "tense",
+          "visceral"
+        ],
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 24428,
+      "media_type": "movie",
+      "title": "The Avengers",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 102382,
+      "media_type": "movie",
+      "title": "The Amazing Spider-Man 2",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "romantic-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "bittersweet",
+          "tense",
+          "romantic"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 155,
+      "media_type": "movie",
+      "title": "The Dark Knight",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "crime-thriller",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "menacing",
+          "gritty"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1263532,
+      "media_type": "movie",
+      "title": "Beast Race",
+      "primary_subgenre": {
+        "value": "dystopian-sci-fi",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "survival-thriller",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "gritty"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1361774,
+      "media_type": "movie",
+      "title": "The Dink",
+      "primary_subgenre": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful",
+          "wry"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 361743,
+      "media_type": "movie",
+      "title": "Top Gun: Maverick",
+      "primary_subgenre": {
+        "value": "military-action",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "tense",
+          "uplifting"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 671,
+      "media_type": "movie",
+      "title": "Harry Potter and the Philosopher's Stone",
+      "primary_subgenre": {
+        "value": "urban-fantasy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "coming-of-age-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "warm",
+          "playful",
+          "earnest"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 5879,
+      "media_type": "movie",
+      "title": "In the Realm of the Senses",
+      "primary_subgenre": {
+        "value": "erotic-romance",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "tragic-romance",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "unsettling",
+          "visceral"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "slow",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1668364,
+      "media_type": "movie",
+      "title": "Desire",
+      "primary_subgenre": {
+        "value": "erotic-thriller",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "family-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "romantic",
+          "tense",
+          "unsettling"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1726,
+      "media_type": "movie",
+      "title": "Iron Man",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "tense"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 299536,
+      "media_type": "movie",
+      "title": "Avengers: Infinity War",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "space-opera",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "menacing",
+          "bleak"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 122,
+      "media_type": "movie",
+      "title": "The Lord of the Rings: The Return of the King",
+      "primary_subgenre": {
+        "value": "epic-fantasy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "tense",
+          "uplifting"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 98894,
+      "media_type": "movie",
+      "title": "Jessica",
+      "primary_subgenre": {
+        "value": "sex-comedy",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "romantic-comedy",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful",
+          "romantic",
+          "warm"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1259102,
+      "media_type": "movie",
+      "title": "Eternity",
+      "primary_subgenre": {
+        "value": "romantic-comedy",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "romantic",
+          "bittersweet",
+          "warm"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 680,
+      "media_type": "movie",
+      "title": "Pulp Fiction",
+      "primary_subgenre": {
+        "value": "dark-comedy",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "neo-noir",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "wry",
+          "stylized",
+          "visceral"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 603,
+      "media_type": "movie",
+      "title": "The Matrix",
+      "primary_subgenre": {
+        "value": "cyberpunk",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "martial-arts",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "cerebral",
+          "tense",
+          "stylized"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 21484,
+      "media_type": "movie",
+      "title": "Possession",
+      "primary_subgenre": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "secondary_subgenre": {
+        "value": "body-horror",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "unsettling",
+          "visceral",
+          "bleak"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 949838,
+      "media_type": "movie",
+      "title": "72 HOURS",
+      "primary_subgenre": {
+        "value": "buddy-comedy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful",
+          "raunchy"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 19995,
+      "media_type": "movie",
+      "title": "Avatar",
+      "primary_subgenre": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "secondary_subgenre": {
+        "value": "adventure-action",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "romantic",
+          "visceral"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 83533,
+      "media_type": "movie",
+      "title": "Avatar: Fire and Ash",
+      "primary_subgenre": {
+        "value": "space-opera",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "family-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "visceral",
+          "melancholic"
+        ],
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1325734,
+      "media_type": "movie",
+      "title": "The Drama",
+      "primary_subgenre": {
+        "value": "romantic-comedy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "dark-comedy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 755898,
+      "media_type": "movie",
+      "title": "War of the Worlds",
+      "primary_subgenre": {
+        "value": "conspiracy-thriller",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "tech-thriller",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1416,
+      "media_type": "tv",
+      "title": "Grey's Anatomy",
+      "primary_subgenre": {
+        "value": "workplace-drama",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "soap-serial-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "sentimental"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 5920,
+      "media_type": "tv",
+      "title": "The Mentalist",
+      "primary_subgenre": {
+        "value": "detective",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "tone_tags": {
+        "value": [
+          "wry",
+          "playful",
+          "cerebral"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 65334,
+      "media_type": "tv",
+      "title": "Miraculous: Tales of Ladybug & Cat Noir",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "animated-family",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful",
+          "warm",
+          "romantic"
+        ],
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 94997,
+      "media_type": "tv",
+      "title": "House of the Dragon",
+      "primary_subgenre": {
+        "value": "epic-fantasy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "political-drama",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "bleak",
+          "melancholic",
+          "tense"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 113962,
+      "media_type": "tv",
+      "title": "Lioness",
+      "primary_subgenre": {
+        "value": "espionage-thriller",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "military-action",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "earnest",
+          "gritty"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 125988,
+      "media_type": "tv",
+      "title": "Silo",
+      "primary_subgenre": {
+        "value": "dystopian-sci-fi",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "conspiracy-thriller",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "bleak",
+          "cynical",
+          "tense"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 4614,
+      "media_type": "tv",
+      "title": "NCIS",
+      "primary_subgenre": {
+        "value": "police-procedural",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 2734,
+      "media_type": "tv",
+      "title": "Law & Order: Special Victims Unit",
+      "primary_subgenre": {
+        "value": "police-procedural",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "courtroom-crime",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "gritty",
+          "tense",
+          "earnest"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 32419,
+      "media_type": "tv",
+      "title": "Horrible Histories",
+      "primary_subgenre": {
+        "value": "sketch-comedy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful",
+          "absurdist"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 549,
+      "media_type": "tv",
+      "title": "Law & Order",
+      "primary_subgenre": {
+        "value": "police-procedural",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "courtroom-crime",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "gritty",
+          "earnest",
+          "tense"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 79744,
+      "media_type": "tv",
+      "title": "The Rookie",
+      "primary_subgenre": {
+        "value": "police-procedural",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "dramedy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "playful"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 456,
+      "media_type": "tv",
+      "title": "The Simpsons",
+      "primary_subgenre": {
+        "value": "family-sitcom",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "satire",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "satirical",
+          "wry",
+          "playful"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 60625,
+      "media_type": "tv",
+      "title": "Rick and Morty",
+      "primary_subgenre": {
+        "value": "absurdist-comedy",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "adult-animation",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "absurdist",
+          "cynical",
+          "playful"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1622,
+      "media_type": "tv",
+      "title": "Supernatural",
+      "primary_subgenre": {
+        "value": "supernatural-horror",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "urban-fantasy",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "menacing",
+          "tense",
+          "earnest"
+        ],
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 97546,
+      "media_type": "tv",
+      "title": "Ted Lasso",
+      "primary_subgenre": {
+        "value": "workplace-comedy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "dramedy",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "warm",
+          "uplifting",
+          "earnest"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 4057,
+      "media_type": "tv",
+      "title": "Criminal Minds",
+      "primary_subgenre": {
+        "value": "police-procedural",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "psychological-thriller",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "gritty",
+          "menacing"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 22980,
+      "media_type": "tv",
+      "title": "Watch What Happens Live with Andy Cohen",
+      "primary_subgenre": {
+        "value": "late-night-talk-show",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1095,
+      "media_type": "tv",
+      "title": "Ghost in the Shell: Stand Alone Complex",
+      "primary_subgenre": {
+        "value": "cyberpunk",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "police-procedural",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "cerebral",
+          "tense"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 291496,
+      "media_type": "tv",
+      "title": "Our Sticky Love",
+      "primary_subgenre": {
+        "value": "romantic-comedy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "romantic",
+          "playful",
+          "warm"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1434,
+      "media_type": "tv",
+      "title": "Family Guy",
+      "primary_subgenre": {
+        "value": "family-sitcom",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "adult-animation",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "satirical",
+          "raunchy",
+          "absurdist"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 138502,
+      "media_type": "tv",
+      "title": "X-Men '97",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "social-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "earnest"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1399,
+      "media_type": "tv",
+      "title": "Game of Thrones",
+      "primary_subgenre": {
+        "value": "epic-fantasy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "political-drama",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "gritty",
+          "cynical",
+          "menacing"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 108978,
+      "media_type": "tv",
+      "title": "Reacher",
+      "primary_subgenre": {
+        "value": "action-thriller",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "conspiracy-thriller",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "gritty",
+          "tense",
+          "visceral"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 278624,
+      "media_type": "tv",
+      "title": "Lucky",
+      "primary_subgenre": {
+        "value": "crime-thriller",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "heist",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "gritty"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1431,
+      "media_type": "tv",
+      "title": "CSI: Crime Scene Investigation",
+      "primary_subgenre": {
+        "value": "police-procedural",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "cerebral",
+          "tense",
+          "gritty"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 59941,
+      "media_type": "tv",
+      "title": "The Tonight Show Starring Jimmy Fallon",
+      "primary_subgenre": {
+        "value": "late-night-talk-show",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful",
+          "warm"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 106841,
+      "media_type": "tv",
+      "title": "Blossoms Shanghai",
+      "primary_subgenre": {
+        "value": "historical-drama",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "relationship-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "pacing": {
+        "value": "slow",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1396,
+      "media_type": "tv",
+      "title": "Breaking Bad",
+      "primary_subgenre": {
+        "value": "crime-drama",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "psychological-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "bleak",
+          "gritty"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1408,
+      "media_type": "tv",
+      "title": "House",
+      "primary_subgenre": {
+        "value": "procedural",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "workplace-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "cerebral",
+          "cynical",
+          "wry"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1413,
+      "media_type": "tv",
+      "title": "American Horror Story",
+      "primary_subgenre": {
+        "value": "anthology",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "supernatural-horror",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "menacing",
+          "unsettling",
+          "visceral"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1668,
+      "media_type": "tv",
+      "title": "Friends",
+      "primary_subgenre": {
+        "value": "sitcom",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "warm",
+          "playful"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 76479,
+      "media_type": "tv",
+      "title": "The Boys",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "satire",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "satirical",
+          "cynical",
+          "visceral"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 203744,
+      "media_type": "tv",
+      "title": "Sugar",
+      "primary_subgenre": {
+        "value": "neo-noir",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "detective",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "enigmatic",
+          "stylized"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 63770,
+      "media_type": "tv",
+      "title": "The Late Show with Stephen Colbert",
+      "primary_subgenre": {
+        "value": "late-night-talk-show",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "satirical",
+          "wry",
+          "playful"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 61818,
+      "media_type": "tv",
+      "title": "Late Night with Seth Meyers",
+      "primary_subgenre": {
+        "value": "late-night-talk-show",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "satirical",
+          "wry",
+          "playful"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 894,
+      "media_type": "tv",
+      "title": "The Prisoner",
+      "primary_subgenre": {
+        "value": "psychological-thriller",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "espionage-thriller",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "enigmatic",
+          "unsettling",
+          "tense"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 34307,
+      "media_type": "tv",
+      "title": "Shameless",
+      "primary_subgenre": {
+        "value": "dramedy",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "dramedy",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "raunchy",
+          "gritty",
+          "warm"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 94664,
+      "media_type": "tv",
+      "title": "Mushoku Tensei: Jobless Reincarnation",
+      "primary_subgenre": {
+        "value": "isekai",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "epic-fantasy",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful",
+          "raunchy",
+          "earnest"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 60572,
+      "media_type": "tv",
+      "title": "Pokémon",
+      "primary_subgenre": {
+        "value": "anime-action",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "animated-family",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "playful",
+          "warm",
+          "uplifting"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 45140,
+      "media_type": "tv",
+      "title": "Teen Titans Go!",
+      "primary_subgenre": {
+        "value": "parody-spoof",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "animated-family",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "absurdist",
+          "playful"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1911,
+      "media_type": "tv",
+      "title": "Bones",
+      "primary_subgenre": {
+        "value": "police-procedural",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "murder-mystery",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": null,
+        "source": "pass2-human-review-pending",
+        "human_review_pending": true
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 241609,
+      "media_type": "tv",
+      "title": "Your Friends & Neighbors",
+      "primary_subgenre": {
+        "value": "black-comedy",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "crime-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "cynical",
+          "wry",
+          "tense"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 2224,
+      "media_type": "tv",
+      "title": "The Daily Show",
+      "primary_subgenre": {
+        "value": "news-satire",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "satirical",
+          "wry"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 1421,
+      "media_type": "tv",
+      "title": "Modern Family",
+      "primary_subgenre": {
+        "value": "family-sitcom",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "mockumentary",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "warm",
+          "playful"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 64099,
+      "media_type": "tv",
+      "title": "War and Peace",
+      "primary_subgenre": {
+        "value": "historical-drama",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "romantic-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "melancholic"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "slow",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 66732,
+      "media_type": "tv",
+      "title": "Stranger Things",
+      "primary_subgenre": {
+        "value": "supernatural-horror",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "coming-of-age-drama",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "menacing",
+          "warm"
+        ],
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 30984,
+      "media_type": "tv",
+      "title": "Bleach",
+      "primary_subgenre": {
+        "value": "anime-action",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "urban-fantasy",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "visceral"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 215072,
+      "media_type": "tv",
+      "title": "A Shop for Killers",
+      "primary_subgenre": {
+        "value": "action-thriller",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "mystery-thriller",
+        "source": "pass2-provisional_accept",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "tense",
+          "gritty"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 502,
+      "media_type": "tv",
+      "title": "Sesame Street",
+      "primary_subgenre": {
+        "value": "sketch-comedy",
+        "source": "pass2-auto_accept",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": null,
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "warm",
+          "playful",
+          "earnest"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "moderate",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      }
+    },
+    {
+      "tmdb_id": 2661,
+      "media_type": "tv",
+      "title": "Kamen Rider",
+      "primary_subgenre": {
+        "value": "superhero",
+        "source": "pass1-full",
+        "human_review_pending": false
+      },
+      "secondary_subgenre": {
+        "value": "martial-arts",
+        "source": "pass1-majority",
+        "human_review_pending": false
+      },
+      "tone_tags": {
+        "value": [
+          "earnest",
+          "menacing"
+        ],
+        "source": "pass1-majority-tags",
+        "human_review_pending": false
+      },
+      "pacing": {
+        "value": "fast",
+        "source": "pass1-full",
+        "human_review_pending": false
+      }
+    }
+  ]
+}

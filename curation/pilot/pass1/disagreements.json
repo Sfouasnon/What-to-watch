@@ -1,0 +1,3617 @@
+{
+  "ontology_version": "0.1.1",
+  "disagreements": [
+    {
+      "tmdb_id": 1284041,
+      "media_type": "movie",
+      "title": "The Last House",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "survival-horror",
+        "claude": "survival-horror",
+        "gemini": "survival-horror",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "creature-feature",
+        "claude": "creature-feature",
+        "gemini": "sci-fi-horror",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "menacing"
+        ],
+        "claude": [
+          "tense",
+          "menacing"
+        ],
+        "gemini": [
+          "tense",
+          "menacing"
+        ],
+        "avg_pairwise_jaccard": 1
+      }
+    },
+    {
+      "tmdb_id": 557,
+      "media_type": "movie",
+      "title": "Spider-Man",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "coming-of-age-drama",
+        "claude": "coming-of-age-drama",
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "moderate",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "playful"
+        ],
+        "claude": [
+          "earnest",
+          "romantic",
+          "bittersweet"
+        ],
+        "gemini": [
+          "playful",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.5
+      }
+    },
+    {
+      "tmdb_id": 634649,
+      "media_type": "movie",
+      "title": "Spider-Man: No Way Home",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": null,
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "tense"
+        ],
+        "claude": [
+          "bittersweet",
+          "uplifting"
+        ],
+        "gemini": [
+          "earnest",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 0.333
+      }
+    },
+    {
+      "tmdb_id": 931285,
+      "media_type": "movie",
+      "title": "Mortal Kombat II",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "martial-arts",
+        "claude": "martial-arts",
+        "gemini": "martial-arts",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": "dark-fantasy",
+        "gemini": "adventure-action",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "visceral",
+          "tense",
+          "menacing"
+        ],
+        "claude": [
+          "visceral",
+          "tense"
+        ],
+        "gemini": [
+          "visceral"
+        ],
+        "avg_pairwise_jaccard": 0.5
+      }
+    },
+    {
+      "tmdb_id": 980431,
+      "media_type": "movie",
+      "title": "Avatar Aang: The Last Airbender",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "epic-fantasy",
+        "claude": "epic-fantasy",
+        "gemini": "epic-fantasy",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": "animated-family",
+        "gemini": "animated-family",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "warm",
+          "uplifting",
+          "earnest"
+        ],
+        "claude": [
+          "uplifting",
+          "warm",
+          "playful"
+        ],
+        "gemini": [
+          "earnest",
+          "playful"
+        ],
+        "avg_pairwise_jaccard": 0.333
+      }
+    },
+    {
+      "tmdb_id": 346,
+      "media_type": "movie",
+      "title": "Seven Samurai",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "historical-drama",
+        "claude": "historical-drama",
+        "gemini": "historical-drama",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": "martial-arts",
+        "gemini": "martial-arts",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "slow",
+        "gemini": "slow",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "gritty",
+          "earnest"
+        ],
+        "claude": [
+          "bittersweet",
+          "earnest",
+          "gritty"
+        ],
+        "gemini": [
+          "earnest",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 0.417
+      }
+    },
+    {
+      "tmdb_id": 315635,
+      "media_type": "movie",
+      "title": "Spider-Man: Homecoming",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "coming-of-age-drama",
+        "claude": "coming-of-age-drama",
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "playful",
+          "earnest",
+          "warm"
+        ],
+        "claude": [
+          "playful",
+          "earnest",
+          "uplifting"
+        ],
+        "gemini": [
+          "playful",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.611
+      }
+    },
+    {
+      "tmdb_id": 429617,
+      "media_type": "movie",
+      "title": "Spider-Man: Far From Home",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": null,
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "playful",
+          "earnest"
+        ],
+        "claude": [
+          "playful",
+          "romantic",
+          "tense"
+        ],
+        "gemini": [
+          "playful",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.5
+      }
+    },
+    {
+      "tmdb_id": 569094,
+      "media_type": "movie",
+      "title": "Spider-Man: Across the Spider-Verse",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": null,
+        "gemini": "animated-family",
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "tense"
+        ],
+        "claude": [
+          "stylized",
+          "tense",
+          "bittersweet"
+        ],
+        "gemini": [
+          "stylized",
+          "playful",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.233
+      }
+    },
+    {
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "epic-fantasy",
+        "claude": "sword-and-sorcery",
+        "gemini": "sword-and-sorcery",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "sword-and-sorcery",
+        "claude": "epic-fantasy",
+        "gemini": null,
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "menacing"
+        ],
+        "claude": [
+          "earnest",
+          "warm",
+          "uplifting"
+        ],
+        "gemini": [
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.361
+      }
+    },
+    {
+      "tmdb_id": 950396,
+      "media_type": "movie",
+      "title": "The Gorge",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "survival-thriller",
+        "claude": "survival-thriller",
+        "gemini": "survival-thriller",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "romantic-drama",
+        "claude": "romantic-drama",
+        "gemini": "romantic-drama",
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "romantic",
+          "menacing"
+        ],
+        "claude": [
+          "tense",
+          "romantic",
+          "unsettling"
+        ],
+        "gemini": [
+          "tense",
+          "menacing"
+        ],
+        "avg_pairwise_jaccard": 0.472
+      }
+    },
+    {
+      "tmdb_id": 157336,
+      "media_type": "movie",
+      "title": "Interstellar",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "hard-sci-fi",
+        "claude": "hard-sci-fi",
+        "gemini": "hard-sci-fi",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": null,
+        "claude": "family-drama",
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "slow",
+        "gemini": "moderate",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cerebral",
+          "earnest",
+          "tense"
+        ],
+        "claude": [
+          "cerebral",
+          "bittersweet",
+          "uplifting"
+        ],
+        "gemini": [
+          "cerebral",
+          "earnest",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 0.467
+      }
+    },
+    {
+      "tmdb_id": 1226863,
+      "media_type": "movie",
+      "title": "The Super Mario Galaxy Movie",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": "adventure-action",
+        "gemini": "animated-family",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "animated-family",
+        "claude": "animated-family",
+        "gemini": "adventure-action",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "playful",
+          "warm",
+          "uplifting"
+        ],
+        "claude": [
+          "playful",
+          "warm",
+          "uplifting"
+        ],
+        "gemini": [
+          "playful",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.5
+      }
+    },
+    {
+      "tmdb_id": 1598,
+      "media_type": "movie",
+      "title": "Cape Fear",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "crime-thriller",
+        "claude": "psychological-thriller",
+        "gemini": "psychological-thriller",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "psychological-thriller",
+        "claude": "revenge-thriller",
+        "gemini": null,
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "menacing",
+          "gritty"
+        ],
+        "claude": [
+          "menacing",
+          "tense",
+          "unsettling"
+        ],
+        "gemini": [
+          "menacing",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 0.611
+      }
+    },
+    {
+      "tmdb_id": 559,
+      "media_type": "movie",
+      "title": "Spider-Man 3",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": null,
+        "claude": null,
+        "gemini": null,
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "earnest"
+        ],
+        "claude": [
+          "sentimental",
+          "bittersweet",
+          "earnest"
+        ],
+        "gemini": [
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.361
+      }
+    },
+    {
+      "tmdb_id": 1930,
+      "media_type": "movie",
+      "title": "The Amazing Spider-Man",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "coming-of-age-drama",
+        "claude": "coming-of-age-drama",
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "moderate",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "romantic"
+        ],
+        "claude": [
+          "earnest",
+          "bittersweet",
+          "romantic"
+        ],
+        "gemini": [
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.5
+      }
+    },
+    {
+      "tmdb_id": 1304313,
+      "media_type": "movie",
+      "title": "Lee Cronin's The Mummy",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "supernatural-horror",
+        "claude": "supernatural-horror",
+        "gemini": "supernatural-horror",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "mystery-thriller",
+        "claude": "mystery-thriller",
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "menacing",
+          "unsettling",
+          "tense"
+        ],
+        "claude": [
+          "unsettling",
+          "menacing",
+          "bleak"
+        ],
+        "gemini": [
+          "unsettling",
+          "menacing"
+        ],
+        "avg_pairwise_jaccard": 0.611
+      }
+    },
+    {
+      "tmdb_id": 687163,
+      "media_type": "movie",
+      "title": "Project Hail Mary",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "hard-sci-fi",
+        "claude": "hard-sci-fi",
+        "gemini": "hard-sci-fi",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "puzzle-mystery",
+        "claude": "alien-first-contact",
+        "gemini": null,
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cerebral",
+          "earnest"
+        ],
+        "claude": [
+          "uplifting",
+          "warm",
+          "earnest"
+        ],
+        "gemini": [
+          "earnest",
+          "cerebral"
+        ],
+        "avg_pairwise_jaccard": 0.5
+      }
+    },
+    {
+      "tmdb_id": 1698575,
+      "media_type": "movie",
+      "title": "Snoopy Presents: There's No Place Like Home, Snoopy",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "animated-family",
+        "claude": "animated-family",
+        "gemini": "animated-family",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": null,
+        "claude": null,
+        "gemini": null,
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "slow",
+        "gemini": "moderate",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "warm",
+          "playful",
+          "uplifting"
+        ],
+        "claude": [
+          "warm",
+          "uplifting",
+          "playful"
+        ],
+        "gemini": [
+          "warm",
+          "playful"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 238,
+      "media_type": "movie",
+      "title": "The Godfather",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "gangster",
+        "claude": "gangster",
+        "gemini": "organized-crime",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "organized-crime",
+        "claude": "organized-crime",
+        "gemini": "family-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "slow",
+        "gemini": "slow",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "gritty",
+          "cynical",
+          "menacing"
+        ],
+        "claude": [
+          "gritty",
+          "menacing",
+          "tense"
+        ],
+        "gemini": [
+          "gritty",
+          "menacing"
+        ],
+        "avg_pairwise_jaccard": 0.611
+      }
+    },
+    {
+      "tmdb_id": 652,
+      "media_type": "movie",
+      "title": "Troy",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "combat-film",
+        "claude": "historical-drama",
+        "gemini": "historical-drama",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "historical-drama",
+        "claude": "combat-film",
+        "gemini": "combat-film",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "visceral",
+          "tense"
+        ],
+        "claude": [
+          "bittersweet",
+          "gritty",
+          "tense"
+        ],
+        "gemini": [
+          "earnest",
+          "visceral"
+        ],
+        "avg_pairwise_jaccard": 0.194
+      }
+    },
+    {
+      "tmdb_id": 3782,
+      "media_type": "movie",
+      "title": "Ikiru",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "psychological-drama",
+        "claude": "psychological-drama",
+        "gemini": "psychological-drama",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "workplace-drama",
+        "claude": "social-drama",
+        "gemini": "social-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "slow",
+        "claude": "slow",
+        "gemini": "slow",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "melancholic",
+          "meditative",
+          "earnest"
+        ],
+        "claude": [
+          "melancholic",
+          "bittersweet",
+          "meditative"
+        ],
+        "gemini": [
+          "meditative",
+          "melancholic",
+          "bittersweet"
+        ],
+        "avg_pairwise_jaccard": 0.667
+      }
+    },
+    {
+      "tmdb_id": 1510795,
+      "media_type": "movie",
+      "title": "Shake, Rattle & Roll: Evil Origins",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "supernatural-horror",
+        "claude": "supernatural-horror",
+        "gemini": "supernatural-horror",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "slasher",
+        "claude": "slasher",
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "menacing",
+          "tense",
+          "visceral"
+        ],
+        "claude": [
+          "menacing",
+          "gritty",
+          "bleak"
+        ],
+        "gemini": [
+          "menacing",
+          "visceral"
+        ],
+        "avg_pairwise_jaccard": 0.372
+      }
+    },
+    {
+      "tmdb_id": 24428,
+      "media_type": "movie",
+      "title": "The Avengers",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": null,
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "tense"
+        ],
+        "claude": [
+          "uplifting",
+          "playful",
+          "tense"
+        ],
+        "gemini": [
+          "playful",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.278
+      }
+    },
+    {
+      "tmdb_id": 102382,
+      "media_type": "movie",
+      "title": "The Amazing Spider-Man 2",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "romantic-drama",
+        "claude": "romantic-drama",
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "romantic",
+          "tense"
+        ],
+        "claude": [
+          "bittersweet",
+          "tense",
+          "romantic"
+        ],
+        "gemini": [
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.278
+      }
+    },
+    {
+      "tmdb_id": 155,
+      "media_type": "movie",
+      "title": "The Dark Knight",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "crime-thriller",
+        "claude": "crime-thriller",
+        "gemini": "crime-thriller",
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "menacing",
+          "gritty"
+        ],
+        "claude": [
+          "menacing",
+          "tense",
+          "cerebral"
+        ],
+        "gemini": [
+          "gritty",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 0.472
+      }
+    },
+    {
+      "tmdb_id": 1263532,
+      "media_type": "movie",
+      "title": "Beast Race",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "dystopian-sci-fi",
+        "claude": "dystopian-sci-fi",
+        "gemini": "dystopian-sci-fi",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "action-thriller",
+        "claude": "survival-thriller",
+        "gemini": "survival-thriller",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "visceral",
+          "gritty"
+        ],
+        "claude": [
+          "tense",
+          "gritty",
+          "bleak"
+        ],
+        "gemini": [
+          "tense",
+          "gritty"
+        ],
+        "avg_pairwise_jaccard": 0.611
+      }
+    },
+    {
+      "tmdb_id": 1361774,
+      "media_type": "movie",
+      "title": "The Dink",
+      "severity": "major",
+      "primary_subgenre": {
+        "chatgpt": "workplace-comedy",
+        "claude": "absurdist-comedy",
+        "gemini": "sports-drama",
+        "agreement": "none"
+      },
+      "secondary_subgenre": {
+        "chatgpt": null,
+        "claude": null,
+        "gemini": null,
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "playful",
+          "earnest"
+        ],
+        "claude": [
+          "playful",
+          "wry"
+        ],
+        "gemini": [
+          "playful",
+          "wry"
+        ],
+        "avg_pairwise_jaccard": 0.556
+      }
+    },
+    {
+      "tmdb_id": 361743,
+      "media_type": "movie",
+      "title": "Top Gun: Maverick",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "military-action",
+        "claude": "military-action",
+        "gemini": "military-action",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "action-thriller",
+        "claude": null,
+        "gemini": "sports-drama",
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "tense",
+          "uplifting"
+        ],
+        "claude": [
+          "uplifting",
+          "tense",
+          "earnest"
+        ],
+        "gemini": [
+          "earnest",
+          "uplifting"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 671,
+      "media_type": "movie",
+      "title": "Harry Potter and the Philosopher's Stone",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "urban-fantasy",
+        "claude": "urban-fantasy",
+        "gemini": "urban-fantasy",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": "coming-of-age-drama",
+        "gemini": "coming-of-age-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "warm",
+          "playful",
+          "earnest"
+        ],
+        "claude": [
+          "warm",
+          "playful",
+          "uplifting"
+        ],
+        "gemini": [
+          "playful",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.472
+      }
+    },
+    {
+      "tmdb_id": 5879,
+      "media_type": "movie",
+      "title": "In the Realm of the Senses",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "erotic-romance",
+        "claude": "erotic-romance",
+        "gemini": "erotic-romance",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "tragic-romance",
+        "claude": "tragic-romance",
+        "gemini": "psychological-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "slow",
+        "gemini": "slow",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "romantic",
+          "unsettling",
+          "visceral"
+        ],
+        "claude": [
+          "visceral",
+          "unsettling",
+          "bleak"
+        ],
+        "gemini": [
+          "visceral",
+          "unsettling"
+        ],
+        "avg_pairwise_jaccard": 0.611
+      }
+    },
+    {
+      "tmdb_id": 1668364,
+      "media_type": "movie",
+      "title": "Desire",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "erotic-thriller",
+        "claude": "relationship-drama",
+        "gemini": "erotic-thriller",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "relationship-drama",
+        "claude": "family-drama",
+        "gemini": "family-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "romantic",
+          "tense",
+          "unsettling"
+        ],
+        "claude": [
+          "tense",
+          "unsettling",
+          "melancholic"
+        ],
+        "gemini": [
+          "tense",
+          "menacing"
+        ],
+        "avg_pairwise_jaccard": 0.333
+      }
+    },
+    {
+      "tmdb_id": 1726,
+      "media_type": "movie",
+      "title": "Iron Man",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "tech-sci-fi",
+        "claude": null,
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "tense"
+        ],
+        "claude": [
+          "earnest",
+          "uplifting",
+          "tense"
+        ],
+        "gemini": [
+          "playful",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.417
+      }
+    },
+    {
+      "tmdb_id": 299536,
+      "media_type": "movie",
+      "title": "Avengers: Infinity War",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "space-opera",
+        "claude": "space-opera",
+        "gemini": "space-opera",
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "menacing",
+          "visceral"
+        ],
+        "claude": [
+          "bleak",
+          "tense",
+          "menacing"
+        ],
+        "gemini": [
+          "tense",
+          "bleak"
+        ],
+        "avg_pairwise_jaccard": 0.472
+      }
+    },
+    {
+      "tmdb_id": 122,
+      "media_type": "movie",
+      "title": "The Lord of the Rings: The Return of the King",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "epic-fantasy",
+        "claude": "epic-fantasy",
+        "gemini": "epic-fantasy",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": null,
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "tense"
+        ],
+        "claude": [
+          "uplifting",
+          "bittersweet",
+          "earnest"
+        ],
+        "gemini": [
+          "earnest",
+          "uplifting",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 0.472
+      }
+    },
+    {
+      "tmdb_id": 98894,
+      "media_type": "movie",
+      "title": "Jessica",
+      "severity": "major",
+      "primary_subgenre": {
+        "chatgpt": "romantic-comedy",
+        "claude": "screwball-comedy",
+        "gemini": "sex-comedy",
+        "agreement": "none"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "sex-comedy",
+        "claude": "romantic-comedy",
+        "gemini": null,
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "playful",
+          "romantic"
+        ],
+        "claude": [
+          "playful",
+          "warm",
+          "romantic"
+        ],
+        "gemini": [
+          "playful",
+          "warm"
+        ],
+        "avg_pairwise_jaccard": 0.556
+      }
+    },
+    {
+      "tmdb_id": 1259102,
+      "media_type": "movie",
+      "title": "Eternity",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "romantic-comedy",
+        "claude": "romantic-drama",
+        "gemini": "romantic-comedy",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": null,
+        "claude": null,
+        "gemini": "magical-realism",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "romantic",
+          "bittersweet",
+          "warm"
+        ],
+        "claude": [
+          "bittersweet",
+          "romantic",
+          "meditative"
+        ],
+        "gemini": [
+          "warm",
+          "meditative"
+        ],
+        "avg_pairwise_jaccard": 0.333
+      }
+    },
+    {
+      "tmdb_id": 680,
+      "media_type": "movie",
+      "title": "Pulp Fiction",
+      "severity": "major",
+      "primary_subgenre": {
+        "chatgpt": "crime-drama",
+        "claude": "dark-comedy",
+        "gemini": "black-comedy",
+        "agreement": "none"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "black-comedy",
+        "claude": "neo-noir",
+        "gemini": "gangster",
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "moderate",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cynical",
+          "visceral",
+          "wry"
+        ],
+        "claude": [
+          "absurdist",
+          "wry",
+          "stylized"
+        ],
+        "gemini": [
+          "stylized",
+          "wry"
+        ],
+        "avg_pairwise_jaccard": 0.372
+      }
+    },
+    {
+      "tmdb_id": 603,
+      "media_type": "movie",
+      "title": "The Matrix",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "cyberpunk",
+        "claude": "cyberpunk",
+        "gemini": "cyberpunk",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "martial-arts",
+        "claude": "dystopian-sci-fi",
+        "gemini": "martial-arts",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cerebral",
+          "tense",
+          "stylized"
+        ],
+        "claude": [
+          "cerebral",
+          "stylized",
+          "tense"
+        ],
+        "gemini": [
+          "stylized",
+          "cerebral"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 21484,
+      "media_type": "movie",
+      "title": "Possession",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "supernatural-horror",
+        "claude": "psychological-horror",
+        "gemini": "psychological-horror",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "psychological-horror",
+        "claude": "body-horror",
+        "gemini": "body-horror",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "unsettling",
+          "visceral",
+          "bleak"
+        ],
+        "claude": [
+          "unsettling",
+          "visceral",
+          "bleak"
+        ],
+        "gemini": [
+          "unsettling",
+          "visceral",
+          "menacing"
+        ],
+        "avg_pairwise_jaccard": 0.667
+      }
+    },
+    {
+      "tmdb_id": 19995,
+      "media_type": "movie",
+      "title": "Avatar",
+      "severity": "major",
+      "primary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": "alien-first-contact",
+        "gemini": "space-opera",
+        "agreement": "none"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "alien-first-contact",
+        "claude": "space-opera",
+        "gemini": "adventure-action",
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "moderate",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "romantic",
+          "tense"
+        ],
+        "claude": [
+          "uplifting",
+          "visceral",
+          "earnest"
+        ],
+        "gemini": [
+          "earnest",
+          "visceral"
+        ],
+        "avg_pairwise_jaccard": 0.372
+      }
+    },
+    {
+      "tmdb_id": 83533,
+      "media_type": "movie",
+      "title": "Avatar: Fire and Ash",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": "space-opera",
+        "gemini": "space-opera",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "family-drama",
+        "claude": "family-drama",
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "melancholic",
+          "earnest"
+        ],
+        "claude": [
+          "tense",
+          "bittersweet",
+          "gritty"
+        ],
+        "gemini": [
+          "tense",
+          "visceral"
+        ],
+        "avg_pairwise_jaccard": 0.233
+      }
+    },
+    {
+      "tmdb_id": 1325734,
+      "media_type": "movie",
+      "title": "The Drama",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "romantic-comedy",
+        "claude": "romantic-comedy",
+        "gemini": "romantic-comedy",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "dark-comedy",
+        "claude": "dark-comedy",
+        "gemini": "dark-comedy",
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "romantic",
+          "tense"
+        ],
+        "claude": [
+          "wry",
+          "tense",
+          "sentimental"
+        ],
+        "gemini": [
+          "tense",
+          "playful"
+        ],
+        "avg_pairwise_jaccard": 0.278
+      }
+    },
+    {
+      "tmdb_id": 755898,
+      "media_type": "movie",
+      "title": "War of the Worlds",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "conspiracy-thriller",
+        "claude": "conspiracy-thriller",
+        "gemini": "tech-thriller",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "tech-thriller",
+        "claude": "tech-sci-fi",
+        "gemini": "sci-fi-horror",
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "cerebral",
+          "menacing"
+        ],
+        "claude": [
+          "tense",
+          "unsettling",
+          "cynical"
+        ],
+        "gemini": [
+          "tense",
+          "menacing"
+        ],
+        "avg_pairwise_jaccard": 0.372
+      }
+    },
+    {
+      "tmdb_id": 1416,
+      "media_type": "tv",
+      "title": "Grey's Anatomy",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "workplace-drama",
+        "claude": "workplace-drama",
+        "gemini": "workplace-drama",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "relationship-drama",
+        "claude": "soap-serial-drama",
+        "gemini": "soap-serial-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest"
+        ],
+        "claude": [
+          "sentimental",
+          "tense",
+          "earnest"
+        ],
+        "gemini": [
+          "earnest",
+          "sentimental"
+        ],
+        "avg_pairwise_jaccard": 0.5
+      }
+    },
+    {
+      "tmdb_id": 5920,
+      "media_type": "tv",
+      "title": "The Mentalist",
+      "severity": "major",
+      "primary_subgenre": {
+        "chatgpt": "procedural",
+        "claude": "detective",
+        "gemini": "police-procedural",
+        "agreement": "none"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "detective",
+        "claude": "procedural",
+        "gemini": null,
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cerebral"
+        ],
+        "claude": [
+          "wry",
+          "playful",
+          "cerebral"
+        ],
+        "gemini": [
+          "wry",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 0.194
+      }
+    },
+    {
+      "tmdb_id": 65334,
+      "media_type": "tv",
+      "title": "Miraculous: Tales of Ladybug & Cat Noir",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "animated-family",
+        "claude": "animated-family",
+        "gemini": "animated-family",
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "playful",
+          "romantic",
+          "warm"
+        ],
+        "claude": [
+          "playful",
+          "warm",
+          "uplifting"
+        ],
+        "gemini": [
+          "playful",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.333
+      }
+    },
+    {
+      "tmdb_id": 94997,
+      "media_type": "tv",
+      "title": "House of the Dragon",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "epic-fantasy",
+        "claude": "epic-fantasy",
+        "gemini": "epic-fantasy",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "political-drama",
+        "claude": "political-drama",
+        "gemini": "political-drama",
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "bleak",
+          "melancholic",
+          "tense"
+        ],
+        "claude": [
+          "melancholic",
+          "bleak",
+          "tense"
+        ],
+        "gemini": [
+          "gritty",
+          "menacing",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 0.467
+      }
+    },
+    {
+      "tmdb_id": 113962,
+      "media_type": "tv",
+      "title": "Lioness",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "espionage-thriller",
+        "claude": "espionage-thriller",
+        "gemini": "espionage-thriller",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "military-action",
+        "claude": "military-action",
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "earnest",
+          "gritty"
+        ],
+        "claude": [
+          "tense",
+          "earnest",
+          "gritty"
+        ],
+        "gemini": [
+          "tense",
+          "gritty"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 125988,
+      "media_type": "tv",
+      "title": "Silo",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "dystopian-sci-fi",
+        "claude": "post-apocalyptic",
+        "gemini": "dystopian-sci-fi",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "conspiracy-thriller",
+        "claude": "dystopian-sci-fi",
+        "gemini": null,
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cynical",
+          "bleak",
+          "tense"
+        ],
+        "claude": [
+          "bleak",
+          "cynical",
+          "unsettling"
+        ],
+        "gemini": [
+          "tense",
+          "unsettling"
+        ],
+        "avg_pairwise_jaccard": 0.333
+      }
+    },
+    {
+      "tmdb_id": 4614,
+      "media_type": "tv",
+      "title": "NCIS",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "police-procedural",
+        "claude": "police-procedural",
+        "gemini": "police-procedural",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": null,
+        "claude": "procedural",
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest"
+        ],
+        "claude": [
+          "earnest",
+          "tense",
+          "gritty"
+        ],
+        "gemini": [
+          "wry",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.361
+      }
+    },
+    {
+      "tmdb_id": 2734,
+      "media_type": "tv",
+      "title": "Law & Order: Special Victims Unit",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "police-procedural",
+        "claude": "police-procedural",
+        "gemini": "police-procedural",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "courtroom-crime",
+        "claude": "courtroom-crime",
+        "gemini": "crime-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "gritty",
+          "tense",
+          "earnest"
+        ],
+        "claude": [
+          "gritty",
+          "bleak",
+          "tense"
+        ],
+        "gemini": [
+          "gritty",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.472
+      }
+    },
+    {
+      "tmdb_id": 32419,
+      "media_type": "tv",
+      "title": "Horrible Histories",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "sketch-comedy",
+        "claude": "sketch-comedy",
+        "gemini": "sketch-comedy",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "parody-spoof",
+        "claude": null,
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "playful"
+        ],
+        "claude": [
+          "playful",
+          "absurdist",
+          "satirical"
+        ],
+        "gemini": [
+          "playful",
+          "absurdist"
+        ],
+        "avg_pairwise_jaccard": 0.5
+      }
+    },
+    {
+      "tmdb_id": 549,
+      "media_type": "tv",
+      "title": "Law & Order",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "police-procedural",
+        "claude": "police-procedural",
+        "gemini": "police-procedural",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "courtroom-crime",
+        "claude": "courtroom-crime",
+        "gemini": "legal-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "gritty",
+          "earnest",
+          "tense"
+        ],
+        "claude": [
+          "gritty",
+          "earnest",
+          "tense"
+        ],
+        "gemini": [
+          "earnest",
+          "gritty"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 79744,
+      "media_type": "tv",
+      "title": "The Rookie",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "police-procedural",
+        "claude": "police-procedural",
+        "gemini": "police-procedural",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "dramedy",
+        "claude": "dramedy",
+        "gemini": "dramedy",
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "uplifting"
+        ],
+        "claude": [
+          "earnest",
+          "playful",
+          "tense"
+        ],
+        "gemini": [
+          "earnest",
+          "playful"
+        ],
+        "avg_pairwise_jaccard": 0.417
+      }
+    },
+    {
+      "tmdb_id": 456,
+      "media_type": "tv",
+      "title": "The Simpsons",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "family-sitcom",
+        "claude": "satire",
+        "gemini": "family-sitcom",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adult-animation",
+        "claude": "family-sitcom",
+        "gemini": "satire",
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "satirical",
+          "wry",
+          "playful"
+        ],
+        "claude": [
+          "satirical",
+          "playful",
+          "absurdist"
+        ],
+        "gemini": [
+          "playful",
+          "wry"
+        ],
+        "avg_pairwise_jaccard": 0.472
+      }
+    },
+    {
+      "tmdb_id": 60625,
+      "media_type": "tv",
+      "title": "Rick and Morty",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "absurdist-comedy",
+        "claude": "absurdist-comedy",
+        "gemini": "adult-animation",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adult-animation",
+        "claude": "adult-animation",
+        "gemini": "absurdist-comedy",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "absurdist",
+          "cynical",
+          "playful"
+        ],
+        "claude": [
+          "absurdist",
+          "cynical",
+          "deadpan"
+        ],
+        "gemini": [
+          "cynical",
+          "playful",
+          "absurdist"
+        ],
+        "avg_pairwise_jaccard": 0.667
+      }
+    },
+    {
+      "tmdb_id": 1622,
+      "media_type": "tv",
+      "title": "Supernatural",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "supernatural-horror",
+        "claude": "supernatural-horror",
+        "gemini": "supernatural-horror",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": null,
+        "claude": "urban-fantasy",
+        "gemini": "adventure-action",
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "menacing",
+          "tense",
+          "earnest"
+        ],
+        "claude": [
+          "menacing",
+          "bittersweet",
+          "tense"
+        ],
+        "gemini": [
+          "tense",
+          "gritty"
+        ],
+        "avg_pairwise_jaccard": 0.333
+      }
+    },
+    {
+      "tmdb_id": 97546,
+      "media_type": "tv",
+      "title": "Ted Lasso",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "workplace-comedy",
+        "claude": "workplace-comedy",
+        "gemini": "workplace-comedy",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "dramedy",
+        "claude": "dramedy",
+        "gemini": "sports-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "warm",
+          "uplifting",
+          "earnest"
+        ],
+        "claude": [
+          "warm",
+          "uplifting",
+          "earnest"
+        ],
+        "gemini": [
+          "warm",
+          "uplifting"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 4057,
+      "media_type": "tv",
+      "title": "Criminal Minds",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "police-procedural",
+        "claude": "police-procedural",
+        "gemini": "police-procedural",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "psychological-thriller",
+        "claude": "psychological-thriller",
+        "gemini": "psychological-thriller",
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "gritty",
+          "menacing"
+        ],
+        "claude": [
+          "tense",
+          "unsettling",
+          "gritty"
+        ],
+        "gemini": [
+          "menacing",
+          "gritty"
+        ],
+        "avg_pairwise_jaccard": 0.472
+      }
+    },
+    {
+      "tmdb_id": 22980,
+      "media_type": "tv",
+      "title": "Watch What Happens Live with Andy Cohen",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "late-night-talk-show",
+        "claude": "late-night-talk-show",
+        "gemini": "late-night-talk-show",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": null,
+        "claude": null,
+        "gemini": null,
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "playful"
+        ],
+        "claude": [
+          "playful"
+        ],
+        "gemini": [
+          "playful",
+          "wry"
+        ],
+        "avg_pairwise_jaccard": 0.667
+      }
+    },
+    {
+      "tmdb_id": 1095,
+      "media_type": "tv",
+      "title": "Ghost in the Shell: Stand Alone Complex",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "cyberpunk",
+        "claude": "cyberpunk",
+        "gemini": "cyberpunk",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "police-procedural",
+        "claude": "police-procedural",
+        "gemini": "anime-action",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cerebral",
+          "tense"
+        ],
+        "claude": [
+          "cerebral",
+          "tense",
+          "stylized"
+        ],
+        "gemini": [
+          "cerebral",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 1434,
+      "media_type": "tv",
+      "title": "Family Guy",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "family-sitcom",
+        "claude": "satire",
+        "gemini": "family-sitcom",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adult-animation",
+        "claude": "adult-animation",
+        "gemini": "adult-animation",
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "satirical",
+          "raunchy",
+          "absurdist"
+        ],
+        "claude": [
+          "absurdist",
+          "satirical",
+          "raunchy"
+        ],
+        "gemini": [
+          "cynical",
+          "absurdist",
+          "raunchy"
+        ],
+        "avg_pairwise_jaccard": 0.667
+      }
+    },
+    {
+      "tmdb_id": 138502,
+      "media_type": "tv",
+      "title": "X-Men '97",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "social-drama",
+        "claude": "social-drama",
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "earnest"
+        ],
+        "claude": [
+          "tense",
+          "earnest",
+          "bittersweet"
+        ],
+        "gemini": [
+          "earnest",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 1399,
+      "media_type": "tv",
+      "title": "Game of Thrones",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "epic-fantasy",
+        "claude": "epic-fantasy",
+        "gemini": "epic-fantasy",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "political-drama",
+        "claude": "political-drama",
+        "gemini": "political-drama",
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "gritty",
+          "cynical",
+          "menacing"
+        ],
+        "claude": [
+          "gritty",
+          "tense",
+          "bleak"
+        ],
+        "gemini": [
+          "gritty",
+          "menacing",
+          "bleak"
+        ],
+        "avg_pairwise_jaccard": 0.4
+      }
+    },
+    {
+      "tmdb_id": 108978,
+      "media_type": "tv",
+      "title": "Reacher",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "action-thriller",
+        "claude": "action-thriller",
+        "gemini": "action-thriller",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "conspiracy-thriller",
+        "claude": "crime-thriller",
+        "gemini": "detective",
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "gritty",
+          "tense"
+        ],
+        "claude": [
+          "tense",
+          "gritty",
+          "visceral"
+        ],
+        "gemini": [
+          "gritty",
+          "visceral"
+        ],
+        "avg_pairwise_jaccard": 0.556
+      }
+    },
+    {
+      "tmdb_id": 278624,
+      "media_type": "tv",
+      "title": "Lucky",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "crime-thriller",
+        "claude": "crime-thriller",
+        "gemini": "heist",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "survival-thriller",
+        "claude": "heist",
+        "gemini": "crime-thriller",
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "gritty"
+        ],
+        "claude": [
+          "tense",
+          "gritty",
+          "visceral"
+        ],
+        "gemini": [
+          "tense",
+          "playful"
+        ],
+        "avg_pairwise_jaccard": 0.417
+      }
+    },
+    {
+      "tmdb_id": 1431,
+      "media_type": "tv",
+      "title": "CSI: Crime Scene Investigation",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "police-procedural",
+        "claude": "police-procedural",
+        "gemini": "police-procedural",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "detective",
+        "claude": "procedural",
+        "gemini": null,
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cerebral",
+          "tense",
+          "gritty"
+        ],
+        "claude": [
+          "cerebral",
+          "gritty",
+          "tense"
+        ],
+        "gemini": [
+          "gritty",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.5
+      }
+    },
+    {
+      "tmdb_id": 106841,
+      "media_type": "tv",
+      "title": "Blossoms Shanghai",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "historical-drama",
+        "claude": "historical-drama",
+        "gemini": "historical-drama",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "relationship-drama",
+        "claude": "relationship-drama",
+        "gemini": "romantic-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "slow",
+        "gemini": "slow",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "melancholic",
+          "romantic"
+        ],
+        "claude": [
+          "stylized",
+          "melancholic",
+          "dreamlike"
+        ],
+        "gemini": [
+          "meditative",
+          "stylized",
+          "melancholic"
+        ],
+        "avg_pairwise_jaccard": 0.333
+      }
+    },
+    {
+      "tmdb_id": 1396,
+      "media_type": "tv",
+      "title": "Breaking Bad",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "gangster",
+        "claude": "crime-drama",
+        "gemini": "crime-drama",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "psychological-drama",
+        "claude": "psychological-drama",
+        "gemini": "gangster",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cynical",
+          "tense",
+          "bleak"
+        ],
+        "claude": [
+          "bleak",
+          "tense",
+          "gritty"
+        ],
+        "gemini": [
+          "gritty",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 0.472
+      }
+    },
+    {
+      "tmdb_id": 1408,
+      "media_type": "tv",
+      "title": "House",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "procedural",
+        "claude": "workplace-drama",
+        "gemini": "procedural",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "workplace-drama",
+        "claude": "puzzle-mystery",
+        "gemini": "workplace-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cerebral",
+          "cynical",
+          "wry"
+        ],
+        "claude": [
+          "cerebral",
+          "cynical",
+          "wry"
+        ],
+        "gemini": [
+          "cynical",
+          "cerebral"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 1413,
+      "media_type": "tv",
+      "title": "American Horror Story",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "anthology",
+        "claude": "supernatural-horror",
+        "gemini": "anthology",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "supernatural-horror",
+        "claude": "anthology",
+        "gemini": "supernatural-horror",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "fast",
+        "gemini": "moderate",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "menacing",
+          "unsettling",
+          "visceral"
+        ],
+        "claude": [
+          "unsettling",
+          "menacing",
+          "bleak"
+        ],
+        "gemini": [
+          "unsettling",
+          "visceral"
+        ],
+        "avg_pairwise_jaccard": 0.472
+      }
+    },
+    {
+      "tmdb_id": 1668,
+      "media_type": "tv",
+      "title": "Friends",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "sitcom",
+        "claude": "sitcom",
+        "gemini": "sitcom",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": null,
+        "claude": null,
+        "gemini": null,
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "moderate",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "warm",
+          "playful",
+          "romantic"
+        ],
+        "claude": [
+          "warm",
+          "playful",
+          "uplifting"
+        ],
+        "gemini": [
+          "warm",
+          "playful"
+        ],
+        "avg_pairwise_jaccard": 0.611
+      }
+    },
+    {
+      "tmdb_id": 203744,
+      "media_type": "tv",
+      "title": "Sugar",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "neo-noir",
+        "claude": "neo-noir",
+        "gemini": "neo-noir",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "detective",
+        "claude": "detective",
+        "gemini": "detective",
+        "agreement": "full"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "enigmatic",
+          "tense"
+        ],
+        "claude": [
+          "enigmatic",
+          "stylized",
+          "melancholic"
+        ],
+        "gemini": [
+          "enigmatic",
+          "stylized"
+        ],
+        "avg_pairwise_jaccard": 0.417
+      }
+    },
+    {
+      "tmdb_id": 63770,
+      "media_type": "tv",
+      "title": "The Late Show with Stephen Colbert",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "late-night-talk-show",
+        "claude": "late-night-talk-show",
+        "gemini": "late-night-talk-show",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "satire",
+        "claude": null,
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "satirical",
+          "wry",
+          "playful"
+        ],
+        "claude": [
+          "satirical",
+          "playful",
+          "wry"
+        ],
+        "gemini": [
+          "satirical",
+          "playful"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 61818,
+      "media_type": "tv",
+      "title": "Late Night with Seth Meyers",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "late-night-talk-show",
+        "claude": "late-night-talk-show",
+        "gemini": "late-night-talk-show",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "satire",
+        "claude": null,
+        "gemini": null,
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "satirical",
+          "wry",
+          "playful"
+        ],
+        "claude": [
+          "satirical",
+          "wry",
+          "playful"
+        ],
+        "gemini": [
+          "satirical",
+          "wry"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 894,
+      "media_type": "tv",
+      "title": "The Prisoner",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "psychological-thriller",
+        "claude": "dystopian-sci-fi",
+        "gemini": "psychological-thriller",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "espionage-thriller",
+        "claude": "psychological-thriller",
+        "gemini": "dystopian-sci-fi",
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "slow",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "enigmatic",
+          "unsettling",
+          "tense"
+        ],
+        "claude": [
+          "enigmatic",
+          "unsettling",
+          "tense"
+        ],
+        "gemini": [
+          "enigmatic",
+          "unsettling",
+          "dreamlike"
+        ],
+        "avg_pairwise_jaccard": 0.667
+      }
+    },
+    {
+      "tmdb_id": 34307,
+      "media_type": "tv",
+      "title": "Shameless",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "family-drama",
+        "claude": "family-drama",
+        "gemini": "dramedy",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "dramedy",
+        "claude": "dramedy",
+        "gemini": "family-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "gritty",
+          "warm"
+        ],
+        "claude": [
+          "gritty",
+          "bleak",
+          "wry"
+        ],
+        "gemini": [
+          "raunchy",
+          "gritty",
+          "warm"
+        ],
+        "avg_pairwise_jaccard": 0.372
+      }
+    },
+    {
+      "tmdb_id": 60572,
+      "media_type": "tv",
+      "title": "Pokémon",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "anime-action",
+        "claude": "anime-action",
+        "gemini": "anime-action",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "adventure-action",
+        "claude": "animated-family",
+        "gemini": "animated-family",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "playful",
+          "warm",
+          "uplifting"
+        ],
+        "claude": [
+          "playful",
+          "warm",
+          "uplifting"
+        ],
+        "gemini": [
+          "earnest",
+          "playful"
+        ],
+        "avg_pairwise_jaccard": 0.5
+      }
+    },
+    {
+      "tmdb_id": 45140,
+      "media_type": "tv",
+      "title": "Teen Titans Go!",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "parody-spoof",
+        "gemini": "superhero",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "parody-spoof",
+        "claude": "animated-family",
+        "gemini": "animated-family",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "absurdist",
+          "playful"
+        ],
+        "claude": [
+          "absurdist",
+          "playful"
+        ],
+        "gemini": [
+          "absurdist",
+          "playful"
+        ],
+        "avg_pairwise_jaccard": 1
+      }
+    },
+    {
+      "tmdb_id": 1911,
+      "media_type": "tv",
+      "title": "Bones",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "procedural",
+        "claude": "police-procedural",
+        "gemini": "police-procedural",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "murder-mystery",
+        "claude": "procedural",
+        "gemini": null,
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cerebral",
+          "tense"
+        ],
+        "claude": [
+          "wry",
+          "cerebral",
+          "gritty"
+        ],
+        "gemini": [
+          "wry",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.167
+      }
+    },
+    {
+      "tmdb_id": 241609,
+      "media_type": "tv",
+      "title": "Your Friends & Neighbors",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "black-comedy",
+        "claude": "black-comedy",
+        "gemini": "heist",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "crime-drama",
+        "claude": "crime-drama",
+        "gemini": "dark-comedy",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "moderate",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "cynical",
+          "wry",
+          "tense"
+        ],
+        "claude": [
+          "cynical",
+          "wry",
+          "tense"
+        ],
+        "gemini": [
+          "cynical",
+          "wry",
+          "tense"
+        ],
+        "avg_pairwise_jaccard": 1
+      }
+    },
+    {
+      "tmdb_id": 1421,
+      "media_type": "tv",
+      "title": "Modern Family",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "family-sitcom",
+        "claude": "family-sitcom",
+        "gemini": "family-sitcom",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": null,
+        "claude": "mockumentary",
+        "gemini": "mockumentary",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "moderate",
+        "gemini": "fast",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "warm",
+          "playful",
+          "wry"
+        ],
+        "claude": [
+          "warm",
+          "playful",
+          "sentimental"
+        ],
+        "gemini": [
+          "warm",
+          "playful"
+        ],
+        "avg_pairwise_jaccard": 0.611
+      }
+    },
+    {
+      "tmdb_id": 64099,
+      "media_type": "tv",
+      "title": "War and Peace",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "period-romance",
+        "claude": "historical-drama",
+        "gemini": "historical-drama",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "historical-drama",
+        "claude": "romantic-drama",
+        "gemini": "romantic-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "moderate",
+        "claude": "slow",
+        "gemini": "slow",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "romantic",
+          "earnest",
+          "melancholic"
+        ],
+        "claude": [
+          "earnest",
+          "melancholic",
+          "bittersweet"
+        ],
+        "gemini": [
+          "earnest",
+          "melancholic"
+        ],
+        "avg_pairwise_jaccard": 0.611
+      }
+    },
+    {
+      "tmdb_id": 66732,
+      "media_type": "tv",
+      "title": "Stranger Things",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "supernatural-horror",
+        "claude": "supernatural-horror",
+        "gemini": "sci-fi-horror",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "mystery-thriller",
+        "claude": "coming-of-age-drama",
+        "gemini": "coming-of-age-drama",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "moderate",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "menacing"
+        ],
+        "claude": [
+          "tense",
+          "unsettling",
+          "warm"
+        ],
+        "gemini": [
+          "tense",
+          "unsettling",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.333
+      }
+    },
+    {
+      "tmdb_id": 30984,
+      "media_type": "tv",
+      "title": "Bleach",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "anime-action",
+        "claude": "anime-action",
+        "gemini": "anime-action",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "urban-fantasy",
+        "claude": "martial-arts",
+        "gemini": "urban-fantasy",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "visceral"
+        ],
+        "claude": [
+          "tense",
+          "earnest",
+          "visceral"
+        ],
+        "gemini": [
+          "earnest",
+          "visceral"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    },
+    {
+      "tmdb_id": 215072,
+      "media_type": "tv",
+      "title": "A Shop for Killers",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "mystery-thriller",
+        "claude": "mystery-thriller",
+        "gemini": "action-thriller",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "action-thriller",
+        "claude": "tech-thriller",
+        "gemini": "mystery-thriller",
+        "agreement": "none"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "tense",
+          "gritty",
+          "enigmatic"
+        ],
+        "claude": [
+          "tense",
+          "unsettling",
+          "gritty"
+        ],
+        "gemini": [
+          "tense",
+          "gritty"
+        ],
+        "avg_pairwise_jaccard": 0.611
+      }
+    },
+    {
+      "tmdb_id": 502,
+      "media_type": "tv",
+      "title": "Sesame Street",
+      "severity": "moderate",
+      "primary_subgenre": {
+        "chatgpt": "sketch-comedy",
+        "claude": "sketch-comedy",
+        "gemini": "animated-family",
+        "agreement": "majority"
+      },
+      "secondary_subgenre": {
+        "chatgpt": null,
+        "claude": null,
+        "gemini": "sketch-comedy",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "moderate",
+        "gemini": "moderate",
+        "agreement": "majority"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "warm",
+          "playful",
+          "earnest"
+        ],
+        "claude": [
+          "warm",
+          "playful",
+          "uplifting"
+        ],
+        "gemini": [
+          "warm",
+          "playful",
+          "earnest"
+        ],
+        "avg_pairwise_jaccard": 0.667
+      }
+    },
+    {
+      "tmdb_id": 2661,
+      "media_type": "tv",
+      "title": "Kamen Rider",
+      "severity": "low",
+      "primary_subgenre": {
+        "chatgpt": "superhero",
+        "claude": "superhero",
+        "gemini": "superhero",
+        "agreement": "full"
+      },
+      "secondary_subgenre": {
+        "chatgpt": "martial-arts",
+        "claude": "martial-arts",
+        "gemini": "adventure-action",
+        "agreement": "majority"
+      },
+      "pacing": {
+        "chatgpt": "fast",
+        "claude": "fast",
+        "gemini": "fast",
+        "agreement": "full"
+      },
+      "tone_tags": {
+        "chatgpt": [
+          "earnest",
+          "menacing"
+        ],
+        "claude": [
+          "tense",
+          "earnest",
+          "menacing"
+        ],
+        "gemini": [
+          "earnest",
+          "menacing"
+        ],
+        "avg_pairwise_jaccard": 0.778
+      }
+    }
+  ]
+}

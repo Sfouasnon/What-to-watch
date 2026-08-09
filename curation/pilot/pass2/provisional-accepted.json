@@ -1,0 +1,1803 @@
+{
+  "ontology_version": "0.1.1",
+  "items": [
+    {
+      "tmdb_id": 634649,
+      "media_type": "movie",
+      "title": "Spider-Man: No Way Home",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "earnest",
+        "tense",
+        "bittersweet"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "bittersweet",
+          "uplifting"
+        ],
+        "proposal_b": [
+          "earnest",
+          "tense"
+        ],
+        "proposal_c": [
+          "earnest",
+          "tense"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "earnest",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The high-stakes identity crisis, escalating danger, and moral self-definition directly support earnestness and tension. The context does not establish the simultaneous resolution-and-loss required for bittersweet or a clearly uplifting trajectory."
+        },
+        "claude": {
+          "preferred_value": [
+            "earnest",
+            "tense",
+            "bittersweet"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The film's sustained multiverse-villain danger and Aunt May's death make earnest/tense the dominant register (2 of 3 proposals), but the memory-erasing, self-sacrificing ending is a genuine mix of loss and resolution, which earns 'bittersweet' over the vaguer 'uplifting.'"
+        },
+        "gemini": {
+          "preferred_value": [
+            "earnest",
+            "tense",
+            "bittersweet"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The film's core involves sincere hero themes (earnest), high-stakes multiverse danger (tense), and the profound loss Peter experiences (bittersweet)."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 569094,
+      "media_type": "movie",
+      "title": "Spider-Man: Across the Spider-Verse",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "stylized",
+        "tense",
+        "earnest"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "stylized",
+          "playful",
+          "earnest"
+        ],
+        "proposal_b": [
+          "stylized",
+          "tense",
+          "bittersweet"
+        ],
+        "proposal_c": [
+          "earnest",
+          "tense"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "earnest",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Miles is pitted against other Spider-People and must act alone to save loved ones, which strongly supports earnest and tense. Animation alone does not establish stylized or playful tone under the ontology."
+        },
+        "claude": {
+          "preferred_value": [
+            "stylized",
+            "tense",
+            "earnest"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The film's signature fractured animation style is 'stylized,' the unresolved cliffhanger and Miles-vs-Spider-Society conflict is sustained tension, and the sacrifice/father-son threads are sincerely played (earnest); it ends unresolved rather than with the settled loss-and-happiness mix 'bittersweet' requires."
+        },
+        "gemini": {
+          "preferred_value": [
+            "stylized",
+            "tense",
+            "earnest"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The film is heavily defined by its groundbreaking visual aesthetic (stylized), the sincere emotional core of Miles' family relationships (earnest), and the high-stakes conflict with the Spider Society (tense)."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 569094,
+      "media_type": "movie",
+      "title": "Spider-Man: Across the Spider-Verse",
+      "field": "secondary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "adventure-action",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "animated-family",
+        "proposal_b": null,
+        "proposal_c": "adventure-action"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "adventure-action",
+          "human_review": true,
+          "severity": "minor",
+          "reason": "The multiverse-spanning movement and quest-like action make adventure-action a useful secondary to the superhero premise. Null is also defensible because the superhero classification already absorbs much of that action-adventure information."
+        },
+        "claude": {
+          "preferred_value": "adventure-action",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Per the ontology's explicit design principle, animation is a medium and shouldn't be used as a secondary just because the film is animated -- nothing here signals the family-friendly-packaging convention 'animated-family' requires. The multiverse-spanning journey structure does add real information beyond the superhero primary, supporting adventure-action."
+        },
+        "gemini": {
+          "preferred_value": null,
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The primary superhero subgenre adequately captures the film's premise; a secondary subgenre is not strictly necessary to define the work."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "field": "primary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "sword-and-sorcery",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "epic-fantasy",
+        "proposal_b": "sword-and-sorcery",
+        "proposal_c": "sword-and-sorcery"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "epic-fantasy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The story is set in the secondary world of Eternia and centers on restoring a shattered realm and saving the world, which matches epic-fantasy's large-scale stakes and mythic structure. Sword-and-sorcery is defined around more personal-scale conflict."
+        },
+        "claude": {
+          "preferred_value": "sword-and-sorcery",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Keywords explicitly tag 'sword and sorcery' and 'sword and planet,' and the story is a small band (Adam, Teela, Duncan) in personal-scale battle to reclaim their home against a monstrous tyrant -- the defining sword-and-sorcery convention -- rather than a world-spanning mythic-structure epic."
+        },
+        "gemini": {
+          "preferred_value": "sword-and-sorcery",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "He-Man fundamentally aligns with sword-and-sorcery, centering on a muscular hero and close allies fighting magical and monstrous threats."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 1598,
+      "media_type": "movie",
+      "title": "Cape Fear",
+      "field": "primary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "psychological-thriller",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 2,
+        "fundamental": 1
+      },
+      "proposals": {
+        "proposal_a": "crime-thriller",
+        "proposal_b": "psychological-thriller",
+        "proposal_c": "psychological-thriller"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "crime-thriller",
+          "human_review": false,
+          "severity": "fundamental",
+          "reason": "The suspense is organized around a released criminal antagonist stalking and threatening a lawyer's family. The context does not describe uncertainty about perception or mental reliability, so psychological-thriller is not the best fit."
+        },
+        "claude": {
+          "preferred_value": "psychological-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "TMDB's own keyword tag is literally 'psychological thriller,' and the film's terror comes from Cady's calculated psychological torment and the Bowdens' unraveling sense of safety/trust, not primarily from procedural crime mechanics."
+        },
+        "gemini": {
+          "preferred_value": "psychological-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The film focuses on Cady's methodical terrorization and mind games played on the Bowden family, fitting psychological-thriller best."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 687163,
+      "media_type": "movie",
+      "title": "Project Hail Mary",
+      "field": "secondary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "alien-first-contact",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "alien-first-contact",
+        "proposal_b": "puzzle-mystery",
+        "proposal_c": null
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "puzzle-mystery",
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "The mission is explicitly framed as solving the riddle of a mysterious substance through scientific reasoning, which supports puzzle-mystery. Alien-first-contact is also plausible from the alien and language-barrier keywords, but the synopsis does not describe that encounter clearly enough to make it definitive."
+        },
+        "claude": {
+          "preferred_value": "alien-first-contact",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The central relationship with Rocky -- learning to communicate across a total language and biological barrier -- is a genuine first-contact narrative and the story's most distinctive element, adding real information beyond a hard-sci-fi primary."
+        },
+        "gemini": {
+          "preferred_value": "alien-first-contact",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The keywords 'alien' and 'language barrier' point directly to the story's core plot of encountering and cooperating with non-human intelligence, making alien-first-contact the ideal secondary subgenre."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 238,
+      "media_type": "movie",
+      "title": "The Godfather",
+      "field": "primary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "organized-crime",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "organized-crime",
+        "proposal_b": "gangster",
+        "proposal_c": "gangster"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "organized-crime",
+          "human_review": true,
+          "severity": "minor",
+          "reason": "The overview frames the film as a chronicle of the Corleone crime family, with patriarchal succession and mafia-family politics, which fits organized-crime's institutional focus. Gangster is also reasonable because Michael's move into violent criminal leadership suggests an individual rise within that hierarchy."
+        },
+        "claude": {
+          "preferred_value": "gangster",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The film is structured around Michael Corleone's personal rise (and moral fall) within the Corleone hierarchy -- an individual figure's arc -- which is precisely what 'gangster' names, rather than a broader institutional operations/culture study."
+        },
+        "gemini": {
+          "preferred_value": "organized-crime",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The film is a sprawling chronicle of the Corleone family's operations, politics, and culture as an institution, fitting organized-crime perfectly alongside Michael's gangster arc."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 102382,
+      "media_type": "movie",
+      "title": "The Amazing Spider-Man 2",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "bittersweet",
+        "tense",
+        "romantic"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "earnest"
+        ],
+        "proposal_b": [
+          "earnest",
+          "romantic",
+          "tense"
+        ],
+        "proposal_c": [
+          "bittersweet",
+          "tense",
+          "romantic"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "earnest",
+            "romantic",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Peter's love for Gwen and promise to her father support romantic and earnest tones, while the arrival of Electro, Harry, and new revelations adds tension. A bittersweet tone depends on an outcome not supplied in the context."
+        },
+        "claude": {
+          "preferred_value": [
+            "bittersweet",
+            "tense",
+            "romantic"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The Peter/Gwen relationship is the film's emotional core (romantic), Electro and Harry's threats sustain tension, and the film's famous, genuinely tragic ending folds loss into the love story -- bittersweet rather than plain earnest."
+        },
+        "gemini": {
+          "preferred_value": [
+            "romantic",
+            "bittersweet",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The narrative relies heavily on Peter and Gwen's idealized relationship (romantic), high-stakes action sequences (tense), and culminates in a famously tragic resolution (bittersweet)."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 361743,
+      "media_type": "movie",
+      "title": "Top Gun: Maverick",
+      "field": "secondary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 1,
+        "fundamental": 1
+      },
+      "proposals": {
+        "proposal_a": "action-thriller",
+        "proposal_b": null,
+        "proposal_c": "sports-drama"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": null,
+          "human_review": false,
+          "severity": "fundamental",
+          "reason": "The military aviation mission is already captured by the likely primary action classification, and the context does not establish a separate sustained thriller structure strongly enough to force action-thriller. Sports-drama is a clear mismatch because the training and competition are military, not athletic."
+        },
+        "claude": {
+          "preferred_value": "action-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The specialized, high-risk mission carries sustained thriller-level suspense beyond the film's military-action core, adding real information; sports-drama doesn't fit since there's no athletic competition, and Drama is already reflected in the primary."
+        },
+        "gemini": {
+          "preferred_value": null,
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Assuming the primary subgenre captures the military action, a secondary subgenre is not strictly required, as the film does not strongly overlay a separate genre structure."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1668364,
+      "media_type": "movie",
+      "title": "Desire",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "romantic",
+        "tense",
+        "unsettling"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "tense",
+          "menacing"
+        ],
+        "proposal_b": [
+          "tense",
+          "unsettling",
+          "melancholic"
+        ],
+        "proposal_c": [
+          "romantic",
+          "tense",
+          "unsettling"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "romantic",
+            "tense",
+            "unsettling"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Longing and attraction are central, while secrecy, jealousy, and collapsing family boundaries produce tension and diffuse discomfort. No specific external threatening force is identified strongly enough for menacing, and persistent wistful sadness is not established."
+        },
+        "claude": {
+          "preferred_value": [
+            "tense",
+            "unsettling",
+            "romantic"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Tense is common to all three proposals; the slow tightening grip of secrecy fits the diffuse dread of 'unsettling' better than a locatable threat ('menacing'); the affair itself is framed as an idealized, consuming attraction, supporting romantic."
+        },
+        "gemini": {
+          "preferred_value": [
+            "tense",
+            "unsettling"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The narrative promises psychological friction and boundary collapse (unsettling) along with the suspense of a dangerous affair being discovered (tense)."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 1259102,
+      "media_type": "movie",
+      "title": "Eternity",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "romantic",
+        "bittersweet",
+        "warm"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "bittersweet",
+          "romantic",
+          "meditative"
+        ],
+        "proposal_b": [
+          "warm",
+          "meditative"
+        ],
+        "proposal_c": [
+          "romantic",
+          "bittersweet",
+          "warm"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "romantic",
+            "bittersweet",
+            "warm"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The central choice between a lifelong husband and a first love makes romantic feeling dominant, while death, waiting, and competing attachments create simultaneous love and loss. The loving relationships also support warmth more directly than the pacing-dependent meditative tag."
+        },
+        "claude": {
+          "preferred_value": [
+            "romantic",
+            "bittersweet",
+            "warm"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The impossible choice between two loves is inherently bittersweet (genuine happiness and genuine loss both present), romantic given the film's whole premise, and 'loving'/tender relationships in the keywords support warm over the more art-house-coded 'meditative.'"
+        },
+        "gemini": {
+          "preferred_value": [
+            "meditative",
+            "romantic",
+            "bittersweet"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The reflective nature of the afterlife choice (meditative), the idealized focus on two loves (romantic), and the inherent loss in choosing one over the other (bittersweet) define the tone."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 680,
+      "media_type": "movie",
+      "title": "Pulp Fiction",
+      "field": "primary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "dark-comedy",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "crime-drama",
+        "proposal_b": "black-comedy",
+        "proposal_c": "dark-comedy"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "dark-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The overview explicitly describes a comedic crime caper and the keywords identify dark comedy, fitting serious criminal material played for laughs. The context does not establish the bleak or misanthropic worldview required for black-comedy."
+        },
+        "claude": {
+          "preferred_value": "dark-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "TMDB's own keyword is 'dark comedy' (not 'black comedy'), and the overview calls it a 'comedic crime caper' -- the film plays taboo, violent material for laughs with a cool, stylish attitude rather than being defined by an inescapably bleak or misanthropic worldview."
+        },
+        "gemini": {
+          "preferred_value": "crime-drama",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Pulp Fiction is primarily structured around criminal acts and the underworld (crime-drama), heavily inflected by dark comedy and neo-noir elements."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 680,
+      "media_type": "movie",
+      "title": "Pulp Fiction",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "wry",
+        "stylized",
+        "visceral"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "cynical",
+          "visceral",
+          "wry"
+        ],
+        "proposal_b": [
+          "stylized",
+          "wry"
+        ],
+        "proposal_c": [
+          "absurdist",
+          "wry",
+          "stylized"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "stylized",
+            "wry"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The deliberately nonlinear, interlocking structure supports a heightened formal style, while the comedic crime-caper framing supports a dry, knowing attitude. The packet does not establish an irrational world for absurdist or enough pervasive institutional distrust for cynical."
+        },
+        "claude": {
+          "preferred_value": [
+            "wry",
+            "stylized",
+            "visceral"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Wry is common to all three proposals; Tarantino's dialogue and nonlinear structure are famously stylized; the film's bursts of violence (the overdose, the diner shootout) are immediate and bodily, supporting visceral over the more thematic 'cynical' or the ill-fitting 'absurdist' (the film's world is not illogical, just eccentric)."
+        },
+        "gemini": {
+          "preferred_value": [
+            "wry",
+            "stylized",
+            "visceral"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The film is famous for its distinctive, heightened dialogue and nonlinear structure (stylized), understated dark humor (wry), and sudden bursts of graphic violence (visceral)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 680,
+      "media_type": "movie",
+      "title": "Pulp Fiction",
+      "field": "secondary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "neo-noir",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "black-comedy",
+        "proposal_b": "gangster",
+        "proposal_c": "neo-noir"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "neo-noir",
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "The keywords explicitly identify neo-noir, which adds crime-aesthetic information without simply restating the dark-comedy primary. Gangster is plausible from the hit men and crime boss, so the secondary remains a real judgment call."
+        },
+        "claude": {
+          "preferred_value": "neo-noir",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "'Neo-noir' is a direct TMDB keyword, and the film's moral ambiguity, LA crime-world setting, and classic-noir tropes filtered through a modern lens are a real, distinguishing addition beyond the dark-comedy primary."
+        },
+        "gemini": {
+          "preferred_value": "dark-comedy",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The film's defining characteristic beyond its crime structure is how it plays violence and taboo subjects for laughs, making dark-comedy a perfect secondary label."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 19995,
+      "media_type": "movie",
+      "title": "Avatar",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "earnest",
+        "romantic",
+        "visceral"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "earnest",
+          "romantic",
+          "tense"
+        ],
+        "proposal_b": [
+          "uplifting",
+          "visceral",
+          "earnest"
+        ],
+        "proposal_c": [
+          "earnest",
+          "visceral"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "earnest",
+            "romantic",
+            "visceral"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The moral choice between orders and protecting an alien civilization supports earnestness, the love-affair keyword supports romantic tone, and battle supports visceral physical intensity. An uplifting resolution is not stated."
+        },
+        "claude": {
+          "preferred_value": [
+            "uplifting",
+            "visceral",
+            "earnest"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Earnest and visceral (the film's huge, physically immediate battle sequences) are shared by two of three proposals; the story's hopeful arc from paraplegic marine to accepted Na'vi warrior fits uplifting better than either romantic or plain tense."
+        },
+        "gemini": {
+          "preferred_value": [
+            "earnest",
+            "visceral",
+            "romantic"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The film combines sincere, unironic messaging about nature (earnest), intense and tactile action sequences (visceral), and a central, idealized love story (romantic)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 19995,
+      "media_type": "movie",
+      "title": "Avatar",
+      "field": "secondary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "adventure-action",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "alien-first-contact",
+        "proposal_b": "space-opera",
+        "proposal_c": "adventure-action"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "alien-first-contact",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The protagonist's interaction with an alien civilization is a central source of culture clash and divided loyalty, making alien-first-contact an informative science-fiction secondary. Space-opera is broader and less specifically supported by the one-world synopsis."
+        },
+        "claude": {
+          "preferred_value": "adventure-action",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "With primary reassigned to alien-first-contact, the film's kinetic, spectacle-driven journey structure (and eventual large-scale battle) adds real texture as a secondary that the contact-focused primary doesn't fully capture."
+        },
+        "gemini": {
+          "preferred_value": "adventure-action",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Adventure-action perfectly captures the film's emphasis on journey, exploration of a new world, and high-momentum spectacle."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 5920,
+      "media_type": "tv",
+      "title": "The Mentalist",
+      "field": "primary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "detective",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "procedural",
+        "proposal_b": "police-procedural",
+        "proposal_c": "detective"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "detective",
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "Patrick Jane's distinctive observation and people-reading skills are explicitly the engine by which crimes are solved, which fits detective better than routine police methods. Procedural and police-procedural remain plausible TV-format readings, but the packet does not describe episodic structure in enough detail to settle that fully."
+        },
+        "claude": {
+          "preferred_value": "detective",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Patrick Jane's hook is his personal, idiosyncratic observational genius bypassing routine investigative process -- the opposite of what 'police-procedural' (routine law-enforcement methods over personal drama) describes -- making 'detective' (an investigator whose individual process is the engine) the better fit despite the generic 'police procedural' keyword tag."
+        },
+        "gemini": {
+          "preferred_value": "procedural",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "As an episodic TV show resolving a new criminal case each week, procedural is the most accurate structural subgenre."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 5920,
+      "media_type": "tv",
+      "title": "The Mentalist",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "wry",
+        "playful",
+        "cerebral"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "cerebral"
+        ],
+        "proposal_b": [
+          "wry",
+          "tense"
+        ],
+        "proposal_c": [
+          "wry",
+          "playful",
+          "cerebral"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "cerebral"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The defining feature supplied is Jane's razor-sharp observation and interpretive reasoning, directly supporting cerebral. Wry, playful, and tense are not established by the factual packet."
+        },
+        "claude": {
+          "preferred_value": [
+            "wry",
+            "playful",
+            "cerebral"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The show is defined by Jane's playful, manipulative charm and witty banter (wry, playful) layered over genuine deductive intellect (cerebral); two of three proposals converge on this combination."
+        },
+        "gemini": {
+          "preferred_value": [
+            "cerebral",
+            "wry",
+            "playful"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Patrick Jane's character defines the show's tone: he is highly observant and intellectual (cerebral), while constantly mocking and manipulating suspects with an understated, mischievous humor (wry, playful)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 125988,
+      "media_type": "tv",
+      "title": "Silo",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "bleak",
+        "cynical",
+        "tense"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "bleak",
+          "cynical",
+          "unsettling"
+        ],
+        "proposal_b": [
+          "cynical",
+          "bleak",
+          "tense"
+        ],
+        "proposal_c": [
+          "tense",
+          "unsettling"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "cynical",
+            "tense",
+            "unsettling"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Systemic corruption and hidden powers support cynical distrust, mysterious deaths and investigation create tension, and concealed truths produce diffuse unease. Bleak is too strong because the synopsis still centers on active discovery rather than near-total absence of hope."
+        },
+        "claude": {
+          "preferred_value": [
+            "bleak",
+            "cynical",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "'Cynical' and 'depressing'/'depressed' are literal keywords, giving bleak and cynical the strongest direct textual support; tense fits the mystery-investigation structure and is shared with the unselected 'unsettling' option, but the direct keyword evidence favors this combination."
+        },
+        "gemini": {
+          "preferred_value": [
+            "tense",
+            "cynical",
+            "bleak"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The toxic outside world and strict internal control create despair (bleak), the systemic corruption fosters distrust (cynical), and the dangerous investigation generates suspense (tense)."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 125988,
+      "media_type": "tv",
+      "title": "Silo",
+      "field": "secondary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "conspiracy-thriller",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "dystopian-sci-fi",
+        "proposal_b": "conspiracy-thriller",
+        "proposal_c": null
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "post-apocalyptic",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The ruined, toxic future and explicit post-apocalyptic keyword make post-apocalyptic a useful setting-level secondary to dystopian-sci-fi. It adds distinct world-state information rather than forcing a weaker conspiracy label."
+        },
+        "claude": {
+          "preferred_value": "conspiracy-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Juliette 'uncovering shocking secrets and the truth' about the silo's hidden rulers is a direct match for conspiracy-thriller's protagonist-uncovers-a-hidden-plot definition, adding real information beyond the dystopian-sci-fi primary."
+        },
+        "gemini": {
+          "preferred_value": "conspiracy-thriller",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Juliette's primary plotline of investigating murders to uncover a coordinated, hidden plot by the silo's leaders perfectly aligns with conspiracy-thriller."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1399,
+      "media_type": "tv",
+      "title": "Game of Thrones",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "gritty",
+        "cynical",
+        "menacing"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "gritty",
+          "cynical",
+          "menacing"
+        ],
+        "proposal_b": [
+          "gritty",
+          "tense",
+          "bleak"
+        ],
+        "proposal_c": [
+          "gritty",
+          "menacing",
+          "bleak"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "gritty",
+            "cynical",
+            "menacing"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Dynastic warfare and power struggles support a gritty and cynical political texture, while the awakening ancient evil supplies a concrete menacing force. Bleak is not justified because the synopsis does not show a near-total absence of hope."
+        },
+        "claude": {
+          "preferred_value": [
+            "gritty",
+            "menacing",
+            "bleak"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "All three proposals agree on gritty (unvarnished political and physical brutality); the White Walkers and other threats are a locatable, felt danger (menacing); the show's willingness to kill major characters and deny easy hope supports bleak over the more general 'cynical' or 'tense.'"
+        },
+        "gemini": {
+          "preferred_value": [
+            "gritty",
+            "cynical",
+            "menacing"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The show is defined by its unvarnished realism and violence (gritty), its assumption of self-interested political motives (cynical), and the looming threat of the White Walkers (menacing)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 108978,
+      "media_type": "tv",
+      "title": "Reacher",
+      "field": "secondary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "conspiracy-thriller",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "detective",
+        "proposal_b": "conspiracy-thriller",
+        "proposal_c": "crime-thriller"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "conspiracy-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The conspiracy keyword, assassins, police connections, and Reacher's investigator background support a hidden-plot thriller strand. It is more specific than generic crime-thriller and adds more plot information than detective alone."
+        },
+        "claude": {
+          "preferred_value": "conspiracy-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "'Conspiracy' is a direct keyword, and the show's signature structure -- Reacher stumbling into a town and uncovering a hidden coordinated criminal plot -- is a precise match, adding real information beyond a detective/crime-thriller primary."
+        },
+        "gemini": {
+          "preferred_value": "detective",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Reacher's role as a former military police investigator solving local cases grounds the action firmly in the investigative process, supporting detective as a strong secondary."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 278624,
+      "media_type": "tv",
+      "title": "Lucky",
+      "field": "secondary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "heist",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "heist",
+        "proposal_b": "crime-thriller",
+        "proposal_c": "survival-thriller"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "heist",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The failed multi-million-dollar heist is the defining catalyst and remains important crime-story information even though the pursuit drives the main thriller arc. It is more specific than a general survival-thriller secondary."
+        },
+        "claude": {
+          "preferred_value": "heist",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The inciting, title-defining event is explicitly a multi-million-dollar heist; that origin remains a real, distinguishing element of the show's identity beyond the ongoing pursuit that defines the primary."
+        },
+        "gemini": {
+          "preferred_value": "survival-thriller",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "With the protagonist actively on the run and fighting for her life against both law enforcement and the underworld, survival-thriller captures the extreme stakes of her evasion."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 1431,
+      "media_type": "tv",
+      "title": "CSI: Crime Scene Investigation",
+      "field": "secondary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 3,
+        "meaningful": 0,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "procedural",
+        "proposal_b": "detective",
+        "proposal_c": null
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": null,
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The forensic case-solving described is already inherent in the likely procedural primary, so adding detective or another generic procedural label would be redundant. No separate secondary is needed."
+        },
+        "claude": {
+          "preferred_value": null,
+          "human_review": false,
+          "severity": "minor",
+          "reason": "CSI's identity as a forensic-science-driven police procedural is already fully captured by its primary; 'procedural' would be largely redundant with that primary, and 'detective' undersells the show's actual emphasis on lab/forensic process over personal deductive genius -- null is preferable to a weak, forced secondary."
+        },
+        "gemini": {
+          "preferred_value": "procedural",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "As the quintessential show about self-contained weekly cases resolved by a recurring team, procedural is a highly accurate tag to pair with its crime-solving focus."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 894,
+      "media_type": "tv",
+      "title": "The Prisoner",
+      "field": "primary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "psychological-thriller",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 1,
+        "fundamental": 1
+      },
+      "proposals": {
+        "proposal_a": "psychological-thriller",
+        "proposal_b": "psychological-thriller",
+        "proposal_c": "dystopian-sci-fi"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "espionage-thriller",
+          "human_review": true,
+          "severity": "fundamental",
+          "reason": "The protagonist is a former secret agent abducted by warders who demand information, so intelligence and coercive espionage are the clearest supplied thriller mechanisms. Neither psychological-thriller's mental-state uncertainty nor dystopian-sci-fi's future-society criterion is firmly established, leaving a genuine ontology judgment call."
+        },
+        "claude": {
+          "preferred_value": "psychological-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The show's core conflict is a battle of wills over the protagonist's mind, identity, and trustworthy perception of reality ('Kafkaesque,' refusing to give up information) -- uncertainty about mental state and manipulation -- rather than a broad depiction of an oppressive future society's control over its people."
+        },
+        "gemini": {
+          "preferred_value": "psychological-thriller",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The constant mind games, Kafkaesque nature of the village, and the protagonist's struggle to maintain his sanity and trust make psychological-thriller the strongest primary fit."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 894,
+      "media_type": "tv",
+      "title": "The Prisoner",
+      "field": "secondary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "espionage-thriller",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "espionage-thriller",
+        "proposal_b": "dystopian-sci-fi",
+        "proposal_c": "psychological-thriller"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": null,
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "The Kafkaesque prison village suggests psychological or dystopian overtones, but the packet does not establish either ontology definition strongly enough to force a secondary. Null is preferable, though a human could reasonably read those overtones as substantial."
+        },
+        "claude": {
+          "preferred_value": "espionage-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The entire premise is triggered by the protagonist's resignation from intelligence work and his abduction because of it; his spy background is central and adds real information beyond the psychological-thriller primary."
+        },
+        "gemini": {
+          "preferred_value": "espionage-thriller",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The protagonist's background as a secret agent and the interrogations focused on extracting classified information firmly support espionage-thriller."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 34307,
+      "media_type": "tv",
+      "title": "Shameless",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "raunchy",
+        "gritty",
+        "warm"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "gritty",
+          "warm"
+        ],
+        "proposal_b": [
+          "gritty",
+          "bleak",
+          "wry"
+        ],
+        "proposal_c": [
+          "raunchy",
+          "gritty",
+          "warm"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "gritty",
+            "warm"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Poverty, alcoholism, and family dysfunction support an unvarnished gritty texture, while the siblings' resilience and family bonds support warmth. Bleak is too strong and raunchy is not established by the supplied packet."
+        },
+        "claude": {
+          "preferred_value": [
+            "raunchy",
+            "gritty",
+            "warm"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Gritty (unvarnished South Side poverty and hardship) is shared by all three proposals; the show is known for frank, explicit sexual content (raunchy) alongside genuine sibling devotion and found-family love (warm), which together capture the show better than the more one-note 'bleak.'"
+        },
+        "gemini": {
+          "preferred_value": [
+            "gritty",
+            "warm",
+            "raunchy"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The show is characterized by its unvarnished poverty (gritty), the genuine, fierce loyalty among the siblings (warm), and its reliance on explicit/crude situations for humor (raunchy)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 45140,
+      "media_type": "tv",
+      "title": "Teen Titans Go!",
+      "field": "primary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "parody-spoof",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "superhero",
+        "proposal_b": "superhero",
+        "proposal_c": "parody-spoof"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "parody-spoof",
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "The series turns an established superhero team into madcap domestic comedy and is explicitly tagged parody, supporting direct genre/franchise exaggeration as the comic engine. Superhero remains a plausible reading because the characters still save the world, so human review is warranted."
+        },
+        "claude": {
+          "preferred_value": "superhero",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The show is a comedic take on its own existing superhero characters and mythology rather than a direct imitation/exaggeration of a specific separate franchise, which parody-spoof requires; it is superhero content played for slapstick humor."
+        },
+        "gemini": {
+          "preferred_value": "parody-spoof",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The show explicitly exaggerates and mocks the conventions of its own superhero franchise and characters for comedic effect, functioning essentially as a parody-spoof."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 1911,
+      "media_type": "tv",
+      "title": "Bones",
+      "field": "primary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "police-procedural",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 3,
+        "meaningful": 0,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "police-procedural",
+        "proposal_b": "procedural",
+        "proposal_c": "police-procedural"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "police-procedural",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The Jeffersonian team works with an FBI agent on murder investigations through repeatable forensic methods, making police-procedural more specific than the generic TV procedural label."
+        },
+        "claude": {
+          "preferred_value": "police-procedural",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The FBI/law-enforcement partnership (Special Agent Booth) anchoring the forensic investigations supports police-procedural over the more generic TV-structural 'procedural' term."
+        },
+        "gemini": {
+          "preferred_value": "procedural",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "As a heavily episodic TV series resolving a distinct, self-contained murder case every week, procedural is the most accurate structural term."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 66732,
+      "media_type": "tv",
+      "title": "Stranger Things",
+      "field": "primary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "supernatural-horror",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "supernatural-horror",
+        "proposal_b": "supernatural-horror",
+        "proposal_c": "sci-fi-horror"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "supernatural-horror",
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "The overview explicitly identifies terrifying supernatural forces, while the keywords also call out supernatural horror, monsters, and a parallel world. Secret experiments and the strange girl's powers make sci-fi-horror a genuinely reasonable competing reading, so the hybrid warrants review."
+        },
+        "claude": {
+          "preferred_value": "supernatural-horror",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "'Supernatural horror' is a direct TMDB keyword, and the show's core threat engine (the Upside Down, the Demogorgon) is paranormal/otherworldly, even though it is explained via a sci-fi government-experiment origin."
+        },
+        "gemini": {
+          "preferred_value": "sci-fi-horror",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The threats emerge from a government lab, scientific experiments, and alternate dimensions, rooting the terror firmly in sci-fi-horror premises rather than pure magic."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 66732,
+      "media_type": "tv",
+      "title": "Stranger Things",
+      "field": "tone_tags",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": [
+        "tense",
+        "menacing",
+        "warm"
+      ],
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "tense",
+          "menacing"
+        ],
+        "proposal_b": [
+          "tense",
+          "unsettling",
+          "warm"
+        ],
+        "proposal_c": [
+          "tense",
+          "unsettling",
+          "earnest"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "tense",
+            "menacing",
+            "warm"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The disappearance, monster, and supernatural forces create sustained tension and a concrete threatening presence, while friendship supports genuine warmth among the young characters. Unsettling is less specific than menacing once the threat is identified."
+        },
+        "claude": {
+          "preferred_value": [
+            "tense",
+            "unsettling",
+            "warm"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Tense is shared by all three; the diffuse wrongness of the Upside Down supports unsettling (shared by two proposals); the friendship-group bond and 80s nostalgia at the show's heart support warm as much as the horror elements support menacing."
+        },
+        "gemini": {
+          "preferred_value": [
+            "tense",
+            "menacing",
+            "warm"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The show blends the palpable threat of monsters (menacing) and high suspense (tense) with a deep, genuine affection among the core group of friends (warm)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 215072,
+      "media_type": "tv",
+      "title": "A Shop for Killers",
+      "field": "primary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "action-thriller",
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "mystery-thriller",
+        "proposal_b": "action-thriller",
+        "proposal_c": "mystery-thriller"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "action-thriller",
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "Guns, killers, being surrounded, and the niece's danger indicate an action-forward thriller, while her uncle's mysterious death and hidden truth supply a major mystery component. The packet is too brief to determine confidently which of those two engines dominates."
+        },
+        "claude": {
+          "preferred_value": "mystery-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The 'mysterious death' keyword and the niece's central quest to uncover the truth about her uncle's secret life frame this as a puzzle with thriller-level danger layered on top -- mystery-thriller precisely -- rather than being primarily action-forward."
+        },
+        "gemini": {
+          "preferred_value": "action-thriller",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "With assassins closing in and constant physical danger, the show balances high-stakes suspense with sustained combat, fitting action-thriller."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 215072,
+      "media_type": "tv",
+      "title": "A Shop for Killers",
+      "field": "secondary_subgenre",
+      "resolution": "PROVISIONAL_ACCEPT",
+      "consensus_type": "two_of_three",
+      "resolved_value": "mystery-thriller",
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "tech-thriller",
+        "proposal_b": "mystery-thriller",
+        "proposal_c": "action-thriller"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "mystery-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "If action-thriller is primary, the mysterious death and newly uncovered truth make mystery-thriller a distinct, informative secondary. Hacking and dark-web elements are present but not clearly central enough for tech-thriller."
+        },
+        "claude": {
+          "preferred_value": "tech-thriller",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Hacking, cybersecurity, hidden cameras, and the dark web form a dense, specific cluster in the keywords, indicating technology is a central tool/threat in the story's world and adding real information beyond the mystery-thriller primary."
+        },
+        "gemini": {
+          "preferred_value": "mystery-thriller",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Uncovering the hidden truth about her uncle's death and secret business adds a strong layer of puzzle-solving amidst the danger, fitting mystery-thriller."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "gemini",
+        "C": "chatgpt"
+      }
+    }
+  ]
+}

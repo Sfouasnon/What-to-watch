@@ -23,17 +23,19 @@ The product intentionally avoids an infinite feed and an LLM/chatbot recommendat
 - Next.js 16 App Router, React 19, TypeScript, and CSS
 - Vitest recommendation-domain tests
 - Supabase Auth helpers and normalized Postgres migrations with Row Level Security
-- Server-only TMDB metadata search and region-aware watch-provider endpoints
+- Server-only TMDB search, details/credits, candidate generation, and region-aware availability
 - Vercel production target
 
-The polished deployed experience starts in an explicit local demo mode so it remains usable without secrets. Demo title/provider records are labeled as demo availability and should not be interpreted as live provider data.
+Without a Supabase session the app stays in explicit browser-local demo mode. Signed-in profiles use Supabase for profiles, settings, questionnaire evidence, ratings/history, recommendations, and feedback; their recommendation candidates and metadata come from TMDB rather than the demo catalog.
 
 When configured, the server endpoints are:
 
 - `GET /api/tmdb/search?query=arrival&page=1`
+- `GET /api/tmdb/title?mediaType=movie&id=329865&region=US`
 - `GET /api/tmdb/watch-providers?mediaType=movie&id=329865&region=US`
+- `POST /api/recommendations` (authenticated, profile-scoped)
 
-Both return `503` with a stable error code when `TMDB_TOKEN` is absent.
+The live TMDB endpoints return `503` with a stable error code when `TMDB_TOKEN` is absent.
 
 ## Recommendation model
 
@@ -56,7 +58,7 @@ If no eligible friend evidence exists, Friend’s Picks falls back to the same p
 
 ## Profiles and data safety
 
-`supabase/migrations/0001_initial.sql` defines account-owned profiles and profile-keyed personalization records. `supabase/migrations/0002_friends_social.sql` adds mutual profile friendships, short review notes, explicit recommendations, an internal compatibility cache, privacy-aware contextual activity, and guarded request/accept/decline/remove RPCs.
+`supabase/migrations/0001_initial.sql` defines account-owned profiles and profile-keyed personalization records. `0002_friends_social.sql` adds profile friendships and privacy-aware social evidence. `0003_profile_runtime_rpcs.sql` adds guarded browser-write boundaries for services, questionnaire data, ratings, recommendations, and feedback. `0004_security_hardening.sql` removes browser execution from trigger-only functions, `0005_api_table_grants.sql` replaces unsafe default table privileges with RLS-governed authenticated DML, `0006_runtime_security_and_integrity.sql` hardens social-profile privacy, questionnaire retakes, TMDB identity writes, and runtime payload validation, and `0007_social_compatibility_service_fix.sql` preserves the service-only friendship compatibility refresh behind the hardened caller checks.
 
 The schema includes normalized titles, people/credits, genres/tags, curated lists, Criterion metadata, expiring provider offers, ratings, watch history, questionnaire versions/responses, affinities, recommendation events/items/feedback, model versions, and performance metrics.
 
@@ -64,7 +66,7 @@ Algorithm imports accept only allow-listed, range-checked configuration fields. 
 
 Each profile chooses one sharing mode: `ratings_and_reviews`, `ratings_only`, or `nothing`. Raw ratings and reviews remain owner-only tables; a guarded title-context RPC reveals only fields permitted by the source profile’s setting. An explicit recommendation remains visible to its intended recipient regardless of general sharing, while questionnaire answers, raw model data, weights, recommendation history, and private viewing settings are never social fields.
 
-The browser-local demo seeds a few friend profiles so the complete interaction can be evaluated without a configured backend. Production persistence requires applying both Supabase migrations and configuring Auth; the repository does not claim that a live Supabase project is already connected.
+The browser-local demo seeds a few friend profiles so the interaction can be evaluated without a configured backend. It never reads or writes authenticated profile data.
 
 ## Local setup
 
@@ -84,22 +86,20 @@ Environment variables:
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 TMDB_TOKEN=
-SUPABASE_SERVICE_ROLE_KEY=
-NEXT_PUBLIC_SITE_URL=
 ```
 
-`TMDB_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` are server-only. Never expose them through a `NEXT_PUBLIC_` variable.
+`TMDB_TOKEN` is server-only. Never expose it through a `NEXT_PUBLIC_` variable. The application does not require or use a Supabase service-role key.
 
 ## Supabase setup
 
-Create or choose a dedicated Supabase project, then apply the migration using the Supabase dashboard, connector, or CLI:
+Create or choose a dedicated Supabase project, then apply all migrations in order using the Supabase dashboard, connector, or CLI:
 
 ```bash
 supabase link --project-ref YOUR_PROJECT_REF
 supabase db push
 ```
 
-Add the project URL and publishable/anon key to local and Vercel environment variables. `/account` then enables passwordless email sign-in; without those variables it clearly identifies browser-local demo mode.
+Add the project URL and publishable/anon key to local and Vercel environment variables. In Supabase Auth URL Configuration, allow `/auth/callback` for localhost and the eventual production origin. `/account` then enables passwordless email sign-in; without those variables it clearly identifies browser-local demo mode.
 
 ## Quality gate
 
@@ -110,7 +110,7 @@ npm test
 npm run build
 ```
 
-The test suite covers strict service/region gating, marketplace-versus-subscription distinctions, exceptional rentals, stand-up separation, watched/rewatch behavior, creator and dislike learning, prior decay, profile isolation, Criterion semantics, canonical modes, exact top-ten lanes/uniqueness, explanations, raw/normalized scores, serializability, config-import safety, friend privacy, explicit recommendations, overlap-weighted influence, no-evidence fallback, and social hard-gate enforcement.
+The deterministic suite covers strict service/region gating, marketplace-versus-subscription distinctions, exceptional rentals, stand-up separation, watched/rewatch behavior, creator and dislike learning, prior decay, profile isolation, Criterion semantics, canonical modes, exact top-ten lanes/uniqueness, explanations, raw/normalized scores, serializability, config-import safety, friend privacy, explicit recommendations, overlap-weighted influence, no-evidence fallback, social hard-gate enforcement, and TMDB movie/TV/provider normalization. Live catalog observations are run separately because availability changes.
 
 ## Deploy to Vercel
 

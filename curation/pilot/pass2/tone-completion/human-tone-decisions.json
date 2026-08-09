@@ -1,0 +1,494 @@
+{
+  "ontology_version": "0.1.1",
+  "created_at": "2026-08-09T22:54:52.305Z",
+  "updated_at": "2026-08-09T22:58:56.113Z",
+  "decisions": {
+    "1284041:movie": {
+      "tmdb_id": 1284041,
+      "media_type": "movie",
+      "title": "The Last House",
+      "status": "kept",
+      "proposed_third_tone": null,
+      "final_tone_tags": [
+        "tense",
+        "menacing"
+      ],
+      "decided_at": "2026-08-09T22:55:52.023Z"
+    },
+    "557:movie": {
+      "tmdb_id": 557,
+      "media_type": "movie",
+      "title": "Spider-Man",
+      "status": "added",
+      "proposed_third_tone": "bittersweet",
+      "final_tone_tags": [
+        "earnest",
+        "playful",
+        "bittersweet"
+      ],
+      "decided_at": "2026-08-09T22:56:00.489Z"
+    },
+    "931285:movie": {
+      "tmdb_id": 931285,
+      "media_type": "movie",
+      "title": "Mortal Kombat II",
+      "status": "added",
+      "proposed_third_tone": "menacing",
+      "final_tone_tags": [
+        "visceral",
+        "tense",
+        "menacing"
+      ],
+      "decided_at": "2026-08-09T22:56:12.535Z"
+    },
+    "1481343:movie": {
+      "tmdb_id": 1481343,
+      "media_type": "movie",
+      "title": "The Devil's Mouth",
+      "status": "added",
+      "proposed_third_tone": "menacing",
+      "final_tone_tags": [
+        "tense",
+        "visceral",
+        "menacing"
+      ],
+      "decided_at": "2026-08-09T22:56:18.046Z"
+    },
+    "911430:movie": {
+      "tmdb_id": 911430,
+      "media_type": "movie",
+      "title": "F1",
+      "status": "added",
+      "proposed_third_tone": "tense",
+      "final_tone_tags": [
+        "uplifting",
+        "earnest",
+        "tense"
+      ],
+      "decided_at": "2026-08-09T22:56:22.875Z"
+    },
+    "346:movie": {
+      "tmdb_id": 346,
+      "media_type": "movie",
+      "title": "Seven Samurai",
+      "status": "added",
+      "proposed_third_tone": "bittersweet",
+      "final_tone_tags": [
+        "gritty",
+        "earnest",
+        "bittersweet"
+      ],
+      "decided_at": "2026-08-09T22:56:27.399Z"
+    },
+    "315635:movie": {
+      "tmdb_id": 315635,
+      "media_type": "movie",
+      "title": "Spider-Man: Homecoming",
+      "status": "added",
+      "proposed_third_tone": "uplifting",
+      "final_tone_tags": [
+        "playful",
+        "earnest",
+        "uplifting"
+      ],
+      "decided_at": "2026-08-09T22:56:30.654Z"
+    },
+    "1314481:movie": {
+      "tmdb_id": 1314481,
+      "media_type": "movie",
+      "title": "The Devil Wears Prada 2",
+      "status": "added",
+      "proposed_third_tone": "satirical",
+      "final_tone_tags": [
+        "wry",
+        "playful",
+        "satirical"
+      ],
+      "decided_at": "2026-08-09T22:56:35.339Z"
+    },
+    "429617:movie": {
+      "tmdb_id": 429617,
+      "media_type": "movie",
+      "title": "Spider-Man: Far From Home",
+      "status": "kept",
+      "proposed_third_tone": "romantic",
+      "final_tone_tags": [
+        "playful",
+        "earnest"
+      ],
+      "decided_at": "2026-08-09T22:56:47.347Z"
+    },
+    "454639:movie": {
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "status": "added",
+      "proposed_third_tone": "uplifting",
+      "final_tone_tags": [
+        "earnest",
+        "menacing",
+        "uplifting"
+      ],
+      "decided_at": "2026-08-09T22:56:53.590Z"
+    },
+    "1598:movie": {
+      "tmdb_id": 1598,
+      "media_type": "movie",
+      "title": "Cape Fear",
+      "status": "added",
+      "proposed_third_tone": "gritty",
+      "final_tone_tags": [
+        "tense",
+        "menacing",
+        "gritty"
+      ],
+      "decided_at": "2026-08-09T22:57:07.184Z"
+    },
+    "1630409:movie": {
+      "tmdb_id": 1630409,
+      "media_type": "movie",
+      "title": "The Debt Collector",
+      "status": "added",
+      "proposed_third_tone": "bleak",
+      "final_tone_tags": [
+        "gritty",
+        "tense",
+        "bleak"
+      ],
+      "decided_at": "2026-08-09T22:57:11.266Z"
+    },
+    "1930:movie": {
+      "tmdb_id": 1930,
+      "media_type": "movie",
+      "title": "The Amazing Spider-Man",
+      "status": "added",
+      "proposed_third_tone": "bittersweet",
+      "final_tone_tags": [
+        "earnest",
+        "romantic",
+        "bittersweet"
+      ],
+      "decided_at": "2026-08-09T22:57:20.216Z"
+    },
+    "1304313:movie": {
+      "tmdb_id": 1304313,
+      "media_type": "movie",
+      "title": "Lee Cronin's The Mummy",
+      "status": "added",
+      "proposed_third_tone": "bleak",
+      "final_tone_tags": [
+        "menacing",
+        "unsettling",
+        "bleak"
+      ],
+      "decided_at": "2026-08-09T22:57:24.176Z"
+    },
+    "687163:movie": {
+      "tmdb_id": 687163,
+      "media_type": "movie",
+      "title": "Project Hail Mary",
+      "status": "added",
+      "proposed_third_tone": "uplifting",
+      "final_tone_tags": [
+        "cerebral",
+        "earnest",
+        "uplifting"
+      ],
+      "decided_at": "2026-08-09T22:57:27.052Z"
+    },
+    "238:movie": {
+      "tmdb_id": 238,
+      "media_type": "movie",
+      "title": "The Godfather",
+      "status": "added",
+      "proposed_third_tone": "cynical",
+      "final_tone_tags": [
+        "gritty",
+        "menacing",
+        "cynical"
+      ],
+      "decided_at": "2026-08-09T22:57:30.147Z"
+    },
+    "1263532:movie": {
+      "tmdb_id": 1263532,
+      "media_type": "movie",
+      "title": "Beast Race",
+      "status": "added",
+      "proposed_third_tone": "bleak",
+      "final_tone_tags": [
+        "tense",
+        "gritty",
+        "bleak"
+      ],
+      "decided_at": "2026-08-09T22:57:34.074Z"
+    },
+    "1361774:movie": {
+      "tmdb_id": 1361774,
+      "media_type": "movie",
+      "title": "The Dink",
+      "status": "added",
+      "proposed_third_tone": "earnest",
+      "final_tone_tags": [
+        "playful",
+        "wry",
+        "earnest"
+      ],
+      "decided_at": "2026-08-09T22:57:36.854Z"
+    },
+    "5879:movie": {
+      "tmdb_id": 5879,
+      "media_type": "movie",
+      "title": "In the Realm of the Senses",
+      "status": "added",
+      "proposed_third_tone": "bleak",
+      "final_tone_tags": [
+        "unsettling",
+        "visceral",
+        "bleak"
+      ],
+      "decided_at": "2026-08-09T22:57:39.628Z"
+    },
+    "1726:movie": {
+      "tmdb_id": 1726,
+      "media_type": "movie",
+      "title": "Iron Man",
+      "status": "added",
+      "proposed_third_tone": "playful",
+      "final_tone_tags": [
+        "earnest",
+        "tense",
+        "playful"
+      ],
+      "decided_at": "2026-08-09T22:57:42.614Z"
+    },
+    "949838:movie": {
+      "tmdb_id": 949838,
+      "media_type": "movie",
+      "title": "72 HOURS",
+      "status": "added",
+      "proposed_third_tone": "absurdist",
+      "final_tone_tags": [
+        "playful",
+        "raunchy",
+        "absurdist"
+      ],
+      "decided_at": "2026-08-09T22:57:47.157Z"
+    },
+    "1416:tv": {
+      "tmdb_id": 1416,
+      "media_type": "tv",
+      "title": "Grey's Anatomy",
+      "status": "added",
+      "proposed_third_tone": "tense",
+      "final_tone_tags": [
+        "earnest",
+        "sentimental",
+        "tense"
+      ],
+      "decided_at": "2026-08-09T22:57:51.098Z"
+    },
+    "32419:tv": {
+      "tmdb_id": 32419,
+      "media_type": "tv",
+      "title": "Horrible Histories",
+      "status": "added",
+      "proposed_third_tone": "satirical",
+      "final_tone_tags": [
+        "playful",
+        "absurdist",
+        "satirical"
+      ],
+      "decided_at": "2026-08-09T22:57:53.837Z"
+    },
+    "79744:tv": {
+      "tmdb_id": 79744,
+      "media_type": "tv",
+      "title": "The Rookie",
+      "status": "added",
+      "proposed_third_tone": "tense",
+      "final_tone_tags": [
+        "earnest",
+        "playful",
+        "tense"
+      ],
+      "decided_at": "2026-08-09T22:57:59.592Z"
+    },
+    "22980:tv": {
+      "tmdb_id": 22980,
+      "media_type": "tv",
+      "title": "Watch What Happens Live with Andy Cohen",
+      "status": "added",
+      "proposed_third_tone": "wry",
+      "final_tone_tags": [
+        "playful",
+        "wry"
+      ],
+      "decided_at": "2026-08-09T22:58:05.367Z"
+    },
+    "1095:tv": {
+      "tmdb_id": 1095,
+      "media_type": "tv",
+      "title": "Ghost in the Shell: Stand Alone Complex",
+      "status": "added",
+      "proposed_third_tone": "stylized",
+      "final_tone_tags": [
+        "cerebral",
+        "tense",
+        "stylized"
+      ],
+      "decided_at": "2026-08-09T22:58:09.172Z"
+    },
+    "138502:tv": {
+      "tmdb_id": 138502,
+      "media_type": "tv",
+      "title": "X-Men '97",
+      "status": "added",
+      "proposed_third_tone": "bittersweet",
+      "final_tone_tags": [
+        "tense",
+        "earnest",
+        "bittersweet"
+      ],
+      "decided_at": "2026-08-09T22:58:11.685Z"
+    },
+    "278624:tv": {
+      "tmdb_id": 278624,
+      "media_type": "tv",
+      "title": "Lucky",
+      "status": "added",
+      "proposed_third_tone": "playful",
+      "final_tone_tags": [
+        "tense",
+        "gritty",
+        "playful"
+      ],
+      "decided_at": "2026-08-09T22:58:14.231Z"
+    },
+    "59941:tv": {
+      "tmdb_id": 59941,
+      "media_type": "tv",
+      "title": "The Tonight Show Starring Jimmy Fallon",
+      "status": "kept",
+      "proposed_third_tone": null,
+      "final_tone_tags": [
+        "playful",
+        "warm"
+      ],
+      "decided_at": "2026-08-09T22:58:20.959Z"
+    },
+    "1668:tv": {
+      "tmdb_id": 1668,
+      "media_type": "tv",
+      "title": "Friends",
+      "status": "kept",
+      "proposed_third_tone": "romantic",
+      "final_tone_tags": [
+        "warm",
+        "playful"
+      ],
+      "decided_at": "2026-08-09T22:58:24.913Z"
+    },
+    "203744:tv": {
+      "tmdb_id": 203744,
+      "media_type": "tv",
+      "title": "Sugar",
+      "status": "added",
+      "proposed_third_tone": "melancholic",
+      "final_tone_tags": [
+        "enigmatic",
+        "stylized",
+        "melancholic"
+      ],
+      "decided_at": "2026-08-09T22:58:28.705Z"
+    },
+    "45140:tv": {
+      "tmdb_id": 45140,
+      "media_type": "tv",
+      "title": "Teen Titans Go!",
+      "status": "kept",
+      "proposed_third_tone": null,
+      "final_tone_tags": [
+        "absurdist",
+        "playful"
+      ],
+      "decided_at": "2026-08-09T22:58:32.531Z"
+    },
+    "2224:tv": {
+      "tmdb_id": 2224,
+      "media_type": "tv",
+      "title": "The Daily Show",
+      "status": "kept",
+      "proposed_third_tone": "playful",
+      "final_tone_tags": [
+        "satirical",
+        "wry"
+      ],
+      "decided_at": "2026-08-09T22:58:37.275Z"
+    },
+    "1421:tv": {
+      "tmdb_id": 1421,
+      "media_type": "tv",
+      "title": "Modern Family",
+      "status": "added",
+      "proposed_third_tone": "sentimental",
+      "final_tone_tags": [
+        "warm",
+        "playful",
+        "sentimental"
+      ],
+      "decided_at": "2026-08-09T22:58:42.392Z"
+    },
+    "64099:tv": {
+      "tmdb_id": 64099,
+      "media_type": "tv",
+      "title": "War and Peace",
+      "status": "added",
+      "proposed_third_tone": "bittersweet",
+      "final_tone_tags": [
+        "earnest",
+        "melancholic",
+        "bittersweet"
+      ],
+      "decided_at": "2026-08-09T22:58:45.665Z"
+    },
+    "30984:tv": {
+      "tmdb_id": 30984,
+      "media_type": "tv",
+      "title": "Bleach",
+      "status": "added",
+      "proposed_third_tone": "tense",
+      "final_tone_tags": [
+        "earnest",
+        "visceral",
+        "tense"
+      ],
+      "decided_at": "2026-08-09T22:58:47.964Z"
+    },
+    "215072:tv": {
+      "tmdb_id": 215072,
+      "media_type": "tv",
+      "title": "A Shop for Killers",
+      "status": "added",
+      "proposed_third_tone": "enigmatic",
+      "final_tone_tags": [
+        "tense",
+        "gritty",
+        "enigmatic"
+      ],
+      "decided_at": "2026-08-09T22:58:50.794Z"
+    },
+    "2661:tv": {
+      "tmdb_id": 2661,
+      "media_type": "tv",
+      "title": "Kamen Rider",
+      "status": "added",
+      "proposed_third_tone": "tense",
+      "final_tone_tags": [
+        "earnest",
+        "menacing",
+        "tense"
+      ],
+      "decided_at": "2026-08-09T22:58:56.113Z"
+    }
+  }
+}

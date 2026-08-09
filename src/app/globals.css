@@ -1722,6 +1722,91 @@ button:disabled {
   .details-sheet { min-height: 94dvh; max-height: 94dvh; align-self: center; border: 1px solid var(--line); border-radius: 24px; }
 }
 
+/* Keep the primary desktop decision surface inside one calm viewport. */
+@media (min-width: 1200px) and (min-height: 760px) {
+  body:has(.app-shell > .home-screen) { overflow: hidden; }
+
+  .app-shell:has(> .home-screen) {
+    display: flex;
+    height: 100dvh;
+    min-height: 0;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .app-shell > .home-screen {
+    width: min(100%, 1680px);
+    min-height: 0;
+    flex: 1;
+    grid-template-columns: minmax(300px, 0.72fr) minmax(620px, 1.28fr);
+    grid-template-rows: auto auto auto auto;
+    align-content: start;
+    column-gap: clamp(48px, 5vw, 96px);
+    padding: clamp(24px, 3.6dvh, 42px) clamp(28px, 3vw, 56px) clamp(14px, 2dvh, 24px);
+    overflow: hidden;
+  }
+
+  .home-intro {
+    position: static;
+    grid-row: 1 / 5;
+  }
+
+  .home-intro h1 {
+    max-width: 470px;
+    margin-top: clamp(10px, 1.8dvh, 18px);
+    font-size: clamp(4.2rem, min(6.4vw, 9.6dvh), 7.2rem);
+    line-height: 0.94;
+  }
+
+  .home-intro > p:last-child { margin-top: clamp(12px, 2dvh, 20px); }
+
+  .home-screen .choice-section,
+  .home-screen .choice-section:first-of-type {
+    margin-top: 0;
+    padding-top: clamp(10px, 1.8dvh, 20px);
+  }
+
+  .home-screen .vibe-section { margin-top: clamp(12px, 2dvh, 22px); }
+  .home-screen .section-heading { margin-bottom: clamp(8px, 1.4dvh, 16px); }
+
+  .home-screen .mood-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(6px, 0.8dvh, 9px);
+  }
+
+  .home-screen .mood-chip {
+    min-height: clamp(44px, 5.4dvh, 56px);
+    padding: 0 clamp(9px, 1vw, 14px);
+  }
+
+  .home-screen .vibe-scroll {
+    margin: 0;
+    padding: 0;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-auto-columns: auto;
+    grid-auto-flow: row;
+    gap: clamp(6px, 0.8dvh, 9px);
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .home-screen .vibe-card {
+    min-height: clamp(58px, 7.7dvh, 82px);
+    gap: 4px;
+    padding: clamp(8px, 1.1dvh, 12px);
+  }
+
+  .home-screen .vibe-card > span { font-size: 0.5rem; }
+  .home-screen .vibe-card strong { font-size: clamp(0.82rem, 0.9vw, 1rem); }
+
+  .home-screen .find-button {
+    min-height: clamp(52px, 6.4dvh, 64px);
+    margin-top: clamp(12px, 2dvh, 22px);
+  }
+
+  .home-screen .home-trust { margin-top: clamp(8px, 1.2dvh, 14px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }

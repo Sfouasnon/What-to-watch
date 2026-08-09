@@ -1,0 +1,889 @@
+{
+  "ontology_version": "0.1.1",
+  "items": [
+    {
+      "tmdb_id": 980431,
+      "media_type": "movie",
+      "title": "Avatar Aang: The Last Airbender",
+      "field": "tone_tags",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "warm",
+          "uplifting",
+          "earnest"
+        ],
+        "proposal_b": [
+          "earnest",
+          "playful"
+        ],
+        "proposal_c": [
+          "uplifting",
+          "warm",
+          "playful"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "warm",
+            "uplifting",
+            "earnest"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Aang undertakes the quest with friends to save his culture and preserve peace, while the keywords explicitly signal comforting and hopeful qualities. That supports warm, uplifting, and earnest more directly than playful."
+        },
+        "claude": {
+          "preferred_value": [
+            "uplifting",
+            "warm",
+            "playful"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Keywords 'comforting', 'hopeful', and 'amused' map directly onto warm, uplifting, and playful; 'earnest' is plausible but less specifically evidenced than the light, hopeful, friendship-driven register the context describes."
+        },
+        "gemini": {
+          "preferred_value": [
+            "earnest",
+            "playful",
+            "uplifting"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The Avatar franchise balances sincere, high-stakes storytelling (earnest) with lighthearted humor (playful) and hopeful, friendship-driven themes (uplifting)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "field": "tone_tags",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "earnest",
+          "menacing"
+        ],
+        "proposal_b": [
+          "earnest"
+        ],
+        "proposal_c": [
+          "earnest",
+          "warm",
+          "uplifting"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "earnest",
+            "menacing"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Adam's destiny and mission to save family and world support an earnest register, while Skeletor's fiendish rule provides a specific threatening presence. Warm and uplifting are not established by the supplied trajectory."
+        },
+        "claude": {
+          "preferred_value": [
+            "earnest",
+            "warm",
+            "menacing"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "'Fiendish rule of Skeletor' is a concrete, locatable threat (menacing); 'loving' and the doubled father-child relationship keywords support warm; earnest is the one tag all three proposals share."
+        },
+        "gemini": {
+          "preferred_value": [
+            "earnest",
+            "uplifting"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The narrative of embracing a true heroic destiny to save family and world supports an earnest and uplifting tone."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "field": "secondary_subgenre",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 3,
+        "meaningful": 0,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "sword-and-sorcery",
+        "proposal_b": null,
+        "proposal_c": "epic-fantasy"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "sword-and-sorcery",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Despite the world-scale epic frame, the Sword of Power, small-band allies, warrior imagery, and magical foe make sword-and-sorcery informative as a secondary action mode."
+        },
+        "claude": {
+          "preferred_value": "epic-fantasy",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "With primary set to the personal-scale sword-and-sorcery reading, the larger mythic-destiny/secondary-world stakes (ancient sword, planet under tyranny, chosen-hero framing) add real information as a secondary layer rather than being redundant or forced."
+        },
+        "gemini": {
+          "preferred_value": null,
+          "human_review": false,
+          "severity": "minor",
+          "reason": "With sword-and-sorcery as the primary, a secondary subgenre is redundant and unnecessary."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 559,
+      "media_type": "movie",
+      "title": "Spider-Man 3",
+      "field": "tone_tags",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "earnest"
+        ],
+        "proposal_b": [
+          "sentimental",
+          "bittersweet",
+          "earnest"
+        ],
+        "proposal_c": [
+          "tense",
+          "earnest"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "earnest",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Multiple villains, altered powers, and interpersonal conflict support sustained tension, while forgiveness and Peter's personal struggles support earnestness. The context does not establish a bittersweet resolution or deliberate sentimentality."
+        },
+        "claude": {
+          "preferred_value": [
+            "sentimental",
+            "bittersweet",
+            "earnest"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The film is known for its openly tear-jerking, deliberately emotional beats (forgiveness, the estranged-friend reconciliation) which is sentimental rather than earned obliquely; genuine reconciliation coexists with the loss of Harry and the strain on Peter/MJ, supporting bittersweet alongside the universally-agreed earnest."
+        },
+        "gemini": {
+          "preferred_value": [
+            "earnest",
+            "bittersweet",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Raimi's Spider-Man films are highly earnest, while the concluding chapter carries a bittersweet sense of loss alongside tense villain showdowns."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 652,
+      "media_type": "movie",
+      "title": "Troy",
+      "field": "tone_tags",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "earnest",
+          "visceral"
+        ],
+        "proposal_b": [
+          "visceral",
+          "tense"
+        ],
+        "proposal_c": [
+          "bittersweet",
+          "gritty",
+          "tense"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "visceral",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Large armies, sword fighting, battlefield conflict, and imminent war support physical intensity and anticipatory tension. Bittersweet and gritty require tonal evidence not present in the supplied context."
+        },
+        "claude": {
+          "preferred_value": [
+            "visceral",
+            "tense",
+            "bittersweet"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The battle sequences are famously physical and immediate (visceral), the war's outcome stays in doubt throughout (tense), and the ending mixes real loss (Hector, Achilles, the fall of Troy) with heroic glory and Aeneas's escape -- the simultaneous loss-and-resolution that defines bittersweet."
+        },
+        "gemini": {
+          "preferred_value": [
+            "earnest",
+            "visceral",
+            "bittersweet"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The tone captures the grand, sincere tragedy of the myth (earnest, bittersweet) along with the intense, bloody physical combat (visceral)."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 24428,
+      "media_type": "movie",
+      "title": "The Avengers",
+      "field": "tone_tags",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "earnest",
+          "tense"
+        ],
+        "proposal_b": [
+          "uplifting",
+          "playful",
+          "tense"
+        ],
+        "proposal_c": [
+          "playful",
+          "earnest"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "earnest",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The global-security threat and effort to assemble a team to avert disaster directly support earnest stakes and tension. The factual packet does not independently establish a playful or uplifting overall tone."
+        },
+        "claude": {
+          "preferred_value": [
+            "uplifting",
+            "playful",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Whedon's signature quippy banter supports playful, the team's triumphant 'assemble' moment against a genuine alien-invasion threat supports uplifting and tense; plain 'earnest' undersells the film's well-known humor."
+        },
+        "gemini": {
+          "preferred_value": [
+            "playful",
+            "earnest",
+            "uplifting"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The film is defined by its witty, banter-heavy dialogue (playful), its sincere comic-book heroics (earnest), and its rousing, triumphant team-up resolution (uplifting)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1361774,
+      "media_type": "movie",
+      "title": "The Dink",
+      "field": "primary_subgenre",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 2,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 2,
+        "fundamental": 1
+      },
+      "proposals": {
+        "proposal_a": "workplace-comedy",
+        "proposal_b": "absurdist-comedy",
+        "proposal_c": "sports-drama"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "absurdist-comedy",
+          "human_review": true,
+          "severity": "fundamental",
+          "reason": "The sports-comedy setup treats the supposedly unthinkable act of playing pickleball as a heightened comic premise, making absurdist-comedy the closest available controlled term. The ontology lacks a sports-comedy leaf, while workplace-comedy and sports-drama do not match the described comic engine cleanly."
+        },
+        "claude": {
+          "preferred_value": "workplace-comedy",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The stated stakes are explicitly institutional/professional -- saving the country club and the protagonist's standing there, plus his father's professional respect -- which fits a job/workplace-centered comedy engine better than an illogical-world premise (the ontology has no dedicated sports-comedy term, and the Drama genre needed for sports-drama isn't present)."
+        },
+        "gemini": {
+          "preferred_value": null,
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "The ontology lacks a 'sports-comedy' subgenre. 'sports-drama' captures the athletic stakes but clashes with the film's purely comedic genre, making null the safest choice while flagging for review."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 21484,
+      "media_type": "movie",
+      "title": "Possession",
+      "field": "primary_subgenre",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "two_of_three",
+      "resolved_value": null,
+      "human_review_requests": 2,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "psychological-horror",
+        "proposal_b": "supernatural-horror",
+        "proposal_c": "psychological-horror"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "supernatural-horror",
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "Possession and monster keywords, together with bizarre incidents beyond an ordinary affair, support a paranormal threat. Psychological-horror is also reasonable from obsession, hysteria, and marital deterioration, so the supplied packet permits both readings."
+        },
+        "claude": {
+          "preferred_value": "psychological-horror",
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "The film is centrally about a disintegrating marriage, hysteria, and a wife's mental/spiritual unraveling, which supports psychological-horror -- but a literal creature/monster is also present in the story, so a supernatural-horror reading is genuinely defensible too; the film's dual nature makes this a real judgment call."
+        },
+        "gemini": {
+          "preferred_value": "psychological-horror",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "While it features a literal monster, the film's terror is fundamentally rooted in hysteria, emotional breakdown, and the mental deterioration of a dissolving marriage, making psychological-horror the strongest fit."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 19995,
+      "media_type": "movie",
+      "title": "Avatar",
+      "field": "primary_subgenre",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 1,
+      "severity_distribution": {
+        "minor": 0,
+        "meaningful": 3,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "adventure-action",
+        "proposal_b": "alien-first-contact",
+        "proposal_c": "space-opera"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": "adventure-action",
+          "human_review": true,
+          "severity": "meaningful",
+          "reason": "The mission to Pandora, alien-world setting, battle, and large physical conflict support an action-adventure frame. Space-opera and alien-first-contact are also plausible science-fiction readings, but the synopsis emphasizes the protagonist's mission and conflict more than multi-faction space scope or the first moment of contact."
+        },
+        "claude": {
+          "preferred_value": "alien-first-contact",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The film's defining and most culturally distinctive element is a human's immersion into and communication with an entirely alien civilization and culture (Na'vi society, culture clash, indigenous themes) -- the alien-first-contact engine -- rather than a spatially sweeping, multi-faction space-opera (the story stays confined to one moon) or a generic action-adventure label."
+        },
+        "gemini": {
+          "preferred_value": "space-opera",
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The film's sweeping stakes, planetary-scale battles, and clash between human military and alien factions perfectly embody the space-opera subgenre."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1325734,
+      "media_type": "movie",
+      "title": "The Drama",
+      "field": "tone_tags",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "wry",
+          "tense",
+          "sentimental"
+        ],
+        "proposal_b": [
+          "romantic",
+          "tense"
+        ],
+        "proposal_c": [
+          "tense",
+          "playful"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "romantic",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The engaged couple and wedding-week crisis make romantic attachment central, while infidelity, trust issues, and a relationship put to the test create tension. The packet does not establish sentimental technique or a broadly playful mood."
+        },
+        "claude": {
+          "preferred_value": [
+            "tense",
+            "sentimental",
+            "romantic"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Tense is common to all three; 'melodramatic' and 'provocative' in the keywords point to openly tear-jerking beats (sentimental) rather than dry wit, and 'romantic'/'adoring' keywords directly support the romantic tag over the lighter 'playful.'"
+        },
+        "gemini": {
+          "preferred_value": [
+            "tense",
+            "wry",
+            "romantic"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The narrative of a wedding week derailed by dark-comedic turns and trust issues suggests a blend of suspense (tense), dark humor (wry), and relationship focus (romantic)."
+        }
+      },
+      "source_mapping": {
+        "A": "claude",
+        "B": "chatgpt",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 755898,
+      "media_type": "movie",
+      "title": "War of the Worlds",
+      "field": "tone_tags",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 1,
+        "meaningful": 2,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "tense",
+          "cerebral",
+          "menacing"
+        ],
+        "proposal_b": [
+          "tense",
+          "unsettling",
+          "cynical"
+        ],
+        "proposal_c": [
+          "tense",
+          "menacing"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "tense",
+            "menacing"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "An unknown attacking entity and possible government concealment create uncertainty and a concrete sense of threat. The context does not establish enough pervasive distrust for cynical or idea-first emphasis for cerebral."
+        },
+        "claude": {
+          "preferred_value": [
+            "tense",
+            "menacing",
+            "cynical"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Tense is shared by all three; the attacking entity is a concrete, locatable threat (menacing, shared by two proposals); the government-secrecy/surveillance-state throughline supports a distrustful, institutions-are-corrupt undercurrent (cynical) over the vaguer 'unsettling.'"
+        },
+        "gemini": {
+          "preferred_value": [
+            "tense",
+            "unsettling",
+            "cynical"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The themes of mass surveillance and government cover-ups invite a distrustful worldview (cynical), while the unknown threat provides suspense and unease (tense, unsettling)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 5920,
+      "media_type": "tv",
+      "title": "The Mentalist",
+      "field": "secondary_subgenre",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 3,
+        "meaningful": 0,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": "detective",
+        "proposal_b": null,
+        "proposal_c": "procedural"
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": null,
+          "human_review": false,
+          "severity": "minor",
+          "reason": "With detective as the best-supported primary, neither a second detective label nor an unsupported episodic-procedural assumption adds reliable information. Null is preferable to a redundant or weak secondary."
+        },
+        "claude": {
+          "preferred_value": "procedural",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Beyond Jane's personal detective process, the show still follows a case-of-the-week structural format at the CBI, which 'procedural' captures as real additional information."
+        },
+        "gemini": {
+          "preferred_value": "detective",
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Jane's specific role as a consultant whose unique investigative process solves the crimes makes detective a perfect secondary classification."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "gemini",
+        "C": "claude"
+      }
+    },
+    {
+      "tmdb_id": 4614,
+      "media_type": "tv",
+      "title": "NCIS",
+      "field": "tone_tags",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "wry",
+          "earnest"
+        ],
+        "proposal_b": [
+          "earnest",
+          "tense",
+          "gritty"
+        ],
+        "proposal_c": [
+          "earnest"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "earnest",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "The team handles murder, espionage, terrorism, and other serious military-linked crimes, supporting an earnest professional register and recurring tension. Wry humor and gritty realism are not established in the supplied context."
+        },
+        "claude": {
+          "preferred_value": [
+            "wry",
+            "earnest"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "NCIS is known for blending banter/humor between agents (wry) with sincere emotional and patriotic beats (earnest); the show's glossy, formulaic procedural style doesn't strongly support the more naturalistic 'gritty.'"
+        },
+        "gemini": {
+          "preferred_value": [
+            "earnest",
+            "wry",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "NCIS balances sincere dedication to duty and victims (earnest), suspenseful criminal investigations (tense), and frequent workplace banter (wry)."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "claude",
+        "C": "chatgpt"
+      }
+    },
+    {
+      "tmdb_id": 106841,
+      "media_type": "tv",
+      "title": "Blossoms Shanghai",
+      "field": "tone_tags",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "melancholic",
+          "romantic"
+        ],
+        "proposal_b": [
+          "stylized",
+          "melancholic",
+          "dreamlike"
+        ],
+        "proposal_c": [
+          "meditative",
+          "stylized",
+          "melancholic"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "melancholic",
+            "romantic"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Longing, a troubled past, and entanglement with women representing love and other life pursuits support melancholic and romantic tones. The packet does not establish dream logic, conspicuous formal stylization, or an unhurried contemplative mode strongly enough for the other tags."
+        },
+        "claude": {
+          "preferred_value": [
+            "stylized",
+            "melancholic",
+            "dreamlike"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Wong Kar-Wai's directorial signature is famously stylized and dreamlike (fluid, associative, nostalgic imagery), and 'lyrical'/'longing' in the keywords support both dreamlike and melancholic, which two of three proposals share."
+        },
+        "gemini": {
+          "preferred_value": [
+            "stylized",
+            "romantic",
+            "melancholic"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Directed by Wong Kar-Wai, the series leans heavily on a distinct, gorgeous aesthetic (stylized), themes of longing and love (romantic), and a persistent wistfulness (melancholic)."
+        }
+      },
+      "source_mapping": {
+        "A": "chatgpt",
+        "B": "claude",
+        "C": "gemini"
+      }
+    },
+    {
+      "tmdb_id": 1911,
+      "media_type": "tv",
+      "title": "Bones",
+      "field": "tone_tags",
+      "resolution": "HUMAN_REVIEW",
+      "consensus_type": "none",
+      "resolved_value": null,
+      "human_review_requests": 0,
+      "severity_distribution": {
+        "minor": 2,
+        "meaningful": 1,
+        "fundamental": 0
+      },
+      "proposals": {
+        "proposal_a": [
+          "wry",
+          "earnest"
+        ],
+        "proposal_b": [
+          "cerebral",
+          "tense"
+        ],
+        "proposal_c": [
+          "wry",
+          "cerebral",
+          "gritty"
+        ]
+      },
+      "adjudications": {
+        "chatgpt": {
+          "preferred_value": [
+            "cerebral",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "meaningful",
+          "reason": "Forensic science and difficult identification work support an ideas-and-reasoning emphasis, while murder investigations naturally create uncertainty and stakes. Wry banter and gritty texture are not established in the factual packet."
+        },
+        "claude": {
+          "preferred_value": [
+            "wry",
+            "cerebral",
+            "tense"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "Booth and Brennan's banter supports wry, the forensic-science deduction focus supports cerebral (each shared by two proposals), and case-solving suspense supports tense over the less-fitting 'gritty' or plain 'earnest.'"
+        },
+        "gemini": {
+          "preferred_value": [
+            "cerebral",
+            "wry",
+            "gritty"
+          ],
+          "human_review": false,
+          "severity": "minor",
+          "reason": "The show relies heavily on forensic science and logic (cerebral), features highly decomposed bodies (gritty), and uses understated, character-based humor (wry)."
+        }
+      },
+      "source_mapping": {
+        "A": "gemini",
+        "B": "chatgpt",
+        "C": "claude"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "titles_included": 49,
+  "fields": {
+    "primary_subgenre": 32,
+    "secondary_subgenre": 19,
+    "tone_tags": 26
+  },
+  "secondary_escalated_from_majority": 0,
+  "secondary_none_included": 19,
+  "severity_major_all_covered_by_primary": 5,
+  "titles_not_in_disagreements_but_included": []
+}
