@@ -288,10 +288,12 @@ export function recommendForProfile({
   for (let index = 0; index < count; index += 1) {
     const requestedLane = RECOMMENDATION_LANES[index];
     const recommendationLane = lane ?? selectSemanticLane(requestedLane, remaining, selected);
+    if (!recommendationLane) continue;
     const scoringLane = lane ?? recommendationLane;
     const exploration = config.exploration[scoringLane];
     const laneCandidates = remaining.filter((candidate) => laneEligible(candidate, scoringLane, selected));
-    const ranked = (laneCandidates.length ? laneCandidates : remaining)
+    if (!laneCandidates.length) continue;
+    const ranked = laneCandidates
       .map((candidate) => ({
         candidate,
         score: laneScore(candidate, scoringLane, exploration, selected, config),
@@ -512,16 +514,19 @@ function selectSemanticLane(
   preferred: RecommendationLane,
   remaining: readonly ScoredCandidate[],
   selected: readonly Recommendation[],
-): RecommendationLane {
-  if (remaining.some((candidate) => laneEligible(candidate, preferred, selected))) return preferred;
+): RecommendationLane | undefined {
+  const used = new Set(selected.map(({ lane }) => lane));
+  if (!used.has(preferred) && remaining.some((candidate) => laneEligible(candidate, preferred, selected))) {
+    return preferred;
+  }
   const substitutes: RecommendationLane[] = [
     "Best Bet", "Close Second", "Right Mood", "Something Different", "Go Deeper",
     "Creator Match", "Hidden Gem", "Film School Pick", "Left Field", "Wild Card",
   ];
   return substitutes.find((candidateLane) =>
-    !selected.some(({ lane }) => lane === candidateLane) &&
+    !used.has(candidateLane) &&
     remaining.some((candidate) => laneEligible(candidate, candidateLane, selected))
-  ) ?? "Best Bet";
+  );
 }
 
 function laneScore(

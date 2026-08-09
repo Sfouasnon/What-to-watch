@@ -2018,7 +2018,23 @@ export function WhatToWatchApp() {
         window.setTimeout(loadDemo, 0);
       }
     });
-    if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => undefined);
+    if ("serviceWorker" in navigator) {
+      if (process.env.NODE_ENV === "production") {
+        navigator.serviceWorker.register("/sw.js").catch(() => undefined);
+      } else {
+        // Never let the PWA service worker cache Next.js development chunks.
+        // A previously installed worker can otherwise keep localhost on stale
+        // client code after branch switches or rebuilds.
+        void navigator.serviceWorker.getRegistrations()
+          .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+          .catch(() => undefined);
+        if ("caches" in window) {
+          void caches.keys()
+            .then((keys) => Promise.all(keys.filter((key) => key.startsWith("what-to-watch-")).map((key) => caches.delete(key))))
+            .catch(() => undefined);
+        }
+      }
+    }
     return () => {
       cancelled = true;
       window.clearTimeout(initialize);
