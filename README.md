@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# What to Watch
 
-## Getting Started
+What to Watch is a mobile-first Progressive Web App that turns a viewer’s taste, tonight’s mood, and actual streaming access into a ranked top ten.
 
-First, run the development server:
+**Ten considered picks. One good night.**
+
+The product intentionally avoids an infinite feed and an LLM/chatbot recommendation loop. Its recommendation model is deterministic, explainable, profile-isolated, and tunable.
+
+## Product experience
+
+- Independent household and guest profiles with profile-specific services, region, ratings, questionnaire state, and model version
+- Original cold-start flow with 21 taste statements, a 21-genre matrix, three forced choices, and title calibration
+- Separate mood and viewing-intent controls, including stand-up as its own medium
+- Ten ranked lanes: Best Bet, Close Second, Right Mood, Creator Match, Something Different, Hidden Gem, Go Deeper, Film School Pick, Left Field, and Wild Card
+- Clear match explanations, provider/rental labels, title details, credits, people filmographies, ratings, and structured recommendation feedback
+- Mutual profile friendships, a Friend’s Picks vibe, and compact friend context only when it helps choose a title
+- Optional 1–4 sentence reactions and multi-friend recommendations after a positive rating, with no inbox, feed, unread count, or notification loop
+- Taste dashboard, profile management, streaming controls, and an Algorithm Lab with safe JSON export/import
+- Installable iPhone-friendly PWA with safe-area layout and an offline shell
+
+## Architecture
+
+- Next.js 16 App Router, React 19, TypeScript, and CSS
+- Vitest recommendation-domain tests
+- Supabase Auth helpers and normalized Postgres migrations with Row Level Security
+- Server-only TMDB metadata search and region-aware watch-provider endpoints
+- Vercel production target
+
+The polished deployed experience starts in an explicit local demo mode so it remains usable without secrets. Demo title/provider records are labeled as demo availability and should not be interpreted as live provider data.
+
+When configured, the server endpoints are:
+
+- `GET /api/tmdb/search?query=arrival&page=1`
+- `GET /api/tmdb/watch-providers?mediaType=movie&id=329865&region=US`
+
+Both return `503` with a stable error code when `TMDB_TOKEN` is absent.
+
+## Recommendation model
+
+The production domain lives in `src/lib/recommendation/` and keeps raw and normalized scores separate. It scores normalized title features including:
+
+- director, writer, actor, and cinematographer affinity
+- genre, subgenre, mood, viewing intent, decade, country, language, and runtime fit
+- canonical/editorial signals and Criterion association
+- popularity, novelty, and escalating exploration
+- similarity to strongly disliked titles
+- subscription/free availability and the exceptional-rental margin
+
+Questionnaire influence follows one centralized exponential decay formula. Observed ratings gain confidence as evidence grows and can override an early questionnaire prior. Explanations are assembled from the same evidence used by the scorer.
+
+Hard gates run before ranking: profile region, subscribed services, ad-supported preference, watched-title exclusion (outside rewatch mode), stand-up separation, and rental policy. Results are unique and capped at ten.
+
+Friend evidence is calculated in a separate, capped layer. A Friend’s Picks request combines explicit recommendations, high ratings, recency, useful notes, friend count, and compatibility learned only from overlapping ratings. It cannot bypass mood, watched-title, or availability gates, and it never rewrites the viewer’s personal ratings, questionnaire priors, affinities, or model weights. Normal recommendations keep their original ranking while still showing a small friend banner when the selected title happens to have relevant activity.
+
+If no eligible friend evidence exists, Friend’s Picks falls back to the same personal top ten instead of producing an empty social screen.
+
+## Profiles and data safety
+
+`supabase/migrations/0001_initial.sql` defines account-owned profiles and profile-keyed personalization records. `supabase/migrations/0002_friends_social.sql` adds mutual profile friendships, short review notes, explicit recommendations, an internal compatibility cache, privacy-aware contextual activity, and guarded request/accept/decline/remove RPCs.
+
+The schema includes normalized titles, people/credits, genres/tags, curated lists, Criterion metadata, expiring provider offers, ratings, watch history, questionnaire versions/responses, affinities, recommendation events/items/feedback, model versions, and performance metrics.
+
+Algorithm imports accept only allow-listed, range-checked configuration fields. They create a new configuration/model version and cannot accept ratings, watch history, recommendation history, or raw feedback as parameters. Cloning a profile copies household access/settings only—not taste or history.
+
+Each profile chooses one sharing mode: `ratings_and_reviews`, `ratings_only`, or `nothing`. Raw ratings and reviews remain owner-only tables; a guarded title-context RPC reveals only fields permitted by the source profile’s setting. An explicit recommendation remains visible to its intended recipient regardless of general sharing, while questionnaire answers, raw model data, weights, recommendation history, and private viewing settings are never social fields.
+
+The browser-local demo seeds a few friend profiles so the complete interaction can be evaluated without a configured backend. Production persistence requires applying both Supabase migrations and configuring Auth; the repository does not claim that a live Supabase project is already connected.
+
+## Local setup
+
+Requirements: Node.js 20+ and npm.
 
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Environment variables:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+TMDB_TOKEN=
+SUPABASE_SERVICE_ROLE_KEY=
+NEXT_PUBLIC_SITE_URL=
+```
 
-## Learn More
+`TMDB_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` are server-only. Never expose them through a `NEXT_PUBLIC_` variable.
 
-To learn more about Next.js, take a look at the following resources:
+## Supabase setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create or choose a dedicated Supabase project, then apply the migration using the Supabase dashboard, connector, or CLI:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+supabase link --project-ref YOUR_PROJECT_REF
+supabase db push
+```
 
-## Deploy on Vercel
+Add the project URL and publishable/anon key to local and Vercel environment variables. `/account` then enables passwordless email sign-in; without those variables it clearly identifies browser-local demo mode.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Quality gate
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run typecheck
+npm run lint
+npm test
+npm run build
+```
+
+The test suite covers strict service/region gating, marketplace-versus-subscription distinctions, exceptional rentals, stand-up separation, watched/rewatch behavior, creator and dislike learning, prior decay, profile isolation, Criterion semantics, canonical modes, exact top-ten lanes/uniqueness, explanations, raw/normalized scores, serializability, config-import safety, friend privacy, explicit recommendations, overlap-weighted influence, no-evidence fallback, and social hard-gate enforcement.
+
+## Deploy to Vercel
+
+```bash
+vercel --prod
+```
+
+Configure the same environment variables in the Vercel project before enabling live Supabase/TMDB behavior. The app builds and runs without them in safe demo mode.
+
+## PWA and offline behavior
+
+The manifest, branded 180/192/512 icons, and service worker are in `public/`. The service worker caches the app shell and same-origin assets after use, applies a navigation fallback, and intentionally bypasses API and cross-origin requests so metadata/availability errors are never disguised as current data.
+
+## Attribution
+
+This product uses the TMDB API but is not endorsed or certified by TMDB. Watch-provider data exposed through TMDB may be powered by JustWatch. Provider availability changes over time and should be rechecked before viewing.
