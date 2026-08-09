@@ -67,6 +67,15 @@ export interface CanonicalMembership {
   position?: number;
 }
 
+export interface EditorialFeatures {
+  primarySubgenre: string;
+  secondarySubgenre?: string;
+  primaryFamily: string;
+  secondaryFamily?: string;
+  ontologyVersion: string;
+  source: "gold-set";
+}
+
 export interface Title {
   id: string;
   name: string;
@@ -83,6 +92,7 @@ export interface Title {
   toneTags: string[];
   themes: string[];
   pacing: "slow" | "moderate" | "fast";
+  editorial?: EditorialFeatures;
   countries: string[];
   languages: string[];
   directors: string[];
@@ -127,217 +137,4 @@ export type QuestionnaireDimension =
   | "classicOpenness"
   | "internationalOpenness"
   | "horrorTolerance"
-  | "rewatchOrientation"
-  | "televisionCommitment"
-  | "bingePreference";
-
-export type QuestionnaireKind = "agreement" | "forced-choice" | "genre-matrix";
-
-export interface QuestionnaireQuestion {
-  id: string;
-  kind: QuestionnaireKind;
-  prompt: string;
-  dimension?: QuestionnaireDimension;
-  reverse?: boolean;
-  choices?: Array<{
-    id: string;
-    label: string;
-    signals: Partial<Record<QuestionnaireDimension, number>>;
-  }>;
-  genres?: string[];
-}
-
-export interface QuestionnaireProfile {
-  completedAt?: string;
-  dimensionScores: Partial<Record<QuestionnaireDimension, number>>;
-  genreScores: Record<string, number>;
-}
-
-export interface FavoritePeople {
-  actors: string[];
-  directors: string[];
-  writers: string[];
-  cinematographers: string[];
-}
-
-export interface Profile {
-  id: string;
-  accountId: string;
-  displayName: string;
-  avatar: string;
-  createdAt: string;
-  onboardingCompleted: boolean;
-  guest: boolean;
-  region: string;
-  modelVersion: string;
-  subscriptions: string[];
-  rentalMode: RentalMode;
-  allowAdSupported: boolean;
-  ratings: Rating[];
-  questionnaire?: QuestionnaireProfile;
-  favoritePeople: FavoritePeople;
-}
-
-export interface RecommendationFeedback {
-  profileId: string;
-  titleId: string;
-  modelVersion: string;
-  recommendationScore?: number;
-  reason?:
-    | "already-seen"
-    | "not-interested"
-    | "wrong-mood"
-    | "too-dark"
-    | "too-light"
-    | "too-old"
-    | "too-long"
-    | "disliked-actor"
-    | "misclassified"
-    | "not-available"
-    | "good-wrong-night";
-  createdAt: string;
-}
-
-export interface RecommendationWeights {
-  directorAffinity: number;
-  actorAffinity: number;
-  writerAffinity: number;
-  cinematographerAffinity: number;
-  genreMatch: number;
-  subgenreMatch: number;
-  moodMatch: number;
-  vibeMatch: number;
-  decadeAffinity: number;
-  countryAffinity: number;
-  languageAffinity: number;
-  runtimeAffinity: number;
-  canonicalScore: number;
-  criterionBonus: number;
-  popularitySignal: number;
-  noveltyBonus: number;
-  explorationBonus: number;
-  dislikedSimilarityPenalty: number;
-  availabilityPreference: number;
-}
-
-export interface RecommendationThresholds {
-  stronglyLikedRating: number;
-  stronglyDislikedRating: number;
-  creatorMinimumEvidence: number;
-  rentalExceptionalMargin: number;
-  rentalExceptionalAbsoluteScore: number;
-  canonicalMinimum: number;
-  trendingMinimum: number;
-  maxRecommendations: number;
-}
-
-export interface QuestionnaireDecayConfig {
-  initialWeight: number;
-  minimumWeight: number;
-  decayRatings: number;
-  behavioralEvidenceScale: number;
-}
-
-export interface RecommendationConfig {
-  schemaVersion: 1;
-  modelVersion: string;
-  weights: RecommendationWeights;
-  thresholds: RecommendationThresholds;
-  exploration: Record<RecommendationLane, number>;
-  questionnaireDecay: QuestionnaireDecayConfig;
-  normalization: {
-    midpoint: number;
-    scale: number;
-    minimumDisplayMatch: number;
-    maximumDisplayMatch: number;
-  };
-}
-
-export interface FeatureContribution {
-  feature: string;
-  value: number;
-  evidence?: string;
-}
-
-export interface Recommendation {
-  rank: number;
-  lane: RecommendationLane;
-  title: Title;
-  rawScore: number;
-  normalizedScore: number;
-  matchScore: number;
-  explanation: string;
-  evidence: string[];
-  contributions: FeatureContribution[];
-  availability: AvailabilityOption[];
-  primaryAvailability: AvailabilityOption;
-  requiresPayment: boolean;
-  modelVersion: string;
-  friendContext?: FriendContext;
-}
-
-export type FriendShareMode = "ratings_and_reviews" | "ratings_only" | "nothing";
-
-export interface FriendProfileSnapshot {
-  profileId: string;
-  displayName: string;
-  ratings: Rating[];
-  shareWithFriends: FriendShareMode;
-}
-
-export interface FriendshipSignal {
-  requesterProfileId: string;
-  addresseeProfileId: string;
-  status: "pending" | "accepted" | "declined";
-}
-
-export interface FriendReviewSignal {
-  authorProfileId: string;
-  titleId: string;
-  note: string;
-  createdAt: string;
-}
-
-export interface ExplicitFriendRecommendation {
-  senderProfileId: string;
-  recipientProfileId: string;
-  titleId: string;
-  note?: string;
-  createdAt: string;
-}
-
-export interface SocialRecommendationInput {
-  friendProfiles: FriendProfileSnapshot[];
-  friendships: FriendshipSignal[];
-  reviews: FriendReviewSignal[];
-  recommendations: ExplicitFriendRecommendation[];
-  now?: string;
-}
-
-export interface FriendContext {
-  headline: string;
-  note?: string;
-  rating?: number;
-  friendCount: number;
-  averageRating?: number;
-  explicit: boolean;
-}
-
-export interface RecommendForProfileInput {
-  profile: Profile;
-  catalog: readonly Title[];
-  moods?: readonly Mood[];
-  vibes?: readonly Vibe[];
-  lane?: RecommendationLane;
-  config?: RecommendationConfig;
-  limit?: number;
-  social?: SocialRecommendationInput;
-}
-
-export interface PreferenceBlendInput {
-  behavioralPreference?: number;
-  behavioralEvidence?: number;
-  questionnairePreference?: number;
-  ratingCount: number;
-  config?: QuestionnaireDecayConfig;
-}
+  | "rewatchOrientation";
