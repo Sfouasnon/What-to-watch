@@ -1,5 +1,5 @@
-import { editorialClassification } from "@/lib/recommendation/editorial";
-import type { Title } from "@/lib/recommendation/types";
+import { editorialClassification } from "../recommendation/editorial";
+import type { Title } from "../recommendation/types";
 
 import type { TmdbTitleDetails } from "./types";
 
