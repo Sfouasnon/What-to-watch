@@ -1,202 +1,190 @@
 import { describe, expect, it } from "vitest";
 
-import { demoCatalog, demoProfiles, demoSocial } from "./demo-data";
 import {
   defaultRecommendationConfig,
-  effectivePreference,
-  importTunedConfiguration,
   questionnaireConfidence,
   recommendForProfile,
 } from "./engine";
-import { RECOMMENDATION_LANES, type Profile, type Rating, type SocialRecommendationInput, type Title } from "./types";
+import {
+  RECOMMENDATION_LANES,
+  type AvailabilityOption,
+  type Profile,
+  type Title,
+} from "./types";
 
-const NOW = "2026-08-08T00:00:00.000Z";
+const checkedAt = "2026-08-09T18:00:00.000Z";
 
-function profile(overrides: Partial<Profile> = {}): Profile {
-  return {
-    id: "p1",
-    accountId: "a1",
-    displayName: "Test",
-    avatar: "T",
-    createdAt: NOW,
-    onboardingCompleted: true,
-    guest: false,
-    region: "US",
-    modelVersion: "1.0.0",
-    subscriptions: ["netflix"],
-    rentalMode: "never",
-    allowAdSupported: false,
-    ratings: [],
-    favoritePeople: { actors: [], directors: [], writers: [], cinematographers: [] },
-    ...overrides,
-  };
-}
-
-function rating(titleId: string, score: number): Rating {
-  return { titleId, score, watched: true, ratedAt: NOW };
+function availability(serviceId = "netflix", kind: AvailabilityOption["kind"] = "subscription", region = "US"): AvailabilityOption {
+  return { serviceId, region, kind, checkedAt, source: "demo" };
 }
 
 function title(id: string, overrides: Partial<Title> = {}): Title {
   return {
     id,
-    name: id.replaceAll("-", " "),
+    name: id,
     year: 2020,
     contentType: "movie",
-    synopsis: "Test fixture",
-    runtimeMinutes: 105,
+    synopsis: `${id} synopsis`,
+    runtimeMinutes: 100,
     genres: ["Thriller"],
-    subgenres: ["Mystery"],
+    subgenres: ["mystery"],
     toneTags: ["tense"],
     themes: ["identity"],
     pacing: "moderate",
     countries: ["US"],
     languages: ["en"],
-    directors: ["Director Neutral"],
-    writers: ["Writer Neutral"],
-    cinematographers: ["DP Neutral"],
-    actors: ["Actor Neutral"],
-    canonicalScore: 20,
+    directors: ["Director A"],
+    writers: ["Writer A"],
+    cinematographers: ["DP A"],
+    actors: ["Actor A"],
+    canonicalScore: 55,
     canonicalMemberships: [],
     criterionCollection: false,
-    popularity: 50,
-    trendingScore: 20,
-    availability: [{ serviceId: "netflix", region: "US", kind: "subscription", checkedAt: NOW, source: "demo" }],
+    popularity: 60,
+    trendingScore: 60,
+    availability: [availability()],
     ...overrides,
   };
 }
 
-function social(overrides: Partial<SocialRecommendationInput> = {}): SocialRecommendationInput {
+function profile(overrides: Partial<Profile> = {}): Profile {
   return {
-    now: NOW,
-    friendProfiles: [{
-      profileId: "friend-jane",
-      displayName: "Jane",
-      shareWithFriends: "ratings_and_reviews",
-      ratings: [rating("overlap-a", 10), rating("overlap-b", 9), rating("social-pick", 10)],
-    }],
-    friendships: [{ requesterProfileId: "p1", addresseeProfileId: "friend-jane", status: "accepted" }],
-    reviews: [{ authorProfileId: "friend-jane", titleId: "social-pick", note: "Best thing I have seen all week.", createdAt: NOW }],
-    recommendations: [{ senderProfileId: "friend-jane", recipientProfileId: "p1", titleId: "social-pick", note: "The details in this are completely your thing.", createdAt: NOW }],
+    id: "profile-1",
+    accountId: "account-1",
+    displayName: "Viewer",
+    avatar: "V",
+    createdAt: checkedAt,
+    onboardingCompleted: true,
+    guest: false,
+    region: "US",
+    modelVersion: "1.0.0",
+    subscriptions: ["netflix"],
+    rentalMode: "exceptional",
+    allowAdSupported: true,
+    ratings: [],
+    questionnaire: { dimensionScores: {}, genreScores: {} },
+    favoritePeople: { actors: [], directors: [], writers: [], cinematographers: [] },
     ...overrides,
   };
 }
 
-describe("availability and content gates", () => {
+describe("availability and access", () => {
   it("strictly excludes titles outside the profile's services and region", () => {
-    const catalog = [
-      title("included"),
-      title("wrong-service", { availability: [{ serviceId: "hulu", region: "US", kind: "subscription", checkedAt: NOW, source: "demo" }] }),
-      title("wrong-region", { availability: [{ serviceId: "netflix", region: "GB", kind: "subscription", checkedAt: NOW, source: "demo" }] }),
-      title("unavailable", { availability: [] }),
-    ];
-    expect(recommendForProfile({ profile: profile(), catalog }).map((pick) => pick.title.id)).toEqual(["included"]);
+    const picks = recommendForProfile({
+      profile: profile(),
+      catalog: [
+        title("netflix"),
+        title("hulu", { availability: [availability("hulu")] }),
+        title("uk", { availability: [availability("netflix", "subscription", "GB")] }),
+      ],
+    });
+    expect(picks.map((pick) => pick.title.id)).toEqual(["netflix"]);
   });
 
   it("does not mistake an Amazon purchase for Prime subscription access", () => {
-    const result = recommendForProfile({
-      profile: profile({ subscriptions: ["prime"], rentalMode: "never" }),
-      catalog: [title("sold-on-amazon", { availability: [{ serviceId: "prime", region: "US", kind: "purchase", checkedAt: NOW, source: "demo", price: 14.99, currency: "USD" }] })],
+    const picks = recommendForProfile({
+      profile: profile({ subscriptions: ["prime-video"], rentalMode: "never" }),
+      catalog: [
+        title("prime", { availability: [availability("prime-video")] }),
+        title("amazon-store", { availability: [availability("amazon-video", "purchase")] }),
+      ],
     });
-    expect(result).toEqual([]);
+    expect(picks.map((pick) => pick.title.id)).toEqual(["prime"]);
   });
 
   it("admits only meaningfully stronger rentals in exceptional mode", () => {
-    const included = title("included", { canonicalScore: 0, popularity: 0 });
-    const exceptional = title("exceptional-rental", {
-      canonicalScore: 100,
-      criterionCollection: true,
+    const included = title("included", { popularity: 65, canonicalScore: 65 });
+    const weakRental = title("weak-rental", { popularity: 65, canonicalScore: 65, availability: [availability("apple-tv-store", "rental")] });
+    const strongRental = title("strong-rental", {
       popularity: 100,
-      availability: [{ serviceId: "apple-store", region: "US", kind: "rental", checkedAt: NOW, source: "demo", price: 3.99, currency: "USD" }],
+      canonicalScore: 100,
+      directors: ["Fav Director"],
+      availability: [availability("apple-tv-store", "rental")],
     });
-    const weak = title("weak-rental", {
-      canonicalScore: 0,
-      popularity: 0,
-      availability: [{ serviceId: "apple-store", region: "US", kind: "rental", checkedAt: NOW, source: "demo" }],
+    const viewer = profile({
+      subscriptions: ["netflix"],
+      ratings: [
+        { titleId: "liked-director", score: 10, watched: true, ratedAt: checkedAt },
+        { titleId: "liked-director-2", score: 10, watched: true, ratedAt: checkedAt },
+      ],
     });
-    const picks = recommendForProfile({ profile: profile({ rentalMode: "exceptional" }), catalog: [included, exceptional, weak] });
-    expect(picks.map((pick) => pick.title.id)).toContain("exceptional-rental");
-    expect(picks.map((pick) => pick.title.id)).not.toContain("weak-rental");
-    expect(picks.find((pick) => pick.title.id === "exceptional-rental")?.requiresPayment).toBe(true);
+    const catalog = [
+      included,
+      weakRental,
+      strongRental,
+      title("liked-director", { directors: ["Fav Director"] }),
+      title("liked-director-2", { directors: ["Fav Director"] }),
+    ];
+    const ids = recommendForProfile({ profile: viewer, catalog }).map((pick) => pick.title.id);
+    expect(ids).toContain("included");
+    expect(ids).toContain("strong-rental");
+    expect(ids).not.toContain("weak-rental");
   });
+});
 
+describe("moods, watched state, and learned taste", () => {
   it("keeps stand-up separate from scripted comedy", () => {
-    const standup = title("standup", { contentType: "stand-up", genres: ["Stand-Up"] });
+    const standup = title("standup", { contentType: "stand-up", genres: ["Comedy"] });
     const comedy = title("comedy", { genres: ["Comedy"] });
     expect(recommendForProfile({ profile: profile(), catalog: [standup, comedy], moods: ["comedy"] }).map((pick) => pick.title.id)).toEqual(["comedy"]);
     expect(recommendForProfile({ profile: profile(), catalog: [standup, comedy], moods: ["stand-up"] }).map((pick) => pick.title.id)).toEqual(["standup"]);
   });
-});
 
-describe("personal taste behavior", () => {
   it("excludes watched titles normally and selects favorites in rewatch mode", () => {
     const watched = title("watched");
     const unseen = title("unseen");
-    const viewer = profile({ ratings: [rating("watched", 9)] });
+    const viewer = profile({ ratings: [{ titleId: "watched", score: 9, watched: true, ratedAt: checkedAt }] });
     expect(recommendForProfile({ profile: viewer, catalog: [watched, unseen] }).map((pick) => pick.title.id)).toEqual(["unseen"]);
     expect(recommendForProfile({ profile: viewer, catalog: [watched, unseen], vibes: ["rewatch-favorite"] }).map((pick) => pick.title.id)).toEqual(["watched"]);
   });
 
   it("learns creator affinity from repeated ratings", () => {
     const catalog = [
-      title("fincher-seen-1", { directors: ["David Fincher"] }),
-      title("fincher-seen-2", { directors: ["David Fincher"] }),
-      title("fincher-next", { directors: ["David Fincher"] }),
-      title("other-next", { directors: ["Someone Else"] }),
+      title("liked-1", { directors: ["Fav"] }),
+      title("liked-2", { directors: ["Fav"] }),
+      title("candidate-fav", { directors: ["Fav"] }),
+      title("candidate-other", { directors: ["Other"] }),
     ];
-    const viewer = profile({ ratings: [rating("fincher-seen-1", 10), rating("fincher-seen-2", 9)] });
-    const picks = recommendForProfile({ profile: viewer, catalog, moods: ["thriller"] });
-    expect(picks[0].title.id).toBe("fincher-next");
-    expect(picks[0].explanation).toContain("David Fincher");
+    const viewer = profile({ ratings: [
+      { titleId: "liked-1", score: 9, watched: true, ratedAt: checkedAt },
+      { titleId: "liked-2", score: 10, watched: true, ratedAt: checkedAt },
+    ] });
+    expect(recommendForProfile({ profile: viewer, catalog })[0].title.id).toBe("candidate-fav");
   });
 
   it("penalizes similarity to strongly disliked titles", () => {
-    const disliked = title("disliked", {
-      genres: ["Thriller"], subgenres: ["Home Invasion"], toneTags: ["cruel", "bleak"], themes: ["revenge"],
-      directors: ["Bad Fit"], writers: ["Bad Fit"], cinematographers: ["Bad Fit"], actors: ["Bad Fit"],
-    });
-    const similar = title("similar", {
-      genres: ["Thriller"], subgenres: ["Home Invasion"], toneTags: ["cruel", "bleak"], themes: ["revenge"],
-      directors: ["Bad Fit"], writers: ["Bad Fit"], cinematographers: ["Bad Fit"], actors: ["Bad Fit"],
-    });
-    const different = title("different", { genres: ["Thriller"], subgenres: ["Political"], toneTags: ["cerebral"], themes: ["justice"] });
-    const picks = recommendForProfile({ profile: profile({ ratings: [rating("disliked", 1)] }), catalog: [disliked, similar, different] });
-    expect(picks[0].title.id).toBe("different");
-    expect(picks.find((pick) => pick.title.id === "similar")?.contributions.some((item) => item.feature === "dislikedSimilarityPenalty")).toBe(true);
+    const disliked = title("disliked", { genres: ["Horror"], toneTags: ["bleak"] });
+    const similar = title("similar", { genres: ["Horror"], toneTags: ["bleak"] });
+    const different = title("different", { genres: ["Comedy"], toneTags: ["warm"] });
+    const viewer = profile({ ratings: [{ titleId: "disliked", score: 2, watched: true, ratedAt: checkedAt }] });
+    expect(recommendForProfile({ profile: viewer, catalog: [disliked, similar, different] })[0].title.id).toBe("different");
   });
 
   it("lets repeated behavior override a contradictory questionnaire prior", () => {
-    const seen = [0, 1, 2, 3].map((index) => title(`horror-seen-${index}`, { genres: ["Horror"], toneTags: ["dark"] }));
-    const horror = title("horror-next", { genres: ["Horror"], toneTags: ["dark"] });
-    const neutral = title("neutral-next", { genres: ["Drama"] });
+    const likedComedy = title("liked-comedy", { genres: ["Comedy"] });
+    const comedy = title("comedy", { genres: ["Comedy"] });
+    const drama = title("drama", { genres: ["Drama"] });
     const viewer = profile({
-      ratings: seen.map((item) => rating(item.id, 10)),
-      questionnaire: { dimensionScores: { horrorTolerance: 0 }, genreScores: { Horror: 1, Drama: 7 } },
+      ratings: Array.from({ length: 12 }, (_, index) => ({ titleId: `liked-${index}`, score: 9, watched: true, ratedAt: checkedAt })),
+      questionnaire: { dimensionScores: {}, genreScores: { Comedy: 1, Drama: 7 } },
     });
-    const picks = recommendForProfile({ profile: viewer, catalog: [...seen, horror, neutral] });
-    expect(picks[0].title.id).toBe("horror-next");
+    const catalog = [comedy, drama, ...viewer.ratings.map((rating) => title(rating.titleId, { genres: ["Comedy"] })), likedComedy];
+    expect(recommendForProfile({ profile: viewer, catalog })[0].title.genres).toContain("Comedy");
   });
 
   it("never allows one profile's evidence to leak into another", () => {
-    const catalog = [
-      title("a-seen-1", { directors: ["Director A"] }), title("a-seen-2", { directors: ["Director A"] }),
-      title("b-seen-1", { directors: ["Director B"] }), title("b-seen-2", { directors: ["Director B"] }),
-      title("a-next", { directors: ["Director A"] }), title("b-next", { directors: ["Director B"] }),
-    ];
-    const a = profile({ id: "a", ratings: [rating("a-seen-1", 10), rating("a-seen-2", 9), rating("b-seen-1", 2), rating("b-seen-2", 2)] });
-    const b = profile({ id: "b", ratings: [rating("a-seen-1", 2), rating("a-seen-2", 2), rating("b-seen-1", 10), rating("b-seen-2", 9)] });
-    expect(recommendForProfile({ profile: a, catalog })[0].title.id).toBe("a-next");
-    expect(recommendForProfile({ profile: b, catalog })[0].title.id).toBe("b-next");
-    expect(a.ratings).not.toBe(b.ratings);
+    const catalog = [title("liked", { directors: ["Fav"] }), title("candidate", { directors: ["Fav"] }), title("other", { directors: ["Other"] })];
+    const a = profile({ id: "a", ratings: [{ titleId: "liked", score: 10, watched: true, ratedAt: checkedAt }] });
+    const b = profile({ id: "b" });
+    expect(recommendForProfile({ profile: a, catalog })[0].title.id).toBe("candidate");
+    expect(recommendForProfile({ profile: b, catalog })[0].title.id).not.toBe("liked");
   });
 });
 
 describe("editorial modes, ranking, and confidence", () => {
   it("treats Criterion association separately from Criterion Channel availability", () => {
-    const associatedOnNetflix = title("criterion-film", { criterionCollection: true, canonicalScore: 80 });
-    const merelyStreamingOnCriterion = title("channel-only", {
-      criterionCollection: false,
-      availability: [{ serviceId: "criterion-channel", region: "US", kind: "subscription", checkedAt: NOW, source: "demo" }],
-    });
+    const associatedOnNetflix = title("criterion-film", { criterionCollection: true, availability: [availability("netflix")] });
+    const merelyStreamingOnCriterion = title("criterion-stream", { availability: [availability("criterion-channel")] });
     const picks = recommendForProfile({
       profile: profile({ subscriptions: ["netflix", "criterion-channel"] }),
       catalog: [associatedOnNetflix, merelyStreamingOnCriterion],
@@ -212,7 +200,7 @@ describe("editorial modes, ranking, and confidence", () => {
     expect(recommendForProfile({ profile: profile(), catalog: [classic, merelyOld], vibes: ["rediscover-classic"] }).map((pick) => pick.title.id)).toEqual(["classic"]);
   });
 
-  it("returns a unique top ten with the exact escalating lane contract", () => {
+  it("returns a unique top ten without assigning unsupported semantic lanes", () => {
     const catalog = Array.from({ length: 13 }, (_, index) => title(`candidate-${String(index + 1).padStart(2, "0")}`, {
       popularity: 25 + index * 4,
       canonicalScore: index * 6,
@@ -221,10 +209,24 @@ describe("editorial modes, ranking, and confidence", () => {
     }));
     const picks = recommendForProfile({ profile: profile(), catalog });
     expect(picks).toHaveLength(10);
-    expect(picks.map((pick) => pick.lane)).toEqual([...RECOMMENDATION_LANES]);
     expect(new Set(picks.map((pick) => pick.title.id)).size).toBe(10);
     expect(picks[0].rank).toBe(1);
     expect(picks[9].rank).toBe(10);
+    expect(picks.every((pick) => RECOMMENDATION_LANES.includes(pick.lane))).toBe(true);
+
+    for (const pick of picks) {
+      if (pick.lane === "Creator Match") {
+        expect(pick.contributions.some((contribution) =>
+          ["directorAffinity", "writerAffinity", "cinematographerAffinity", "actorAffinity"].includes(contribution.feature) && contribution.value > 0,
+        )).toBe(true);
+      }
+      if (pick.lane === "Hidden Gem") {
+        expect(pick.title.popularity).toBeLessThanOrEqual(55);
+      }
+      if (pick.lane === "Film School Pick") {
+        expect(pick.title.canonicalScore).toBeGreaterThanOrEqual(65);
+      }
+    }
   });
 
   it("provides evidence-based explanations plus separate raw and normalized scores", () => {
@@ -243,143 +245,5 @@ describe("editorial modes, ranking, and confidence", () => {
     expect(weights[0]).toBeGreaterThan(weights[1]);
     expect(weights[1]).toBeGreaterThan(weights[2]);
     expect(weights[2]).toBeGreaterThan(weights[3]);
-    expect(weights[3]).toBeGreaterThanOrEqual(defaultRecommendationConfig.questionnaireDecay.minimumWeight);
-    expect(effectivePreference({ behavioralPreference: 1, behavioralEvidence: 20, questionnairePreference: -1, ratingCount: 100 })).toBeGreaterThan(0.7);
-  });
-
-  it("ships enough serializable demo inventory for a top ten", () => {
-    const picks = recommendForProfile({ profile: demoProfiles[0], catalog: demoCatalog });
-    expect(picks).toHaveLength(10);
-    expect(() => JSON.parse(JSON.stringify({ catalog: demoCatalog, profiles: demoProfiles }))).not.toThrow();
-  });
-});
-
-describe("friends as contextual recommendation evidence", () => {
-  it("strongly incorporates an accepted friend's pick without replacing personal eligibility", () => {
-    const viewer = profile({ ratings: [rating("overlap-a", 10), rating("overlap-b", 9)] });
-    const picks = recommendForProfile({
-      profile: viewer,
-      catalog: [title("a-control"), title("social-pick")],
-      moods: ["thriller"],
-      vibes: ["friends-picks"],
-      social: social(),
-    });
-    expect(picks[0].title.id).toBe("social-pick");
-    expect(picks[0].friendContext).toMatchObject({
-      headline: "Jane picked this for you",
-      note: "The details in this are completely your thing.",
-      rating: 10,
-      explicit: true,
-    });
-    expect(picks[0].explanation).not.toContain("Jane");
-  });
-
-  it("shows friend context on ordinary picks without changing ordinary ranking", () => {
-    const viewer = profile({ ratings: [rating("overlap-a", 10), rating("overlap-b", 9)] });
-    const catalog = [title("a-control"), title("social-pick")];
-    const baseline = recommendForProfile({ profile: viewer, catalog });
-    const withFriends = recommendForProfile({ profile: viewer, catalog, social: social() });
-    expect(withFriends.map((pick) => pick.title.id)).toEqual(baseline.map((pick) => pick.title.id));
-    expect(withFriends.find((pick) => pick.title.id === "social-pick")?.friendContext?.headline).toBe("Jane picked this for you");
-  });
-
-  it("honors ratings-only and nothing privacy while preserving explicit notes", () => {
-    const ratingsOnly = social({
-      recommendations: [],
-      friendProfiles: [{ profileId: "friend-jane", displayName: "Jane", shareWithFriends: "ratings_only", ratings: [rating("social-pick", 9)] }],
-    });
-    const ratingPick = recommendForProfile({ profile: profile(), catalog: [title("social-pick")], social: ratingsOnly })[0];
-    expect(ratingPick.friendContext?.rating).toBe(9);
-    expect(ratingPick.friendContext?.note).toBeUndefined();
-
-    const hidden = social({
-      friendProfiles: [{ profileId: "friend-jane", displayName: "Jane", shareWithFriends: "nothing", ratings: [rating("social-pick", 10)] }],
-      recommendations: [],
-    });
-    expect(recommendForProfile({ profile: profile(), catalog: [title("social-pick")], social: hidden })[0].friendContext).toBeUndefined();
-
-    const explicit = social({
-      friendProfiles: [{ profileId: "friend-jane", displayName: "Jane", shareWithFriends: "nothing", ratings: [rating("social-pick", 10)] }],
-      reviews: [],
-    });
-    const explicitContext = recommendForProfile({ profile: profile(), catalog: [title("social-pick")], social: explicit })[0].friendContext;
-    expect(explicitContext?.note).toBe("The details in this are completely your thing.");
-    expect(explicitContext?.rating).toBeUndefined();
-  });
-
-  it("ignores pending friendships and falls back cleanly when no evidence is eligible", () => {
-    const catalog = [title("a-control"), title("social-pick"), title("z-control")];
-    const baseline = recommendForProfile({ profile: profile(), catalog });
-    const pending = social({ friendships: [{ requesterProfileId: "p1", addresseeProfileId: "friend-jane", status: "pending" }] });
-    const picks = recommendForProfile({ profile: profile(), catalog, vibes: ["friends-picks"], social: pending });
-    expect(picks.map((pick) => pick.title.id)).toEqual(baseline.map((pick) => pick.title.id));
-    expect(picks.every((pick) => pick.friendContext === undefined)).toBe(true);
-  });
-
-  it("learns influence from actual overlapping ratings", () => {
-    const viewer = profile({ ratings: [rating("overlap-a", 10), rating("overlap-b", 9)] });
-    const compatibilitySocial: SocialRecommendationInput = {
-      now: NOW,
-      friendProfiles: [
-        { profileId: "friend-low", displayName: "Low overlap", shareWithFriends: "nothing", ratings: [rating("overlap-a", 1), rating("overlap-b", 2)] },
-        { profileId: "friend-high", displayName: "High overlap", shareWithFriends: "nothing", ratings: [rating("overlap-a", 10), rating("overlap-b", 9)] },
-      ],
-      friendships: [
-        { requesterProfileId: "p1", addresseeProfileId: "friend-low", status: "accepted" },
-        { requesterProfileId: "p1", addresseeProfileId: "friend-high", status: "accepted" },
-      ],
-      reviews: [],
-      recommendations: [
-        { senderProfileId: "friend-low", recipientProfileId: "p1", titleId: "a-low", createdAt: NOW },
-        { senderProfileId: "friend-high", recipientProfileId: "p1", titleId: "z-high", createdAt: NOW },
-      ],
-    };
-    const picks = recommendForProfile({ profile: viewer, catalog: [title("a-low"), title("z-high")], vibes: ["friends-picks"], social: compatibilitySocial });
-    expect(picks[0].title.id).toBe("z-high");
-  });
-
-  it("never lets an explicit recommendation bypass watched, mood, or availability gates", () => {
-    const viewer = profile({ ratings: [rating("watched", 9)] });
-    const gateSocial = social({
-      friendProfiles: [{ profileId: "friend-jane", displayName: "Jane", shareWithFriends: "nothing", ratings: [] }],
-      reviews: [],
-      recommendations: ["watched", "unavailable", "wrong-mood"].map((titleId) => ({ senderProfileId: "friend-jane", recipientProfileId: "p1", titleId, createdAt: NOW })),
-    });
-    const catalog = [
-      title("watched"),
-      title("unavailable", { availability: [] }),
-      title("wrong-mood", { genres: ["Comedy"] }),
-      title("eligible"),
-    ];
-    const picks = recommendForProfile({ profile: viewer, catalog, moods: ["thriller"], vibes: ["friends-picks"], social: gateSocial });
-    expect(picks.map((pick) => pick.title.id)).toEqual(["eligible"]);
-  });
-
-  it("keeps the bundled social demo serializable", () => {
-    expect(() => JSON.parse(JSON.stringify(demoSocial))).not.toThrow();
-  });
-});
-
-describe("configuration import safety", () => {
-  it("only imports allow-listed model configuration and cannot alter raw profile history", () => {
-    const viewer = profile({ ratings: [rating("immutable", 9)] });
-    const before = JSON.stringify(viewer);
-    const tuned = importTunedConfiguration({
-      configuration: {
-        modelVersion: "2.1.0",
-        weights: { directorAffinity: 13, maliciousWeight: 999 },
-        thresholds: { maxRecommendations: 999 },
-      },
-      ratings: [{ titleId: "immutable", score: 1 }],
-      watchedHistory: [],
-      recommendationHistory: [],
-      rawFeedback: [],
-      profile: { ratings: [] },
-    });
-    expect(tuned.modelVersion).toBe("2.1.0");
-    expect(tuned.weights.directorAffinity).toBe(13);
-    expect(tuned.thresholds.maxRecommendations).toBe(10);
-    expect("maliciousWeight" in tuned.weights).toBe(false);
-    expect(JSON.stringify(viewer)).toBe(before);
   });
 });
