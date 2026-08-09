@@ -1,3 +1,4 @@
+import { editorialClassification } from "@/lib/recommendation/editorial";
 import type { Title } from "@/lib/recommendation/types";
 
 import type { TmdbTitleDetails } from "./types";
@@ -24,6 +25,7 @@ export function tmdbDetailsToDomainTitle(details: TmdbTitleDetails): Title {
   const canonicalScore = clamp(50 * (1 - evidence) + voteSignal * evidence);
   const popularity = normalizedPopularity(details.popularity);
   const keywords = details.keywords.map((keyword) => keyword.toLowerCase());
+  const editorial = editorialClassification(details.mediaType, details.providerId);
 
   return {
     id: details.externalId,
@@ -37,10 +39,12 @@ export function tmdbDetailsToDomainTitle(details: TmdbTitleDetails): Title {
     completed: details.completed ?? undefined,
     serialized: details.mediaType === "tv",
     genres: details.genres.map((genre) => genre.name),
-    subgenres: keywords.slice(0, 8),
-    toneTags: keywords.slice(0, 12),
+    subgenres: editorial
+      ? [editorial.primarySubgenre, ...(editorial.secondarySubgenre ? [editorial.secondarySubgenre] : [])]
+      : keywords.slice(0, 8),
+    toneTags: editorial?.toneTags ?? keywords.slice(0, 12),
     themes: keywords.slice(0, 12),
-    pacing: pacing(details),
+    pacing: editorial?.pacing ?? pacing(details),
     countries: details.countries,
     languages: details.languages.length
       ? details.languages
