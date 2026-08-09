@@ -45,6 +45,14 @@ export function tmdbDetailsToDomainTitle(details: TmdbTitleDetails): Title {
     toneTags: editorial?.toneTags ?? keywords.slice(0, 12),
     themes: keywords.slice(0, 12),
     pacing: editorial?.pacing ?? pacing(details),
+    editorial: editorial ? {
+      primarySubgenre: editorial.primarySubgenre,
+      secondarySubgenre: editorial.secondarySubgenre,
+      primaryFamily: editorial.primaryFamily,
+      secondaryFamily: editorial.secondaryFamily,
+      ontologyVersion: editorial.ontologyVersion,
+      source: "gold-set",
+    } : undefined,
     countries: details.countries,
     languages: details.languages.length
       ? details.languages
