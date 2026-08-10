@@ -101,10 +101,45 @@ describe("recommendation eligibility and scoring", () => {
   });
 
   it("keeps stand-up separate from scripted comedy", () => {
-    const comedy = title("scripted-comedy", { genres: ["comedy"] });
+    const comedy = title("scripted-comedy", { genres: ["comedy"], subgenres: ["sitcom"] });
     const standup = title("standup", { contentType: "stand-up", genres: ["comedy"] });
     expect(recommendForProfile({ profile: profile(), catalog: [comedy, standup], moods: ["comedy"] }).map((pick) => pick.title.id)).toEqual(["scripted-comedy"]);
     expect(recommendForProfile({ profile: profile(), catalog: [comedy, standup], moods: ["stand-up"] }).map((pick) => pick.title.id)).toEqual(["standup"]);
+  });
+
+  it("uses editorial comedy first, weak supported TMDB fallback second, and rejects unsupported broad comedy", () => {
+    const editorialComedy = title("editorial-comedy", {
+      genres: ["comedy"],
+      subgenres: ["absurdist-comedy"],
+      editorial: {
+        primarySubgenre: "absurdist-comedy",
+        primaryFamily: "comedy",
+        ontologyVersion: "0.1.1",
+        source: "gold-set",
+      },
+    });
+    const supportedFallback = title("supported-fallback", {
+      genres: ["comedy"],
+      subgenres: ["sitcom"],
+    });
+    const unsupportedBroad = title("unsupported-broad", {
+      genres: ["comedy", "drama"],
+      subgenres: ["teen drama", "supernatural"],
+      themes: ["high school"],
+    });
+
+    const picks = recommendForProfile({
+      profile: profile(),
+      catalog: [unsupportedBroad, supportedFallback, editorialComedy],
+      moods: ["comedy"],
+    });
+
+    expect(picks.map((pick) => pick.title.id)).not.toContain("unsupported-broad");
+    expect(picks[0].title.id).toBe("editorial-comedy");
+    const fallback = picks.find((pick) => pick.title.id === "supported-fallback");
+    expect(fallback).toBeDefined();
+    expect(picks[0].contributions.find((item) => item.feature === "moodMatch")?.value)
+      .toBeGreaterThan(fallback?.contributions.find((item) => item.feature === "moodMatch")?.value ?? 0);
   });
 
   it("excludes watched titles normally and selects favorites in rewatch mode", () => {
@@ -176,10 +211,84 @@ describe("editorial modes, ranking, and confidence", () => {
     expect(picks[0].evidence.join(" ")).toContain("Criterion-associated");
   });
 
-  it("gates canonical modes to significant titles", () => {
-    const classic = title("classic", { year: 1968, canonicalScore: 90 });
+  it("gates canonical modes to titles with explicit canonical evidence", () => {
+    const classic = title("classic", {
+      year: 1968,
+      canonicalScore: 90,
+      canonicalMemberships: [{ list: "Sight & Sound", source: "editorial", version: "2026" }],
+    });
+    const highScoreOnly = title("high-score-only", { year: 1968, canonicalScore: 95 });
     const merelyOld = title("merely-old", { year: 1968, canonicalScore: 10 });
-    expect(recommendForProfile({ profile: profile(), catalog: [classic, merelyOld], vibes: ["rediscover-classic"] }).map((pick) => pick.title.id)).toEqual(["classic"]);
+    expect(recommendForProfile({
+      profile: profile(),
+      catalog: [classic, highScoreOnly, merelyOld],
+      vibes: ["rediscover-classic"],
+    }).map((pick) => pick.title.id)).toEqual(["classic"]);
+  });
+
+  it("never assigns Film School Pick from a high score alone", () => {
+    const canonical = title("canonical", {
+      canonicalScore: 85,
+      canonicalMemberships: [{ list: "AFI 100", source: "editorial", version: "2026" }],
+    });
+    const highScoreOnly = title("high-score-only", { canonicalScore: 99 });
+    const picks = recommendForProfile({
+      profile: profile(),
+      catalog: [highScoreOnly, canonical],
+      lane: "Film School Pick",
+      limit: 1,
+    });
+    expect(picks.map((pick) => pick.title.id)).toEqual(["canonical"]);
+  });
+
+  it("requires real obscurity plus predicted fit for Hidden Gem", () => {
+    const editorial = {
+      primarySubgenre: "psychological-thriller",
+      primaryFamily: "thriller",
+      ontologyVersion: "0.1.1",
+      source: "gold-set" as const,
+    };
+    const obscure = title("obscure", {
+      popularity: 10,
+      canonicalScore: 100,
+      editorial,
+      subgenres: ["psychological-thriller"],
+    });
+    const mainstream = title("mainstream", {
+      popularity: 75,
+      canonicalScore: 100,
+      editorial,
+      subgenres: ["psychological-thriller"],
+    });
+    const picks = recommendForProfile({
+      profile: profile(),
+      catalog: [mainstream, obscure],
+      moods: ["thriller"],
+      vibes: ["hidden-gem"],
+      lane: "Hidden Gem",
+      limit: 1,
+    });
+    expect(picks.map((pick) => pick.title.id)).toEqual(["obscure"]);
+  });
+
+  it("requires creator or observed taste affinity for Go Deeper", () => {
+    const seed = title("seed", { genres: ["thriller"], subgenres: ["neo-noir"] });
+    const affinityCandidate = title("affinity", { genres: ["thriller"], subgenres: ["neo-noir"] });
+    const lowPopularityWithoutAffinity = title("low-popularity", {
+      genres: ["drama"],
+      subgenres: ["family-drama"],
+      popularity: 5,
+    });
+    const p = profile({
+      ratings: [{ titleId: seed.id, score: 10, watched: true, ratedAt: checkedAt }],
+    });
+    const picks = recommendForProfile({
+      profile: p,
+      catalog: [seed, lowPopularityWithoutAffinity, affinityCandidate],
+      lane: "Go Deeper",
+      limit: 1,
+    });
+    expect(picks.map((pick) => pick.title.id)).toEqual(["affinity"]);
   });
 
   it("returns unique ranked picks without assigning unsupported semantic lanes", () => {
@@ -204,10 +313,15 @@ describe("editorial modes, ranking, and confidence", () => {
         )).toBe(true);
       }
       if (pick.lane === "Hidden Gem") {
-        expect(pick.title.popularity).toBeLessThanOrEqual(55);
+        expect(pick.title.popularity).toBeLessThanOrEqual(35);
+      }
+      if (pick.lane === "Go Deeper") {
+        expect(pick.contributions.some((contribution) =>
+          ["genreMatch", "subgenreMatch", "directorAffinity", "writerAffinity", "cinematographerAffinity", "actorAffinity"].includes(contribution.feature) && contribution.value > 0,
+        )).toBe(true);
       }
       if (pick.lane === "Film School Pick") {
-        expect(pick.title.canonicalScore).toBeGreaterThanOrEqual(65);
+        expect(pick.title.criterionCollection || pick.title.canonicalMemberships.length > 0).toBe(true);
       }
     }
   });
