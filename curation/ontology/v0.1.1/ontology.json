@@ -1,0 +1,1045 @@
+{
+  "ontology_version": "0.1.1",
+  "based_on": "0.1",
+  "patch_notes": {
+    "summary": "Additive patch. Adds a new Animation subgenre family (4 terms) and 2 TV-specific terms for late-night talk / news-satire formats. No existing subgenre id, tone id, or definition was changed, removed, or renamed.",
+    "motivation": [
+      "Animation is primarily a medium, not a genre. The new Animation family exists only for cases where animation-specific conventions (anime genre conventions, adult-animation audience targeting, or all-ages family framing) are themselves meaningful editorial signal not captured by an existing content-based subgenre.",
+      "5 of the 100 pilot titles are late-night talk shows or a news-satire program with no prior TV-specific fit."
+    ],
+    "added_subgenres": [
+      "animated-family",
+      "adult-animation",
+      "anime-action",
+      "isekai",
+      "late-night-talk-show",
+      "news-satire"
+    ],
+    "unchanged": "All 110 v0.1 subgenre ids, all 25 tone ids, and pacing definitions are unchanged and reproduced verbatim from v0.1."
+  },
+  "purpose": "Classifies intrinsic editorial properties of a movie or TV show: what kind of work it is (subgenre), its emotional register (tone), and its narrative rhythm (pacing). Excludes derived or externally sourced signals such as hidden-gem status, comfort-watch status, rewatchability, mainstream/niche positioning, film-school-worthiness, canonical importance, or Criterion status.",
+  "animation_design_principle": "Animation is primarily a medium, not a genre. Do not force every animated or anime title into an Animation-family term. Prefer an existing, more specific non-animation subgenre as primary whenever it accurately describes the work's content (e.g. an animated superhero film should still classify as superhero; an animated romantic comedy should still classify as romantic-comedy). Animation-family terms exist for the residual cases where the animation-specific convention itself — not just the medium — is the meaningful editorial signal.",
+  "fields": {
+    "primary_subgenre": "Exactly one controlled subgenre id. The single most useful, specific answer to 'what kind of work is this?'",
+    "secondary_subgenre": "Zero or one controlled subgenre id. Must differ from primary_subgenre. Optional.",
+    "tone_tags": "Zero to three controlled tone ids. Prefer exactly three whenever three genuinely descriptive, non-redundant controlled tone ids apply. Two is acceptable only when a third would be weak, redundant, speculative, or misleading. One or zero should be rare, reserved for genuinely insufficient evidence. Never pad to three simply to hit the preferred count. Three remains the maximum. See `tone_tag_preference_policy` below.",
+    "pacing": "One of slow | moderate | fast, or null if there is insufficient evidence."
+  },
+  "subgenre_families": [
+    {
+      "family_id": "comedy",
+      "family_label": "Comedy",
+      "terms": [
+        {
+          "id": "romantic-comedy",
+          "label": "Romantic Comedy",
+          "definition": "A comedy centered on the development of a romantic relationship, typically resolving with the couple's union."
+        },
+        {
+          "id": "dark-comedy",
+          "label": "Dark Comedy",
+          "definition": "Comedy that plays traditionally serious or taboo subject matter (death, illness, crime) for laughs while keeping a recognizably comic tone throughout."
+        },
+        {
+          "id": "black-comedy",
+          "label": "Black Comedy",
+          "definition": "Comedy built around a bleak, morbid, or misanthropic worldview, where humor and disturbing content are inseparable rather than one offsetting the other."
+        },
+        {
+          "id": "screwball-comedy",
+          "label": "Screwball Comedy",
+          "definition": "Fast-talking, farcical comedy of mismatched romantic pairs, class conflict, or social role reversal, marked by rapid-fire dialogue and escalating misunderstandings."
+        },
+        {
+          "id": "satire",
+          "label": "Satire",
+          "definition": "Comedy that uses irony, exaggeration, or ridicule to critique a specific real-world target such as institutions, politics, public figures, or social norms."
+        },
+        {
+          "id": "parody-spoof",
+          "label": "Parody / Spoof",
+          "definition": "Comedy built by directly imitating and exaggerating the conventions of a specific genre, film, or franchise for comic effect."
+        },
+        {
+          "id": "workplace-comedy",
+          "label": "Workplace Comedy",
+          "definition": "Comedy centered on the dynamics, hierarchy, and absurdities of a specific job or workplace."
+        },
+        {
+          "id": "coming-of-age-comedy",
+          "label": "Coming-of-Age Comedy",
+          "definition": "Comedy centered on a young protagonist's transition toward adulthood, told primarily through humor."
+        },
+        {
+          "id": "buddy-comedy",
+          "label": "Buddy Comedy",
+          "definition": "Comedy driven by the mismatched-pair dynamic between two (or more) friends or partners thrown together by circumstance."
+        },
+        {
+          "id": "breakup-comedy",
+          "label": "Breakup Comedy",
+          "definition": "Comedy centered on the end of a romantic relationship and its comic fallout."
+        },
+        {
+          "id": "sex-comedy",
+          "label": "Sex Comedy",
+          "definition": "Comedy in which sexual pursuit, desire, or awkwardness is the primary comic engine."
+        },
+        {
+          "id": "stoner-comedy",
+          "label": "Stoner Comedy",
+          "definition": "Comedy centered on drug use, typically cannabis, as a defining lifestyle and source of episodic, low-stakes misadventure."
+        },
+        {
+          "id": "absurdist-comedy",
+          "label": "Absurdist Comedy",
+          "definition": "Comedy built on illogical premises or a fundamentally irrational world, where the humor comes from that irrationality itself."
+        },
+        {
+          "id": "mockumentary",
+          "label": "Mockumentary",
+          "definition": "Comedy that adopts documentary form (interviews, handheld footage, narration) as a fictional device."
+        }
+      ]
+    },
+    {
+      "family_id": "drama",
+      "family_label": "Drama",
+      "terms": [
+        {
+          "id": "family-drama",
+          "label": "Family Drama",
+          "definition": "Drama centered on the relationships, conflicts, and obligations within a family unit."
+        },
+        {
+          "id": "relationship-drama",
+          "label": "Relationship Drama",
+          "definition": "Drama centered on an intimate relationship between a small number of characters, without primarily being a romance in the genre sense."
+        },
+        {
+          "id": "psychological-drama",
+          "label": "Psychological Drama",
+          "definition": "Drama centered on a character's internal mental or emotional state as the primary source of conflict."
+        },
+        {
+          "id": "legal-drama",
+          "label": "Legal Drama",
+          "definition": "Drama centered on the practice of law, including litigation, legal ethics, or the justice system, told from a legal-professional point of view."
+        },
+        {
+          "id": "political-drama",
+          "label": "Political Drama",
+          "definition": "Drama centered on the pursuit, exercise, or consequences of political power."
+        },
+        {
+          "id": "historical-drama",
+          "label": "Historical Drama",
+          "definition": "Drama set in a clearly defined past era where the historical setting materially shapes the story (period drama)."
+        },
+        {
+          "id": "social-drama",
+          "label": "Social Drama",
+          "definition": "Drama centered on a social issue or systemic condition, such as poverty, addiction, or discrimination, and its effect on characters' lives."
+        },
+        {
+          "id": "workplace-drama",
+          "label": "Workplace Drama",
+          "definition": "Drama centered on the stakes, hierarchy, and pressures of a specific job or workplace, without comic framing."
+        },
+        {
+          "id": "coming-of-age-drama",
+          "label": "Coming-of-Age Drama",
+          "definition": "Drama centered on a young protagonist's transition toward adulthood or self-understanding."
+        },
+        {
+          "id": "sports-drama",
+          "label": "Sports Drama",
+          "definition": "Drama centered on athletic competition, training, or a sports institution as the primary stakes."
+        },
+        {
+          "id": "showbiz-drama",
+          "label": "Showbiz Drama",
+          "definition": "Drama centered on the entertainment industry and the toll or mechanics of fame and creative work."
+        }
+      ]
+    },
+    {
+      "family_id": "crime",
+      "family_label": "Crime",
+      "terms": [
+        {
+          "id": "crime-drama",
+          "label": "Crime Drama",
+          "definition": "Drama centered on the commission, investigation, or consequences of crime, without being primarily a thriller, procedural, or heist."
+        },
+        {
+          "id": "gangster",
+          "label": "Gangster",
+          "definition": "Story centered on the rise and/or fall of an individual criminal figure within a criminal underworld or hierarchy."
+        },
+        {
+          "id": "heist",
+          "label": "Heist",
+          "definition": "Story structured around the planning and execution of a theft or robbery."
+        },
+        {
+          "id": "detective",
+          "label": "Detective",
+          "definition": "Story centered on an investigator, professional or amateur, solving a case, with the investigative process as the narrative engine."
+        },
+        {
+          "id": "police-procedural",
+          "label": "Police Procedural",
+          "definition": "Story centered on law enforcement's routine methods and casework, emphasizing process over the personal drama of any one case."
+        },
+        {
+          "id": "neo-noir",
+          "label": "Neo-Noir",
+          "definition": "Contemporary story that consciously adopts classic film-noir conventions, such as moral ambiguity and a shadowy visual and narrative tone, in a modern or non-period setting."
+        },
+        {
+          "id": "courtroom-crime",
+          "label": "Courtroom Crime",
+          "definition": "Crime story structured primarily around trial proceedings rather than investigation."
+        },
+        {
+          "id": "organized-crime",
+          "label": "Organized Crime",
+          "definition": "Story centered on the operations, politics, or culture of a criminal organization as an institution, distinct from a single gangster's rise-and-fall arc."
+        }
+      ]
+    },
+    {
+      "family_id": "thriller",
+      "family_label": "Thriller",
+      "terms": [
+        {
+          "id": "psychological-thriller",
+          "label": "Psychological Thriller",
+          "definition": "Thriller driven by uncertainty about a character's mental state, perception, or trustworthiness rather than by physical danger alone."
+        },
+        {
+          "id": "crime-thriller",
+          "label": "Crime Thriller",
+          "definition": "Thriller organized around a criminal act or criminal antagonist, prioritizing suspense and pursuit over procedural or investigative detail."
+        },
+        {
+          "id": "political-thriller",
+          "label": "Political Thriller",
+          "definition": "Thriller in which political power, conspiracy, or state institutions create the central danger."
+        },
+        {
+          "id": "conspiracy-thriller",
+          "label": "Conspiracy Thriller",
+          "definition": "Thriller centered on a protagonist uncovering a hidden, coordinated plot, typically involving institutions working against them."
+        },
+        {
+          "id": "espionage-thriller",
+          "label": "Espionage Thriller",
+          "definition": "Thriller centered on intelligence work, spies, or covert operations."
+        },
+        {
+          "id": "erotic-thriller",
+          "label": "Erotic Thriller",
+          "definition": "Thriller in which sexual desire or a sexual relationship is the mechanism that generates danger or suspense."
+        },
+        {
+          "id": "tech-thriller",
+          "label": "Tech Thriller",
+          "definition": "Thriller in which technology, such as surveillance, AI, hacking, or engineered systems, is the central source of threat or the primary tool of danger."
+        },
+        {
+          "id": "survival-thriller",
+          "label": "Survival Thriller",
+          "definition": "Thriller centered on a character's struggle to physically survive a hostile environment or antagonist, with escape or endurance as the core stakes."
+        },
+        {
+          "id": "revenge-thriller",
+          "label": "Revenge Thriller",
+          "definition": "Thriller structured around a protagonist's pursuit of retribution against those who wronged them."
+        }
+      ]
+    },
+    {
+      "family_id": "action",
+      "family_label": "Action",
+      "terms": [
+        {
+          "id": "action-thriller",
+          "label": "Action-Thriller",
+          "definition": "Action-forward story that also sustains thriller-level suspense and stakes, blending set-piece spectacle with mounting tension."
+        },
+        {
+          "id": "martial-arts",
+          "label": "Martial Arts",
+          "definition": "Action centered on hand-to-hand combat systems or disciplines as a primary visual and narrative focus."
+        },
+        {
+          "id": "adventure-action",
+          "label": "Adventure Action",
+          "definition": "Action built around a journey, quest, or exploration, prioritizing spectacle and momentum over emotional interiority."
+        },
+        {
+          "id": "military-action",
+          "label": "Military Action",
+          "definition": "Action centered on organized armed forces, combat units, or military operations."
+        },
+        {
+          "id": "superhero",
+          "label": "Superhero",
+          "definition": "Action centered on a character or team with extraordinary powers or abilities operating within a superhero mythology or universe."
+        },
+        {
+          "id": "revenge-action",
+          "label": "Revenge Action",
+          "definition": "Action structured around a protagonist's violent retribution against those who wronged them, with action set pieces as the primary means of pursuing it."
+        },
+        {
+          "id": "disaster",
+          "label": "Disaster",
+          "definition": "Action centered on characters surviving a large-scale catastrophic event, natural or man-made."
+        }
+      ]
+    },
+    {
+      "family_id": "horror",
+      "family_label": "Horror",
+      "terms": [
+        {
+          "id": "psychological-horror",
+          "label": "Psychological Horror",
+          "definition": "Horror that generates fear through mental deterioration, unreliable perception, or dread rather than explicit monsters or violence."
+        },
+        {
+          "id": "supernatural-horror",
+          "label": "Supernatural Horror",
+          "definition": "Horror in which the threat originates from a paranormal or otherworldly force, such as ghosts, demons, or possession."
+        },
+        {
+          "id": "folk-horror",
+          "label": "Folk Horror",
+          "definition": "Horror rooted in isolated communities, rural landscapes, or pre-modern belief systems and rituals."
+        },
+        {
+          "id": "body-horror",
+          "label": "Body Horror",
+          "definition": "Horror centered on the graphic transformation, mutilation, or violation of the human body."
+        },
+        {
+          "id": "slasher",
+          "label": "Slasher",
+          "definition": "Horror structured around a killer stalking and murdering a sequence of victims, typically with a signature method or weapon."
+        },
+        {
+          "id": "creature-feature",
+          "label": "Creature Feature",
+          "definition": "Horror centered on a monster or creature as the primary physical antagonist."
+        },
+        {
+          "id": "gothic-horror",
+          "label": "Gothic Horror",
+          "definition": "Horror built on atmosphere, decayed grandeur, and classic gothic settings such as mansions, castles, and family curses, over graphic violence."
+        },
+        {
+          "id": "cosmic-horror",
+          "label": "Cosmic Horror",
+          "definition": "Horror centered on incomprehensible, vast, or indifferent forces beyond human understanding or control."
+        },
+        {
+          "id": "horror-comedy",
+          "label": "Horror-Comedy",
+          "definition": "Horror that plays its scares for comic effect, alternating or blending fear and humor as co-equal tones."
+        },
+        {
+          "id": "survival-horror",
+          "label": "Survival Horror",
+          "definition": "Horror centered on a character's physical struggle to survive a hostile threat or environment, emphasizing endurance over investigation."
+        },
+        {
+          "id": "sci-fi-horror",
+          "label": "Sci-Fi Horror",
+          "definition": "Horror in which the source of threat is grounded in science-fiction premises, such as aliens, experiments, or technology gone wrong."
+        }
+      ]
+    },
+    {
+      "family_id": "science-fiction",
+      "family_label": "Science Fiction",
+      "terms": [
+        {
+          "id": "hard-sci-fi",
+          "label": "Hard Sci-Fi",
+          "definition": "Science fiction that emphasizes scientific plausibility and technical accuracy as central to the story's logic and stakes."
+        },
+        {
+          "id": "dystopian-sci-fi",
+          "label": "Dystopian Sci-Fi",
+          "definition": "Science fiction set in an oppressive or degraded future society, centered on that society's control over its people."
+        },
+        {
+          "id": "cyberpunk",
+          "label": "Cyberpunk",
+          "definition": "Science fiction combining advanced technology, often digital or cybernetic, with social decay, corporate power, and a stylized urban underworld."
+        },
+        {
+          "id": "space-opera",
+          "label": "Space Opera",
+          "definition": "Science fiction centered on large-scale adventure across space, typically with sweeping stakes, multiple factions, or galactic scope."
+        },
+        {
+          "id": "alien-first-contact",
+          "label": "Alien First Contact",
+          "definition": "Science fiction centered on humanity's encounter or communication with a non-human extraterrestrial intelligence."
+        },
+        {
+          "id": "time-travel",
+          "label": "Time Travel",
+          "definition": "Science fiction structured around movement between different points in time as the central narrative mechanic."
+        },
+        {
+          "id": "tech-sci-fi",
+          "label": "Tech Sci-Fi",
+          "definition": "Science fiction centered on the near-term social or personal consequences of a specific emerging technology."
+        },
+        {
+          "id": "post-apocalyptic",
+          "label": "Post-Apocalyptic",
+          "definition": "Science fiction set after a civilization-ending event, centered on survival in its aftermath."
+        }
+      ]
+    },
+    {
+      "family_id": "fantasy",
+      "family_label": "Fantasy",
+      "terms": [
+        {
+          "id": "epic-fantasy",
+          "label": "Epic Fantasy",
+          "definition": "Fantasy set in an original secondary world with large-scale stakes, sprawling scope, and mythic structure."
+        },
+        {
+          "id": "dark-fantasy",
+          "label": "Dark Fantasy",
+          "definition": "Fantasy that foregrounds horror elements, moral bleakness, or menace within its fantastical world."
+        },
+        {
+          "id": "urban-fantasy",
+          "label": "Urban Fantasy",
+          "definition": "Fantasy in which magical or mythical elements exist within a recognizably contemporary, real-world setting."
+        },
+        {
+          "id": "magical-realism",
+          "label": "Magical Realism",
+          "definition": "Story grounded in a realistic, everyday setting where a small number of magical elements are treated as unremarkable by the characters."
+        },
+        {
+          "id": "fairy-tale-fable",
+          "label": "Fairy Tale / Fable",
+          "definition": "Story structured as or directly adapted from a traditional fairy tale, fable, or folk tale, retaining that form's moral or symbolic logic."
+        },
+        {
+          "id": "sword-and-sorcery",
+          "label": "Sword and Sorcery",
+          "definition": "Fantasy centered on a physically capable individual hero or small band navigating personal-scale battles against magical or monstrous threats, prioritizing action over world-spanning stakes."
+        }
+      ]
+    },
+    {
+      "family_id": "romance",
+      "family_label": "Romance",
+      "terms": [
+        {
+          "id": "romantic-drama",
+          "label": "Romantic Drama",
+          "definition": "Drama centered on a romantic relationship where the relationship's course, not its comic potential, drives the story."
+        },
+        {
+          "id": "period-romance",
+          "label": "Period Romance",
+          "definition": "Romance set in a clearly defined historical era where the setting's social conventions materially shape the relationship."
+        },
+        {
+          "id": "tragic-romance",
+          "label": "Tragic Romance",
+          "definition": "Romance in which the central relationship is defined by its failure, loss, or the death or separation of one or both partners."
+        },
+        {
+          "id": "erotic-romance",
+          "label": "Erotic Romance",
+          "definition": "Romance in which sexual desire and intimacy are a central, foregrounded element of the relationship's portrayal."
+        }
+      ]
+    },
+    {
+      "family_id": "mystery",
+      "family_label": "Mystery",
+      "terms": [
+        {
+          "id": "murder-mystery",
+          "label": "Murder Mystery",
+          "definition": "Mystery organized around solving a specific killing, with the culprit's identity as the central question."
+        },
+        {
+          "id": "whodunit",
+          "label": "Whodunit",
+          "definition": "Mystery structured as a formal puzzle with a defined set of suspects, clues, and a fair-play reveal of the culprit."
+        },
+        {
+          "id": "mystery-thriller",
+          "label": "Mystery-Thriller",
+          "definition": "Mystery that sustains thriller-level tension and danger alongside its central puzzle, rather than proceeding at a purely investigative pace."
+        },
+        {
+          "id": "puzzle-mystery",
+          "label": "Puzzle Mystery",
+          "definition": "Mystery centered on solving a complex structural or intellectual puzzle, not necessarily a crime, as the core engine."
+        }
+      ]
+    },
+    {
+      "family_id": "war",
+      "family_label": "War",
+      "terms": [
+        {
+          "id": "combat-film",
+          "label": "Combat Film",
+          "definition": "War story centered on frontline combat and its physical experience."
+        },
+        {
+          "id": "anti-war-film",
+          "label": "Anti-War Film",
+          "definition": "War story whose primary purpose is to critique the morality, cost, or futility of war itself."
+        },
+        {
+          "id": "pow-escape",
+          "label": "POW / Escape",
+          "definition": "War story centered on captivity and a prisoner-of-war's attempt to escape or endure imprisonment."
+        },
+        {
+          "id": "home-front-war-drama",
+          "label": "Home-Front War Drama",
+          "definition": "War story centered on civilians or communities affected by a war occurring elsewhere."
+        }
+      ]
+    },
+    {
+      "family_id": "western",
+      "family_label": "Western",
+      "terms": [
+        {
+          "id": "traditional-western",
+          "label": "Traditional Western",
+          "definition": "Western that upholds classic genre conventions, such as clear moral lines, frontier justice, and iconic Old West setting, without substantially subverting them."
+        },
+        {
+          "id": "revisionist-western",
+          "label": "Revisionist Western",
+          "definition": "Western that consciously subverts or critiques classic genre conventions, complicating its moral framework or mythology."
+        },
+        {
+          "id": "neo-western",
+          "label": "Neo-Western",
+          "definition": "Western sensibility and themes relocated to a modern-day setting."
+        }
+      ]
+    },
+    {
+      "family_id": "musical",
+      "family_label": "Musical",
+      "terms": [
+        {
+          "id": "traditional-musical",
+          "label": "Traditional Musical",
+          "definition": "Story in which characters break into song-and-dance numbers as a core, integrated storytelling device."
+        },
+        {
+          "id": "music-drama",
+          "label": "Music Drama",
+          "definition": "Drama centered on musicians, music-making, or the music industry, without characters performing full musical numbers as a narrative device."
+        },
+        {
+          "id": "music-comedy",
+          "label": "Music Comedy",
+          "definition": "Comedy centered on musicians, music-making, or the music industry, without characters performing full musical numbers as a narrative device."
+        }
+      ]
+    },
+    {
+      "family_id": "documentary",
+      "family_label": "Documentary",
+      "terms": [
+        {
+          "id": "investigative-documentary",
+          "label": "Investigative Documentary",
+          "definition": "Documentary structured around uncovering previously hidden or disputed facts about its subject."
+        },
+        {
+          "id": "biography-profile-documentary",
+          "label": "Biography / Profile Documentary",
+          "definition": "Documentary centered on the life story of a single person or a small, defined group of people."
+        },
+        {
+          "id": "political-social-documentary",
+          "label": "Political / Social Documentary",
+          "definition": "Documentary centered on a political issue, policy, or broad social phenomenon."
+        },
+        {
+          "id": "nature-documentary",
+          "label": "Nature Documentary",
+          "definition": "Documentary centered on the natural world, wildlife, or the environment."
+        },
+        {
+          "id": "music-documentary",
+          "label": "Music Documentary",
+          "definition": "Documentary centered on a musician, band, or music scene."
+        },
+        {
+          "id": "sports-documentary",
+          "label": "Sports Documentary",
+          "definition": "Documentary centered on an athlete, team, or sporting event or era."
+        },
+        {
+          "id": "true-crime-documentary",
+          "label": "True Crime Documentary",
+          "definition": "Documentary centered on a real crime, investigation, or criminal case."
+        }
+      ]
+    },
+    {
+      "family_id": "tv-specific",
+      "family_label": "TV-Specific",
+      "terms": [
+        {
+          "id": "sitcom",
+          "label": "Sitcom",
+          "definition": "Half-hour-scale scripted comedy built around a recurring ensemble and self-contained episodic situations, with a stable premise across episodes."
+        },
+        {
+          "id": "workplace-sitcom",
+          "label": "Workplace Sitcom",
+          "definition": "Sitcom whose recurring setting and ensemble are organized around a specific workplace."
+        },
+        {
+          "id": "family-sitcom",
+          "label": "Family Sitcom",
+          "definition": "Sitcom whose recurring setting and ensemble are organized around a family household."
+        },
+        {
+          "id": "dramedy",
+          "label": "Dramedy",
+          "definition": "Series that deliberately sustains both comedic and dramatic registers as co-equal tones across episodes, rather than one dominating."
+        },
+        {
+          "id": "procedural",
+          "label": "Procedural",
+          "definition": "Episodic series structured around a self-contained case, incident, or problem resolved largely within each episode."
+        },
+        {
+          "id": "prestige-drama",
+          "label": "Prestige Drama",
+          "definition": "Serialized hour-long drama with heightened production values and creative ambition, built for sustained arcs across a season rather than episodic cases."
+        },
+        {
+          "id": "soap-serial-drama",
+          "label": "Soap / Serial Drama",
+          "definition": "Serialized drama centered on interpersonal melodrama across an ensemble, with long-running, heavily plotted relationship arcs."
+        },
+        {
+          "id": "anthology",
+          "label": "Anthology",
+          "definition": "Series in which each season or episode tells a self-contained story with a new setting and/or cast, connected by theme rather than continuing plot."
+        },
+        {
+          "id": "sketch-comedy",
+          "label": "Sketch Comedy",
+          "definition": "Series built from a sequence of short, unconnected comedic sketches rather than a continuing story or ensemble situation."
+        },
+        {
+          "id": "reality-competition",
+          "label": "Reality Competition",
+          "definition": "Unscripted series structured around contestants competing toward elimination or a defined prize."
+        },
+        {
+          "id": "docuseries",
+          "label": "Docuseries",
+          "definition": "Multi-episode nonfiction series following a real subject, event, or investigation across a season."
+        },
+        {
+          "id": "late-night-talk-show",
+          "label": "Late-Night Talk Show",
+          "definition": "Recurring host-driven program built around a nightly or daily format of monologues, celebrity interviews, and comedic segments.",
+          "inclusion_guidance": "Use for programs structured around a recurring host, guest interviews, and monologue or comedy-segment format, regardless of exact airtime.",
+          "exclusion_guidance": "Distinct from sketch-comedy: sketch-comedy is built from a sequence of unconnected scripted sketches with no recurring host-interview structure. Distinct from news-satire: news-satire's comedic structure is built specifically around parodying news-broadcast conventions and current events rather than general celebrity interviews, even though both formats may share a nightly airtime.",
+          "anchor_titles": [
+            "The Tonight Show Starring Jimmy Fallon",
+            "The Late Show with Stephen Colbert",
+            "Late Night with Seth Meyers"
+          ],
+          "added_in": "0.1.1"
+        },
+        {
+          "id": "news-satire",
+          "label": "News Satire",
+          "definition": "Program structured around satirizing current news and events specifically, using a news-broadcast format (anchor desk, correspondents, headlines) as the comedic vehicle.",
+          "inclusion_guidance": "Use when the show's comedic structure is specifically built around parodying news-broadcast conventions and current events, not general celebrity interviews.",
+          "exclusion_guidance": "Distinct from satire (Comedy family): satire is a general-purpose critique of any real-world target through irony or exaggeration, in any format (film, sitcom, etc.), while news-satire specifically names the news-broadcast-format vehicle. Distinct from late-night-talk-show: a news-satire program is organized around news headlines and correspondents rather than a monologue-plus-celebrity-interview structure.",
+          "anchor_titles": [
+            "The Daily Show"
+          ],
+          "added_in": "0.1.1"
+        }
+      ]
+    },
+    {
+      "family_id": "animation",
+      "family_label": "Animation",
+      "terms": [
+        {
+          "id": "animated-family",
+          "label": "Animated Family",
+          "definition": "Animated work made primarily for a general or family audience, where the all-ages, gentle sensibility itself is a meaningful editorial signal beyond genre or plot content.",
+          "inclusion_guidance": "Use as primary when no existing non-animation subgenre captures the work's content precisely (e.g. a gentle, low-plot family adventure). Use as secondary when an existing subgenre (adventure-action, epic-fantasy, superhero, etc.) already captures the content precisely but the all-ages animated packaging is still a materially useful signal for a viewer choosing what to watch.",
+          "exclusion_guidance": "Do not apply merely because a title is animated — animation is a medium, not automatically a subgenre. Skip this tag when the all-ages framing adds no information beyond what the existing primary subgenre already conveys. Do not use for adult-oriented animation (see adult-animation).",
+          "anchor_titles": [
+            "The Super Mario Galaxy Movie",
+            "Snoopy Presents: There's No Place Like Home, Snoopy",
+            "Teen Titans Go!"
+          ],
+          "added_in": "0.1.1"
+        },
+        {
+          "id": "adult-animation",
+          "label": "Adult Animation",
+          "definition": "Animated work created for and marketed to an adult audience, typically featuring mature humor, themes, or content not intended for a general family audience.",
+          "inclusion_guidance": "Use when the adult-oriented intent of the animation is itself a meaningful signal — for satirical adult sitcoms, adult sci-fi comedy, and similar — as primary if no other subgenre fits, or as secondary alongside a precise content subgenre (e.g. family-sitcom, absurdist-comedy).",
+          "exclusion_guidance": "Do not apply to all-ages or family-targeted animation (see animated-family). Do not apply merely because a title contains some crude humor if it remains fundamentally family-marketed. This term flags audience intent, not a specific comedic genre — pair it with the actual content subgenre (satire, family-sitcom, absurdist-comedy, etc.) rather than using it alone whenever a more specific fit exists.",
+          "anchor_titles": [
+            "The Simpsons",
+            "Family Guy",
+            "Rick and Morty"
+          ],
+          "added_in": "0.1.1"
+        },
+        {
+          "id": "anime-action",
+          "label": "Anime Action",
+          "definition": "Japanese-animation (anime) work whose primary appeal is fast-paced physical or supernatural combat, told through anime-specific genre conventions such as shonen tournament arcs, power escalation, or creature-battling structures.",
+          "inclusion_guidance": "Use as primary when the anime genre conventions themselves — not just the fact of being Japanese-animated — are the meaningful classification signal, e.g. a shonen battle series or creature-battling tournament adventure.",
+          "exclusion_guidance": "Do not use simply because a title is Japanese-animated, and do not use for a Western production merely styled after anime (an \"anime-inspired\" visual aesthetic is not the same as being part of the anime industry/tradition). If an existing non-animation subgenre (cyberpunk, martial-arts, superhero, adventure-action) already captures the content precisely, prefer that as primary and use anime-action only as a secondary flag if the anime-specific conventions add real information. Distinct from martial-arts (existing; discipline-focused combat, not anime-specific).",
+          "anchor_titles": [
+            "Bleach",
+            "Pokémon"
+          ],
+          "added_in": "0.1.1"
+        },
+        {
+          "id": "isekai",
+          "label": "Isekai",
+          "definition": "Anime or anime-adjacent work in which a protagonist is transported, reincarnated, or otherwise displaced into a different, typically fantasy or game-like, world, and that displacement premise structures the story.",
+          "inclusion_guidance": "Use when the isekai displacement premise (death-and-reincarnation, portal transport, or being pulled into a game world) is itself a defining structural element of the plot.",
+          "exclusion_guidance": "Do not use as a generic synonym for \"characters travel to another world\" — a Western portal-fantasy story should use urban-fantasy or epic-fantasy instead. Isekai names a specific anime genre convention, not a plot device available to any medium. If the work is anime but not built around a displacement premise, prefer anime-action or an existing fantasy subgenre instead.",
+          "anchor_titles": [
+            "Mushoku Tensei: Jobless Reincarnation"
+          ],
+          "added_in": "0.1.1"
+        }
+      ]
+    }
+  ],
+  "subgenre_term_count": 116,
+  "tone_tags": [
+    {
+      "id": "warm",
+      "label": "Warm",
+      "definition": "Conveys genuine affection, kindness, or emotional closeness between characters; the viewer feels comforted by the relationships on screen.",
+      "not": "Not the same as uplifting: warm describes the emotional temperature of relationships, not the trajectory or resolution of the story. A story can be warm and still end sadly.",
+      "anchor_titles": [
+        "Paddington 2",
+        "Ted Lasso",
+        "The Great British Bake Off"
+      ]
+    },
+    {
+      "id": "bittersweet",
+      "label": "Bittersweet",
+      "definition": "Blends genuine happiness or resolution with an equally genuine sense of loss, so that neither feeling cancels the other out.",
+      "not": "Not simply a sad story with a happy ending: in bittersweet work the joy and the loss are both fully present at once, rather than joy following after sadness has passed.",
+      "anchor_titles": [
+        "Past Lives",
+        "Her",
+        "Lost in Translation"
+      ]
+    },
+    {
+      "id": "melancholic",
+      "label": "Melancholic",
+      "definition": "A persistent, low-intensity sadness or wistfulness that colors the work without dominating it or removing hope entirely.",
+      "not": "Distinct from bleak: melancholic sadness is reflective and survivable, and can coexist with warmth or gentle humor; bleak withholds hope almost entirely.",
+      "anchor_titles": [
+        "Paterson",
+        "Columbus",
+        "Aftersun"
+      ]
+    },
+    {
+      "id": "bleak",
+      "label": "Bleak",
+      "definition": "Portrays a world or outcome with little to no meaningful hope, comfort, or redemption; despair is the dominant, unresolved note.",
+      "not": "Distinct from melancholic: bleak work offers little or no relief from despair, where melancholic allows sadness to coexist with warmth, humor, or reflection.",
+      "anchor_titles": [
+        "Requiem for a Dream",
+        "The Road",
+        "Chernobyl"
+      ]
+    },
+    {
+      "id": "uplifting",
+      "label": "Uplifting",
+      "definition": "Leaves the viewer with a sense of hope, affirmation, or emotional lift, typically through the story's trajectory or resolution.",
+      "not": "Not the same as warm: uplifting describes the emotional arc or destination of the story, not the texture of relationships throughout it. A hard-won triumph can be uplifting without being warm.",
+      "anchor_titles": [
+        "Rocky",
+        "Rudy",
+        "Ted Lasso"
+      ]
+    },
+    {
+      "id": "sentimental",
+      "label": "Sentimental",
+      "definition": "Deliberately and openly appeals to tender emotion, often through music, dialogue, or framing designed to elicit feeling.",
+      "not": "Not neutral about its emotional intent: sentimental work wears its heartstring-pulling openly, unlike warm or bittersweet work that earns emotion more obliquely.",
+      "anchor_titles": [
+        "The Notebook",
+        "Marley & Me"
+      ]
+    },
+    {
+      "id": "playful",
+      "label": "Playful",
+      "definition": "Light, mischievous, and energetic in spirit; takes evident delight in its own game, characters, or premise.",
+      "not": "Not the same as absurdist: playful describes an inviting, high-spirited energy, while absurdist specifically involves illogic or a fundamentally irrational premise.",
+      "anchor_titles": [
+        "Paddington 2",
+        "Game Night"
+      ]
+    },
+    {
+      "id": "raunchy",
+      "label": "Raunchy",
+      "definition": "Explicit, crude, or graphic in its sexual or bodily humor, foregrounded as a deliberate comic engine rather than incidental content.",
+      "not": "Not simply 'contains adult content': raunchy specifically means crude sexual or bodily material is a deliberate comic device, not background material in a serious drama.",
+      "anchor_titles": [
+        "Superbad",
+        "Bridesmaids"
+      ]
+    },
+    {
+      "id": "deadpan",
+      "label": "Deadpan",
+      "definition": "Delivered with flat, affectless line readings or reactions, where the humor comes from the gap between that flat delivery and outrageous or absurd content.",
+      "not": "Distinct from wry: deadpan is a performance or delivery style (flat affect), while wry is a narrative attitude of dry, knowing understatement that doesn't require flat performance.",
+      "anchor_titles": [
+        "Fargo",
+        "What We Do in the Shadows",
+        "Napoleon Dynamite"
+      ]
+    },
+    {
+      "id": "absurdist",
+      "label": "Absurdist",
+      "definition": "Built on illogical premises or a fundamentally irrational world where normal cause-and-effect or social logic doesn't apply.",
+      "not": "Not the same as playful: absurdist is about the internal logic, or lack of it, governing the story's world, not simply a lighthearted mood.",
+      "anchor_titles": [
+        "Rick and Morty",
+        "Everything Everywhere All at Once"
+      ]
+    },
+    {
+      "id": "satirical",
+      "label": "Satirical",
+      "definition": "Critiques a specific real-world target, such as institutions, public figures, ideologies, or social norms, through irony or exaggeration.",
+      "not": "Distinct from cynical: satirical implies an active, pointed critique aimed at a specific target, while cynical is a general distrustful stance with no particular object of ridicule.",
+      "anchor_titles": [
+        "The Daily Show",
+        "Don't Look Up",
+        "Veep"
+      ]
+    },
+    {
+      "id": "wry",
+      "label": "Wry",
+      "definition": "A dry, understated, knowing sense of humor communicated through attitude and tone rather than performance style or premise.",
+      "not": "Distinct from deadpan: wry is an authorial or narrative attitude of dry amusement, while deadpan refers specifically to flat delivery or performance.",
+      "anchor_titles": [
+        "Fleabag",
+        "Election"
+      ]
+    },
+    {
+      "id": "tense",
+      "label": "Tense",
+      "definition": "Sustains anticipatory anxiety about what might happen next; the viewer feels suspense about an uncertain outcome.",
+      "not": "Distinct from menacing: tense is about uncertainty and anticipation, asking whether something bad will happen, while menacing is about the felt presence of a specific threatening force, even without uncertainty about the outcome.",
+      "anchor_titles": [
+        "Uncut Gems",
+        "No Country for Old Men"
+      ]
+    },
+    {
+      "id": "menacing",
+      "label": "Menacing",
+      "definition": "Conveys the felt presence of a specific threatening force, person, or entity, regardless of whether the outcome is in doubt.",
+      "not": "Distinct from tense: menacing describes a quality radiating from a person, place, or force, not the viewer's uncertainty about the plot's outcome.",
+      "anchor_titles": [
+        "No Country for Old Men",
+        "The Shining"
+      ]
+    },
+    {
+      "id": "unsettling",
+      "label": "Unsettling",
+      "definition": "Produces a diffuse sense of wrongness or discomfort that resists clear explanation, unmoored from a specific identifiable threat.",
+      "not": "Distinct from menacing: unsettling doesn't require a locatable source of danger; the discomfort itself, not a specific threat, is the point.",
+      "anchor_titles": [
+        "The Lighthouse",
+        "Under the Skin"
+      ]
+    },
+    {
+      "id": "visceral",
+      "label": "Visceral",
+      "definition": "Produces an immediate, bodily reaction in the viewer through violence, physical intensity, or sensory extremity.",
+      "not": "Not simply 'intense' in an abstract sense: visceral specifically implies a physical, gut-level reaction rather than an intellectual or purely emotional one.",
+      "anchor_titles": [
+        "Mad Max: Fury Road",
+        "Uncut Gems"
+      ]
+    },
+    {
+      "id": "cerebral",
+      "label": "Cerebral",
+      "definition": "Prioritizes ideas, logic, or intellectual engagement, asking the viewer to actively think through concepts or implications.",
+      "not": "Distinct from enigmatic: cerebral work can be fully explicable and resolved, just demanding, while enigmatic work specifically withholds clear meaning or resolution.",
+      "anchor_titles": [
+        "Arrival",
+        "Primer"
+      ]
+    },
+    {
+      "id": "enigmatic",
+      "label": "Enigmatic",
+      "definition": "Deliberately withholds clear meaning, explanation, or resolution, leaving significant ambiguity intact by design.",
+      "not": "Distinct from cerebral: enigmatic is defined by unresolved ambiguity itself, not by the amount of thinking required. A work can be cerebral and still fully resolve its ideas.",
+      "anchor_titles": [
+        "Mulholland Drive",
+        "Under the Skin"
+      ]
+    },
+    {
+      "id": "meditative",
+      "label": "Meditative",
+      "definition": "Unhurried and contemplative, favoring stillness, reflection, or atmosphere over incident, inviting the viewer to sit with a mood or idea.",
+      "not": "Not the same as slow pacing alone: meditative describes an emotional and tonal register of quiet reflection, though it frequently co-occurs with slow pacing.",
+      "anchor_titles": [
+        "Paterson",
+        "Columbus"
+      ]
+    },
+    {
+      "id": "dreamlike",
+      "label": "Dreamlike",
+      "definition": "Evokes the logic, imagery, or atmosphere of a dream: fluid, associative, and not bound by strict realism or causality.",
+      "not": "Distinct from enigmatic: dreamlike is about atmosphere and the loosening of realistic logic, not necessarily about withholding meaning or resolution.",
+      "anchor_titles": [
+        "Mulholland Drive",
+        "The Tree of Life"
+      ]
+    },
+    {
+      "id": "gritty",
+      "label": "Gritty",
+      "definition": "Depicts its world with unvarnished, tactile realism: grime, hardship, and consequence rendered without glamorization.",
+      "not": "Not the same as bleak: gritty is about the texture and realism of the depiction, not the presence or absence of hope in the story's outcome.",
+      "anchor_titles": [
+        "The Wire",
+        "Uncut Gems"
+      ]
+    },
+    {
+      "id": "stylized",
+      "label": "Stylized",
+      "definition": "Foregrounds a distinctive, heightened visual or formal aesthetic that departs from naturalism as a deliberate authorial choice.",
+      "not": "Not the same as dreamlike: stylized refers to a consciously crafted aesthetic choice, which can be sharp and precise rather than fluid or associative.",
+      "anchor_titles": [
+        "The Grand Budapest Hotel",
+        "Kill Bill"
+      ]
+    },
+    {
+      "id": "earnest",
+      "label": "Earnest",
+      "definition": "Sincere and direct in its emotional or moral intent, without irony, cynicism, or a protective wink to the audience.",
+      "not": "Distinct from sentimental: earnest describes sincerity of intent, not the deployment of tear-jerking technique. A work can be earnest without being emotionally manipulative.",
+      "anchor_titles": [
+        "Paddington 2",
+        "Ted Lasso"
+      ]
+    },
+    {
+      "id": "cynical",
+      "label": "Cynical",
+      "definition": "Assumes and portrays self-interested or corrupt motives as the default, distrustful of institutions, sincerity, or good intentions.",
+      "not": "Distinct from satirical: cynical is a general worldview or stance, while satirical requires an active, pointed critique of a specific target.",
+      "anchor_titles": [
+        "Nightcrawler",
+        "Succession"
+      ]
+    },
+    {
+      "id": "romantic",
+      "label": "Romantic",
+      "definition": "Foregrounds longing, attraction, or love as an idealized emotional force driving the work's central feeling.",
+      "not": "Not the same as sentimental: romantic describes the specific object of feeling, love or desire, while sentimental describes an emotionally manipulative technique that can apply to any subject.",
+      "anchor_titles": [
+        "Before Sunrise",
+        "Call Me by Your Name",
+        "Past Lives"
+      ]
+    }
+  ],
+  "tone_tag_count": 25,
+  "tone_tag_preference_policy": {
+    "effective_date": "2026-08-09",
+    "requires_version_bump": false,
+    "version_note": "This is a classification-preference change, not a vocabulary change: no tone id was added, removed, renamed, or redefined, and the field cardinality (zero to three) is unchanged. The controlled-vocabulary versioning scheme in this ontology (see patch_notes) tracks additions/removals/renames to ids and definitions, not preference guidance for how to use an unchanged cardinality range. Ontology version therefore remains 0.1.1.",
+    "summary": "Prefer exactly 3 tone tags whenever three genuinely descriptive controlled tone terms apply. This reverses the prior default guidance ('prefer fewer, precise tags'), which is superseded wherever it appears in Pass 1/Pass 2 prompts and workflow docs.",
+    "rules": [
+      "Prefer exactly 3 tone tags whenever three genuinely descriptive controlled tone terms apply.",
+      "2 tone tags are acceptable only when a third would be weak, redundant, speculative, or misleading.",
+      "1 or 0 tone tags should be rare and require genuinely insufficient evidence.",
+      "Never pad a title to 3 tags simply to satisfy the preferred count.",
+      "Maximum remains 3.",
+      "All tags must remain from the controlled tone vocabulary above."
+    ],
+    "applies_to": [
+      "Future Pass 1 classification prompts",
+      "Future Pass 2 adjudication prompts",
+      "Ontology and workflow README documentation"
+    ],
+    "does_not_apply_to": "Historical Pass 1 and Pass 2 model outputs and final-classifications.json, which were produced under the prior guidance and are not retroactively altered by this policy. See curation/pilot/pass2/tone-coverage-review.json for the list of already-classified titles with fewer than 3 tone tags that a human editor may want to re-examine against this policy."
+  },
+  "pacing": [
+    {
+      "id": "slow",
+      "definition": "Deliberately allows substantial time between major narrative developments; patience is a defining part of the viewing experience."
+    },
+    {
+      "id": "moderate",
+      "definition": "Neither deliberate patience nor sustained momentum is a defining characteristic."
+    },
+    {
+      "id": "fast",
+      "definition": "Frequent narrative developments, action, jokes, revelations, scene changes, or escalating events create sustained forward momentum."
+    }
+  ]
+}

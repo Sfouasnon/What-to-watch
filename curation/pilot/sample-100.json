@@ -1,0 +1,5243 @@
+{
+  "schema_version": "curation-pilot-1",
+  "region": "US",
+  "generated_at": "2026-08-09T20:50:37.937Z",
+  "title_count": 100,
+  "provider_resolution": [
+    {
+      "requested": "Netflix",
+      "movie_provider": {
+        "id": 8,
+        "name": "Netflix"
+      },
+      "tv_provider": {
+        "id": 8,
+        "name": "Netflix"
+      }
+    },
+    {
+      "requested": "Hulu",
+      "movie_provider": {
+        "id": 15,
+        "name": "Hulu"
+      },
+      "tv_provider": {
+        "id": 15,
+        "name": "Hulu"
+      }
+    },
+    {
+      "requested": "Disney Plus",
+      "movie_provider": {
+        "id": 337,
+        "name": "Disney Plus"
+      },
+      "tv_provider": {
+        "id": 337,
+        "name": "Disney Plus"
+      }
+    },
+    {
+      "requested": "HBO Max",
+      "movie_provider": {
+        "id": 1899,
+        "name": "HBO Max"
+      },
+      "tv_provider": {
+        "id": 1899,
+        "name": "HBO Max"
+      }
+    },
+    {
+      "requested": "Amazon Prime Video",
+      "movie_provider": {
+        "id": 9,
+        "name": "Amazon Prime Video"
+      },
+      "tv_provider": {
+        "id": 9,
+        "name": "Amazon Prime Video"
+      }
+    },
+    {
+      "requested": "Apple TV Plus",
+      "movie_provider": {
+        "id": 350,
+        "name": "Apple TV"
+      },
+      "tv_provider": {
+        "id": 350,
+        "name": "Apple TV"
+      }
+    },
+    {
+      "requested": "Paramount Plus",
+      "movie_provider": {
+        "id": 2303,
+        "name": "Paramount Plus Premium"
+      },
+      "tv_provider": {
+        "id": 2303,
+        "name": "Paramount Plus Premium"
+      }
+    },
+    {
+      "requested": "Peacock Premium",
+      "movie_provider": {
+        "id": 386,
+        "name": "Peacock Premium"
+      },
+      "tv_provider": {
+        "id": 386,
+        "name": "Peacock Premium"
+      }
+    },
+    {
+      "requested": "Criterion Channel",
+      "movie_provider": {
+        "id": 258,
+        "name": "Criterion Channel"
+      },
+      "tv_provider": {
+        "id": 258,
+        "name": "Criterion Channel"
+      }
+    }
+  ],
+  "titles": [
+    {
+      "tmdb_id": 1284041,
+      "media_type": "movie",
+      "title": "The Last House",
+      "original_title": "The Last House",
+      "year": 2026,
+      "overview": "A family suddenly sealed inside their home must work together to survive against dwindling resources and the ominous threat keeping them trapped.",
+      "tmdb_genres": [
+        "Horror",
+        "Science Fiction",
+        "Thriller"
+      ],
+      "runtime": 110,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 290.8148,
+      "vote_average": 6.56,
+      "vote_count": 209,
+      "directors": [
+        "Louis Leterrier"
+      ],
+      "writers": [
+        "Matthew Robinson"
+      ],
+      "cinematographers": [
+        "Pål Ulvik Rokseth"
+      ],
+      "principal_cast": [
+        "Greta Lee",
+        "Wagner Moura",
+        "Riley Chung",
+        "Noah Alexander Sosnowski",
+        "Emma Ho",
+        "Gabriel Barbosa"
+      ],
+      "keywords": [
+        "monster",
+        "water monster",
+        "sea creature",
+        "dangerous rain"
+      ],
+      "sampled_streaming_providers": [
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 557,
+      "media_type": "movie",
+      "title": "Spider-Man",
+      "original_title": "Spider-Man",
+      "year": 2002,
+      "overview": "After being bitten by a genetically altered spider at Oscorp, nerdy but endearing high school student Peter Parker is endowed with amazing powers to become the superhero known as Spider-Man.",
+      "tmdb_genres": [
+        "Action",
+        "Science Fiction"
+      ],
+      "runtime": 121,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 190.5988,
+      "vote_average": 7.341,
+      "vote_count": 21067,
+      "directors": [
+        "Sam Raimi"
+      ],
+      "writers": [
+        "David Koepp"
+      ],
+      "cinematographers": [
+        "Don Burgess"
+      ],
+      "principal_cast": [
+        "Tobey Maguire",
+        "Willem Dafoe",
+        "Kirsten Dunst",
+        "James Franco",
+        "Cliff Robertson",
+        "Rosemary Harris"
+      ],
+      "keywords": [
+        "new york city",
+        "adolescence",
+        "photographer",
+        "loss of loved one",
+        "photography",
+        "secret identity",
+        "hostility",
+        "superhero",
+        "spider",
+        "bad boss",
+        "villain",
+        "based on comic",
+        "teenage boy",
+        "teenage love",
+        "evil"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus",
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 634649,
+      "media_type": "movie",
+      "title": "Spider-Man: No Way Home",
+      "original_title": "Spider-Man: No Way Home",
+      "year": 2021,
+      "overview": "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.",
+      "tmdb_genres": [
+        "Action",
+        "Adventure",
+        "Science Fiction"
+      ],
+      "runtime": 148,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 590.5478,
+      "vote_average": 7.938,
+      "vote_count": 22558,
+      "directors": [
+        "Jon Watts"
+      ],
+      "writers": [
+        "Chris McKenna",
+        "Erik Sommers"
+      ],
+      "cinematographers": [
+        "Mauro Fiore"
+      ],
+      "principal_cast": [
+        "Tom Holland",
+        "Zendaya",
+        "Benedict Cumberbatch",
+        "Jacob Batalon",
+        "Jon Favreau",
+        "Jamie Foxx"
+      ],
+      "keywords": [
+        "new york city",
+        "hero",
+        "showdown",
+        "magic",
+        "loss of loved one",
+        "secret identity",
+        "superhero",
+        "villain",
+        "portal",
+        "based on comic",
+        "sequel",
+        "vigilante",
+        "superhero team",
+        "masked vigilante",
+        "alternative reality"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus"
+      ]
+    },
+    {
+      "tmdb_id": 931285,
+      "media_type": "movie",
+      "title": "Mortal Kombat II",
+      "original_title": "Mortal Kombat II",
+      "year": 2026,
+      "overview": "The fan favorite champions—now joined by Johnny Cage himself—are pitted against one another in the ultimate, no-holds barred, gory battle to defeat the dark rule of Shao Kahn that threatens the very existence of the Earthrealm and its defenders.",
+      "tmdb_genres": [
+        "Action",
+        "Fantasy",
+        "Adventure"
+      ],
+      "runtime": 116,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 99.3242,
+      "vote_average": 7.895,
+      "vote_count": 2313,
+      "directors": [
+        "Simon McQuoid"
+      ],
+      "writers": [
+        "Jeremy Slater"
+      ],
+      "cinematographers": [
+        "Stephen F. Windon"
+      ],
+      "principal_cast": [
+        "Karl Urban",
+        "Adeline Rudolph",
+        "Ludi Lin",
+        "Jessica McNamee",
+        "Josh Lawson",
+        "Martyn Ford"
+      ],
+      "keywords": [
+        "martial arts",
+        "magic",
+        "ninja fighter",
+        "gore",
+        "sequel",
+        "god",
+        "alternate dimension",
+        "ninja",
+        "fighting",
+        "based on video game",
+        "martial arts tournament",
+        "struggling actor",
+        "hand to hand combat",
+        "aggressive",
+        "amused"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max"
+      ]
+    },
+    {
+      "tmdb_id": 1481343,
+      "media_type": "movie",
+      "title": "The Devil's Mouth",
+      "original_title": "The Devil's Mouth",
+      "year": 2026,
+      "overview": "A group of college friends' Thailand adventure turns deadly when they become trapped in submerged caves with a dangerous predator. As oxygen runs low, past conflicts emerge in their desperate fight for survival.",
+      "tmdb_genres": [
+        "Horror",
+        "Thriller"
+      ],
+      "runtime": 106,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 227.0605,
+      "vote_average": 6.559,
+      "vote_count": 518,
+      "directors": [
+        "Jeff Wadlow"
+      ],
+      "writers": [
+        "Aja Gabel",
+        "Myung Joh Wesner",
+        "Jeff Wadlow"
+      ],
+      "cinematographers": [
+        "James Kniest"
+      ],
+      "principal_cast": [
+        "Kathryn Newton",
+        "Lana Condor",
+        "Nico Hiraga",
+        "Gavin Casalegno",
+        "Tommi Rose",
+        "Tayme Thapthimthong"
+      ],
+      "keywords": [
+        "cave",
+        "animal attack",
+        "thailand",
+        "survival",
+        "creature",
+        "shark",
+        "survival horror",
+        "killer shark",
+        "aggressive",
+        "college friends",
+        "animal horror",
+        "inspirational",
+        "survival thriller"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video"
+      ]
+    },
+    {
+      "tmdb_id": 911430,
+      "media_type": "movie",
+      "title": "F1",
+      "original_title": "F1",
+      "year": 2025,
+      "overview": "Racing legend Sonny Hayes is coaxed out of retirement to lead a struggling Formula 1 team—and mentor a young hotshot driver—while chasing one more chance at glory.",
+      "tmdb_genres": [
+        "Action",
+        "Drama"
+      ],
+      "runtime": 156,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 39.4971,
+      "vote_average": 7.815,
+      "vote_count": 4409,
+      "directors": [
+        "Joseph Kosinski"
+      ],
+      "writers": [
+        "Ehren Kruger",
+        "Joseph Kosinski"
+      ],
+      "cinematographers": [
+        "Claudio Miranda"
+      ],
+      "principal_cast": [
+        "Brad Pitt",
+        "Damson Idris",
+        "Javier Bardem",
+        "Kerry Condon",
+        "Tobias Menzies",
+        "Kim Bodnia"
+      ],
+      "keywords": [
+        "sports",
+        "comeback",
+        "racing",
+        "race car driver",
+        "sport competition",
+        "aftercreditsstinger",
+        "beforecreditsstinger",
+        "rookie",
+        "formula one (f1)",
+        "motorsport",
+        "car racing",
+        "disdainful",
+        "exhilarated",
+        "joyful"
+      ],
+      "sampled_streaming_providers": [
+        "Apple TV"
+      ]
+    },
+    {
+      "tmdb_id": 980431,
+      "media_type": "movie",
+      "title": "Avatar Aang: The Last Airbender",
+      "original_title": "Avatar Aang: The Last Airbender",
+      "year": 2026,
+      "overview": "Avatar Aang, the world's last Airbender, learns of an ancient power that could save his culture from extinction. With the help of his friends, he embarks on a global quest to find it before it falls into the wrong hands and threatens to upend the peace they sacrificed everything to achieve.",
+      "tmdb_genres": [
+        "Animation",
+        "Action",
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtime": 99,
+      "original_language": "en",
+      "origin_country": [
+        "US",
+        "KR",
+        "AU"
+      ],
+      "popularity": 175.1395,
+      "vote_average": 9.294,
+      "vote_count": 754,
+      "directors": [
+        "Lauren Montgomery"
+      ],
+      "writers": [
+        "Tim Hedrick",
+        "Christopher L. Yost",
+        "Bryan Konietzko",
+        "Michael Dante DiMartino",
+        "Kenneth Lin"
+      ],
+      "cinematographers": [
+        "Damon O'Beirne"
+      ],
+      "principal_cast": [
+        "Eric Nam",
+        "Dave Bautista",
+        "Jessica Matten",
+        "Román Zaragoza",
+        "Steven Yeun",
+        "Dionne Quan"
+      ],
+      "keywords": [
+        "martial arts",
+        "extinction",
+        "cultural identity",
+        "based on tv series",
+        "amused",
+        "comforting",
+        "hopeful",
+        "anime inspired"
+      ],
+      "sampled_streaming_providers": [
+        "Paramount Plus Premium"
+      ]
+    },
+    {
+      "tmdb_id": 1339713,
+      "media_type": "movie",
+      "title": "Obsession",
+      "original_title": "Obsession",
+      "year": 2026,
+      "overview": "After breaking the mysterious \"One Wish Willow\" to win his crush's heart, a hopeless romantic finds himself getting exactly what he asked for but soon discovers that some desires come at a dark, sinister price.",
+      "tmdb_genres": [
+        "Horror",
+        "Thriller"
+      ],
+      "runtime": 109,
+      "original_language": "en",
+      "origin_country": [
+        "US",
+        "GB"
+      ],
+      "popularity": 303.9085,
+      "vote_average": 8.232,
+      "vote_count": 4465,
+      "directors": [
+        "Curry Barker"
+      ],
+      "writers": [
+        "Curry Barker"
+      ],
+      "cinematographers": [
+        "Taylor Clemons"
+      ],
+      "principal_cast": [
+        "Michael Johnston",
+        "Inde Navarrette",
+        "Cooper Tomlinson",
+        "Megan Lawless",
+        "Andy Richter",
+        "Haley Fitzgerald"
+      ],
+      "keywords": [
+        "obsession",
+        "supernatural",
+        "possession",
+        "wish",
+        "unrequited love",
+        "couple",
+        "absurdism",
+        "self-harm",
+        "supernatural horror",
+        "psychological",
+        "independent film",
+        "psychological horror",
+        "cursed object"
+      ],
+      "sampled_streaming_providers": [
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 346,
+      "media_type": "movie",
+      "title": "Seven Samurai",
+      "original_title": "七人の侍",
+      "year": 1954,
+      "overview": "A samurai answers a village's request for protection after he falls on hard times. The town needs protection from bandits, so the samurai gathers six others to help him teach the people how to defend themselves, and the villagers provide the soldiers with food.",
+      "tmdb_genres": [
+        "Action",
+        "Drama"
+      ],
+      "runtime": 207,
+      "original_language": "ja",
+      "origin_country": [
+        "JP"
+      ],
+      "popularity": 15.8497,
+      "vote_average": 8.451,
+      "vote_count": 4304,
+      "directors": [
+        "Akira Kurosawa"
+      ],
+      "writers": [
+        "Akira Kurosawa",
+        "Shinobu Hashimoto",
+        "Hideo Oguni"
+      ],
+      "cinematographers": [
+        "Asakazu Nakai"
+      ],
+      "principal_cast": [
+        "Toshirō Mifune",
+        "Takashi Shimura",
+        "Yoshio Inaba",
+        "Seiji Miyaguchi",
+        "Minoru Chiaki",
+        "Daisuke Katō"
+      ],
+      "keywords": [
+        "martial arts",
+        "japan",
+        "samurai",
+        "sword",
+        "peasant",
+        "village",
+        "looting",
+        "rice",
+        "fencing",
+        "moral ambiguity",
+        "forbidden love",
+        "black and white",
+        "battle",
+        "period drama",
+        "bandit"
+      ],
+      "sampled_streaming_providers": [
+        "Criterion Channel"
+      ]
+    },
+    {
+      "tmdb_id": 315635,
+      "media_type": "movie",
+      "title": "Spider-Man: Homecoming",
+      "original_title": "Spider-Man: Homecoming",
+      "year": 2017,
+      "overview": "Following the events of Captain America: Civil War, Peter Parker, with the help of his mentor Tony Stark, tries to balance his life as an ordinary high school student in Queens, New York City, with fighting crime as his superhero alter ego Spider-Man as a new threat, the Vulture, emerges.",
+      "tmdb_genres": [
+        "Action",
+        "Adventure",
+        "Science Fiction"
+      ],
+      "runtime": 133,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 223.5165,
+      "vote_average": 7.332,
+      "vote_count": 23548,
+      "directors": [
+        "Jon Watts"
+      ],
+      "writers": [
+        "Jonathan Goldstein",
+        "John Francis Daley",
+        "Jon Watts",
+        "Christopher Ford",
+        "Chris McKenna",
+        "Erik Sommers"
+      ],
+      "cinematographers": [
+        "Salvatore Totino"
+      ],
+      "principal_cast": [
+        "Tom Holland",
+        "Michael Keaton",
+        "Robert Downey Jr.",
+        "Marisa Tomei",
+        "Jon Favreau",
+        "Gwyneth Paltrow"
+      ],
+      "keywords": [
+        "high school",
+        "new york city",
+        "washington dc, usa",
+        "secret identity",
+        "superhero",
+        "based on comic",
+        "coming of age",
+        "reboot",
+        "aftercreditsstinger",
+        "duringcreditsstinger",
+        "marvel cinematic universe (mcu)",
+        "masked superhero",
+        "teen superhero",
+        "cliché",
+        "straightforward"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus",
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 1314481,
+      "media_type": "movie",
+      "title": "The Devil Wears Prada 2",
+      "original_title": "The Devil Wears Prada 2",
+      "year": 2026,
+      "overview": "Andy Sachs returns to Runway as Miranda Priestly navigates a new media landscape and Runway's position within. The duo reconnect with former assistant Emily Charlton, now the head of a luxury brand that possesses funding which could ensure Runway's survival.",
+      "tmdb_genres": [
+        "Comedy",
+        "Drama"
+      ],
+      "runtime": 119,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 120.2228,
+      "vote_average": 7.096,
+      "vote_count": 1974,
+      "directors": [
+        "David Frankel"
+      ],
+      "writers": [
+        "Aline Brosh McKenna"
+      ],
+      "cinematographers": [
+        "Florian Ballhaus"
+      ],
+      "principal_cast": [
+        "Anne Hathaway",
+        "Meryl Streep",
+        "Emily Blunt",
+        "Stanley Tucci",
+        "Kenneth Branagh",
+        "Justin Theroux"
+      ],
+      "keywords": [
+        "new york city",
+        "based on novel or book",
+        "sequel",
+        "fashion",
+        "fashion magazine",
+        "dramedy",
+        "magazine editor",
+        "fashion industry",
+        "fashionista"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus",
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 429617,
+      "media_type": "movie",
+      "title": "Spider-Man: Far From Home",
+      "original_title": "Spider-Man: Far From Home",
+      "year": 2019,
+      "overview": "Peter Parker and his friends go on a summer trip to Europe. However, they will hardly be able to rest - Peter will have to agree to help Nick Fury uncover the mystery of creatures that cause natural disasters and destruction throughout the continent.",
+      "tmdb_genres": [
+        "Action",
+        "Adventure",
+        "Science Fiction"
+      ],
+      "runtime": 129,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 118.4504,
+      "vote_average": 7.4,
+      "vote_count": 17310,
+      "directors": [
+        "Jon Watts"
+      ],
+      "writers": [
+        "Chris McKenna",
+        "Erik Sommers"
+      ],
+      "cinematographers": [
+        "Matthew J. Lloyd"
+      ],
+      "principal_cast": [
+        "Tom Holland",
+        "Jake Gyllenhaal",
+        "Samuel L. Jackson",
+        "Marisa Tomei",
+        "Jon Favreau",
+        "Zendaya"
+      ],
+      "keywords": [
+        "venice, italy",
+        "secret identity",
+        "superhero",
+        "school trip",
+        "europe",
+        "based on comic",
+        "sequel",
+        "travel",
+        "aftercreditsstinger",
+        "duringcreditsstinger",
+        "marvel cinematic universe (mcu)",
+        "masked superhero",
+        "tower of london",
+        "teen superhero"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus"
+      ]
+    },
+    {
+      "tmdb_id": 569094,
+      "media_type": "movie",
+      "title": "Spider-Man: Across the Spider-Verse",
+      "original_title": "Spider-Man: Across the Spider-Verse",
+      "year": 2023,
+      "overview": "After reuniting with Gwen Stacy, Brooklyn’s full-time, friendly neighborhood Spider-Man is catapulted across the Multiverse, where he encounters the Spider Society, a team of Spider-People charged with protecting the Multiverse's very existence. But when the heroes clash on how to handle a new threat, Miles finds himself pitted against the other Spiders and must set out on his own to save those he loves most.",
+      "tmdb_genres": [
+        "Animation",
+        "Action",
+        "Adventure",
+        "Science Fiction"
+      ],
+      "runtime": 140,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 70.4361,
+      "vote_average": 8.341,
+      "vote_count": 8948,
+      "directors": [
+        "Kemp Powers",
+        "Justin K. Thompson",
+        "Joaquim Dos Santos"
+      ],
+      "writers": [
+        "Phil Lord",
+        "Christopher Miller",
+        "David Callaham"
+      ],
+      "cinematographers": [],
+      "principal_cast": [
+        "Shameik Moore",
+        "Hailee Steinfeld",
+        "Brian Tyree Henry",
+        "Luna Lauren Vélez",
+        "Jake Johnson",
+        "Oscar Isaac"
+      ],
+      "keywords": [
+        "new york city",
+        "hero",
+        "double life",
+        "sacrifice",
+        "secret identity",
+        "superhero",
+        "villain",
+        "portal",
+        "based on comic",
+        "sequel",
+        "romance",
+        "alter ego",
+        "alternate dimension",
+        "parenting",
+        "family"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus",
+        "HBO Max"
+      ]
+    },
+    {
+      "tmdb_id": 454639,
+      "media_type": "movie",
+      "title": "Masters of the Universe",
+      "original_title": "Masters of the Universe",
+      "year": 2026,
+      "overview": "After being separated for 15 years, the Sword of Power leads Prince Adam back to Eternia, where he discovers his home shattered under the fiendish rule of Skeletor. To save his family and his world, Adam must join forces with his closest allies, Teela and Duncan/Man-At-Arms, and embrace his true destiny as He-Man — the most powerful man in the universe.",
+      "tmdb_genres": [
+        "Action",
+        "Fantasy",
+        "Science Fiction"
+      ],
+      "runtime": 141,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 214.7988,
+      "vote_average": 7.216,
+      "vote_count": 1686,
+      "directors": [
+        "Travis Knight"
+      ],
+      "writers": [
+        "Chris Butler",
+        "Aaron Nee",
+        "Adam Nee",
+        "David Callaham",
+        "Alex Litvak",
+        "Michael Finch"
+      ],
+      "cinematographers": [
+        "Fabian Wagner"
+      ],
+      "principal_cast": [
+        "Nicholas Galitzine",
+        "Camila Mendes",
+        "Idris Elba",
+        "Jared Leto",
+        "Alison Brie",
+        "Jóhannes Haukur Jóhannesson"
+      ],
+      "keywords": [
+        "skeleton",
+        "superhero",
+        "nostalgia",
+        "alien planet",
+        "based on toy",
+        "super power",
+        "reboot",
+        "aftercreditsstinger",
+        "duringcreditsstinger",
+        "warrior",
+        "sword and planet",
+        "father son conflict",
+        "sword and sorcery",
+        "father daughter relationship",
+        "loving"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video"
+      ]
+    },
+    {
+      "tmdb_id": 950396,
+      "media_type": "movie",
+      "title": "The Gorge",
+      "original_title": "The Gorge",
+      "year": 2025,
+      "overview": "Two highly trained operatives grow close from a distance after being sent to guard opposite sides of a mysterious gorge. When an evil below emerges, they must work together to survive what lies within.",
+      "tmdb_genres": [
+        "Romance",
+        "Science Fiction",
+        "Thriller"
+      ],
+      "runtime": 128,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 35.8745,
+      "vote_average": 7.683,
+      "vote_count": 4041,
+      "directors": [
+        "Scott Derrickson"
+      ],
+      "writers": [
+        "Zach Dean"
+      ],
+      "cinematographers": [
+        "Dan Laustsen"
+      ],
+      "principal_cast": [
+        "Miles Teller",
+        "Anya Taylor-Joy",
+        "Sigourney Weaver",
+        "Ṣọpẹ́ Dìrísù",
+        "William Houston",
+        "Kobna Holdbrook-Smith"
+      ],
+      "keywords": [
+        "isolation",
+        "paranoia",
+        "fog",
+        "tower",
+        "elite sniper",
+        "trust issues",
+        "snipers",
+        "long-term observation",
+        "unknown threat",
+        "mysterious canyon",
+        "sci‑fi romance",
+        "espionage mission",
+        "surveillance partners",
+        "enigmatic environment",
+        "survival pressure"
+      ],
+      "sampled_streaming_providers": [
+        "Apple TV"
+      ]
+    },
+    {
+      "tmdb_id": 157336,
+      "media_type": "movie",
+      "title": "Interstellar",
+      "original_title": "Interstellar",
+      "year": 2014,
+      "overview": "The adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.",
+      "tmdb_genres": [
+        "Adventure",
+        "Drama",
+        "Science Fiction"
+      ],
+      "runtime": 169,
+      "original_language": "en",
+      "origin_country": [
+        "GB",
+        "US"
+      ],
+      "popularity": 70.2255,
+      "vote_average": 8.484,
+      "vote_count": 40664,
+      "directors": [
+        "Christopher Nolan"
+      ],
+      "writers": [
+        "Jonathan Nolan",
+        "Christopher Nolan"
+      ],
+      "cinematographers": [
+        "Hoyte van Hoytema"
+      ],
+      "principal_cast": [
+        "Matthew McConaughey",
+        "Anne Hathaway",
+        "Michael Caine",
+        "Jessica Chastain",
+        "Casey Affleck",
+        "Wes Bentley"
+      ],
+      "keywords": [
+        "spacecraft",
+        "race against time",
+        "artificial intelligence (a.i.)",
+        "nasa",
+        "time warp",
+        "dystopia",
+        "expedition",
+        "time travel",
+        "space travel",
+        "wormhole",
+        "famine",
+        "hibernation",
+        "black hole",
+        "quantum mechanics",
+        "family relationships"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video",
+        "Hulu",
+        "Paramount Plus Premium"
+      ]
+    },
+    {
+      "tmdb_id": 1226863,
+      "media_type": "movie",
+      "title": "The Super Mario Galaxy Movie",
+      "original_title": "The Super Mario Galaxy Movie",
+      "year": 2026,
+      "overview": "Having thwarted Bowser's previous plot to marry Princess Peach, Mario and Luigi now face a fresh threat in Bowser Jr., who is determined to liberate his father from captivity and restore the family legacy. Alongside companions new and old, the brothers travel across the stars to stop the young heir's crusade.",
+      "tmdb_genres": [
+        "Family",
+        "Comedy",
+        "Adventure",
+        "Fantasy",
+        "Animation"
+      ],
+      "runtime": 98,
+      "original_language": "en",
+      "origin_country": [
+        "JP",
+        "US"
+      ],
+      "popularity": 85.1676,
+      "vote_average": 8.257,
+      "vote_count": 3389,
+      "directors": [
+        "Aaron Horvath",
+        "Michael Jelenic"
+      ],
+      "writers": [
+        "Matthew Fogel"
+      ],
+      "cinematographers": [],
+      "principal_cast": [
+        "Chris Pratt",
+        "Charlie Day",
+        "Anya Taylor-Joy",
+        "Jack Black",
+        "Keegan-Michael Key",
+        "Donald Glover"
+      ],
+      "keywords": [
+        "galaxy",
+        "friendship",
+        "sibling relationship",
+        "space travel",
+        "sequel",
+        "space",
+        "based on video game",
+        "buddy comedy",
+        "aftercreditsstinger",
+        "duringcreditsstinger",
+        "space adventure",
+        "father son relationship",
+        "parallel universe",
+        "brother brother relationship",
+        "talking animal"
+      ],
+      "sampled_streaming_providers": [
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 1598,
+      "media_type": "movie",
+      "title": "Cape Fear",
+      "original_title": "Cape Fear",
+      "year": 1991,
+      "overview": "Sam Bowden is a small-town corporate attorney. Max Cady is a tattooed, cigar-smoking, Bible-quoting, psychotic rapist. What do they have in common? 14 years ago, Sam was a public defender assigned to Max Cady's rape trial, and he made a serious error: he hid a document from his illiterate client that could have gotten him acquitted. Now, the cagey Cady has been released, and he intends to teach Sam Bowden and his family a thing or two about loss.",
+      "tmdb_genres": [
+        "Drama",
+        "Crime",
+        "Thriller"
+      ],
+      "runtime": 128,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 15.1287,
+      "vote_average": 7.263,
+      "vote_count": 3961,
+      "directors": [
+        "Martin Scorsese"
+      ],
+      "writers": [
+        "Wesley Strick"
+      ],
+      "cinematographers": [
+        "Freddie Francis"
+      ],
+      "principal_cast": [
+        "Robert De Niro",
+        "Nick Nolte",
+        "Jessica Lange",
+        "Juliette Lewis",
+        "Joe Don Baker",
+        "Robert Mitchum"
+      ],
+      "keywords": [
+        "prison",
+        "small town",
+        "child abuse",
+        "rape",
+        "houseboat",
+        "cigar smoking",
+        "remake",
+        "revenge",
+        "stalking",
+        "lawyer",
+        "psychological thriller",
+        "fear",
+        "rebellious daughter",
+        "rapist",
+        "private detective"
+      ],
+      "sampled_streaming_providers": [
+        "Criterion Channel"
+      ]
+    },
+    {
+      "tmdb_id": 1630409,
+      "media_type": "movie",
+      "title": "The Debt Collector",
+      "original_title": "คนเดือดทวงแค้น",
+      "year": 2026,
+      "overview": "Tormented by past mistakes and a terminal diagnosis, an ex-debt collector returns to the underworld to protect the victims of a violent organization.",
+      "tmdb_genres": [
+        "Action",
+        "Thriller",
+        "Crime"
+      ],
+      "runtime": 134,
+      "original_language": "th",
+      "origin_country": [
+        "TH"
+      ],
+      "popularity": 128.0408,
+      "vote_average": 7.75,
+      "vote_count": 76,
+      "directors": [
+        "Surapong Ploensang"
+      ],
+      "writers": [
+        "Ornusa Donsawai",
+        "Pun Homchuen",
+        "Surapong Ploensang"
+      ],
+      "cinematographers": [
+        "Phalanon Pholchawaporn"
+      ],
+      "principal_cast": [
+        "Nadech Kugimiya",
+        "Pittaya Saechua",
+        "Chaiwat Thongsaeng",
+        "Nuanprang Treechit",
+        "Jonathan Holman",
+        "Ploypaphas Fonkaewsiwaporn"
+      ],
+      "keywords": [],
+      "sampled_streaming_providers": [
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 559,
+      "media_type": "movie",
+      "title": "Spider-Man 3",
+      "original_title": "Spider-Man 3",
+      "year": 2007,
+      "overview": "The seemingly invincible Spider-Man goes up against an all-new crop of villains—including the shape-shifting Sandman. While Spider-Man’s superpowers are altered by an alien organism, his alter ego, Peter Parker, deals with nemesis Eddie Brock and also gets caught up in a love triangle.",
+      "tmdb_genres": [
+        "Action",
+        "Adventure",
+        "Science Fiction"
+      ],
+      "runtime": 139,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 84.1582,
+      "vote_average": 6.5,
+      "vote_count": 15508,
+      "directors": [
+        "Sam Raimi"
+      ],
+      "writers": [
+        "Alvin Sargent",
+        "Sam Raimi",
+        "Ivan Raimi"
+      ],
+      "cinematographers": [
+        "Bill Pope"
+      ],
+      "principal_cast": [
+        "Tobey Maguire",
+        "Kirsten Dunst",
+        "James Franco",
+        "Thomas Haden Church",
+        "Topher Grace",
+        "Bryce Dallas Howard"
+      ],
+      "keywords": [
+        "amnesia",
+        "dual identity",
+        "love of one's life",
+        "loss of loved one",
+        "forgiveness",
+        "hostility",
+        "superhero",
+        "sandstorm",
+        "spider",
+        "wretch",
+        "sand",
+        "narcissism",
+        "egomania",
+        "based on comic",
+        "sequel"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus",
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 1930,
+      "media_type": "movie",
+      "title": "The Amazing Spider-Man",
+      "original_title": "The Amazing Spider-Man",
+      "year": 2012,
+      "overview": "A teenage Peter Parker grapples with both high school and amazing super-human crises as his alter-ego Spider-Man.",
+      "tmdb_genres": [
+        "Action",
+        "Adventure",
+        "Science Fiction"
+      ],
+      "runtime": 136,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 97.7928,
+      "vote_average": 6.747,
+      "vote_count": 18831,
+      "directors": [
+        "Marc Webb"
+      ],
+      "writers": [
+        "James Vanderbilt",
+        "Alvin Sargent",
+        "Steve Kloves"
+      ],
+      "cinematographers": [
+        "John Schwartzman"
+      ],
+      "principal_cast": [
+        "Andrew Garfield",
+        "Emma Stone",
+        "Rhys Ifans",
+        "Denis Leary",
+        "Martin Sheen",
+        "Sally Field"
+      ],
+      "keywords": [
+        "new york city",
+        "experiment",
+        "loss of loved one",
+        "superhero",
+        "based on comic",
+        "vigilante",
+        "teenage girl",
+        "teenage boy",
+        "super power",
+        "spider bite",
+        "masked vigilante",
+        "reboot",
+        "genetic engineering",
+        "social outcast",
+        "death of husband"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus"
+      ]
+    },
+    {
+      "tmdb_id": 1304313,
+      "media_type": "movie",
+      "title": "Lee Cronin's The Mummy",
+      "original_title": "Lee Cronin's The Mummy",
+      "year": 2026,
+      "overview": "The young daughter of a journalist disappears into the desert without a trace—eight years later, the broken family is shocked when she is returned to them, as what should be a joyful reunion turns into a living nightmare.",
+      "tmdb_genres": [
+        "Horror",
+        "Mystery"
+      ],
+      "runtime": 133,
+      "original_language": "en",
+      "origin_country": [
+        "US",
+        "IE"
+      ],
+      "popularity": 69.8707,
+      "vote_average": 7.924,
+      "vote_count": 2463,
+      "directors": [
+        "Lee Cronin"
+      ],
+      "writers": [
+        "Lee Cronin"
+      ],
+      "cinematographers": [
+        "Dave Garbett"
+      ],
+      "principal_cast": [
+        "Jack Reynor",
+        "Laia Costa",
+        "May Calamawy",
+        "Natalie Grace",
+        "Shylo Molina",
+        "Billie Roy"
+      ],
+      "keywords": [
+        "journalist",
+        "egypt",
+        "monster",
+        "ritual",
+        "kidnapping",
+        "pyramid",
+        "investigation",
+        "supernatural",
+        "mummy",
+        "possession",
+        "disappearance",
+        "curse",
+        "demon",
+        "tomb",
+        "missing person"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max"
+      ]
+    },
+    {
+      "tmdb_id": 687163,
+      "media_type": "movie",
+      "title": "Project Hail Mary",
+      "original_title": "Project Hail Mary",
+      "year": 2026,
+      "overview": "Science teacher Ryland Grace wakes up on a spaceship light years from home with no recollection of who he is or how he got there. As his memory returns, he begins to uncover his mission: solve the riddle of the mysterious substance causing the sun to die out. He must call on his scientific knowledge and unorthodox ideas to save everything on Earth from extinction.",
+      "tmdb_genres": [
+        "Science Fiction",
+        "Adventure"
+      ],
+      "runtime": 157,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 144.9994,
+      "vote_average": 8.7,
+      "vote_count": 6882,
+      "directors": [
+        "Phil Lord",
+        "Christopher Miller"
+      ],
+      "writers": [
+        "Drew Goddard"
+      ],
+      "cinematographers": [
+        "Greig Fraser"
+      ],
+      "principal_cast": [
+        "Ryan Gosling",
+        "Sandra Hüller",
+        "James Ortiz",
+        "Lionel Boyce",
+        "Milana Vayntrub",
+        "Ken Leung"
+      ],
+      "keywords": [
+        "friendship",
+        "coma",
+        "based on novel or book",
+        "bravery",
+        "sun",
+        "language barrier",
+        "space travel",
+        "space mission",
+        "alien",
+        "space",
+        "memory loss",
+        "astronaut",
+        "scientist",
+        "science teacher",
+        "save the planet"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video"
+      ]
+    },
+    {
+      "tmdb_id": 1698575,
+      "media_type": "movie",
+      "title": "Snoopy Presents: There's No Place Like Home, Snoopy",
+      "original_title": "Snoopy Presents: There's No Place Like Home, Snoopy",
+      "year": 2026,
+      "overview": "When Snoopy's beloved doghouse goes missing, he tries to track it down, and learns what makes a house feel like home.",
+      "tmdb_genres": [
+        "Animation",
+        "Family"
+      ],
+      "runtime": 32,
+      "original_language": "en",
+      "origin_country": [
+        "US",
+        "CA"
+      ],
+      "popularity": 30.4613,
+      "vote_average": 8.14,
+      "vote_count": 25,
+      "directors": [
+        "Ridd Sorensen"
+      ],
+      "writers": [
+        "Rob Hoegee"
+      ],
+      "cinematographers": [],
+      "principal_cast": [
+        "Riley Kai Vargas",
+        "Terry McGurrin",
+        "Rob Tinkler",
+        "Kitai O'Garro",
+        "Josephine Nisbett",
+        "Grace Nicolaou-Wood"
+      ],
+      "keywords": [],
+      "sampled_streaming_providers": [
+        "Apple TV"
+      ]
+    },
+    {
+      "tmdb_id": 238,
+      "media_type": "movie",
+      "title": "The Godfather",
+      "original_title": "The Godfather",
+      "year": 1972,
+      "overview": "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
+      "tmdb_genres": [
+        "Drama",
+        "Crime"
+      ],
+      "runtime": 175,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 57.6669,
+      "vote_average": 8.686,
+      "vote_count": 23299,
+      "directors": [
+        "Francis Ford Coppola"
+      ],
+      "writers": [
+        "Mario Puzo",
+        "Francis Ford Coppola"
+      ],
+      "cinematographers": [
+        "Gordon Willis"
+      ],
+      "principal_cast": [
+        "Marlon Brando",
+        "Al Pacino",
+        "James Caan",
+        "Robert Duvall",
+        "Richard S. Castellano",
+        "Diane Keaton"
+      ],
+      "keywords": [
+        "based on novel or book",
+        "loss of loved one",
+        "love at first sight",
+        "italy",
+        "gangster",
+        "symbolism",
+        "patriarch",
+        "europe",
+        "organized crime",
+        "mafia",
+        "religion",
+        "revenge motive",
+        "crime family",
+        "sicilian mafia",
+        "religious hypocrisy"
+      ],
+      "sampled_streaming_providers": [
+        "Paramount Plus Premium"
+      ]
+    },
+    {
+      "tmdb_id": 652,
+      "media_type": "movie",
+      "title": "Troy",
+      "original_title": "Troy",
+      "year": 2004,
+      "overview": "In year 1250 B.C. during the late Bronze age, two emerging nations begin to clash. Paris, the Trojan prince, convinces Helen, Queen of Sparta, to leave her husband Menelaus, and sail with him back to Troy. After Menelaus finds out that his wife was taken by the Trojans, he asks his brother Agamemnon to help him get her back. Agamemnon sees this as an opportunity for power. They set off with 1,000 ships holding 50,000 Greeks to Troy.",
+      "tmdb_genres": [
+        "War",
+        "Action",
+        "History"
+      ],
+      "runtime": 163,
+      "original_language": "en",
+      "origin_country": [
+        "GB",
+        "US"
+      ],
+      "popularity": 59.8138,
+      "vote_average": 7.183,
+      "vote_count": 11341,
+      "directors": [
+        "Wolfgang Petersen"
+      ],
+      "writers": [
+        "David Benioff"
+      ],
+      "cinematographers": [
+        "Roger Pratt"
+      ],
+      "principal_cast": [
+        "Brad Pitt",
+        "Orlando Bloom",
+        "Eric Bana",
+        "Brian Cox",
+        "Sean Bean",
+        "Brendan Gleeson"
+      ],
+      "keywords": [
+        "adultery",
+        "sibling relationship",
+        "hostility",
+        "bravery",
+        "mythology",
+        "beauty",
+        "trojan war",
+        "wall",
+        "fraud",
+        "sword fight",
+        "battlefield",
+        "historical fiction",
+        "ancient world",
+        "based on song, poem or rhyme",
+        "pyre"
+      ],
+      "sampled_streaming_providers": [
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 3782,
+      "media_type": "movie",
+      "title": "Ikiru",
+      "original_title": "生きる",
+      "year": 1952,
+      "overview": "Kanji Watanabe is a middle-aged man who has worked in the same monotonous bureaucratic position for decades. Learning he has cancer, he starts to look for the meaning of his life.",
+      "tmdb_genres": [
+        "Drama"
+      ],
+      "runtime": 143,
+      "original_language": "ja",
+      "origin_country": [
+        "JP"
+      ],
+      "popularity": 14.333,
+      "vote_average": 8.305,
+      "vote_count": 1373,
+      "directors": [
+        "Akira Kurosawa"
+      ],
+      "writers": [
+        "Shinobu Hashimoto",
+        "Akira Kurosawa",
+        "Hideo Oguni"
+      ],
+      "cinematographers": [
+        "Asakazu Nakai"
+      ],
+      "principal_cast": [
+        "Takashi Shimura",
+        "Haruo Tanaka",
+        "Nobuo Kaneko",
+        "Bokuzen Hidari",
+        "Miki Odagiri",
+        "Shinichi Himori"
+      ],
+      "keywords": [
+        "dying and death",
+        "japan",
+        "bureaucracy",
+        "age difference",
+        "praise",
+        "office",
+        "night life",
+        "sense of life",
+        "playground",
+        "obsequies",
+        "swing",
+        "loneliness",
+        "office politics",
+        "black and white",
+        "co-workers relationship"
+      ],
+      "sampled_streaming_providers": [
+        "Criterion Channel"
+      ]
+    },
+    {
+      "tmdb_id": 1510795,
+      "media_type": "movie",
+      "title": "Shake, Rattle & Roll: Evil Origins",
+      "original_title": "Shake, Rattle & Roll: Evil Origins",
+      "year": 2026,
+      "overview": "In 1775 during the Spanish colonial period in the Philippines, nuns attempts to survive the night after an unknown evil was set free in their cloister. Meanwhile in 2025, a group of friends attend a Halloween masquerade ball which was attacked by a serial killer. Fast forward to the future in 2050, a post-apocalytic Philippines is ruled by the aswang.",
+      "tmdb_genres": [
+        "Horror"
+      ],
+      "runtime": 148,
+      "original_language": "tl",
+      "origin_country": [
+        "PH"
+      ],
+      "popularity": 118.685,
+      "vote_average": 4,
+      "vote_count": 5,
+      "directors": [
+        "Shugo Praico",
+        "Joey De Guzman",
+        "Ian Loreños"
+      ],
+      "writers": [
+        "Alex Castor",
+        "Onay Sales-Camero",
+        "Gina Marissa Tagasa-Gil",
+        "John Paul Abellera",
+        "Noreen Capili"
+      ],
+      "cinematographers": [
+        "Mo Zee",
+        "Mark Joshua Tirona",
+        "Rommel Sales"
+      ],
+      "principal_cast": [
+        "Carla Abellana",
+        "Richard Gutierrez",
+        "Ivana Alawi",
+        "Manilyn Reynes",
+        "Janice de Belen",
+        "Francine Diaz"
+      ],
+      "keywords": [
+        "connected",
+        "horror anthology",
+        "terror",
+        "mmff"
+      ],
+      "sampled_streaming_providers": [
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 24428,
+      "media_type": "movie",
+      "title": "The Avengers",
+      "original_title": "The Avengers",
+      "year": 2012,
+      "overview": "When an unexpected enemy emerges and threatens global safety and security, Nick Fury, director of the international peacekeeping agency known as S.H.I.E.L.D., finds himself in need of a team to pull the world back from the brink of disaster. Spanning the globe, a daring recruitment effort begins!",
+      "tmdb_genres": [
+        "Science Fiction",
+        "Action",
+        "Adventure"
+      ],
+      "runtime": 143,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 82.5463,
+      "vote_average": 8.064,
+      "vote_count": 39119,
+      "directors": [
+        "Joss Whedon"
+      ],
+      "writers": [
+        "Joss Whedon",
+        "Zak Penn"
+      ],
+      "cinematographers": [
+        "Seamus McGarvey"
+      ],
+      "principal_cast": [
+        "Robert Downey Jr.",
+        "Chris Evans",
+        "Mark Ruffalo",
+        "Chris Hemsworth",
+        "Scarlett Johansson",
+        "Jeremy Renner"
+      ],
+      "keywords": [
+        "new york city",
+        "superhero",
+        "shield",
+        "based on comic",
+        "alien invasion",
+        "superhero team",
+        "aftercreditsstinger",
+        "duringcreditsstinger",
+        "marvel cinematic universe (mcu)"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus",
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 102382,
+      "media_type": "movie",
+      "title": "The Amazing Spider-Man 2",
+      "original_title": "The Amazing Spider-Man 2",
+      "year": 2014,
+      "overview": "For Peter Parker, life is busy. Between taking out the bad guys as Spider-Man and spending time with the person he loves, Gwen Stacy, high school graduation cannot come quickly enough. Peter has not forgotten about the promise he made to Gwen’s father to protect her by staying away, but that is a promise he cannot keep. Things will change for Peter when a new villain, Electro, emerges, an old friend, Harry Osborn, returns, and Peter uncovers new clues about his past.",
+      "tmdb_genres": [
+        "Action",
+        "Adventure",
+        "Science Fiction"
+      ],
+      "runtime": 141,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 97.6154,
+      "vote_average": 6.552,
+      "vote_count": 14516,
+      "directors": [
+        "Marc Webb"
+      ],
+      "writers": [
+        "Alex Kurtzman",
+        "Roberto Orci",
+        "Jeff Pinkner",
+        "James Vanderbilt"
+      ],
+      "cinematographers": [
+        "Dan Mindel"
+      ],
+      "principal_cast": [
+        "Andrew Garfield",
+        "Emma Stone",
+        "Jamie Foxx",
+        "Dane DeHaan",
+        "Colm Feore",
+        "Felicity Jones"
+      ],
+      "keywords": [
+        "new york city",
+        "experiment",
+        "obsession",
+        "secret identity",
+        "superhero",
+        "based on comic",
+        "sequel",
+        "electrocution",
+        "super power",
+        "masked superhero",
+        "teen superhero",
+        "disapproving"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus"
+      ]
+    },
+    {
+      "tmdb_id": 155,
+      "media_type": "movie",
+      "title": "The Dark Knight",
+      "original_title": "The Dark Knight",
+      "year": 2008,
+      "overview": "Batman raises the stakes in his war on crime. With the help of Lt. Jim Gordon and District Attorney Harvey Dent, Batman sets out to dismantle the remaining criminal organizations that plague the streets. The partnership proves to be effective, but they soon find themselves prey to a reign of chaos unleashed by a rising criminal mastermind known to the terrified citizens of Gotham as the Joker.",
+      "tmdb_genres": [
+        "Action",
+        "Crime",
+        "Thriller"
+      ],
+      "runtime": 152,
+      "original_language": "en",
+      "origin_country": [
+        "GB",
+        "US"
+      ],
+      "popularity": 65.096,
+      "vote_average": 8.534,
+      "vote_count": 36324,
+      "directors": [
+        "Christopher Nolan"
+      ],
+      "writers": [
+        "Jonathan Nolan",
+        "Christopher Nolan",
+        "David S. Goyer"
+      ],
+      "cinematographers": [
+        "Wally Pfister"
+      ],
+      "principal_cast": [
+        "Christian Bale",
+        "Heath Ledger",
+        "Aaron Eckhart",
+        "Michael Caine",
+        "Maggie Gyllenhaal",
+        "Gary Oldman"
+      ],
+      "keywords": [
+        "sadism",
+        "chaos",
+        "secret identity",
+        "crime fighter",
+        "superhero",
+        "anti hero",
+        "scarecrow",
+        "based on comic",
+        "vigilante",
+        "organized crime",
+        "tragic hero",
+        "anti villain",
+        "criminal mastermind",
+        "district attorney",
+        "super power"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max"
+      ]
+    },
+    {
+      "tmdb_id": 1263532,
+      "media_type": "movie",
+      "title": "Beast Race",
+      "original_title": "Corrida dos Bichos",
+      "year": 2026,
+      "overview": "In future Rio de Janeiro, a young leader of the resistance must enter a deadly parkour-inspired competition in order to save his sister's life.",
+      "tmdb_genres": [
+        "Action",
+        "Science Fiction",
+        "Thriller"
+      ],
+      "runtime": 124,
+      "original_language": "pt",
+      "origin_country": [
+        "BR"
+      ],
+      "popularity": 89.4695,
+      "vote_average": 5.757,
+      "vote_count": 35,
+      "directors": [
+        "Fernando Meirelles",
+        "Rodrigo Pesavento",
+        "Ernesto Solis"
+      ],
+      "writers": [
+        "Rodrigo Lages",
+        "Ernesto Solis",
+        "Eva Klaver",
+        "Marco Abujamra"
+      ],
+      "cinematographers": [
+        "Gustavo Hadba"
+      ],
+      "principal_cast": [
+        "Matheus Abreu",
+        "Rodrigo Santoro",
+        "Isis Valverde",
+        "Thainá Duarte",
+        "Bruno Gagliasso",
+        "Seu Jorge"
+      ],
+      "keywords": [
+        "bet",
+        "dystopia",
+        "post-apocalyptic future",
+        "parkour",
+        "game",
+        "dark future",
+        "running race",
+        "social inequality",
+        "futuro distópico",
+        "dying race"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video"
+      ]
+    },
+    {
+      "tmdb_id": 1361774,
+      "media_type": "movie",
+      "title": "The Dink",
+      "original_title": "The Dink",
+      "year": 2026,
+      "overview": "Desperate to save a struggling country club and earn his father's respect, a washed-up tennis pro is compelled to break a sacred vow and do the unthinkable: play pickleball.",
+      "tmdb_genres": [
+        "Comedy"
+      ],
+      "runtime": 103,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 24.0315,
+      "vote_average": 6.1,
+      "vote_count": 89,
+      "directors": [
+        "Josh Greenbaum"
+      ],
+      "writers": [
+        "Sean Clements"
+      ],
+      "cinematographers": [
+        "Carl Herse"
+      ],
+      "principal_cast": [
+        "Jake Johnson",
+        "Mary Steenburgen",
+        "Chloe Fineman",
+        "Aaron Chen",
+        "Patton Oswalt",
+        "Andy Roddick"
+      ],
+      "keywords": [
+        "sports",
+        "tennis",
+        "rehabilitation",
+        "prodigy",
+        "washed up",
+        "sports comedy",
+        "pickleball"
+      ],
+      "sampled_streaming_providers": [
+        "Apple TV"
+      ]
+    },
+    {
+      "tmdb_id": 361743,
+      "media_type": "movie",
+      "title": "Top Gun: Maverick",
+      "original_title": "Top Gun: Maverick",
+      "year": 2022,
+      "overview": "After more than thirty years of service as one of the Navy’s top aviators, and dodging the advancement in rank that would ground him, Pete “Maverick” Mitchell finds himself training a detachment of TOP GUN graduates for a specialized mission the likes of which no living pilot has ever seen.",
+      "tmdb_genres": [
+        "Action",
+        "Drama"
+      ],
+      "runtime": 131,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 44.8034,
+      "vote_average": 8.159,
+      "vote_count": 11305,
+      "directors": [
+        "Joseph Kosinski"
+      ],
+      "writers": [
+        "Eric Warren Singer",
+        "Ehren Kruger",
+        "Christopher McQuarrie",
+        "Justin Marks",
+        "Peter Craig"
+      ],
+      "cinematographers": [
+        "Claudio Miranda"
+      ],
+      "principal_cast": [
+        "Tom Cruise",
+        "Miles Teller",
+        "Jennifer Connelly",
+        "Bashir Salahuddin",
+        "Jon Hamm",
+        "Charles Parnell"
+      ],
+      "keywords": [
+        "fighter pilot",
+        "u.s. navy",
+        "sequel",
+        "nuclear weapons",
+        "military",
+        "aircraft carrier",
+        "naval aviation",
+        "war"
+      ],
+      "sampled_streaming_providers": [
+        "Paramount Plus Premium"
+      ]
+    },
+    {
+      "tmdb_id": 671,
+      "media_type": "movie",
+      "title": "Harry Potter and the Philosopher's Stone",
+      "original_title": "Harry Potter and the Philosopher's Stone",
+      "year": 2001,
+      "overview": "Harry Potter has lived under the stairs at his aunt and uncle's house his whole life. But on his 11th birthday, he learns he's a powerful wizard—with a place waiting for him at the Hogwarts School of Witchcraft and Wizardry. As he learns to harness his newfound powers with the help of the school's kindly headmaster, Harry uncovers the truth about his parents' deaths—and about the villain who's to blame.",
+      "tmdb_genres": [
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtime": 152,
+      "original_language": "en",
+      "origin_country": [
+        "GB",
+        "US"
+      ],
+      "popularity": 53.8815,
+      "vote_average": 7.902,
+      "vote_count": 29958,
+      "directors": [
+        "Chris Columbus"
+      ],
+      "writers": [
+        "Steve Kloves"
+      ],
+      "cinematographers": [
+        "John Seale"
+      ],
+      "principal_cast": [
+        "Daniel Radcliffe",
+        "Rupert Grint",
+        "Emma Watson",
+        "Richard Harris",
+        "Tom Felton",
+        "Alan Rickman"
+      ],
+      "keywords": [
+        "witch",
+        "school friend",
+        "friendship",
+        "london, england",
+        "based on novel or book",
+        "magic",
+        "boarding school",
+        "male friendship",
+        "child hero",
+        "school of witchcraft",
+        "chosen one",
+        "bullying",
+        "school",
+        "ghost",
+        "fantasy world"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max",
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 5879,
+      "media_type": "movie",
+      "title": "In the Realm of the Senses",
+      "original_title": "愛のコリーダ",
+      "year": 1976,
+      "overview": "A passionate telling of the story of Sada Abe, a woman whose affair with her master led to an obsessive and ultimately destructive sexual relationship.",
+      "tmdb_genres": [
+        "Drama",
+        "Romance"
+      ],
+      "runtime": 102,
+      "original_language": "ja",
+      "origin_country": [
+        "JP",
+        "FR"
+      ],
+      "popularity": 13.4865,
+      "vote_average": 6.6,
+      "vote_count": 747,
+      "directors": [
+        "Nagisa Ōshima"
+      ],
+      "writers": [
+        "Nagisa Ōshima"
+      ],
+      "cinematographers": [
+        "Hideo Itō"
+      ],
+      "principal_cast": [
+        "Eiko Matsuda",
+        "Tatsuya Fuji",
+        "Aoi Nakajima",
+        "Yasuko Matsui",
+        "Meika Seri",
+        "Kanae Kobayashi"
+      ],
+      "keywords": [
+        "japan",
+        "pornography",
+        "jealousy",
+        "geisha",
+        "brothel",
+        "eroticism",
+        "sake",
+        "longing",
+        "deceived wife",
+        "based on true story",
+        "sadomasochism",
+        "mistress",
+        "prostitution",
+        "nymphomania",
+        "1930s"
+      ],
+      "sampled_streaming_providers": [
+        "Criterion Channel"
+      ]
+    },
+    {
+      "tmdb_id": 1668364,
+      "media_type": "movie",
+      "title": "Desire",
+      "original_title": "Deseo",
+      "year": 2026,
+      "overview": "Lucero’s life appears immaculate: a wealthy household, a devoted husband, and two children who embody the promise of a perfect family. Yet beneath this surface simmers a quiet dissatisfaction. When Matías, a young swimming coach hired by her husband, enters their lives, Lucero finds herself pulled into a risky and consuming relationship. As secrecy, desire, and jealousy tighten their grip, the boundaries within the family begin to collapse, placing mother and daughter in a dangerous emotional triangle that threatens to shatter everything Lucero has built.",
+      "tmdb_genres": [
+        "Mystery",
+        "Drama"
+      ],
+      "runtime": 97,
+      "original_language": "es",
+      "origin_country": [
+        "MX"
+      ],
+      "popularity": 94.7873,
+      "vote_average": 6.776,
+      "vote_count": 199,
+      "directors": [
+        "Teresa Simone"
+      ],
+      "writers": [
+        "Giulia Cardamone",
+        "Vanessa Miklos"
+      ],
+      "cinematographers": [
+        "Marc Bellver"
+      ],
+      "principal_cast": [
+        "Ludwika Paleta",
+        "José María Yázpik",
+        "Óscar Casas",
+        "Leonardo Ortizgris",
+        "Matías Coronado",
+        "Pilar Pascual"
+      ],
+      "keywords": [],
+      "sampled_streaming_providers": [
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 1726,
+      "media_type": "movie",
+      "title": "Iron Man",
+      "original_title": "Iron Man",
+      "year": 2008,
+      "overview": "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
+      "tmdb_genres": [
+        "Action",
+        "Science Fiction",
+        "Adventure"
+      ],
+      "runtime": 126,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 48.9692,
+      "vote_average": 7.664,
+      "vote_count": 28496,
+      "directors": [
+        "Jon Favreau"
+      ],
+      "writers": [
+        "Mark Fergus",
+        "Hawk Ostby",
+        "Art Marcum",
+        "Matt Holloway"
+      ],
+      "cinematographers": [
+        "Matthew Libatique"
+      ],
+      "principal_cast": [
+        "Robert Downey Jr.",
+        "Terrence Howard",
+        "Jeff Bridges",
+        "Gwyneth Paltrow",
+        "Leslie Bibb",
+        "Shaun Toub"
+      ],
+      "keywords": [
+        "middle east",
+        "kidnapping",
+        "superhero",
+        "arms dealer",
+        "based on comic",
+        "aftercreditsstinger",
+        "marvel cinematic universe (mcu)",
+        "aggressive",
+        "counterterrorism",
+        "antagonistic",
+        "bold"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus",
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 299536,
+      "media_type": "movie",
+      "title": "Avengers: Infinity War",
+      "original_title": "Avengers: Infinity War",
+      "year": 2018,
+      "overview": "As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos. A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality. Everything the Avengers have fought for has led up to this moment - the fate of Earth and existence itself has never been more uncertain.",
+      "tmdb_genres": [
+        "Adventure",
+        "Action",
+        "Science Fiction"
+      ],
+      "runtime": 149,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 92.1263,
+      "vote_average": 8.24,
+      "vote_count": 32509,
+      "directors": [
+        "Anthony Russo",
+        "Joe Russo"
+      ],
+      "writers": [
+        "Christopher Markus",
+        "Stephen McFeely"
+      ],
+      "cinematographers": [
+        "Trent Opaloch"
+      ],
+      "principal_cast": [
+        "Robert Downey Jr.",
+        "Chris Evans",
+        "Chris Hemsworth",
+        "Josh Brolin",
+        "Mark Ruffalo",
+        "Scarlett Johansson"
+      ],
+      "keywords": [
+        "sacrifice",
+        "magic",
+        "superhero",
+        "based on comic",
+        "space",
+        "battlefield",
+        "genocide",
+        "magical object",
+        "super power",
+        "superhero team",
+        "aftercreditsstinger",
+        "marvel cinematic universe (mcu)",
+        "cosmic"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus"
+      ]
+    },
+    {
+      "tmdb_id": 122,
+      "media_type": "movie",
+      "title": "The Lord of the Rings: The Return of the King",
+      "original_title": "The Lord of the Rings: The Return of the King",
+      "year": 2003,
+      "overview": "As armies mass for a final battle that will decide the fate of the world--and powerful, ancient forces of Light and Dark compete to determine the outcome--one member of the Fellowship of the Ring is revealed as the noble heir to the throne of the Kings of Men. Yet, the sole hope for triumph over evil lies with a brave hobbit, Frodo, who, accompanied by his loyal friend Sam and the hideous, wretched Gollum, ventures deep into the very dark heart of Mordor on his seemingly impossible quest to destroy the Ring of Power.​",
+      "tmdb_genres": [
+        "Adventure",
+        "Fantasy",
+        "Action"
+      ],
+      "runtime": 201,
+      "original_language": "en",
+      "origin_country": [
+        "NZ",
+        "US"
+      ],
+      "popularity": 56.468,
+      "vote_average": 8.503,
+      "vote_count": 27038,
+      "directors": [
+        "Peter Jackson"
+      ],
+      "writers": [
+        "Fran Walsh",
+        "Peter Jackson",
+        "Philippa Boyens"
+      ],
+      "cinematographers": [
+        "Andrew Lesnie"
+      ],
+      "principal_cast": [
+        "Elijah Wood",
+        "Ian McKellen",
+        "Viggo Mortensen",
+        "Sean Astin",
+        "Andy Serkis",
+        "Dominic Monaghan"
+      ],
+      "keywords": [
+        "army",
+        "based on novel or book",
+        "elves",
+        "dwarf",
+        "magic",
+        "kingdom",
+        "obsession",
+        "bravery",
+        "castle",
+        "volcano",
+        "giant spider",
+        "sequel",
+        "honor",
+        "king",
+        "madness"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max"
+      ]
+    },
+    {
+      "tmdb_id": 98894,
+      "media_type": "movie",
+      "title": "Jessica",
+      "original_title": "Jessica",
+      "year": 1962,
+      "overview": "When the men of a Sicilian village start obsessing over ravishing blonde midwife Jessica, angry females revolt by refusing to have sex with their husbands. As the local priest tries to encourage procreation, Jessica falls for a tricky recluse.",
+      "tmdb_genres": [
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "runtime": 112,
+      "original_language": "en",
+      "origin_country": [
+        "US",
+        "IT",
+        "FR"
+      ],
+      "popularity": 77.2309,
+      "vote_average": 4.294,
+      "vote_count": 17,
+      "directors": [
+        "Jean Negulesco",
+        "Oreste Palella"
+      ],
+      "writers": [
+        "Edith R. Sommer"
+      ],
+      "cinematographers": [
+        "Piero Portalupi"
+      ],
+      "principal_cast": [
+        "Maurice Chevalier",
+        "Angie Dickinson",
+        "Noël-Noël",
+        "Gabriele Ferzetti",
+        "Sylva Koscina",
+        "Agnes Moorehead"
+      ],
+      "keywords": [
+        "sicily, italy",
+        "romance"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video"
+      ]
+    },
+    {
+      "tmdb_id": 1259102,
+      "media_type": "movie",
+      "title": "Eternity",
+      "original_title": "Eternity",
+      "year": 2025,
+      "overview": "In an afterlife where souls have one week to decide where to spend eternity, Joan is faced with the impossible choice between the man she spent her life with and her first love, who died young and has waited decades for her to arrive.",
+      "tmdb_genres": [
+        "Romance",
+        "Comedy",
+        "Drama"
+      ],
+      "runtime": 114,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 19.3301,
+      "vote_average": 7.091,
+      "vote_count": 774,
+      "directors": [
+        "David Freyne"
+      ],
+      "writers": [
+        "David Freyne",
+        "Pat Cunnane"
+      ],
+      "cinematographers": [
+        "Ruairí O'Brien"
+      ],
+      "principal_cast": [
+        "Elizabeth Olsen",
+        "Miles Teller",
+        "Callum Turner",
+        "Da'Vine Joy Randolph",
+        "John Early",
+        "Barry Primus"
+      ],
+      "keywords": [
+        "afterlife",
+        "widow",
+        "marriage",
+        "romcom",
+        "woman between two men",
+        "first love",
+        "death of husband",
+        "eternity",
+        "death of spouse",
+        "reflective",
+        "difficult choice",
+        "memories",
+        "loving",
+        "fantasy",
+        "reminiscent"
+      ],
+      "sampled_streaming_providers": [
+        "Apple TV"
+      ]
+    },
+    {
+      "tmdb_id": 680,
+      "media_type": "movie",
+      "title": "Pulp Fiction",
+      "original_title": "Pulp Fiction",
+      "year": 1994,
+      "overview": "A burger-loving hit man, his philosophical partner, a drug-addled gangster's moll and a washed-up boxer converge in this sprawling, comedic crime caper. Their adventures unfurl in three stories that ingeniously trip back and forth in time.",
+      "tmdb_genres": [
+        "Thriller",
+        "Crime",
+        "Comedy"
+      ],
+      "runtime": 154,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 43.1277,
+      "vote_average": 8.481,
+      "vote_count": 30589,
+      "directors": [
+        "Quentin Tarantino"
+      ],
+      "writers": [
+        "Roger Avary",
+        "Quentin Tarantino"
+      ],
+      "cinematographers": [
+        "Andrzej Sekula"
+      ],
+      "principal_cast": [
+        "John Travolta",
+        "Samuel L. Jackson",
+        "Uma Thurman",
+        "Bruce Willis",
+        "Ving Rhames",
+        "Harvey Keitel"
+      ],
+      "keywords": [
+        "drug dealer",
+        "drug crime",
+        "gangster",
+        "dark comedy",
+        "stolen money",
+        "crime boss",
+        "redemption",
+        "los angeles, california",
+        "theft",
+        "couple",
+        "nonlinear timeline",
+        "multiple storylines",
+        "disturbed",
+        "aggressive",
+        "neo-noir"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video",
+        "Paramount Plus Premium"
+      ]
+    },
+    {
+      "tmdb_id": 603,
+      "media_type": "movie",
+      "title": "The Matrix",
+      "original_title": "The Matrix",
+      "year": 1999,
+      "overview": "Set in the 22nd century, The Matrix tells the story of a computer hacker who joins a group of underground insurgents fighting the vast and powerful computers who now rule the earth.",
+      "tmdb_genres": [
+        "Action",
+        "Science Fiction"
+      ],
+      "runtime": 136,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 45.5763,
+      "vote_average": 8.254,
+      "vote_count": 28380,
+      "directors": [
+        "Lana Wachowski",
+        "Lilly Wachowski"
+      ],
+      "writers": [
+        "Lana Wachowski",
+        "Lilly Wachowski"
+      ],
+      "cinematographers": [
+        "Bill Pope"
+      ],
+      "principal_cast": [
+        "Keanu Reeves",
+        "Laurence Fishburne",
+        "Carrie-Anne Moss",
+        "Hugo Weaving",
+        "Gloria Foster",
+        "Joe Pantoliano"
+      ],
+      "keywords": [
+        "man vs machine",
+        "martial arts",
+        "fortune teller",
+        "artificial intelligence (a.i.)",
+        "saving the world",
+        "prophecy",
+        "philosophy",
+        "dystopia",
+        "allegory",
+        "insurgence",
+        "chosen one",
+        "simulated reality ",
+        "cyberpunk",
+        "gnosticism"
+      ],
+      "sampled_streaming_providers": [
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 21484,
+      "media_type": "movie",
+      "title": "Possession",
+      "original_title": "Possession",
+      "year": 1981,
+      "overview": "A young woman left her family for an unspecified reason. The husband determines to find out the truth and starts following his wife. At first, he suspects that a man is involved. But gradually, he finds out more and more strange behaviors and bizarre incidents that indicate something more than a possessed love affair.",
+      "tmdb_genres": [
+        "Horror"
+      ],
+      "runtime": 124,
+      "original_language": "en",
+      "origin_country": [
+        "FR",
+        "DE"
+      ],
+      "popularity": 13.3021,
+      "vote_average": 7.311,
+      "vote_count": 1382,
+      "directors": [
+        "Andrzej Żuławski"
+      ],
+      "writers": [
+        "Andrzej Żuławski"
+      ],
+      "cinematographers": [
+        "Bruno Nuytten"
+      ],
+      "principal_cast": [
+        "Isabelle Adjani",
+        "Sam Neill",
+        "Margit Carstensen",
+        "Heinz Bennent",
+        "Johanna Hofer",
+        "Carl Duering"
+      ],
+      "keywords": [
+        "adultery",
+        "berlin, germany",
+        "monster",
+        "police",
+        "marriage crisis",
+        "germany",
+        "berlin wall",
+        "obsession",
+        "investigation",
+        "possession",
+        "gore",
+        "hysteria",
+        "teacher",
+        "murder",
+        "domestic abuse"
+      ],
+      "sampled_streaming_providers": [
+        "Criterion Channel"
+      ]
+    },
+    {
+      "tmdb_id": 949838,
+      "media_type": "movie",
+      "title": "72 HOURS",
+      "original_title": "72 HOURS",
+      "year": 2026,
+      "overview": "To save his career, a 40-year-old ad exec joins a crew of twentysomethings for a wild Miami bachelor party after they mistakenly add him to a group chat.",
+      "tmdb_genres": [
+        "Comedy",
+        "Crime"
+      ],
+      "runtime": 102,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 79.0096,
+      "vote_average": 6.791,
+      "vote_count": 308,
+      "directors": [
+        "Tim Story"
+      ],
+      "writers": [
+        "Jon Hurwitz",
+        "Hayden Schlossberg",
+        "Kevin Burrows",
+        "Matt Mider"
+      ],
+      "cinematographers": [
+        "Larry Blanford"
+      ],
+      "principal_cast": [
+        "Kevin Hart",
+        "Marcello Hernández",
+        "Mason Gooding",
+        "Kam Patterson",
+        "Ben Marshall",
+        "Zach Cherry"
+      ],
+      "keywords": [
+        "bachelor party",
+        "depressing",
+        "cliché"
+      ],
+      "sampled_streaming_providers": [
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 19995,
+      "media_type": "movie",
+      "title": "Avatar",
+      "original_title": "Avatar",
+      "year": 2009,
+      "overview": "In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.",
+      "tmdb_genres": [
+        "Action",
+        "Science Fiction",
+        "Adventure"
+      ],
+      "runtime": 162,
+      "original_language": "en",
+      "origin_country": [
+        "US",
+        "GB"
+      ],
+      "popularity": 48.9383,
+      "vote_average": 7.609,
+      "vote_count": 34402,
+      "directors": [
+        "James Cameron"
+      ],
+      "writers": [
+        "James Cameron"
+      ],
+      "cinematographers": [
+        "Mauro Fiore"
+      ],
+      "principal_cast": [
+        "Sam Worthington",
+        "Zoe Saldaña",
+        "Sigourney Weaver",
+        "Stephen Lang",
+        "Michelle Rodriguez",
+        "Giovanni Ribisi"
+      ],
+      "keywords": [
+        "paraplegic",
+        "attachment to nature",
+        "culture clash",
+        "indigenous",
+        "space travel",
+        "space colony",
+        "tribe",
+        "alien planet",
+        "distant future",
+        "marine",
+        "battle",
+        "love affair",
+        "scientist",
+        "nature",
+        "native peoples"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus",
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 83533,
+      "media_type": "movie",
+      "title": "Avatar: Fire and Ash",
+      "original_title": "Avatar: Fire and Ash",
+      "year": 2025,
+      "overview": "In the wake of the devastating war against the RDA and the loss of their eldest son, Jake Sully and Neytiri face a new threat on Pandora: the Ash People, a violent and power-hungry Na'vi tribe led by the ruthless Varang. Jake's family must fight for their survival and the future of Pandora in a conflict that pushes them to their emotional and physical limits.",
+      "tmdb_genres": [
+        "Science Fiction",
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtime": 198,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 87.5974,
+      "vote_average": 7.637,
+      "vote_count": 4081,
+      "directors": [
+        "James Cameron"
+      ],
+      "writers": [
+        "James Cameron",
+        "Shane Salerno",
+        "Amanda Silver",
+        "Rick Jaffa",
+        "Josh Friedman"
+      ],
+      "cinematographers": [
+        "Russell Carpenter"
+      ],
+      "principal_cast": [
+        "Sam Worthington",
+        "Zoe Saldaña",
+        "Sigourney Weaver",
+        "Stephen Lang",
+        "Oona Chaplin",
+        "Jack Champion"
+      ],
+      "keywords": [
+        "witch",
+        "clone",
+        "space war",
+        "tribe",
+        "sequel",
+        "alien",
+        "transhumanism",
+        "family",
+        "space adventure",
+        "motion capture",
+        "family dynamics",
+        "rival"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus"
+      ]
+    },
+    {
+      "tmdb_id": 1325734,
+      "media_type": "movie",
+      "title": "The Drama",
+      "original_title": "The Drama",
+      "year": 2026,
+      "overview": "A happily engaged couple is put to the test when an unexpected turn sends their wedding week off the rails.",
+      "tmdb_genres": [
+        "Romance",
+        "Comedy",
+        "Drama"
+      ],
+      "runtime": 105,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 50.6259,
+      "vote_average": 6.896,
+      "vote_count": 1510,
+      "directors": [
+        "Kristoffer Borgli"
+      ],
+      "writers": [
+        "Kristoffer Borgli"
+      ],
+      "cinematographers": [
+        "Arseni Khachaturan"
+      ],
+      "principal_cast": [
+        "Zendaya",
+        "Robert Pattinson",
+        "Alana Haim",
+        "Mamoudou Athie",
+        "Hailey Benton Gates",
+        "Sydney Lemmon"
+      ],
+      "keywords": [
+        "infidelity",
+        "boston, massachusetts",
+        "dark comedy",
+        "romcom",
+        "engaged couple",
+        "desperate",
+        "trust issues",
+        "provocative",
+        "romantic",
+        "adoring",
+        "audacious",
+        "melodramatic",
+        "sympathetic"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max"
+      ]
+    },
+    {
+      "tmdb_id": 755898,
+      "media_type": "movie",
+      "title": "War of the Worlds",
+      "original_title": "War of the Worlds",
+      "year": 2025,
+      "overview": "Will Radford is a top analyst for Homeland Security who tracks potential threats through a mass surveillance program, until one day an attack by an unknown entity leads him to question whether the government is hiding something from him... and from the rest of the world.",
+      "tmdb_genres": [
+        "Science Fiction",
+        "Thriller"
+      ],
+      "runtime": 91,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 65.0817,
+      "vote_average": 4.082,
+      "vote_count": 1061,
+      "directors": [
+        "Rich Lee"
+      ],
+      "writers": [
+        "Marc Hyman",
+        "Kenny Golde"
+      ],
+      "cinematographers": [
+        "Christopher Probst"
+      ],
+      "principal_cast": [
+        "Ice Cube",
+        "Eva Longoria",
+        "Clark Gregg",
+        "Iman Benson",
+        "Henry Hunter Hall",
+        "Devon Bostick"
+      ],
+      "keywords": [
+        "government",
+        "attack",
+        "privacy",
+        "surveillance",
+        "found footage",
+        "cybersecurity",
+        "district",
+        "online privacy",
+        "screenlife",
+        "war"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video"
+      ]
+    },
+    {
+      "tmdb_id": 1416,
+      "media_type": "tv",
+      "title": "Grey's Anatomy",
+      "original_title": "Grey's Anatomy",
+      "year": 2005,
+      "overview": "Follows the personal and professional lives of a group of doctors at Seattle's Grey Sloan Memorial Hospital.",
+      "tmdb_genres": [
+        "Drama"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 249.5296,
+      "vote_average": 8.206,
+      "vote_count": 10999,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Ellen Pompeo",
+        "Chandra Wilson",
+        "James Pickens Jr.",
+        "Caterina Scorsone",
+        "Camilla Luddington",
+        "Kevin McKidd"
+      ],
+      "keywords": [
+        "seattle, washington",
+        "trauma",
+        "workplace",
+        "hospital",
+        "doctor",
+        "medical student",
+        "surgical interns",
+        "medical drama"
+      ],
+      "sampled_streaming_providers": [
+        "Hulu",
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 5920,
+      "media_type": "tv",
+      "title": "The Mentalist",
+      "original_title": "The Mentalist",
+      "year": 2008,
+      "overview": "Patrick Jane, a former celebrity psychic medium, uses his razor sharp skills of observation and expertise at \"reading\" people to solve serious crimes with the California Bureau of Investigation.",
+      "tmdb_genres": [
+        "Crime",
+        "Drama",
+        "Mystery"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 318.2462,
+      "vote_average": 8.374,
+      "vote_count": 4518,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Simon Baker",
+        "Robin Tunney",
+        "Tim Kang",
+        "Rockmond Dunbar",
+        "Joe Adler",
+        "Josie Loren"
+      ],
+      "keywords": [
+        "california",
+        "con man",
+        "cop",
+        "serial killer",
+        "criminal investigation",
+        "forensic psychology",
+        "criminal consultant",
+        "police procedural"
+      ],
+      "sampled_streaming_providers": [
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 65334,
+      "media_type": "tv",
+      "title": "Miraculous: Tales of Ladybug & Cat Noir",
+      "original_title": "Miraculous, les aventures de Ladybug et Chat Noir",
+      "year": 2015,
+      "overview": "Marinette and Adrien, two Parisian teenagers, are entrusted with powerful jewels in order to transform into superheroes Ladybug and Cat Noir. But neither hero knows the other's true identity — or that they're classmates!",
+      "tmdb_genres": [
+        "Action & Adventure",
+        "Animation",
+        "Kids"
+      ],
+      "runtime": null,
+      "original_language": "fr",
+      "origin_country": [
+        "FR"
+      ],
+      "popularity": 238.8603,
+      "vote_average": 8.059,
+      "vote_count": 4637,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Anouck Hautbois",
+        "Benjamin Bollen",
+        "Marie Nonnenmacher",
+        "Thierry Kazazian"
+      ],
+      "keywords": [
+        "paris, france",
+        "magic",
+        "friendship",
+        "superhero",
+        "romance",
+        "school",
+        "female protagonist",
+        "3d animation",
+        "magical girl",
+        "fantasy",
+        "comedy"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus",
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 94997,
+      "media_type": "tv",
+      "title": "House of the Dragon",
+      "original_title": "House of the Dragon",
+      "year": 2022,
+      "overview": "The Targaryen dynasty is at the absolute apex of its power, with more than 15 dragons under their yoke. Most empires crumble from such heights. In the case of the Targaryens, their slow fall begins when King Viserys breaks with a century of tradition by naming his daughter Rhaenyra heir to the Iron Throne. But when Viserys later fathers a son, the court is shocked when Rhaenyra retains her status as his heir, and seeds of division sow friction across the realm.",
+      "tmdb_genres": [
+        "Sci-Fi & Fantasy",
+        "Drama",
+        "Action & Adventure"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 347.0066,
+      "vote_average": 8.382,
+      "vote_count": 6876,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Matt Smith",
+        "Emma D'Arcy",
+        "Olivia Cooke",
+        "James Norton",
+        "Steve Toussaint",
+        "Fabien Frankel"
+      ],
+      "keywords": [
+        "based on novel or book",
+        "kingdom",
+        "melancholy",
+        "prequel",
+        "dysfunctional family",
+        "knight",
+        "dragon",
+        "king",
+        "fantasy world",
+        "dark fantasy",
+        "power struggle",
+        "hopeless",
+        "thoughtful",
+        "reflective",
+        "power madness"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max"
+      ]
+    },
+    {
+      "tmdb_id": 113962,
+      "media_type": "tv",
+      "title": "Lioness",
+      "original_title": "Lioness",
+      "year": 2023,
+      "overview": "Cruz Manuelos, a rough-around-the-edges but passionate young Marine, is recruited to join the CIA's Lioness Engagement Team to help bring down a terrorist organization from within. Joe, the station chief of the Lioness program, is tasked with training, managing and leading her female undercover operatives.",
+      "tmdb_genres": [
+        "Drama",
+        "War & Politics"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 303.5051,
+      "vote_average": 8,
+      "vote_count": 1308,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Zoe Saldaña",
+        "Laysla De Oliveira",
+        "Dave Annable",
+        "Jill Wagner",
+        "LaMonica Garrett",
+        "James Jordan"
+      ],
+      "keywords": [
+        "central intelligence agency (cia)",
+        "undercover agent",
+        "biting",
+        "us military",
+        "special ops",
+        "thoughtful",
+        "spy thriller",
+        "suspenseful",
+        "appreciative",
+        "compassionate",
+        "earnest",
+        "empathetic",
+        "urgent"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video",
+        "Paramount Plus Premium"
+      ]
+    },
+    {
+      "tmdb_id": 125988,
+      "media_type": "tv",
+      "title": "Silo",
+      "original_title": "Silo",
+      "year": 2023,
+      "overview": "In a ruined and toxic future, thousands live in a giant silo deep underground. After its sheriff breaks a cardinal rule and residents die mysteriously, engineer Juliette starts to uncover shocking secrets and the truth about the silo.",
+      "tmdb_genres": [
+        "Sci-Fi & Fantasy",
+        "Drama"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 236.6381,
+      "vote_average": 8.185,
+      "vote_count": 2392,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Rebecca Ferguson",
+        "Common",
+        "Chinaza Uche",
+        "Ashley Zukerman",
+        "Shane McRae",
+        "Remmie Milner"
+      ],
+      "keywords": [
+        "corruption",
+        "based on novel or book",
+        "post-apocalyptic future",
+        "dystopia",
+        "politics",
+        "disaster",
+        "cynical",
+        "hidden powers",
+        "silo",
+        "societal ignorance",
+        "cautionary",
+        "systemic corruption",
+        "depressed",
+        "absurd",
+        "depressing"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video",
+        "Apple TV"
+      ]
+    },
+    {
+      "tmdb_id": 4614,
+      "media_type": "tv",
+      "title": "NCIS",
+      "original_title": "NCIS",
+      "year": 2003,
+      "overview": "From murder and espionage to terrorism and stolen submarines, a team of special agents investigates any crime that has any connection to Navy and Marine Corps personnel, regardless of rank or position.",
+      "tmdb_genres": [
+        "Crime",
+        "Drama",
+        "Action & Adventure"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 201.4422,
+      "vote_average": 7.608,
+      "vote_count": 2544,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [],
+      "keywords": [
+        "navy",
+        "marine corps",
+        "u.s. navy",
+        "naval officer",
+        "medical examiner",
+        "interrogation",
+        "ex-marine",
+        "criminal investigation",
+        "veteran",
+        "virginia",
+        "crime investigation",
+        "special agent",
+        "police procedural",
+        "dramatic"
+      ],
+      "sampled_streaming_providers": [
+        "Hulu",
+        "Netflix",
+        "Paramount Plus Premium"
+      ]
+    },
+    {
+      "tmdb_id": 2734,
+      "media_type": "tv",
+      "title": "Law & Order: Special Victims Unit",
+      "original_title": "Law & Order: Special Victims Unit",
+      "year": 1999,
+      "overview": "In the criminal justice system, sexually-based offenses are considered especially heinous. In New York City, the dedicated detectives who investigate these vicious felonies are members of an elite squad known as the Special Victims Unit. These are their stories.",
+      "tmdb_genres": [
+        "Crime",
+        "Drama",
+        "Mystery"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 262.2471,
+      "vote_average": 7.958,
+      "vote_count": 4310,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Mariska Hargitay"
+      ],
+      "keywords": [
+        "detective",
+        "sexual abuse",
+        "sex scandal",
+        "domestic abuse",
+        "sexual violence",
+        "domestic violence",
+        "criminal",
+        "sex trafficking",
+        "interrogation",
+        "district attorney",
+        "courtroom",
+        "assistant district attorney",
+        "sex crime",
+        "sexual assault",
+        "sex trade"
+      ],
+      "sampled_streaming_providers": [
+        "Hulu",
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 32419,
+      "media_type": "tv",
+      "title": "Horrible Histories",
+      "original_title": "Horrible Histories",
+      "year": 2009,
+      "overview": "Based on the best-selling children's books and liberally splattered with guts, blood and poo, a group of British comedians offer an anarchic and unconventional take on some of history's most gruesome and funny moments, with topics including the Stone Age, the Middle Ages, the Egyptians and the Romans, among others.",
+      "tmdb_genres": [
+        "Family",
+        "Comedy"
+      ],
+      "runtime": 92,
+      "original_language": "en",
+      "origin_country": [
+        "GB"
+      ],
+      "popularity": 16.173,
+      "vote_average": 7.97,
+      "vote_count": 67,
+      "directors": [],
+      "writers": [
+        "Susie Donkin"
+      ],
+      "cinematographers": [],
+      "principal_cast": [],
+      "keywords": [
+        "anthology",
+        "based on children's book",
+        "educational",
+        "sketch comedy",
+        "british history",
+        "anarchic comedy",
+        "edutainment"
+      ],
+      "sampled_streaming_providers": [
+        "Criterion Channel"
+      ]
+    },
+    {
+      "tmdb_id": 549,
+      "media_type": "tv",
+      "title": "Law & Order",
+      "original_title": "Law & Order",
+      "year": 1990,
+      "overview": "In cases ripped from the headlines, police investigate serious and often deadly crimes, weighing the evidence and questioning the suspects until someone is taken into custody. The district attorney's office then builds a case to convict the perpetrator by proving the person guilty beyond a reasonable doubt. Working together, these expert teams navigate all sides of the complex criminal justice system to make New York a safer place.",
+      "tmdb_genres": [
+        "Crime",
+        "Drama"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 206.9383,
+      "vote_average": 7.3,
+      "vote_count": 705,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [],
+      "keywords": [
+        "new york city",
+        "police",
+        "lawyer",
+        "homicide detective",
+        "crime investigation",
+        "criminal law",
+        "legal drama",
+        "criminal justice system"
+      ],
+      "sampled_streaming_providers": [
+        "Hulu",
+        "Netflix",
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 79744,
+      "media_type": "tv",
+      "title": "The Rookie",
+      "original_title": "The Rookie",
+      "year": 2018,
+      "overview": "Starting over isn't easy, especially for small-town guy John Nolan who, after a life-altering incident, is pursuing his dream of being an LAPD officer. As the force's oldest rookie, he's met with skepticism from some higher-ups who see him as just a walking midlife crisis.",
+      "tmdb_genres": [
+        "Crime",
+        "Drama",
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 242.6292,
+      "vote_average": 8.545,
+      "vote_count": 3448,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Nathan Fillion",
+        "Melissa O'Neil",
+        "Eric Winter",
+        "Alyssa Diaz",
+        "Mekia Cox",
+        "Richard T. Jones"
+      ],
+      "keywords": [
+        "police chase",
+        "los angeles, california",
+        "police officer",
+        "police detective",
+        "street crime",
+        "lapd",
+        "police training",
+        "crime investigation",
+        "dramedy",
+        "police department",
+        "procedural",
+        "police drama",
+        "cautionary",
+        "dramatic"
+      ],
+      "sampled_streaming_providers": [
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 456,
+      "media_type": "tv",
+      "title": "The Simpsons",
+      "original_title": "The Simpsons",
+      "year": 1989,
+      "overview": "Set in Springfield, the average American town, the show focuses on the antics and everyday adventures of the Simpson family; Homer, Marge, Bart, Lisa and Maggie, as well as a virtual cast of thousands. Since the beginning, the series has been a pop culture icon, attracting hundreds of celebrities to guest star. The show has also made name for itself in its fearless satirical take on politics, media and American life in general.",
+      "tmdb_genres": [
+        "Animation",
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 203.8739,
+      "vote_average": 8.021,
+      "vote_count": 10921,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Dan Castellaneta",
+        "Julie Kavner",
+        "Nancy Cartwright",
+        "Yeardley Smith",
+        "Hank Azaria",
+        "Harry Shearer"
+      ],
+      "keywords": [
+        "nuclear power plant",
+        "middle class",
+        "cartoon",
+        "satire",
+        "parody",
+        "dysfunctional family",
+        "school",
+        "adult humor",
+        "social satire",
+        "family",
+        "adult animation",
+        "sitcom",
+        "kids",
+        "farce",
+        "appreciative"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus",
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 60625,
+      "media_type": "tv",
+      "title": "Rick and Morty",
+      "original_title": "Rick and Morty",
+      "year": 2013,
+      "overview": "Follows a sociopathic genius scientist who drags his inherently timid grandson on adventures across the universe.",
+      "tmdb_genres": [
+        "Animation",
+        "Comedy",
+        "Sci-Fi & Fantasy",
+        "Action & Adventure"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 202.7907,
+      "vote_average": 8.681,
+      "vote_count": 11247,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Chris Parnell",
+        "Spencer Grammer",
+        "Sarah Chalke",
+        "Ian Cardoni",
+        "Harry Belden"
+      ],
+      "keywords": [
+        "time travel",
+        "grandfather",
+        "alcoholism",
+        "alien",
+        "dysfunctional family",
+        "mad scientist",
+        "scientist",
+        "adult animation",
+        "father figure",
+        "machinist",
+        "multiple dimensions",
+        "spaceship"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max",
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 1622,
+      "media_type": "tv",
+      "title": "Supernatural",
+      "original_title": "Supernatural",
+      "year": 2005,
+      "overview": "When they were boys, Sam and Dean Winchester lost their mother to a mysterious and demonic supernatural force. Subsequently, their father raised them to be soldiers. He taught them about the paranormal evil that lives in the dark corners and on the back roads of America ... and he taught them how to kill it. Now, the Winchester brothers crisscross the country in their '67 Chevy Impala, battling every kind of supernatural threat they encounter along the way. ",
+      "tmdb_genres": [
+        "Drama",
+        "Mystery",
+        "Sci-Fi & Fantasy"
+      ],
+      "runtime": 45,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 202.8279,
+      "vote_average": 8.313,
+      "vote_count": 8584,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [
+        "Serge Ladouceur"
+      ],
+      "principal_cast": [
+        "Jared Padalecki",
+        "Jensen Ackles",
+        "Misha Collins"
+      ],
+      "keywords": [
+        "angel",
+        "witch",
+        "monster",
+        "exorcism",
+        "supernatural",
+        "paranormal",
+        "purgatory",
+        "paranormal phenomena",
+        "apocalypse",
+        "bromance",
+        "dead mother",
+        "demon",
+        "on the road",
+        "demonic possession",
+        "ghost"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video",
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 97546,
+      "media_type": "tv",
+      "title": "Ted Lasso",
+      "original_title": "Ted Lasso",
+      "year": 2020,
+      "overview": "Ted Lasso, an American football coach, moves to England when he's hired to manage a soccer team—despite having no experience. With cynical players and a doubtful town, will he get them to see the Ted Lasso Way?",
+      "tmdb_genres": [
+        "Drama",
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 143.4798,
+      "vote_average": 8.344,
+      "vote_count": 2508,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Jason Sudeikis",
+        "Hannah Waddingham",
+        "Jeremy Swift",
+        "Brett Goldstein",
+        "Brendan Hunt",
+        "Juno Temple"
+      ],
+      "keywords": [
+        "england",
+        "male friendship",
+        "friendship",
+        "fish out of water",
+        "football (soccer)",
+        "american abroad",
+        "teammate",
+        "professional sports",
+        "football (soccer) team",
+        "workplace comedy",
+        "team owner",
+        "football (soccer) coach",
+        "optimist",
+        "coaching",
+        "nice guy"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video",
+        "Apple TV"
+      ]
+    },
+    {
+      "tmdb_id": 4057,
+      "media_type": "tv",
+      "title": "Criminal Minds",
+      "original_title": "Criminal Minds",
+      "year": 2005,
+      "overview": "An elite team of FBI profilers analyze the country's most twisted criminal minds, anticipating their next moves before they strike again. The Behavioral Analysis Unit's most experienced agent is David Rossi, a founding member of the BAU who returns to help the team solve new cases.",
+      "tmdb_genres": [
+        "Crime",
+        "Drama",
+        "Mystery"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 170.1523,
+      "vote_average": 8.301,
+      "vote_count": 4144,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Joe Mantegna",
+        "Paget Brewster",
+        "Adam Rodriguez",
+        "Kirsten Vangsness",
+        "A.J. Cook",
+        "Aisha Tyler"
+      ],
+      "keywords": [
+        "fbi",
+        "criminal mastermind",
+        "crime investigation",
+        "special agent",
+        "criminology",
+        "police profiling",
+        "police procedural",
+        "witty"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video",
+        "Hulu",
+        "Paramount Plus Premium"
+      ]
+    },
+    {
+      "tmdb_id": 22980,
+      "media_type": "tv",
+      "title": "Watch What Happens Live with Andy Cohen",
+      "original_title": "Watch What Happens Live with Andy Cohen",
+      "year": 2009,
+      "overview": "Bravo network executive Andy Cohen discusses pop culture topics with celebrities and reality show personalities.",
+      "tmdb_genres": [
+        "Talk",
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 167.1354,
+      "vote_average": 5,
+      "vote_count": 87,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Andy Cohen"
+      ],
+      "keywords": [
+        "pop culture",
+        "talk show",
+        "live"
+      ],
+      "sampled_streaming_providers": [
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 1095,
+      "media_type": "tv",
+      "title": "Ghost in the Shell: Stand Alone Complex",
+      "original_title": "攻殻機動隊 STAND ALONE COMPLEX",
+      "year": 2002,
+      "overview": "In the future when technological enhancements and robotics are a way of life, Major Motoko Kusanagi and Section 9 take care of the jobs that are too difficult for the police. Section 9 employs hackers, sharpshooters, detectives and cyborgs all in an effort to thwart cyber criminals and their plans to attack the innocent.",
+      "tmdb_genres": [
+        "Animation",
+        "Action & Adventure",
+        "Sci-Fi & Fantasy",
+        "Crime"
+      ],
+      "runtime": 25,
+      "original_language": "ja",
+      "origin_country": [
+        "JP"
+      ],
+      "popularity": 15.8206,
+      "vote_average": 8.225,
+      "vote_count": 433,
+      "directors": [],
+      "writers": [
+        "Mamoru Oshii"
+      ],
+      "cinematographers": [
+        "Koji Tanaka"
+      ],
+      "principal_cast": [
+        "Atsuko Tanaka",
+        "Akio Otsuka",
+        "Osamu Saka",
+        "Taimei Suzuki",
+        "Takashi Onozuka",
+        "Rikiya Koyama"
+      ],
+      "keywords": [
+        "cyborg",
+        "police",
+        "organized crime",
+        "internet",
+        "cyberpunk",
+        "robot",
+        "crime investigation",
+        "network",
+        "cybercrime",
+        "anime",
+        "near future",
+        "computer networking",
+        "public security",
+        "intense"
+      ],
+      "sampled_streaming_providers": [
+        "Criterion Channel"
+      ]
+    },
+    {
+      "tmdb_id": 291496,
+      "media_type": "tv",
+      "title": "Our Sticky Love",
+      "original_title": "이런 엿같은 사랑",
+      "year": 2026,
+      "overview": "An ambitious prosecutor loses her memory and moves in with a boxing coach who claims to be her boyfriend. Can this sticky situation turn into real love?",
+      "tmdb_genres": [
+        "Drama",
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "ko",
+      "origin_country": [
+        "KR"
+      ],
+      "popularity": 193.1393,
+      "vote_average": 7.045,
+      "vote_count": 11,
+      "directors": [
+        "Kim Jang-han"
+      ],
+      "writers": [
+        "Mo Ji-hye"
+      ],
+      "cinematographers": [],
+      "principal_cast": [
+        "Jung Hae-in",
+        "Ahn Ha-young",
+        "Heo Sung-tae",
+        "Jeon Bae-soo",
+        "Seo Jeong-yeon",
+        "Jang Hye-jin"
+      ],
+      "keywords": [
+        "boxer",
+        "gang leader",
+        "coach",
+        "romcom",
+        "romance",
+        "prosecutor",
+        "former athlete",
+        "temporary amnesia",
+        "village setting",
+        "roommates' relationship",
+        "former criminal"
+      ],
+      "sampled_streaming_providers": [
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 1434,
+      "media_type": "tv",
+      "title": "Family Guy",
+      "original_title": "Family Guy",
+      "year": 1999,
+      "overview": "Sick, twisted, politically incorrect and Freakin' Sweet animated series featuring the adventures of the dysfunctional Griffin family. Bumbling Peter and long-suffering Lois have three kids. Stewie (a brilliant but sadistic baby bent on killing his mother and taking over the world), Meg (the oldest, and is the most unpopular girl in town) and Chris (the middle kid, he's not very bright but has a passion for movies). The final member of the family is Brian - a talking dog and much more than a pet, he keeps Stewie in check whilst sipping Martinis and sorting through his own life issues.",
+      "tmdb_genres": [
+        "Animation",
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 185.0289,
+      "vote_average": 7.409,
+      "vote_count": 5055,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Seth MacFarlane",
+        "Alex Borstein",
+        "Mila Kunis",
+        "Seth Green",
+        "Patrick Warburton",
+        "Arif Zahir"
+      ],
+      "keywords": [
+        "rhode island",
+        "middle class",
+        "satire",
+        "parody",
+        "dysfunctional family",
+        "adult humor",
+        "social satire",
+        "boy genius",
+        "new england",
+        "adult animation"
+      ],
+      "sampled_streaming_providers": [
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 138502,
+      "media_type": "tv",
+      "title": "X-Men '97",
+      "original_title": "X-Men '97",
+      "year": 2024,
+      "overview": "The X-Men, a band of mutants who use their uncanny gifts to protect a world that hates and fears them, are challenged like never before, forced to face a dangerous and unexpected new future.",
+      "tmdb_genres": [
+        "Animation",
+        "Action & Adventure",
+        "Sci-Fi & Fantasy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 94.5489,
+      "vote_average": 8.681,
+      "vote_count": 826,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [],
+      "keywords": [
+        "mutant",
+        "sequel",
+        "superhero",
+        "based on comic",
+        "super power",
+        "superhero team",
+        "discrimination",
+        "1990s",
+        "tense"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus"
+      ]
+    },
+    {
+      "tmdb_id": 1399,
+      "media_type": "tv",
+      "title": "Game of Thrones",
+      "original_title": "Game of Thrones",
+      "year": 2011,
+      "overview": "Seven noble families fight for control of the mythical land of Westeros. Friction between the houses leads to full-scale war. All while a very ancient evil awakens in the farthest north. Amidst the war, a neglected military order of misfits, the Night's Watch, is all that stands between the realms of men and icy horrors beyond.",
+      "tmdb_genres": [
+        "Sci-Fi & Fantasy",
+        "Drama",
+        "Action & Adventure"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 175.4213,
+      "vote_average": 8.469,
+      "vote_count": 27448,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Peter Dinklage",
+        "Kit Harington",
+        "Nikolaj Coster-Waldau",
+        "Lena Headey",
+        "Emilia Clarke",
+        "Liam Cunningham"
+      ],
+      "keywords": [
+        "based on novel or book",
+        "kingdom",
+        "dragon",
+        "king",
+        "intrigue",
+        "fantasy world"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max"
+      ]
+    },
+    {
+      "tmdb_id": 108978,
+      "media_type": "tv",
+      "title": "Reacher",
+      "original_title": "Reacher",
+      "year": 2022,
+      "overview": "Jack Reacher, a veteran military police investigator, has just recently entered civilian life. Reacher is a drifter, carrying no phone and the barest of essentials as he travels the country and explores the nation he once served.",
+      "tmdb_genres": [
+        "Action & Adventure",
+        "Drama",
+        "Crime"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 171.6003,
+      "vote_average": 8.077,
+      "vote_count": 3002,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Alan Ritchson",
+        "Agnez Mo",
+        "Sydelle Noel",
+        "Anggun",
+        "Christopher Rodriguez Marquette",
+        "Kevin Corrigan"
+      ],
+      "keywords": [
+        "assassin",
+        "based on novel or book",
+        "gun",
+        "police",
+        "newfoundland and labrador",
+        "conspiracy",
+        "agent",
+        "blunt",
+        "reboot",
+        "doubtful"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video"
+      ]
+    },
+    {
+      "tmdb_id": 278624,
+      "media_type": "tv",
+      "title": "Lucky",
+      "original_title": "Lucky",
+      "year": 2026,
+      "overview": "When a multi-million-dollar heist goes sideways, con artist Lucky is forced to go on the run. Pursued by both the FBI and a ruthless crime boss, Lucky must fight for her life—and a way out.",
+      "tmdb_genres": [
+        "Drama",
+        "Crime"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 102.0652,
+      "vote_average": 7.383,
+      "vote_count": 125,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Anya Taylor-Joy",
+        "Annette Bening",
+        "Clifton Collins Jr.",
+        "Aunjanue Ellis-Taylor",
+        "Timothy Olyphant"
+      ],
+      "keywords": [
+        "based on novel or book",
+        "fbi",
+        "crime boss",
+        "heist",
+        "con artist",
+        "on the run",
+        "miniseries",
+        "heist gone wrong",
+        "con woman"
+      ],
+      "sampled_streaming_providers": [
+        "Apple TV"
+      ]
+    },
+    {
+      "tmdb_id": 1431,
+      "media_type": "tv",
+      "title": "CSI: Crime Scene Investigation",
+      "original_title": "CSI: Crime Scene Investigation",
+      "year": 2000,
+      "overview": "A Las Vegas team of forensic investigators are trained to solve criminal cases by scouring the crime scene, collecting irrefutable evidence and finding the missing pieces that solve the mystery.",
+      "tmdb_genres": [
+        "Crime",
+        "Drama",
+        "Mystery"
+      ],
+      "runtime": 43,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 154.7631,
+      "vote_average": 7.62,
+      "vote_count": 1413,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Ted Danson",
+        "George Eads",
+        "Jorja Fox",
+        "Eric Szmanda",
+        "Robert David Hall",
+        "Wallace Langham"
+      ],
+      "keywords": [
+        "detective",
+        "police",
+        "crime scene",
+        "las vegas",
+        "criminal investigation",
+        "forensic",
+        "murder investigation",
+        "homicide detective",
+        "crime investigation",
+        "police procedural",
+        "forensic evidence",
+        "forensic expert",
+        "crime scene investigation",
+        "crime scene investigator"
+      ],
+      "sampled_streaming_providers": [
+        "Hulu",
+        "Paramount Plus Premium"
+      ]
+    },
+    {
+      "tmdb_id": 59941,
+      "media_type": "tv",
+      "title": "The Tonight Show Starring Jimmy Fallon",
+      "original_title": "The Tonight Show Starring Jimmy Fallon",
+      "year": 2014,
+      "overview": "After Jay Leno's second retirement from the program, Jimmy Fallon stepped in as his permanent replacement. After 42 years in Los Angeles the program was brought back to New York.",
+      "tmdb_genres": [
+        "Comedy",
+        "Talk"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 163.7577,
+      "vote_average": 5.775,
+      "vote_count": 382,
+      "directors": [
+        "Dave Diomedi"
+      ],
+      "writers": [
+        "Jimmy Fallon"
+      ],
+      "cinematographers": [],
+      "principal_cast": [
+        "Jimmy Fallon",
+        "Steve Higgins"
+      ],
+      "keywords": [
+        "new york city",
+        "celebrity",
+        "game",
+        "audience",
+        "late-night show"
+      ],
+      "sampled_streaming_providers": [
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 106841,
+      "media_type": "tv",
+      "title": "Blossoms Shanghai",
+      "original_title": "繁花",
+      "year": 2023,
+      "overview": "Set against the backdrop of massive economic growth in the 1990s, the story follows A Bao, a self-made millionaire and his journey from being a young opportunist with a troubled past to accumulating dazzling wealth in the city of Shanghai. It also follows his entanglement with four women who represent the pursuits of his life: adventure, honour, love and innocence.",
+      "tmdb_genres": [
+        "Drama"
+      ],
+      "runtime": 46,
+      "original_language": "zh",
+      "origin_country": [
+        "CN"
+      ],
+      "popularity": 10.5582,
+      "vote_average": 8.6,
+      "vote_count": 66,
+      "directors": [
+        "Wong Kar-Wai"
+      ],
+      "writers": [],
+      "cinematographers": [
+        "Peter Pau Tak-Hai"
+      ],
+      "principal_cast": [
+        "Hu Ge",
+        "Ma Yili",
+        "Tang Yan",
+        "Xin Zhilei",
+        "You Benchang"
+      ],
+      "keywords": [
+        "based on novel or book",
+        "loyalty",
+        "ambition",
+        "longing",
+        "stock market",
+        "1990s",
+        "lyrical",
+        "shanghai",
+        "trade war"
+      ],
+      "sampled_streaming_providers": [
+        "Criterion Channel"
+      ]
+    },
+    {
+      "tmdb_id": 1396,
+      "media_type": "tv",
+      "title": "Breaking Bad",
+      "original_title": "Breaking Bad",
+      "year": 2008,
+      "overview": "Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime.",
+      "tmdb_genres": [
+        "Drama",
+        "Crime"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 172.9164,
+      "vote_average": 8.947,
+      "vote_count": 18333,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Bryan Cranston",
+        "Aaron Paul",
+        "Anna Gunn",
+        "RJ Mitte",
+        "Dean Norris",
+        "Betsy Brandt"
+      ],
+      "keywords": [
+        "new mexico",
+        "drug dealer",
+        "narcissism",
+        "psychopath",
+        "terminal illness",
+        "outlaw",
+        "dark comedy",
+        "cancer",
+        "tragedy",
+        "drugs",
+        "criminal",
+        "meth lab",
+        "drug lord",
+        "high school teacher",
+        "dea agent"
+      ],
+      "sampled_streaming_providers": [
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 1408,
+      "media_type": "tv",
+      "title": "House",
+      "original_title": "House",
+      "year": 2004,
+      "overview": "Dr. Gregory House, a drug-addicted, unconventional, misanthropic medical genius, leads a team of diagnosticians at the fictional Princeton–Plainsboro Teaching Hospital in New Jersey.",
+      "tmdb_genres": [
+        "Drama"
+      ],
+      "runtime": 44,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 159.5758,
+      "vote_average": 8.566,
+      "vote_count": 7771,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Hugh Laurie",
+        "Robert Sean Leonard",
+        "Omar Epps",
+        "Jesse Spencer",
+        "Odette Annable",
+        "Peter Jacobson"
+      ],
+      "keywords": [
+        "medicine",
+        "drug addiction",
+        "misanthrophy",
+        "hospital",
+        "doctor",
+        "disease",
+        "patient",
+        "illness",
+        "taunting",
+        "diagnosis",
+        "medical drama",
+        "colleague",
+        "rare disease",
+        "thought provoking",
+        "medical"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video",
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 1413,
+      "media_type": "tv",
+      "title": "American Horror Story",
+      "original_title": "American Horror Story",
+      "year": 2011,
+      "overview": "An anthology horror drama series centering on different characters and locations, including a house with a murderous past, an asylum, a witch coven, a freak show, a hotel, a farmhouse in Roanoke, a cult, the apocalypse and a summer camp.",
+      "tmdb_genres": [
+        "Drama",
+        "Mystery",
+        "Sci-Fi & Fantasy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 86.9797,
+      "vote_average": 8.077,
+      "vote_count": 6121,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Sarah Paulson"
+      ],
+      "keywords": [
+        "hotel",
+        "nun",
+        "asylum",
+        "presidential election",
+        "haunted house",
+        "carnival",
+        "school of witchcraft",
+        "summer camp",
+        "supernatural",
+        "cult",
+        "anti-christ",
+        "anthology",
+        "serial killer",
+        "apocalypse",
+        "slasher"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video",
+        "Disney Plus",
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 1668,
+      "media_type": "tv",
+      "title": "Friends",
+      "original_title": "Friends",
+      "year": 1994,
+      "overview": "Six young people from New York City, on their own and struggling to survive in the real world, find the companionship, comfort and support they get from each other to be the perfect antidote to the pressures of life.",
+      "tmdb_genres": [
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 132.4277,
+      "vote_average": 8.413,
+      "vote_count": 9273,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Jennifer Aniston",
+        "Courteney Cox",
+        "Lisa Kudrow",
+        "Matt LeBlanc",
+        "Matthew Perry",
+        "David Schwimmer"
+      ],
+      "keywords": [
+        "new york city",
+        "roommates",
+        "friendship",
+        "cafe",
+        "apartment building",
+        "group of friends",
+        "manhattan, new york city",
+        "sitcom",
+        "young adult",
+        "searching for love",
+        "apartment",
+        "best friends"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max"
+      ]
+    },
+    {
+      "tmdb_id": 76479,
+      "media_type": "tv",
+      "title": "The Boys",
+      "original_title": "The Boys",
+      "year": 2019,
+      "overview": "A group of vigilantes known informally as “The Boys” set out to take down corrupt superheroes with no more than blue-collar grit and a willingness to fight dirty.",
+      "tmdb_genres": [
+        "Sci-Fi & Fantasy",
+        "Action & Adventure"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 134.2299,
+      "vote_average": 8.441,
+      "vote_count": 13239,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Karl Urban",
+        "Jack Quaid",
+        "Antony Starr",
+        "Erin Moriarty",
+        "Laz Alonso",
+        "Chace Crawford"
+      ],
+      "keywords": [
+        "corruption",
+        "satire",
+        "superhero",
+        "based on comic",
+        "gore",
+        "tragedy",
+        "evil corporation",
+        "super power",
+        "superhero team",
+        "violence",
+        "hilarious"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video"
+      ]
+    },
+    {
+      "tmdb_id": 203744,
+      "media_type": "tv",
+      "title": "Sugar",
+      "original_title": "Sugar",
+      "year": 2024,
+      "overview": "John Sugar is a dashing private eye navigating the dark corners of sunny LA. Though he sees only the good in humanity, Sugar is haunted by a secret too dangerous to expose.",
+      "tmdb_genres": [
+        "Drama",
+        "Mystery"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 80.0374,
+      "vote_average": 7.168,
+      "vote_count": 348,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Colin Farrell",
+        "Jin Ha",
+        "Tony Dalton",
+        "Raymond Lee",
+        "Laura Donnelly",
+        "Sasha Calle"
+      ],
+      "keywords": [
+        "los angeles, california",
+        "private detective",
+        "missing person",
+        "neo-noir",
+        "thriller"
+      ],
+      "sampled_streaming_providers": [
+        "Apple TV"
+      ]
+    },
+    {
+      "tmdb_id": 63770,
+      "media_type": "tv",
+      "title": "The Late Show with Stephen Colbert",
+      "original_title": "The Late Show with Stephen Colbert",
+      "year": 2015,
+      "overview": "Stephen Colbert brings his signature satire and comedy to The Late Show with Stephen Colbert, the #1 show in late night, where he talks with an eclectic mix of guests about what is new and relevant in the worlds of politics, entertainment, business, music, technology, and more. Featuring bandleader Jon Batiste with his band Stay Human, the Emmy Award-nominated show is broadcast from the historic Ed Sullivan Theater.",
+      "tmdb_genres": [
+        "Comedy",
+        "Talk"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 154.2877,
+      "vote_average": 6.084,
+      "vote_count": 359,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Stephen Colbert"
+      ],
+      "keywords": [
+        "politcs",
+        "late-night show"
+      ],
+      "sampled_streaming_providers": [
+        "Paramount Plus Premium"
+      ]
+    },
+    {
+      "tmdb_id": 61818,
+      "media_type": "tv",
+      "title": "Late Night with Seth Meyers",
+      "original_title": "Late Night with Seth Meyers",
+      "year": 2014,
+      "overview": "Seth Meyers, who is \"Saturday Night Live's\" longest serving anchor on the show's wildly popular \"Weekend Update,\" takes over as host of NBC's \"Late Night\" — home to A-list celebrity guests, memorable comedy and the best in musical talent. As the Emmy Award-winning head writer for \"SNL,\" Meyers has established a reputation for sharp wit and perfectly timed comedy, and has gained fame for his spot-on jokes and satire. Meyers takes his departure from \"SNL\" to his new post at \"Late Night,\" as Jimmy Fallon moves to \"The Tonight Show\".",
+      "tmdb_genres": [
+        "Talk",
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 129.0236,
+      "vote_average": 5.083,
+      "vote_count": 132,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Seth Meyers"
+      ],
+      "keywords": [
+        "talk show",
+        "satire",
+        "late-night show",
+        "irreverent",
+        "informative"
+      ],
+      "sampled_streaming_providers": [
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 894,
+      "media_type": "tv",
+      "title": "The Prisoner",
+      "original_title": "The Prisoner",
+      "year": 1967,
+      "overview": "After resigning, a secret agent is abducted and taken to what looks like an idyllic village, but is really a bizarre Kafkaesque prison. His warders demand information. He gives them nothing, but only tries to escape.",
+      "tmdb_genres": [
+        "Drama",
+        "Sci-Fi & Fantasy",
+        "Mystery"
+      ],
+      "runtime": 60,
+      "original_language": "en",
+      "origin_country": [
+        "GB"
+      ],
+      "popularity": 10.4928,
+      "vote_average": 7.7,
+      "vote_count": 214,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Patrick McGoohan"
+      ],
+      "keywords": [
+        "small town",
+        "kidnapping",
+        "trapped",
+        "orwellian"
+      ],
+      "sampled_streaming_providers": [
+        "Criterion Channel"
+      ]
+    },
+    {
+      "tmdb_id": 34307,
+      "media_type": "tv",
+      "title": "Shameless",
+      "original_title": "Shameless",
+      "year": 2011,
+      "overview": "Chicagoan Frank Gallagher is the proud single dad of six smart, industrious, independent kids, who without him would be... perhaps better off. When Frank's not at the bar spending what little money they have, he's passed out on the floor. But the kids have found ways to grow up in spite of him. They may not be like any family you know, but they make no apologies for being exactly who they are.",
+      "tmdb_genres": [
+        "Drama",
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 151.618,
+      "vote_average": 8.167,
+      "vote_count": 3424,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "William H. Macy",
+        "Jeremy Allen White",
+        "Ethan Cutkosky",
+        "Shanola Hampton",
+        "Steve Howey",
+        "Emma Kenney"
+      ],
+      "keywords": [
+        "sibling relationship",
+        "chicago, illinois",
+        "single parent",
+        "self-destruction",
+        "big family",
+        "remake",
+        "dysfunctional family",
+        "drugs",
+        "single father",
+        "alcoholic father"
+      ],
+      "sampled_streaming_providers": [
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 94664,
+      "media_type": "tv",
+      "title": "Mushoku Tensei: Jobless Reincarnation",
+      "original_title": "無職転生 ～異世界行ったら本気だす～",
+      "year": 2021,
+      "overview": "When a 34-year-old underachiever gets run over by a truck, his story doesn't end there. Reincarnated in a new world as an infant, Rudy will seize every opportunity to live the life he's always wanted. Armed with new friends, some freshly acquired magical abilities, and the courage to do the things he's always dreamed of, he's embarking on an epic adventure—with all of his past experience intact!",
+      "tmdb_genres": [
+        "Action & Adventure",
+        "Animation",
+        "Sci-Fi & Fantasy"
+      ],
+      "runtime": 24,
+      "original_language": "ja",
+      "origin_country": [
+        "JP"
+      ],
+      "popularity": 134.9046,
+      "vote_average": 8.5,
+      "vote_count": 1635,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [
+        "Shinji Tonsho"
+      ],
+      "principal_cast": [
+        "Yumi Uchiyama",
+        "Tomokazu Sugita",
+        "Ai Kakuma",
+        "Ai Kayano",
+        "Konomi Kohara"
+      ],
+      "keywords": [
+        "magic",
+        "teleportation",
+        "reincarnation",
+        "polygamy",
+        "harem",
+        "romance",
+        "displacement",
+        "second chance",
+        "fantasy world",
+        "seinen",
+        "ecchi",
+        "anime",
+        "high fantasy",
+        "search for mother",
+        "neet"
+      ],
+      "sampled_streaming_providers": [
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 60572,
+      "media_type": "tv",
+      "title": "Pokémon",
+      "original_title": "ポケットモンスター",
+      "year": 1997,
+      "overview": "Join Ash accompanied by his partner Pikachu, as he travels through many regions, meets new friends and faces new challenges on his quest to become a Pokémon Master.",
+      "tmdb_genres": [
+        "Animation",
+        "Action & Adventure",
+        "Sci-Fi & Fantasy"
+      ],
+      "runtime": null,
+      "original_language": "ja",
+      "origin_country": [
+        "JP"
+      ],
+      "popularity": 81.5107,
+      "vote_average": 7.994,
+      "vote_count": 2225,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Rica Matsumoto",
+        "Ikue Otani",
+        "Daiki Yamashita",
+        "Kenyu Horiuchi"
+      ],
+      "keywords": [
+        "travel",
+        "tournament",
+        "creature",
+        "based on video game",
+        "fantasy world",
+        "adventurer",
+        "quest",
+        "anime",
+        "adventure"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus",
+        "Hulu",
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 45140,
+      "media_type": "tv",
+      "title": "Teen Titans Go!",
+      "original_title": "Teen Titans Go!",
+      "year": 2013,
+      "overview": "Robin, Starfire, Raven, Beast Boy and Cyborg return in all-new, comedic adventures. They may be super heroes who save the world every day ... but somebody still has to do the laundry!",
+      "tmdb_genres": [
+        "Animation",
+        "Action & Adventure",
+        "Comedy",
+        "Family",
+        "Sci-Fi & Fantasy"
+      ],
+      "runtime": 11,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 100.7571,
+      "vote_average": 6.437,
+      "vote_count": 718,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Scott Menville",
+        "Greg Cipes",
+        "Khary Payton",
+        "Tara Strong",
+        "Hynden Walch"
+      ],
+      "keywords": [
+        "slapstick comedy",
+        "superhero",
+        "based on comic",
+        "parody",
+        "based on cartoon",
+        "madcap comedy",
+        "superhero team",
+        "pathetic",
+        "absurdist humor",
+        "disgusted"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max",
+        "Hulu",
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 1911,
+      "media_type": "tv",
+      "title": "Bones",
+      "original_title": "Bones",
+      "year": 2005,
+      "overview": "Dr. Temperance Brennan and her colleagues at the Jeffersonian's Medico-Legal Lab assist Special Agent Seeley Booth with murder investigations when the remains are so badly decomposed, burned or destroyed that the standard identification methods are useless.",
+      "tmdb_genres": [
+        "Crime",
+        "Drama"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 128.2384,
+      "vote_average": 8.185,
+      "vote_count": 3545,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Emily Deschanel",
+        "David Boreanaz",
+        "John Boyd",
+        "Michaela Conlin",
+        "Tamara Taylor",
+        "T.J. Thyne"
+      ],
+      "keywords": [
+        "washington dc, usa",
+        "fbi",
+        "forensic science",
+        "murder investigation",
+        "crime investigation",
+        "forensic archaeology"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video",
+        "Hulu",
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 241609,
+      "media_type": "tv",
+      "title": "Your Friends & Neighbors",
+      "original_title": "Your Friends & Neighbors",
+      "year": 2025,
+      "overview": "When a financial titan suddenly finds himself divorced and jobless, he starts robbing his wealthy neighbors to stay afloat. Stealing from his own social circle strangely exhilarates him—but he gradually gets tangled in a deadly web.",
+      "tmdb_genres": [
+        "Drama",
+        "Crime",
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 66.0516,
+      "vote_average": 7.76,
+      "vote_count": 321,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Jon Hamm",
+        "Amanda Peet",
+        "Olivia Munn",
+        "Hoon Lee",
+        "Mark Tallman",
+        "Lena Hall"
+      ],
+      "keywords": [
+        "stealing",
+        "wealthy",
+        "fired from the job",
+        "ex-husband ex-wife relationship",
+        "financial crisis",
+        "divorced man",
+        "family issues",
+        "affair",
+        "black comedy"
+      ],
+      "sampled_streaming_providers": [
+        "Apple TV"
+      ]
+    },
+    {
+      "tmdb_id": 2224,
+      "media_type": "tv",
+      "title": "The Daily Show",
+      "original_title": "The Daily Show",
+      "year": 1996,
+      "overview": "The World's Fakest News Team tackle the biggest stories in news, politics and pop culture.",
+      "tmdb_genres": [
+        "News",
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 137.2269,
+      "vote_average": 6.381,
+      "vote_count": 649,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [],
+      "keywords": [
+        "sarcasm",
+        "interview",
+        "politics",
+        "political satire",
+        "late-night show",
+        "irreverent",
+        "informative"
+      ],
+      "sampled_streaming_providers": [
+        "Paramount Plus Premium"
+      ]
+    },
+    {
+      "tmdb_id": 1421,
+      "media_type": "tv",
+      "title": "Modern Family",
+      "original_title": "Modern Family",
+      "year": 2009,
+      "overview": "The Pritchett-Dunphy-Tucker clan is a wonderfully large and blended family. They give us an honest and often hilarious look into the sometimes warm, sometimes twisted, embrace of the modern family.",
+      "tmdb_genres": [
+        "Comedy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 121.415,
+      "vote_average": 7.909,
+      "vote_count": 3461,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [
+        "James Bagdonas"
+      ],
+      "principal_cast": [
+        "Ed O'Neill",
+        "Sofía Vergara",
+        "Julie Bowen",
+        "Ty Burrell",
+        "Jesse Tyler Ferguson",
+        "Eric Stonestreet"
+      ],
+      "keywords": [
+        "family relationships",
+        "breaking the fourth wall",
+        "family",
+        "sitcom",
+        "blended family"
+      ],
+      "sampled_streaming_providers": [
+        "Hulu",
+        "Peacock Premium"
+      ]
+    },
+    {
+      "tmdb_id": 64099,
+      "media_type": "tv",
+      "title": "War and Peace",
+      "original_title": "War and Peace",
+      "year": 2016,
+      "overview": "The love story of young Countess Natasha Rostova and Count Pierre Bezukhov is interwoven with the Great Patriotic War of 1812 against Napoleon's invading army.",
+      "tmdb_genres": [
+        "Drama"
+      ],
+      "runtime": 45,
+      "original_language": "en",
+      "origin_country": [
+        "GB"
+      ],
+      "popularity": 9.8907,
+      "vote_average": 7.543,
+      "vote_count": 246,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [
+        "George Steel"
+      ],
+      "principal_cast": [
+        "Paul Dano",
+        "Lily James",
+        "James Norton",
+        "Gillian Anderson",
+        "Jessie Buckley",
+        "Aneurin Barnard"
+      ],
+      "keywords": [
+        "based on novel or book",
+        "napoleon bonaparte",
+        "peace",
+        "family",
+        "historical drama",
+        "costume drama",
+        "aristocratic"
+      ],
+      "sampled_streaming_providers": [
+        "Criterion Channel"
+      ]
+    },
+    {
+      "tmdb_id": 66732,
+      "media_type": "tv",
+      "title": "Stranger Things",
+      "original_title": "Stranger Things",
+      "year": 2016,
+      "overview": "When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.",
+      "tmdb_genres": [
+        "Action & Adventure",
+        "Mystery",
+        "Sci-Fi & Fantasy"
+      ],
+      "runtime": null,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 135.7894,
+      "vote_average": 8.556,
+      "vote_count": 21604,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Winona Ryder",
+        "David Harbour",
+        "Millie Bobby Brown",
+        "Finn Wolfhard",
+        "Gaten Matarazzo",
+        "Caleb McLaughlin"
+      ],
+      "keywords": [
+        "monster",
+        "small town",
+        "indiana, usa",
+        "experiment",
+        "halloween",
+        "friendship",
+        "supernatural",
+        "coming of age",
+        "parallel world",
+        "super power",
+        "government conspiracy",
+        "teen drama",
+        "1980s",
+        "supernatural horror",
+        "teen horror"
+      ],
+      "sampled_streaming_providers": [
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 30984,
+      "media_type": "tv",
+      "title": "Bleach",
+      "original_title": "BLEACH",
+      "year": 2004,
+      "overview": "For as long as he can remember, Ichigo Kurosaki has been able to see ghosts. But when he meets Rukia, a Soul Reaper who battles evil spirits known as Hollows, he finds his life is changed forever. Now, with a newfound wealth of spiritual energy, Ichigo discovers his true calling: to protect the living and the dead from evil.",
+      "tmdb_genres": [
+        "Action & Adventure",
+        "Animation",
+        "Sci-Fi & Fantasy"
+      ],
+      "runtime": 24,
+      "original_language": "ja",
+      "origin_country": [
+        "JP"
+      ],
+      "popularity": 121.9332,
+      "vote_average": 8.367,
+      "vote_count": 2208,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [
+        "Kazuhiro Yamada"
+      ],
+      "principal_cast": [
+        "Masakazu Morita",
+        "Fumiko Orikasa",
+        "Hiroki Yasumoto",
+        "Yuki Matsuoka",
+        "Noriaki Sugiyama"
+      ],
+      "keywords": [
+        "martial arts",
+        "swordplay",
+        "katana",
+        "sword",
+        "training",
+        "friendship",
+        "supernatural",
+        "high school",
+        "based on manga",
+        "high school student",
+        "death",
+        "blade",
+        "fantasy world",
+        "shounen",
+        "anime"
+      ],
+      "sampled_streaming_providers": [
+        "Hulu"
+      ]
+    },
+    {
+      "tmdb_id": 215072,
+      "media_type": "tv",
+      "title": "A Shop for Killers",
+      "original_title": "킬러들의 쇼핑몰",
+      "year": 2024,
+      "overview": "A niece who lost her parents and grew up in the hands of an uncle who runs a shopping mall faces a new truth after her uncle's sudden death.",
+      "tmdb_genres": [
+        "Drama",
+        "Action & Adventure",
+        "Mystery"
+      ],
+      "runtime": null,
+      "original_language": "ko",
+      "origin_country": [
+        "KR"
+      ],
+      "popularity": 80.757,
+      "vote_average": 8.4,
+      "vote_count": 205,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Lee Dong-wook",
+        "Kim Hye-jun",
+        "Geum Hannah",
+        "Min Kim",
+        "Lee Tae-young",
+        "Jo Han-sun"
+      ],
+      "keywords": [
+        "based on novel or book",
+        "gun",
+        "hidden camera",
+        "shopping mall",
+        "hacking",
+        "orphan",
+        "killer",
+        "surrounded",
+        "uncle niece relationship",
+        "slingshot",
+        "cybersecurity",
+        "mysterious death",
+        "dark web"
+      ],
+      "sampled_streaming_providers": [
+        "Disney Plus"
+      ]
+    },
+    {
+      "tmdb_id": 502,
+      "media_type": "tv",
+      "title": "Sesame Street",
+      "original_title": "Sesame Street",
+      "year": 1969,
+      "overview": "On a special inner city street, the inhabitants—human and muppet—teach preschoolers basic educational and social concepts using comedy, cartoons, games, and songs.",
+      "tmdb_genres": [
+        "Kids",
+        "Comedy"
+      ],
+      "runtime": 54,
+      "original_language": "en",
+      "origin_country": [
+        "US"
+      ],
+      "popularity": 100.1237,
+      "vote_average": 7.1,
+      "vote_count": 288,
+      "directors": [],
+      "writers": [
+        "Halcyon Person"
+      ],
+      "cinematographers": [],
+      "principal_cast": [
+        "Frank Oz",
+        "Sonia Manzano",
+        "Roscoe Orman",
+        "Martin P. Robinson",
+        "Suki Lopez",
+        "Violet Tinnirello"
+      ],
+      "keywords": [
+        "puppet",
+        "educational"
+      ],
+      "sampled_streaming_providers": [
+        "HBO Max",
+        "Netflix"
+      ]
+    },
+    {
+      "tmdb_id": 2661,
+      "media_type": "tv",
+      "title": "Kamen Rider",
+      "original_title": "仮面ライダー",
+      "year": 1971,
+      "overview": "Takeshi Hongo is a promising young man with a passion for motorcycle racing. However, his dreams are suddenly ruined when he gets kidnapped by Shocker, the evil secret organization planning to dominate the world. After being remodeled into a cyborg, Takeshi escapes and swears to protect the world from the inhuman monsters.",
+      "tmdb_genres": [
+        "Action & Adventure",
+        "Sci-Fi & Fantasy",
+        "Drama"
+      ],
+      "runtime": 24,
+      "original_language": "ja",
+      "origin_country": [
+        "JP"
+      ],
+      "popularity": 110.1826,
+      "vote_average": 6.413,
+      "vote_count": 104,
+      "directors": [],
+      "writers": [],
+      "cinematographers": [],
+      "principal_cast": [
+        "Ryutaro Imai",
+        "Maho Horiguchi",
+        "Kenta Mishima",
+        "Rina Onuki",
+        "Miki Yagi",
+        "Yuki Furukawa"
+      ],
+      "keywords": [
+        "artificial intelligence (a.i.)",
+        "cyborg",
+        "martial arts",
+        "monster",
+        "hero",
+        "secret organization",
+        "villain",
+        "biker",
+        "superhero",
+        "tribe",
+        "conspiracy",
+        "swordsman",
+        "memory loss",
+        "impostor",
+        "based on manga"
+      ],
+      "sampled_streaming_providers": [
+        "Amazon Prime Video"
+      ]
+    }
+  ]
+}

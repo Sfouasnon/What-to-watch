@@ -1,0 +1,30 @@
+{
+  "revision": "1.1",
+  "base_gold_set": "final-classifications-v1.0-gold.json",
+  "ontology_version": "0.1.1",
+  "corrections": [
+    {
+      "tmdb_id": 680,
+      "media_type": "movie",
+      "title": "Pulp Fiction",
+      "primary_subgenre": {
+        "from": "dark-comedy",
+        "to": "crime-drama"
+      },
+      "secondary_subgenre": {
+        "from": "neo-noir",
+        "to": "crime-thriller"
+      },
+      "tone_tags": {
+        "value": [
+          "wry",
+          "stylized",
+          "visceral"
+        ],
+        "changed": false
+      },
+      "reason": "Humor is substantial, but comedy is not the film's dominant organizing genre. Crime drama and crime thriller better describe the work's narrative identity.",
+      "source": "human-editorial-correction"
+    }
+  ]
+}
