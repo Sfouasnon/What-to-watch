@@ -21,6 +21,16 @@ function argument(name) {
   return process.argv.find((value) => value.startsWith(prefix))?.slice(prefix.length) ?? null;
 }
 
+function integerArgument(name, fallback, { min, max }) {
+  const raw = argument(name);
+  if (raw === null) return fallback;
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value < min || value > max) {
+    throw new Error(`--${name} must be an integer between ${min} and ${max}.`);
+  }
+  return value;
+}
+
 function defaultExportDate() {
   // TMDB publishes the daily exports after its UTC morning job. Yesterday is a
   // deliberately conservative default so this script is reliable at any hour.
@@ -32,6 +42,10 @@ function defaultExportDate() {
 function parseExportDate(value) {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
   if (!match) throw new Error(`Invalid --date=${value}; expected YYYY-MM-DD.`);
+  const parsed = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value) {
+    throw new Error(`Invalid --date=${value}; expected a real calendar date.`);
+  }
   const [, year, month, day] = match;
   return { iso: value, fileDate: `${month}_${day}_${year}` };
 }
@@ -42,7 +56,7 @@ if (requestedType && !["movie", "tv"].includes(requestedType)) {
   throw new Error("--media-type must be movie or tv.");
 }
 
-const BATCH_SIZE = Math.max(100, Number(argument("batch-size") ?? 1000));
+const BATCH_SIZE = integerArgument("batch-size", 1000, { min: 100, max: 5000 });
 const TYPES = requestedType ? [requestedType] : ["movie", "tv"];
 
 function exportUrl(mediaType) {
