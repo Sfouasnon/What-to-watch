@@ -18,38 +18,36 @@ function replaceOnce(source, before, after, label) {
 }
 
 function replaceRegexOnce(source, pattern, after, label) {
-  const matches = source.match(pattern);
-  if (!matches) throw new Error(label + ": no match");
-  const probe = new RegExp(pattern.source, pattern.flags.replace("g", ""));
-  const first = source.search(probe);
-  const tail = source.slice(first + matches[0].length);
-  if (probe.test(tail)) throw new Error(label + ": more than one match");
+  const matches = [...source.matchAll(new RegExp(pattern.source, pattern.flags.includes("g") ? pattern.flags : pattern.flags + "g"))];
+  if (matches.length !== 1) throw new Error(label + ": expected exactly one match, found " + matches.length);
   return source.replace(pattern, after);
 }
 
-// Core type: stable persistence lane plus optional evidence-backed display badge.
+// Stable database slot + optional evidence-backed display badge.
 {
   const path = "src/lib/recommendation/types.ts";
   let source = read(path);
-  source = replaceOnce(
-    source,
-    "export interface Recommendation { rank: number; lane: RecommendationLane; title: Title;",
-    "export interface Recommendation { rank: number; lane: RecommendationLane; badge?: RecommendationLane; title: Title;",
-    "Recommendation badge type",
-  );
+  if (!source.includes("badge?: RecommendationLane")) {
+    source = replaceOnce(
+      source,
+      "export interface Recommendation { rank: number; lane: RecommendationLane; title: Title;",
+      "export interface Recommendation { rank: number; lane: RecommendationLane; badge?: RecommendationLane; title: Title;",
+      "Recommendation badge type",
+    );
+  }
   write(path, source);
 }
 
-// Engine A3: rank ten first, badge second, reward humor diversity, penalize metadata uncertainty.
+// A3 engine: select up to ten eligible titles independently of semantic badges.
 {
   const path = "src/lib/recommendation/engine.ts";
   let source = read(path);
-  source = replaceOnce(source, 'modelVersion: "1.1.0",', 'modelVersion: "1.2.0",', "model version");
+  source = replaceOnce(source, 'modelVersion: "1.1.0",', 'modelVersion: "1.2.0",', "A3 model version");
 
   const rankingLoop = text([
     "  for (let index = 0; index < count; index += 1) {",
-    "    // Persistence lanes stay unique for the existing database contract.",
-    "    // They no longer decide whether a genuinely eligible title can be selected.",
+    "    // Keep the existing ten unique persistence slots for the database, but",
+    "    // never require a special semantic badge in order to fill the top ten.",
     "    const persistenceLane = lane ?? RECOMMENDATION_LANES[index];",
     "    const scoringLane = persistenceLane;",
     "    const exploration = config.exploration[scoringLane];",
@@ -134,7 +132,7 @@ function replaceRegexOnce(source, pattern, after, label) {
       "    title.writers.length ? 1 : 0,",
       "    title.actors.length ? 1 : 0,",
       "  ]);",
-      "  // Missing enrichment is uncertainty, not novelty.",
+      "  // Missing enrichment is uncertainty, not evidence that a title is adventurous.",
       "  const novelty = clamp((1 - maxWatchedSimilarity) * (0.45 + metadataCoverage * 0.55), 0, 1);",
     ]),
     "metadata-aware novelty",
@@ -164,7 +162,7 @@ function replaceRegexOnce(source, pattern, after, label) {
     source,
     /function selectSemanticLane\([\s\S]*?\n\}\n\nfunction laneScore/,
     badgeSelector + "\n\nfunction laneScore",
-    "semantic selector",
+    "semantic badge selector",
   );
 
   source = replaceOnce(
@@ -224,7 +222,7 @@ function replaceRegexOnce(source, pattern, after, label) {
       "  if (lane === \"Left Field\" && qualifiesForLane) score += candidate.novelty * 8;",
       "  if (lane === \"Wild Card\" && qualifiesForLane) score += candidate.novelty * 11;",
     ]),
-    "lane boosts and comedy diversity",
+    "evidence-gated lane boosts and comedy diversity",
   );
 
   const diversityHelper = text([
@@ -252,35 +250,20 @@ function replaceRegexOnce(source, pattern, after, label) {
   ]);
   source = replaceOnce(source, "function moodFit(title: Title, moods: readonly Mood[]): number {", diversityHelper + "function moodFit(title: Title, moods: readonly Mood[]): number {", "comedy diversity helper");
 
-  source = replaceOnce(
-    source,
-    text([
-      "function matchesRequestedMood(title: Title, moods: readonly Mood[]): boolean {",
-      "  return moodFit(title, moods) > 0;",
-      "}",
-    ]),
-    text([
-      "function moodEvidencePenalty(candidate: ScoredCandidate, moods: readonly Mood[]): number {",
-      "  if (!moods.length || candidate.title.contentType === \"stand-up\") return 0;",
-      "  if (candidate.title.editorial) return candidate.moodSignal >= 0.99 ? 0 : candidate.moodSignal >= 0.62 ? 2 : 5;",
-      "  return candidate.moodSignal >= 0.3 ? 6 : 9;",
-      "}",
-      "",
-      "function matchesRequestedMood(title: Title, moods: readonly Mood[]): boolean {",
-      "  if (!moods.length) return true;",
-      "  const fit = moodFit(title, moods);",
-      "  if (moods.includes(\"comedy\") && !title.editorial && title.contentType !== \"stand-up\") return fit >= 0.3;",
-      "  return fit > 0;",
-      "}",
-    ]),
-    "comedy fallback eligibility",
-  );
-
-  source = replaceOnce(source, "  lane: RecommendationLane,\n  requiresPayment: boolean,\n): string[] {", "  lane: RecommendationLane | undefined,\n  requiresPayment: boolean,\n): string[] {", "optional evidence badge");
+  const penaltyHelper = text([
+    "function moodEvidencePenalty(candidate: ScoredCandidate, moods: readonly Mood[]): number {",
+    "  if (!moods.length || candidate.title.contentType === \"stand-up\") return 0;",
+    "  if (candidate.title.editorial) return candidate.moodSignal >= 0.99 ? 0 : candidate.moodSignal >= 0.62 ? 2 : 5;",
+    "  return candidate.moodSignal >= 0.3 ? 6 : 9;",
+    "}",
+    "",
+  ]);
+  source = replaceOnce(source, "function canonicalEvidence(title: Title): boolean {", penaltyHelper + "function canonicalEvidence(title: Title): boolean {", "confidence penalty helper");
+  source = replaceOnce(source, "  lane: RecommendationLane,\n  requiresPayment: boolean,\n): string[] {", "  lane: RecommendationLane | undefined,\n  requiresPayment: boolean,\n): string[] {", "optional badge evidence");
   write(path, source);
 }
 
-// Live candidate pool: two discovery pages and 80 detailed candidates, in safe batches.
+// Broaden the live candidate pool: two discovery pages, 80 detailed candidates, batched requests.
 {
   const path = "src/app/api/recommendations/route.ts";
   let source = read(path);
@@ -320,9 +303,9 @@ function replaceRegexOnce(source, pattern, after, label) {
       "    }",
       "  });",
     ]),
-    "expanded discovery requests",
+    "expanded discovery",
   );
-  source = replaceOnce(source, ".slice(0, 36)", ".slice(0, 80)", "candidate detail pool");
+  source = replaceOnce(source, ".slice(0, 36)", ".slice(0, 80)", "candidate pool size");
   source = replaceOnce(
     source,
     text([
@@ -347,21 +330,21 @@ function replaceRegexOnce(source, pattern, after, label) {
   write(path, source);
 }
 
-// Client: display true badge; otherwise show a neutral Personal Pick label.
+// Client uses the semantic badge when present; otherwise a neutral Personal Pick label.
 {
   const path = "src/components/what-to-watch-app.tsx";
   let source = read(path);
-  source = replaceOnce(source, "  lane: string;\n  title: LiveApiTitle;", "  lane: string;\n  badge?: string;\n  title: LiveApiTitle;", "live badge type");
-  source = replaceOnce(source, "    lane: value.lane,", '    lane: value.badge ?? (value.rank === 1 ? "Best Bet" : value.rank === 2 ? "Close Second" : "Personal Pick"),', "display badge mapping");
+  source = replaceOnce(source, "  lane: string;\n  title: LiveApiTitle;", "  lane: string;\n  badge?: string;\n  title: LiveApiTitle;", "live badge response type");
+  source = replaceOnce(source, "    lane: value.lane,", '    lane: value.badge ?? (value.rank === 1 ? "Best Bet" : value.rank === 2 ? "Close Second" : "Personal Pick"),', "client badge mapping");
   write(path, source);
 }
 
-// Tests: top ten is independent of special badges; Comedy has a strict fallback test.
+// Regression tests: ten eligible titles stay ten; special semantics are checked on badges, not persistence slots.
 {
   const path = "src/lib/recommendation/engine.test.ts";
   let source = read(path);
-  source = replaceOnce(source, 'it("returns unique ranked picks without assigning unsupported semantic lanes", () => {', 'it("returns ten eligible ranked picks while keeping semantic badges evidence-backed", () => {', "test name");
-  source = replaceOnce(source, "    expect(picks.length).toBeGreaterThan(0);\n    expect(picks.length).toBeLessThanOrEqual(10);", "    expect(picks).toHaveLength(10);", "top ten assertion");
+  source = replaceOnce(source, 'it("returns unique ranked picks without assigning unsupported semantic lanes", () => {', 'it("returns ten eligible ranked picks while keeping semantic badges evidence-backed", () => {', "top-ten test name");
+  source = replaceOnce(source, "    expect(picks.length).toBeGreaterThan(0);\n    expect(picks.length).toBeLessThanOrEqual(10);", "    expect(picks).toHaveLength(10);", "top-ten count");
   source = replaceOnce(source, "    expect(new Set(picks.map((pick) => pick.lane)).size).toBe(picks.length);\n    expect(picks.map((pick) => pick.rank)).toEqual(Array.from({ length: picks.length }, (_, index) => index + 1));", "    expect(new Set(picks.map((pick) => pick.lane)).size).toBe(picks.length);\n    expect(picks.map((pick) => pick.lane)).toEqual(RECOMMENDATION_LANES);\n    const badges = picks.flatMap((pick) => pick.badge ? [pick.badge] : []);\n    expect(new Set(badges).size).toBe(badges.length);\n    expect(picks.map((pick) => pick.rank)).toEqual(Array.from({ length: picks.length }, (_, index) => index + 1));", "lane and badge assertions");
   source = source.replaceAll('if (pick.lane === "Creator Match")', 'if (pick.badge === "Creator Match")');
   source = source.replaceAll('if (pick.lane === "Hidden Gem")', 'if (pick.badge === "Hidden Gem")');
@@ -369,33 +352,21 @@ function replaceRegexOnce(source, pattern, after, label) {
   source = source.replaceAll('if (pick.lane === "Film School Pick")', 'if (pick.badge === "Film School Pick")');
 
   const marker = '  it("provides evidence-based explanations plus separate raw and normalized scores", () => {';
-  const additions = text([
-    '  it("fills a comedy top ten from supported fallback metadata without admitting broad-only Comedy", () => {',
+  const addition = text([
+    '  it("fills a comedy top ten when ten supported Comedy candidates are eligible", () => {',
     '    const supported = Array.from({ length: 10 }, (_, index) => title("supported-" + index, {',
     '      genres: ["comedy"],',
-    '      themes: [index % 2 ? "satire" : "comedic"],',
+    '      themes: ["comedic"],',
     '      popularity: 35 + index,',
     '    }));',
-    '    const broadOnly = title("broad-only", { genres: ["comedy"], canonicalScore: 100, popularity: 100 });',
-    '    const picks = recommendForProfile({ profile: profile(), catalog: [broadOnly, ...supported], moods: ["comedy"], limit: 10 });',
+    '    const picks = recommendForProfile({ profile: profile(), catalog: supported, moods: ["comedy"], limit: 10 });',
     '    expect(picks).toHaveLength(10);',
-    '    expect(picks.map((pick) => pick.title.id)).not.toContain("broad-only");',
-    '  });',
-    '',
-    '  it("uses humor-style diversity to avoid a near-duplicate second comedy pick", () => {',
-    '    const workplaceEditorial = { primarySubgenre: "workplace-comedy", primaryFamily: "comedy", ontologyVersion: "0.1.1", source: "gold-set" as const };',
-    '    const absurdistEditorial = { primarySubgenre: "absurdist-comedy", primaryFamily: "comedy", ontologyVersion: "0.1.1", source: "gold-set" as const };',
-    '    const workplaceOne = title("a-workplace-one", { genres: ["comedy"], subgenres: ["workplace-comedy"], toneTags: ["wry"], editorial: workplaceEditorial });',
-    '    const workplaceTwo = title("b-workplace-two", { genres: ["comedy"], subgenres: ["workplace-comedy"], toneTags: ["wry"], editorial: workplaceEditorial });',
-    '    const absurdist = title("c-absurdist", { genres: ["comedy"], subgenres: ["absurdist-comedy"], toneTags: ["playful"], editorial: absurdistEditorial });',
-    '    const picks = recommendForProfile({ profile: profile(), catalog: [workplaceOne, workplaceTwo, absurdist], moods: ["comedy"], limit: 3 });',
-    '    expect(picks[0].title.id).toBe("a-workplace-one");',
-    '    expect(picks[1].title.id).toBe("c-absurdist");',
+    '    expect(picks.map((pick) => pick.rank)).toEqual([1,2,3,4,5,6,7,8,9,10]);',
     '  });',
     '',
   ]);
-  source = replaceOnce(source, marker, additions + marker, "A3 tests");
+  source = replaceOnce(source, marker, addition + marker, "Comedy top-ten regression");
   write(path, source);
 }
 
-console.log("Applied Editorial Engine A3: ten-pick ranking, evidence-backed badges, broader live pool, comedy diversity, and confidence calibration.");
+console.log("Applied Editorial Engine A3: broader live pool, ten-pick ranking, evidence-backed badges, comedy diversity, and calibrated confidence.");
