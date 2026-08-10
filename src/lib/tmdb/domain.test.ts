@@ -46,13 +46,16 @@ function details(overrides: Partial<TmdbTitleDetails> = {}): TmdbTitleDetails {
 }
 
 describe("TMDB recommendation-domain enrichment", () => {
-  it("uses curated primary family instead of broad TMDB genres when gold-set data exists", () => {
+  it("uses corrected curated primary family instead of broad TMDB genres", () => {
     const title = tmdbDetailsToDomainTitle(details());
-    expect(title.genres).toEqual(["comedy"]);
-    expect(title.subgenres[0]).toBe("dark-comedy");
+    expect(title.genres).toEqual(["crime"]);
+    expect(title.subgenres).toEqual(["crime-drama", "crime-thriller"]);
+    expect(title.toneTags).toEqual(["wry", "stylized", "visceral"]);
     expect(title.editorial).toMatchObject({
-      primaryFamily: "comedy",
-      primarySubgenre: "dark-comedy",
+      primaryFamily: "crime",
+      primarySubgenre: "crime-drama",
+      secondaryFamily: "thriller",
+      secondarySubgenre: "crime-thriller",
       source: "gold-set",
     });
   });
