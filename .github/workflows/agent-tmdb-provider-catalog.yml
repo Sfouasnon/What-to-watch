@@ -1,0 +1,32 @@
+name: Apply TMDB provider picker patch
+
+on:
+  push:
+    branches:
+      - agent/tmdb-provider-catalog
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/tmdb-provider-catalog
+          fetch-depth: 0
+
+      - name: Patch provider picker integration
+        run: node .github/scripts/agent-tmdb-provider-catalog.mjs
+
+      - name: Commit generated integration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/components/what-to-watch-app.tsx
+          git rm .github/scripts/agent-tmdb-provider-catalog.mjs .github/workflows/agent-tmdb-provider-catalog.yml
+          git commit -m "Use regional TMDB provider picker"
+          git push origin HEAD:agent/tmdb-provider-catalog
