@@ -41,6 +41,8 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import { ProviderSelector } from "./provider-selector";
+
 type Screen = "home" | "results" | "rate" | "taste" | "settings";
 type ContentKind = "Movie" | "Series" | "Stand-up";
 type AvailabilityType = "subscription" | "free" | "rental";
@@ -192,18 +194,6 @@ const WEIGHT_LIMITS: Record<keyof ModelWeights, [number, number]> = {
   dislikedPenalty: [0, 3],
   explorationBonus: [0, 1.5],
 };
-
-const services = [
-  { id: "Netflix", mark: "N" },
-  { id: "Hulu", mark: "h" },
-  { id: "Disney+", mark: "D+" },
-  { id: "Apple TV+", mark: "tv+" },
-  { id: "Prime Video", mark: "prime" },
-  { id: "Max", mark: "max" },
-  { id: "Peacock", mark: "P" },
-  { id: "Paramount+", mark: "P+" },
-  { id: "Criterion Channel", mark: "C" },
-];
 
 const moods: { id: string; label: string; icon: LucideIcon }[] = [
   { id: "Comedy", label: "Comedy", icon: Sparkles },
@@ -1294,12 +1284,11 @@ function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; o
       {step === "services" && (
         <section className="onboarding-panel">
           <p className="kicker">STEP 1</p><h1>Where do you watch?</h1><p className="lede">Choose the services available to {profile.name}. We use these as a hard filter before recommending.</p>
-          <div className="service-grid">
-            {services.map((service) => {
-              const active = profile.subscriptions.includes(service.id);
-              return <button key={service.id} className={`service-card ${active ? "is-active" : ""}`} onClick={() => onChange({ ...profile, subscriptions: active ? profile.subscriptions.filter((id) => id !== service.id) : [...profile.subscriptions, service.id] })}><span className="service-mark">{service.mark}</span><strong>{service.id}</strong>{active && <Check size={17} />}</button>;
-            })}
-          </div>
+          <ProviderSelector
+            region={profile.region}
+            selected={profile.subscriptions}
+            onChange={(subscriptions) => onChange({ ...profile, subscriptions })}
+          />
           <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("welcome")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("questionnaire")}>Build my taste <ChevronRight size={18} /></button></div>
         </section>
       )}
@@ -1632,7 +1621,17 @@ function SettingsScreen({ profile, feedback, store, onChange, onProfiles, onToas
       onToast(`Configuration imported as model v${profile.modelVersion + 1}. Raw history was untouched.`);
     } catch { onToast("That file is not a valid tuning configuration"); }
   };
-  if (section === "services") return <SettingsSubpage title="Streaming services" onBack={() => setSection("main")}><p className="settings-intro">Availability is filtered for this profile only.</p><div className="settings-service-list">{services.map((service) => { const active = profile.subscriptions.includes(service.id); return <button key={service.id} onClick={() => onChange({ ...profile, subscriptions: active ? profile.subscriptions.filter((id) => id !== service.id) : [...profile.subscriptions, service.id] })}><span className="service-mark">{service.mark}</span><strong>{service.id}</strong><span className={`check-circle ${active ? "is-active" : ""}`}>{active && <Check size={14} />}</span></button>; })}</div></SettingsSubpage>;
+  if (section === "services") return (
+    <SettingsSubpage title="Streaming services" onBack={() => setSection("main")}>
+      <p className="settings-intro">Availability is filtered for this profile only. The service catalog follows {profile.region}.</p>
+      <ProviderSelector
+        region={profile.region}
+        selected={profile.subscriptions}
+        onChange={(subscriptions) => onChange({ ...profile, subscriptions })}
+        mode="list"
+      />
+    </SettingsSubpage>
+  );
   if (section === "friends") return <SettingsSubpage title="Friends" onBack={() => setSection("main")}><FriendsSettingsContent acceptedFriends={acceptedFriends} incomingRequests={incomingRequests} outgoingIds={outgoingIds} suggestedFriends={suggestedFriends} store={store} onFriendship={onFriendship} /></SettingsSubpage>;
   if (section === "algorithm") return <SettingsSubpage title="Algorithm Lab" onBack={() => setSection("main")}><p className="settings-intro">Tune the model without ever rewriting your ratings or watch history.</p><div className="model-card"><div><p className="kicker">CURRENT</p><h3>Model v{profile.modelVersion}</h3><span>Deterministic · profile isolated</span></div><strong>{Object.keys(profile.ratings).length}<small> ratings</small></strong></div><div className="performance-grid"><div><strong>{feedback.length}</strong><span>Feedback events</span></div><div><strong>{Object.keys(profile.questionnaire).length}</strong><span>Taste signals</span></div><div><strong>10</strong><span>Ranked lanes</span></div></div><button className="settings-action" onClick={exportData}><span><Download size={18} /><span><strong>Export training package</strong><small>Ratings, predictions, signals, and current weights</small></span></span><ChevronRight size={17} /></button><button className="settings-action" onClick={() => importRef.current?.click()}><span><Upload size={18} /><span><strong>Import tuned configuration</strong><small>Only approved weights and thresholds can change</small></span></span><ChevronRight size={17} /></button><input ref={importRef} className="visually-hidden" type="file" accept="application/json" onChange={(event) => importConfig(event.target.files?.[0])} /><div className="safety-note"><ShieldCheck size={18} /><p><strong>History safety is enforced.</strong> Imported files cannot overwrite ratings, watched history, recommendation history, or raw feedback.</p></div></SettingsSubpage>;
   if (section === "privacy") return <SettingsSubpage title="Privacy" onBack={() => setSection("main")}><PrivacySettingsContent profile={profile} onChange={onChange} /></SettingsSubpage>;
