@@ -1,0 +1,59 @@
+name: Validate TMDB catalog foundation review
+
+on:
+  push:
+    branches:
+      - agent/tmdb-catalog-foundation
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/tmdb-catalog-foundation
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check catalog script syntax
+        run: |
+          node --check scripts/catalog/import-tmdb-index.mjs
+          node --check scripts/catalog/hydrate-tmdb.mjs
+          node --check scripts/catalog/seed-gold-100.mjs
+
+      - name: Validate gold benchmark
+        run: npm run catalog:validate-gold
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Remove one-shot validation workflow
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/agent-validate-tmdb-catalog-foundation-review.yml
+          git commit -m "Remove one-shot catalog review workflow"
+          git push origin HEAD:agent/tmdb-catalog-foundation
