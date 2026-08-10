@@ -4,6 +4,8 @@ import type {
   MetadataProvider,
   TitleSearchPage,
   TitleSearchResult,
+  WatchProviderCatalogItem,
+  WatchProviderCatalogResult,
   WatchProviderKind,
   WatchProviderMediaType,
   WatchProviderResult,
@@ -44,6 +46,12 @@ type TmdbProvider = {
   provider_name: string;
   logo_path?: string | null;
   display_priority?: number;
+  display_priorities?: Record<string, number>;
+};
+
+type TmdbProviderListResponse = {
+  results: TmdbProvider[];
+  status_message?: string;
 };
 
 type TmdbWatchRegion = {
@@ -115,6 +123,21 @@ function normalizeResult(result: TmdbMultiResult): TitleSearchResult | null {
   };
 }
 
+function providerPriority(provider: TmdbProvider, region: string) {
+  return provider.display_priorities?.[region] ?? provider.display_priority ?? 999;
+}
+
+async function parseProviderList(response: Response): Promise<TmdbProviderListResponse> {
+  const payload = (await response.json().catch(() => null)) as TmdbProviderListResponse | null;
+  if (!response.ok || !payload) {
+    throw new TmdbUpstreamError(
+      payload?.status_message || `TMDB provider catalog request failed with status ${response.status}`,
+      response.status,
+    );
+  }
+  return payload;
+}
+
 export class TmdbMetadataProvider implements MetadataProvider {
   async searchTitles(query: string, page = 1): Promise<TitleSearchPage> {
     const token = process.env.TMDB_TOKEN?.trim();
@@ -145,6 +168,63 @@ export class TmdbMetadataProvider implements MetadataProvider {
       page: payload.page,
       totalPages: payload.total_pages,
       totalResults: payload.total_results,
+    };
+  }
+
+  async getProviderCatalog(region: string): Promise<WatchProviderCatalogResult> {
+    const token = process.env.TMDB_TOKEN?.trim();
+    if (!token) throw new TmdbConfigurationError();
+
+    const normalizedRegion = region.toUpperCase();
+    const params = new URLSearchParams({
+      language: "en-US",
+      watch_region: normalizedRegion,
+    });
+    const request = (mediaType: WatchProviderMediaType) => fetch(`${TMDB_API_BASE}/watch/providers/${mediaType}?${params}`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+      signal: AbortSignal.timeout(8_000),
+      next: { revalidate: 86_400 },
+    });
+
+    const [moviePayload, tvPayload] = await Promise.all([
+      request("movie").then(parseProviderList),
+      request("tv").then(parseProviderList),
+    ]);
+
+    const providers = new Map<number, WatchProviderCatalogItem>();
+    const merge = (mediaType: WatchProviderMediaType, entries: TmdbProvider[]) => {
+      entries.forEach((provider) => {
+        const priority = providerPriority(provider, normalizedRegion);
+        const existing = providers.get(provider.provider_id);
+        if (!existing) {
+          providers.set(provider.provider_id, {
+            providerId: provider.provider_id,
+            providerName: provider.provider_name,
+            logoUrl: imageUrl(provider.logo_path, "w342"),
+            displayPriority: priority,
+            mediaTypes: [mediaType],
+          });
+          return;
+        }
+        providers.set(provider.provider_id, {
+          ...existing,
+          providerName: provider.provider_name || existing.providerName,
+          logoUrl: imageUrl(provider.logo_path, "w342") ?? existing.logoUrl,
+          displayPriority: Math.min(existing.displayPriority, priority),
+          mediaTypes: existing.mediaTypes.includes(mediaType) ? existing.mediaTypes : [...existing.mediaTypes, mediaType],
+        });
+      });
+    };
+
+    merge("movie", moviePayload.results ?? []);
+    merge("tv", tvPayload.results ?? []);
+
+    return {
+      region: normalizedRegion,
+      checkedAt: new Date().toISOString(),
+      providers: [...providers.values()].sort(
+        (a, b) => a.displayPriority - b.displayPriority || a.providerName.localeCompare(b.providerName),
+      ),
     };
   }
 
