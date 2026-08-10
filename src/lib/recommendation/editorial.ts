@@ -36,19 +36,25 @@ type OntologyFamily = {
   terms: Array<{ id: string }>;
 };
 
+type EditorialIdentity = `${"movie" | "tv"}:${number}`;
+
+function editorialIdentity(mediaType: "movie" | "tv", tmdbId: number): EditorialIdentity {
+  return `${mediaType}:${tmdbId}`;
+}
+
 const classifications = goldSet.classifications as GoldClassification[];
-const byIdentity = new Map(
+const byIdentity = new Map<EditorialIdentity, GoldClassification>(
   classifications.map((classification) => [
-    `${classification.media_type}:${classification.tmdb_id}`,
+    editorialIdentity(classification.media_type, classification.tmdb_id),
     classification,
-  ] as const),
+  ]),
 );
 
-const correctionByIdentity = new Map(
+const correctionByIdentity = new Map<EditorialIdentity, EditorialCorrection>(
   (corrections.corrections as EditorialCorrection[]).map((correction) => [
-    `${correction.media_type}:${correction.tmdb_id}`,
+    editorialIdentity(correction.media_type, correction.tmdb_id),
     correction,
-  ] as const),
+  ]),
 );
 
 const familyBySubgenre = new Map(
@@ -72,7 +78,7 @@ export function editorialClassification(
   mediaType: "movie" | "tv",
   tmdbId: number,
 ): EditorialClassification | null {
-  const identity = `${mediaType}:${tmdbId}`;
+  const identity = editorialIdentity(mediaType, tmdbId);
   const classification = byIdentity.get(identity);
   if (!classification) return null;
 
