@@ -21,7 +21,7 @@ const REFERENCE_YEAR = 2026;
 
 export const defaultRecommendationConfig: RecommendationConfig = {
   schemaVersion: 1,
-  modelVersion: "1.0.0",
+  modelVersion: "1.1.0",
   weights: {
     directorAffinity: 8,
     actorAffinity: 5,
@@ -201,8 +201,10 @@ interface ScoredCandidate {
   intrinsicScore: number;
   novelty: number;
   creatorSignal: number;
+  tasteAffinitySignal: number;
   hiddenGemSignal: number;
   canonicalSignal: number;
+  hasCanonicalEvidence: boolean;
   moodSignal: number;
   socialScore: number;
   socialEnabled: boolean;
@@ -317,7 +319,7 @@ export function recommendForProfile({
           (config.normalization.maximumDisplayMatch - config.normalization.minimumDisplayMatch),
     );
     selected.push({
-      rank: index + 1,
+      rank: selected.length + 1,
       lane: recommendationLane,
       title: candidate.title,
       rawScore: round(winner.score, 3),
@@ -384,9 +386,17 @@ function scoreTitle(
 
   const subgenre = affinityFromSharedValues(title.subgenres, rated, (item) => item.subgenres);
   add("subgenreMatch", config.weights.subgenreMatch * subgenre.value);
+  const tasteAffinitySignal = Math.max(
+    0,
+    genreBehavior.evidence ? genreBehavior.value : 0,
+    subgenre.evidence ? subgenre.value : 0,
+  );
 
   const moodSignal = moodFit(title, moods);
   if (moodSignal) add("moodMatch", config.weights.moodMatch * moodSignal, moodEvidence(title, moods));
+  if (moods.length && moodSignal > 0 && !title.editorial && title.contentType !== "stand-up") {
+    add("metadataConfidence", -4 * (1 - moodSignal));
+  }
 
   const creatorResults: Array<{ feature: string; weight: number; result: AffinityResult }> = [
     { feature: "directorAffinity", weight: config.weights.directorAffinity, result: creatorAffinity(title.directors, rated, "directors", profile, config) },
@@ -416,12 +426,14 @@ function scoreTitle(
   add("languageAffinity", config.weights.languageAffinity * language.value);
   add("runtimeAffinity", config.weights.runtimeAffinity * runtime.value);
 
-  const canonicalSignal = clamp(title.canonicalScore / 100, 0, 1);
+  const qualitySignal = clamp(title.canonicalScore / 100, 0, 1);
+  const hasCanonicalEvidence = canonicalEvidence(title);
+  const canonicalSignal = hasCanonicalEvidence ? qualitySignal : 0;
   add(
     "canonicalScore",
-    config.weights.canonicalScore * canonicalSignal,
-    vibes.some((vibe) => ["rediscover-classic", "film-school-night", "blind-spot"].includes(vibe))
-      ? `${title.name} has a ${title.canonicalScore}/100 aggregated canonical score.`
+    config.weights.canonicalScore * qualitySignal,
+    vibes.some((vibe) => ["rediscover-classic", "film-school-night", "blind-spot"].includes(vibe)) && hasCanonicalEvidence
+      ? canonicalEvidenceText(title)
       : undefined,
   );
   if (title.criterionCollection) {
@@ -476,14 +488,19 @@ function scoreTitle(
     social,
     config.thresholds.stronglyLikedRating,
   );
+  const obscuritySignal = clamp((45 - title.popularity) / 45, 0, 1);
+  const predictedFitSignal = clamp((score - 60) / 25, 0, 1);
+  const hiddenGemSignal = obscuritySignal * predictedFitSignal;
 
   return {
     title,
     intrinsicScore: score,
     novelty,
     creatorSignal,
-    hiddenGemSignal: clamp((100 - title.popularity) / 100, 0, 1) * (0.5 + canonicalSignal / 2),
+    tasteAffinitySignal,
+    hiddenGemSignal,
     canonicalSignal,
+    hasCanonicalEvidence,
     moodSignal,
     socialScore: socialEvidence.score,
     socialEnabled: vibes.includes("friends-picks"),
@@ -499,9 +516,11 @@ function laneEligible(
   selected: readonly Recommendation[],
 ): boolean {
   if (lane === "Creator Match") return candidate.creatorSignal >= 0.2;
-  if (lane === "Hidden Gem") return candidate.hiddenGemSignal >= 0.5 && candidate.title.popularity <= 55;
-  if (lane === "Film School Pick") return candidate.canonicalSignal >= 0.65;
-  if (lane === "Go Deeper") return candidate.creatorSignal >= 0.15 || candidate.hiddenGemSignal >= 0.45;
+  if (lane === "Hidden Gem") {
+    return candidate.title.popularity <= 35 && candidate.hiddenGemSignal >= 0.25 && candidate.intrinsicScore >= 62;
+  }
+  if (lane === "Film School Pick") return candidate.hasCanonicalEvidence && candidate.canonicalSignal >= 0.55;
+  if (lane === "Go Deeper") return candidate.creatorSignal >= 0.2 || candidate.tasteAffinitySignal >= 0.25;
   if (lane === "Something Different") return candidate.novelty >= 0.45;
   if (lane === "Left Field") return candidate.novelty >= 0.6;
   if (lane === "Wild Card") return candidate.novelty >= 0.7;
@@ -548,7 +567,7 @@ function laneScore(
   if (lane === "Right Mood") score += candidate.moodSignal * 4;
   if (lane === "Creator Match") score += candidate.creatorSignal * 7;
   if (lane === "Hidden Gem") score += candidate.hiddenGemSignal * 9;
-  if (lane === "Go Deeper") score += (candidate.creatorSignal * 0.6 + candidate.hiddenGemSignal * 0.4) * 8;
+  if (lane === "Go Deeper") score += Math.max(candidate.creatorSignal, candidate.tasteAffinitySignal) * 8;
   if (lane === "Film School Pick") score += candidate.canonicalSignal * 9;
   if (lane === "Left Field") score += candidate.novelty * 8;
   if (lane === "Wild Card") score += candidate.novelty * 11;
@@ -570,12 +589,45 @@ function moodFit(title: Title, moods: readonly Mood[]): number {
     return 0;
   }
 
+  return Math.max(...moods.map((mood) => tmdbFallbackMoodFit(title, mood)), 0);
+}
+
+function tmdbFallbackMoodFit(title: Title, mood: Mood): number {
+  if (mood === "stand-up") return 0;
   const normalizedGenres = title.genres.map((genre) => genre.toLowerCase());
-  return moods.some((mood) => normalizedGenres.includes(mood)) ? 0.42 : 0;
+  if (!normalizedGenres.includes(mood)) return 0;
+
+  // TMDB's broad Comedy genre is especially noisy for mixed-genre titles.
+  // Require at least one comedy-specific keyword/tag before treating an
+  // uncurated title as a fallback Comedy candidate. Other TMDB mood genres
+  // remain eligible, but deliberately weaker than editorial primary/secondary.
+  if (mood === "comedy") {
+    const semanticText = [...title.subgenres, ...title.toneTags, ...title.themes]
+      .map((value) => value.toLowerCase())
+      .join(" ");
+    const supported = /\b(sitcom|comed(?:y|ic)|humou?r|satir|parody|spoof|farce|funny)\b/.test(semanticText);
+    return supported ? 0.32 : 0.12;
+  }
+  return 0.24;
 }
 
 function matchesRequestedMood(title: Title, moods: readonly Mood[]): boolean {
-  return moodFit(title, moods) > 0;
+  if (!moods.length) return true;
+  // 0.15 deliberately rejects unsupported broad-TMDB Comedy while preserving
+  // a weak fallback path when supporting metadata exists.
+  return moodFit(title, moods) >= 0.15;
+}
+
+function canonicalEvidence(title: Title): boolean {
+  return title.criterionCollection || title.canonicalMemberships.length > 0;
+}
+
+function canonicalEvidenceText(title: Title): string {
+  if (title.criterionCollection) return `${title.name} has explicit Criterion editorial evidence.`;
+  const membership = title.canonicalMemberships[0];
+  return membership
+    ? `${title.name} appears on ${membership.list}.`
+    : `${title.name} has explicit canonical editorial evidence.`;
 }
 
 function matchesVibeGate(
@@ -595,9 +647,10 @@ function matchesVibeGate(
     ) return false;
     if (
       ["rediscover-classic", "film-school-night", "blind-spot"].includes(vibe) &&
-      title.canonicalScore < config.thresholds.canonicalMinimum
+      (!canonicalEvidence(title) || title.canonicalScore < config.thresholds.canonicalMinimum)
     ) return false;
     if (vibe === "rediscover-classic" && title.year > 2000) return false;
+    if (vibe === "hidden-gem" && title.popularity > 35) return false;
     if (vibe === "complete-director" || vibe === "go-deeper") {
       const likedDirectors = new Set(
         rated
@@ -704,18 +757,18 @@ function vibeScore(
   const scores = vibes.map((vibe) => {
     switch (vibe) {
       case "rewatch-favorite": return clamp(((ownRating?.score ?? 5.5) - 5.5) / 4.5, 0, 1);
-      case "rediscover-classic": return clamp(title.canonicalScore / 100 + (REFERENCE_YEAR - title.year) / 150, 0, 1);
+      case "rediscover-classic": return canonicalEvidence(title) ? clamp(title.canonicalScore / 100 + (REFERENCE_YEAR - title.year) / 150, 0, 1) : 0;
       case "try-something-new": return novelty;
       case "popular-international": return clamp(title.popularity / 100, 0, 1);
       case "bingeable-tv": return bingeability(title);
       case "trending-series": return clamp(title.trendingScore / 100, 0, 1);
-      case "hidden-gem": return clamp((100 - title.popularity) / 100 + title.canonicalScore / 200, 0, 1);
+      case "hidden-gem": return clamp((35 - title.popularity) / 35, 0, 1);
       case "surprise-me": return novelty;
       case "complete-director": return creatorSignal;
       case "criterion-pick": return title.criterionCollection ? 1 : 0;
-      case "film-school-night": return clamp(title.canonicalScore / 100, 0, 1);
-      case "blind-spot": return clamp(title.canonicalScore / 100, 0, 1);
-      case "go-deeper": return clamp(creatorSignal + (100 - title.popularity) / 200, 0, 1);
+      case "film-school-night": return canonicalEvidence(title) ? clamp(title.canonicalScore / 100, 0, 1) : 0;
+      case "blind-spot": return canonicalEvidence(title) ? clamp(title.canonicalScore / 100, 0, 1) : 0;
+      case "go-deeper": return creatorSignal;
       case "friends-picks": return 0;
     }
   });
@@ -855,11 +908,11 @@ function moodEvidence(title: Title, moods: readonly Mood[]): string {
     if (matchedSecondary) return `You asked for ${matchedSecondary}; ${title.name} has ${title.editorial.secondarySubgenre} as a secondary editorial classification.`;
   }
   const matched = moods.find((mood) => title.genres.some((genre) => genre.toLowerCase() === mood));
-  return `You asked for ${matched ?? moods[0]}; ${title.name} currently relies on broad TMDB genre metadata because editorial enrichment is not available yet.`;
+  return `You asked for ${matched ?? moods[0]}; TMDB provides supporting ${matched ?? moods[0]} metadata, but this title does not yet have editorial enrichment.`;
 }
 
 function vibeEvidence(title: Title, vibes: readonly Vibe[]): string | undefined {
-  if (vibes.includes("hidden-gem")) return `${title.name} has lower mainstream popularity while retaining editorial quality signals.`;
+  if (vibes.includes("hidden-gem")) return `${title.name} is below the hidden-gem popularity ceiling and still clears the predicted-fit floor.`;
   if (vibes.includes("popular-international")) return `${title.name} is primarily from ${title.countries.join(", ")} and has a ${title.popularity}/100 popularity signal.`;
   if (vibes.includes("trending-series")) return `${title.name} has a ${title.trendingScore}/100 current demo trending signal.`;
   if (vibes.includes("bingeable-tv")) return `${title.name} has ${title.episodeRuntimeMinutes ?? "unknown"}-minute episodes and a transparent bingeability fit.`;
@@ -879,11 +932,14 @@ function buildEvidence(
   if (!facts.length && vibes.includes("friends-picks")) facts.push(`${candidate.title.name} remains a personal taste and quality match before friend evidence is considered.`);
   if (!facts.length && vibes.length) facts.push(`${candidate.title.name} satisfies your ${vibes[0].replaceAll("-", " ")} filter.`);
   if (!facts.length) facts.push(`${candidate.title.name} is an unseen title with concrete quality and taste-fit signals.`);
-  if (lane === "Hidden Gem" && !facts.some((fact) => fact.includes("popularity"))) {
-    facts.push(`Its ${candidate.title.popularity}/100 popularity signal makes it a less obvious option.`);
+  if (lane === "Hidden Gem" && !facts.some((fact) => fact.includes("hidden-gem"))) {
+    facts.push(`Its ${candidate.title.popularity}/100 popularity signal is low enough, and its predicted fit clears the hidden-gem floor.`);
   }
-  if (lane === "Film School Pick" && !facts.some((fact) => fact.includes("canonical"))) {
-    facts.push(`Its aggregated canonical score is ${candidate.title.canonicalScore}/100.`);
+  if (lane === "Go Deeper" && candidate.creatorSignal < 0.2 && candidate.tasteAffinitySignal >= 0.25) {
+    facts.push(`${candidate.title.name} extends a genre or subgenre pattern supported by titles you already rated.`);
+  }
+  if (lane === "Film School Pick" && !facts.some((fact) => fact.includes("Criterion") || fact.includes("appears on"))) {
+    facts.push(canonicalEvidenceText(candidate.title));
   }
   if (requiresPayment) facts.push("It cleared the exceptional paid-match rule; payment is required and clearly labeled.");
   return unique(facts);
