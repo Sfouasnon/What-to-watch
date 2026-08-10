@@ -1,3 +1,4 @@
+import corrections from "../../../curation/pilot/pass2/editorial-corrections-v1.1.json";
 import goldSet from "../../../curation/pilot/pass2/final-classifications-v1.0-gold.json";
 import ontology from "../../../curation/ontology/v0.1.1/ontology.json";
 
@@ -22,6 +23,14 @@ type GoldClassification = {
   pacing: { value: Title["pacing"] | null };
 };
 
+type EditorialCorrection = {
+  tmdb_id: number;
+  media_type: "movie" | "tv";
+  primary_subgenre: { to: string };
+  secondary_subgenre: { to: string | null };
+  tone_tags?: { value: string[] };
+};
+
 type OntologyFamily = {
   family_id: string;
   terms: Array<{ id: string }>;
@@ -32,6 +41,13 @@ const byIdentity = new Map(
   classifications.map((classification) => [
     `${classification.media_type}:${classification.tmdb_id}`,
     classification,
+  ] as const),
+);
+
+const correctionByIdentity = new Map(
+  (corrections.corrections as EditorialCorrection[]).map((correction) => [
+    `${correction.media_type}:${correction.tmdb_id}`,
+    correction,
   ] as const),
 );
 
@@ -47,27 +63,36 @@ export function editorialFamilyForSubgenre(subgenre: string): string | undefined
 
 /**
  * Returns the human-adjudicated semantic classification when a live TMDB title
- * is part of the editorial gold set. Unknown titles deliberately return null so
- * live recommendations can continue using provider-neutral TMDB metadata.
+ * is part of the editorial gold set. Frozen v1.0 remains untouched; explicit
+ * human corrections are layered on top through the versioned v1.1 correction
+ * file. Unknown titles deliberately return null so live recommendations can
+ * continue using provider-neutral TMDB metadata.
  */
 export function editorialClassification(
   mediaType: "movie" | "tv",
   tmdbId: number,
 ): EditorialClassification | null {
-  const classification = byIdentity.get(`${mediaType}:${tmdbId}`);
-  const primarySubgenre = classification?.primary_subgenre.value;
-  if (!classification || !primarySubgenre) return null;
+  const identity = `${mediaType}:${tmdbId}`;
+  const classification = byIdentity.get(identity);
+  if (!classification) return null;
+
+  const correction = correctionByIdentity.get(identity);
+  const primarySubgenre = correction?.primary_subgenre.to ?? classification.primary_subgenre.value;
+  if (!primarySubgenre) return null;
 
   const primaryFamily = editorialFamilyForSubgenre(primarySubgenre);
   if (!primaryFamily) return null;
-  const secondarySubgenre = classification.secondary_subgenre.value ?? undefined;
+
+  const secondarySubgenre = correction
+    ? correction.secondary_subgenre.to ?? undefined
+    : classification.secondary_subgenre.value ?? undefined;
 
   return {
     primarySubgenre,
     secondarySubgenre,
     primaryFamily,
     secondaryFamily: secondarySubgenre ? editorialFamilyForSubgenre(secondarySubgenre) : undefined,
-    toneTags: classification.tone_tags.value ?? [],
+    toneTags: correction?.tone_tags?.value ?? classification.tone_tags.value ?? [],
     pacing: classification.pacing.value ?? "moderate",
     ontologyVersion: goldSet.ontology_version,
   };
