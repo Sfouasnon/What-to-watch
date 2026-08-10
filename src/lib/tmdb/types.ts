@@ -49,7 +49,22 @@ export type WatchProviderResult = {
   offers: WatchProviderOffer[];
 };
 
+export type WatchProviderCatalogItem = {
+  providerId: number;
+  providerName: string;
+  logoUrl: string | null;
+  displayPriority: number;
+  mediaTypes: WatchProviderMediaType[];
+};
+
+export type WatchProviderCatalogResult = {
+  region: string;
+  checkedAt: string;
+  providers: WatchProviderCatalogItem[];
+};
+
 export interface MetadataProvider {
   searchTitles(query: string, page?: number): Promise<TitleSearchPage>;
   getWatchProviders(mediaType: WatchProviderMediaType, providerId: number, region: string): Promise<WatchProviderResult>;
+  getProviderCatalog(region: string): Promise<WatchProviderCatalogResult>;
 }
