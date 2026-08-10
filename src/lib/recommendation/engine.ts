@@ -21,7 +21,7 @@ const REFERENCE_YEAR = 2026;
 
 export const defaultRecommendationConfig: RecommendationConfig = {
   schemaVersion: 1,
-  modelVersion: "1.2.0",
+  modelVersion: "1.2.1",
   weights: {
     directorAffinity: 8,
     actorAffinity: 5,
@@ -311,7 +311,7 @@ export function recommendForProfile({
     const winner = ranked[0];
     if (!winner) break;
     const candidate = winner.candidate;
-    const badge = lane ? scoringLane : selectSemanticBadge(persistenceLane, candidate, selected);
+    const badge = lane ? scoringLane : selectSemanticBadge(persistenceLane, candidate, selected, vibes);
     const requiresPayment =
       candidate.primaryAvailability.kind === "rental" || candidate.primaryAvailability.kind === "purchase";
     const evidence = buildEvidence(candidate, moods, vibes, badge, requiresPayment);
@@ -546,10 +546,26 @@ function laneEligible(
   return true;
 }
 
+function semanticBadgeEligible(
+  candidate: ScoredCandidate,
+  lane: RecommendationLane,
+  selected: readonly Recommendation[],
+  vibes: readonly Vibe[],
+): boolean {
+  if (lane === "Hidden Gem" && !vibes.includes("hidden-gem")) {
+    // TMDB popularity is a current-attention signal, not lifetime awareness.
+    // Automatic Hidden Gem labels therefore need substantially stronger
+    // obscurity evidence than an explicit user-requested Hidden Gem search.
+    return candidate.title.popularity <= 15 && candidate.hiddenGemSignal >= 0.45 && candidate.intrinsicScore >= 65;
+  }
+  return laneEligible(candidate, lane, selected);
+}
+
 function selectSemanticBadge(
   preferred: RecommendationLane,
   candidate: ScoredCandidate,
   selected: readonly Recommendation[],
+  vibes: readonly Vibe[],
 ): RecommendationLane | undefined {
   const used = new Set(selected.flatMap((recommendation) => recommendation.badge ? [recommendation.badge] : []));
   if ((preferred === "Best Bet" || preferred === "Close Second") && !used.has(preferred)) return preferred;
@@ -561,7 +577,7 @@ function selectSemanticBadge(
     candidateLane !== "Best Bet" &&
     candidateLane !== "Close Second" &&
     !used.has(candidateLane) &&
-    laneEligible(candidate, candidateLane, selected)
+    semanticBadgeEligible(candidate, candidateLane, selected, vibes)
   );
 }
 
@@ -641,24 +657,36 @@ function tmdbFallbackMoodFit(title: Title, mood: Mood): number {
   if (!normalizedGenres.includes(mood)) return 0;
 
   // TMDB's broad Comedy genre is especially noisy for mixed-genre titles.
-  // Require at least one comedy-specific keyword/tag before treating an
-  // uncurated title as a fallback Comedy candidate. Other TMDB mood genres
-  // remain eligible, but deliberately weaker than editorial primary/secondary.
+  // A tonal ingredient such as dark comedy or satire is not enough by itself
+  // to claim that the work is a good generic "Comedy tonight" candidate.
   if (mood === "comedy") {
-    const semanticText = [...title.subgenres, ...title.toneTags, ...title.themes]
-      .map((value) => value.toLowerCase())
-      .join(" ");
-    const supported = /\b(sitcom|comed(?:y|ic)|humou?r|satir|parody|spoof|farce|funny)\b/.test(semanticText);
-    return supported ? 0.32 : 0.12;
+    const semanticValues = [...title.subgenres, ...title.toneTags, ...title.themes]
+      .map((value) => value.toLowerCase().trim())
+      .filter(Boolean);
+    const mixedMode = semanticValues.some((value) =>
+      /\b(dark[- ]comedy|black[- ]comedy|satire|satirical|social[- ]satire|political[- ]satire)\b/.test(value),
+    );
+    const organizingMode = semanticValues.some((value) =>
+      /\b(sitcom|romantic[- ]comedy|rom[- ]?com|workplace[- ]comedy|family[- ]comedy|buddy[- ]comedy|teen[- ]comedy|sketch[- ]comedy|screwball[- ]comedy|slapstick|mockumentary|parody|spoof|farce)\b/.test(value),
+    );
+    const genericComicSupport = !mixedMode && semanticValues.some((value) =>
+      /\b(comedic|humou?r|funny)\b/.test(value),
+    );
+    return organizingMode || genericComicSupport ? 0.32 : 0.12;
   }
   return 0.24;
 }
 
 function matchesRequestedMood(title: Title, moods: readonly Mood[]): boolean {
   if (!moods.length) return true;
-  // 0.15 deliberately rejects unsupported broad-TMDB Comedy while preserving
-  // a weak fallback path when supporting metadata exists.
-  return moodFit(title, moods) >= 0.15;
+  const fit = moodFit(title, moods);
+  // A single generic Comedy request is stricter than other broad TMDB moods:
+  // uncurated titles need evidence that comedy is an organizing mode, not just
+  // a dark-comedy/satire keyword attached to a drama or thriller.
+  if (moods.length === 1 && moods[0] === "comedy" && !title.editorial && title.contentType !== "stand-up") {
+    return fit >= 0.3;
+  }
+  return fit > 0;
 }
 
 function moodEvidencePenalty(candidate: ScoredCandidate, moods: readonly Mood[]): number {
