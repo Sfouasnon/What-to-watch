@@ -90,6 +90,28 @@ create index title_editorial_review_queue_idx
 create index title_editorial_primary_subgenre_idx
   on public.title_editorial_classifications(primary_subgenre, title_id);
 
+-- The 100-title gold benchmark is an invariant, not merely a convention. A future
+-- classifier may upsert canonical classifications by title_id, so prevent an
+-- accepted/generated record from accidentally replacing a gold/human decision.
+create or replace function public.protect_gold_editorial_classification()
+returns trigger
+language plpgsql
+set search_path = public
+as $$
+begin
+  if old.review_status = 'gold' and new.review_status <> 'gold' then
+    raise exception 'Gold editorial classification for title % cannot be replaced by a non-gold classification', old.title_id;
+  end if;
+  return new;
+end;
+$$;
+
+revoke all on function public.protect_gold_editorial_classification() from public;
+
+create trigger title_editorial_classifications_protect_gold
+  before update on public.title_editorial_classifications
+  for each row execute function public.protect_gold_editorial_classification();
+
 create trigger tmdb_catalog_index_set_updated_at before update on public.tmdb_catalog_index
   for each row execute function public.set_updated_at();
 create trigger title_classification_inputs_set_updated_at before update on public.title_classification_inputs
