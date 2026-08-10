@@ -380,28 +380,41 @@ export async function POST(request: Request) {
     ...likedGenreIds,
     ...parsed.data.moods.flatMap((mood) => moodGenreIds[mood].tv),
   ]);
+  const discoveryRequests = [
+    tmdb.discoverTitles("movie", requestedMovieGenres, 1),
+    tmdb.discoverTitles("tv", requestedTvGenres, 1),
+    tmdb.discoverTitles("movie", requestedMovieGenres, 2),
+    tmdb.discoverTitles("tv", requestedTvGenres, 2),
+  ];
   const candidateRequests = [
     ...seedRequests,
-    tmdb.discoverTitles("movie", requestedMovieGenres),
-    tmdb.discoverTitles("tv", requestedTvGenres),
+    ...discoveryRequests,
     tmdb.getTrending("movie"),
     tmdb.getTrending("tv"),
   ];
   const candidateResponses = await Promise.allSettled(candidateRequests);
   candidateResponses.forEach((result, index) => {
-    if (result.status === "fulfilled") addCandidates(candidatePool, result.value, index < seedRequests.length ? 4 : index < seedRequests.length + 2 ? 3 : 1);
+    if (result.status === "fulfilled") {
+      const sourceWeight = index < seedRequests.length ? 4 : index < seedRequests.length + discoveryRequests.length ? 3 : 1;
+      addCandidates(candidatePool, result.value, sourceWeight);
+    }
   });
 
   const ratedIds = new Set(profile.ratings.map((rating) => rating.titleId));
   const candidateStubs = [...candidatePool.values()]
     .filter(({ result }) => !ratedIds.has(result.externalId))
     .sort((a, b) => b.priority - a.priority || a.result.externalId.localeCompare(b.result.externalId))
-    .slice(0, 36)
+    .slice(0, 80)
     .map(({ result }) => result);
-  const candidateDetails = await Promise.all(candidateStubs.map(async (candidate) => {
-    const identity = tmdbIdentity(candidate.externalId);
-    return identity ? titleDetails(identity.mediaType, identity.id, parsed.data.region) : null;
-  }));
+  const candidateDetails: Array<TmdbTitleDetails | null> = [];
+  for (let offset = 0; offset < candidateStubs.length; offset += 20) {
+    const batch = candidateStubs.slice(offset, offset + 20);
+    const details = await Promise.all(batch.map(async (candidate) => {
+      const identity = tmdbIdentity(candidate.externalId);
+      return identity ? titleDetails(identity.mediaType, identity.id, parsed.data.region) : null;
+    }));
+    candidateDetails.push(...details);
+  }
   const candidateTitles = candidateDetails.flatMap((details) =>
     details ? [tmdbDetailsToDomainTitle(details)] : [],
   );

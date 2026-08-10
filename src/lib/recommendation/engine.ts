@@ -21,7 +21,7 @@ const REFERENCE_YEAR = 2026;
 
 export const defaultRecommendationConfig: RecommendationConfig = {
   schemaVersion: 1,
-  modelVersion: "1.1.0",
+  modelVersion: "1.2.0",
   weights: {
     directorAffinity: 8,
     actorAffinity: 5,
@@ -288,17 +288,19 @@ export function recommendForProfile({
   const remaining = [...eligible];
 
   for (let index = 0; index < count; index += 1) {
-    const requestedLane = RECOMMENDATION_LANES[index];
-    const recommendationLane = lane ?? selectSemanticLane(requestedLane, remaining, selected);
-    if (!recommendationLane) continue;
-    const scoringLane = lane ?? recommendationLane;
+    // Keep the existing ten unique persistence slots for the database, but
+    // never require a special semantic badge in order to fill the top ten.
+    const persistenceLane = lane ?? RECOMMENDATION_LANES[index];
+    const scoringLane = persistenceLane;
     const exploration = config.exploration[scoringLane];
-    const laneCandidates = remaining.filter((candidate) => laneEligible(candidate, scoringLane, selected));
-    if (!laneCandidates.length) continue;
+    const laneCandidates = lane
+      ? remaining.filter((candidate) => laneEligible(candidate, scoringLane, selected))
+      : remaining;
+    if (!laneCandidates.length) break;
     const ranked = laneCandidates
       .map((candidate) => ({
         candidate,
-        score: laneScore(candidate, scoringLane, exploration, selected, config),
+        score: laneScore(candidate, scoringLane, exploration, selected, config, moods),
       }))
       .sort(
         (a, b) =>
@@ -309,18 +311,24 @@ export function recommendForProfile({
     const winner = ranked[0];
     if (!winner) break;
     const candidate = winner.candidate;
+    const badge = lane ? scoringLane : selectSemanticBadge(persistenceLane, candidate, selected);
     const requiresPayment =
       candidate.primaryAvailability.kind === "rental" || candidate.primaryAvailability.kind === "purchase";
-    const evidence = buildEvidence(candidate, moods, vibes, recommendationLane, requiresPayment);
+    const evidence = buildEvidence(candidate, moods, vibes, badge, requiresPayment);
     const normalizedScore = normalizeScore(winner.score, config);
-    const matchScore = Math.round(
+    const calibratedMatchScore =
       config.normalization.minimumDisplayMatch +
-        normalizedScore *
-          (config.normalization.maximumDisplayMatch - config.normalization.minimumDisplayMatch),
-    );
+      normalizedScore *
+        (config.normalization.maximumDisplayMatch - config.normalization.minimumDisplayMatch);
+    const matchScore = Math.round(clamp(
+      calibratedMatchScore - moodEvidencePenalty(candidate, moods),
+      config.normalization.minimumDisplayMatch,
+      config.normalization.maximumDisplayMatch,
+    ));
     selected.push({
       rank: selected.length + 1,
-      lane: recommendationLane,
+      lane: persistenceLane,
+      badge,
       title: candidate.title,
       rawScore: round(winner.score, 3),
       normalizedScore: round(normalizedScore, 4),
@@ -336,7 +344,6 @@ export function recommendForProfile({
     });
     remaining.splice(remaining.indexOf(candidate), 1);
   }
-
   // Displayed confidence must not contradict the ranked order. The underlying
   // raw score remains available for analysis; this only calibrates the user-facing
   // percentage so a lower-ranked recommendation cannot claim higher confidence.
@@ -448,7 +455,17 @@ function scoreTitle(
   const maxWatchedSimilarity = rated.length
     ? Math.max(...rated.map(({ title: ratedTitle }) => titleSimilarity(title, ratedTitle)))
     : 0;
-  const novelty = clamp(1 - maxWatchedSimilarity, 0, 1);
+  const metadataCoverage = average([
+    title.genres.length ? 1 : 0,
+    title.subgenres.length ? 1 : 0,
+    title.toneTags.length ? 1 : 0,
+    title.themes.length ? 1 : 0,
+    title.directors.length ? 1 : 0,
+    title.writers.length ? 1 : 0,
+    title.actors.length ? 1 : 0,
+  ]);
+  // Missing enrichment is uncertainty, not evidence that a title is adventurous.
+  const novelty = clamp((1 - maxWatchedSimilarity) * (0.45 + metadataCoverage * 0.55), 0, 1);
   add("noveltyBonus", config.weights.noveltyBonus * novelty * (vibes.includes("try-something-new") ? 1 : 0.35));
 
   const vibeSignal = vibeScore(title, vibes, profile, rated, creatorSignal, novelty, config);
@@ -529,22 +546,22 @@ function laneEligible(
   return true;
 }
 
-function selectSemanticLane(
+function selectSemanticBadge(
   preferred: RecommendationLane,
-  remaining: readonly ScoredCandidate[],
+  candidate: ScoredCandidate,
   selected: readonly Recommendation[],
 ): RecommendationLane | undefined {
-  const used = new Set(selected.map(({ lane }) => lane));
-  if (!used.has(preferred) && remaining.some((candidate) => laneEligible(candidate, preferred, selected))) {
-    return preferred;
-  }
-  const substitutes: RecommendationLane[] = [
-    "Best Bet", "Close Second", "Right Mood", "Something Different", "Go Deeper",
-    "Creator Match", "Hidden Gem", "Film School Pick", "Left Field", "Wild Card",
+  const used = new Set(selected.flatMap((recommendation) => recommendation.badge ? [recommendation.badge] : []));
+  if ((preferred === "Best Bet" || preferred === "Close Second") && !used.has(preferred)) return preferred;
+  const candidates: RecommendationLane[] = [
+    preferred, "Right Mood", "Creator Match", "Something Different", "Go Deeper",
+    "Hidden Gem", "Film School Pick", "Left Field", "Wild Card",
   ];
-  return substitutes.find((candidateLane) =>
+  return candidates.find((candidateLane) =>
+    candidateLane !== "Best Bet" &&
+    candidateLane !== "Close Second" &&
     !used.has(candidateLane) &&
-    remaining.some((candidate) => laneEligible(candidate, candidateLane, selected))
+    laneEligible(candidate, candidateLane, selected)
   );
 }
 
@@ -554,6 +571,7 @@ function laneScore(
   exploration: number,
   selected: readonly Recommendation[],
   config: RecommendationConfig,
+  moods: readonly Mood[],
 ): number {
   let score = candidate.intrinsicScore;
   const kind = candidate.primaryAvailability.kind;
@@ -563,20 +581,45 @@ function laneScore(
   if (selected.length) {
     const diversity = average(selected.map(({ title }) => 1 - titleSimilarity(candidate.title, title)));
     score += diversity * config.weights.explorationBonus * exploration * 0.7;
+    if (moods.includes("comedy")) {
+      score += comedySelectionDiversity(candidate.title, selected.map(({ title }) => title)) *
+        config.weights.explorationBonus * 1.15;
+    }
   }
-  if (lane === "Right Mood") score += candidate.moodSignal * 4;
-  if (lane === "Creator Match") score += candidate.creatorSignal * 7;
-  if (lane === "Hidden Gem") score += candidate.hiddenGemSignal * 9;
-  if (lane === "Go Deeper") score += Math.max(candidate.creatorSignal, candidate.tasteAffinitySignal) * 8;
-  if (lane === "Film School Pick") score += candidate.canonicalSignal * 9;
-  if (lane === "Left Field") score += candidate.novelty * 8;
-  if (lane === "Wild Card") score += candidate.novelty * 11;
+  const qualifiesForLane = laneEligible(candidate, lane, selected);
+  if (lane === "Right Mood" && qualifiesForLane) score += candidate.moodSignal * 4;
+  if (lane === "Creator Match" && qualifiesForLane) score += candidate.creatorSignal * 7;
+  if (lane === "Hidden Gem" && qualifiesForLane) score += candidate.hiddenGemSignal * 9;
+  if (lane === "Go Deeper" && qualifiesForLane) score += Math.max(candidate.creatorSignal, candidate.tasteAffinitySignal) * 8;
+  if (lane === "Film School Pick" && qualifiesForLane) score += candidate.canonicalSignal * 9;
+  if (lane === "Left Field" && qualifiesForLane) score += candidate.novelty * 8;
+  if (lane === "Wild Card" && qualifiesForLane) score += candidate.novelty * 11;
   if (candidate.socialEnabled && candidate.socialScore > 0) {
     score += candidate.socialScore;
   }
   return score;
 }
 
+function comedySelectionDiversity(title: Title, selectedTitles: readonly Title[]): number {
+  if (!selectedTitles.length) return 0;
+  const creators = [...title.directors, ...title.writers, ...title.actors.slice(0, 5)];
+  return average(selectedTitles.map((other) => {
+    const otherCreators = [...other.directors, ...other.writers, ...other.actors.slice(0, 5)];
+    const subgenreDifference = title.subgenres.length && other.subgenres.length
+      ? title.subgenres.some((value) => other.subgenres.includes(value)) ? 0 : 1
+      : 0.35;
+    const toneDifference = title.toneTags.length && other.toneTags.length
+      ? title.toneTags.some((value) => other.toneTags.includes(value)) ? 0 : 1
+      : 0.35;
+    const creatorDifference = creators.length && otherCreators.length
+      ? creators.some((value) => otherCreators.includes(value)) ? 0 : 1
+      : 0.35;
+    const formatDifference = title.contentType === other.contentType ? 0 : 1;
+    const decadeDifference = Math.floor(title.year / 10) === Math.floor(other.year / 10) ? 0 : 1;
+    return subgenreDifference * 0.38 + toneDifference * 0.22 + creatorDifference * 0.18 +
+      formatDifference * 0.12 + decadeDifference * 0.1;
+  }));
+}
 function moodFit(title: Title, moods: readonly Mood[]): number {
   if (!moods.length) return 1;
   if (title.contentType === "stand-up") return moods.includes("stand-up") ? 1 : 0;
@@ -618,6 +661,11 @@ function matchesRequestedMood(title: Title, moods: readonly Mood[]): boolean {
   return moodFit(title, moods) >= 0.15;
 }
 
+function moodEvidencePenalty(candidate: ScoredCandidate, moods: readonly Mood[]): number {
+  if (!moods.length || candidate.title.contentType === "stand-up") return 0;
+  if (candidate.title.editorial) return candidate.moodSignal >= 0.99 ? 0 : candidate.moodSignal >= 0.62 ? 2 : 5;
+  return candidate.moodSignal >= 0.3 ? 6 : 9;
+}
 function canonicalEvidence(title: Title): boolean {
   return title.criterionCollection || title.canonicalMemberships.length > 0;
 }
@@ -924,7 +972,7 @@ function buildEvidence(
   candidate: ScoredCandidate,
   moods: readonly Mood[],
   vibes: readonly Vibe[],
-  lane: RecommendationLane,
+  lane: RecommendationLane | undefined,
   requiresPayment: boolean,
 ): string[] {
   const facts = [...candidate.evidence];

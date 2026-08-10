@@ -1209,6 +1209,7 @@ type LiveApiTitle = {
 type LiveApiRecommendation = {
   rank: number;
   lane: string;
+  badge?: string;
   title: LiveApiTitle;
   matchScore: number;
   explanation: string;
@@ -1265,7 +1266,7 @@ function apiRecommendationToRecommendation(value: LiveApiRecommendation): Recomm
   const title = apiTitleToTitle(value.title);
   return {
     rank: value.rank,
-    lane: value.lane,
+    lane: value.badge ?? (value.rank === 1 ? "Best Bet" : value.rank === 2 ? "Close Second" : "Personal Pick"),
     title,
     match: value.matchScore,
     explanation: value.explanation,

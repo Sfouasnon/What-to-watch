@@ -291,7 +291,7 @@ describe("editorial modes, ranking, and confidence", () => {
     expect(picks.map((pick) => pick.title.id)).toEqual(["affinity"]);
   });
 
-  it("returns unique ranked picks without assigning unsupported semantic lanes", () => {
+  it("returns ten eligible ranked picks while keeping semantic badges evidence-backed", () => {
     const catalog = Array.from({ length: 13 }, (_, index) => title(`candidate-${String(index + 1).padStart(2, "0")}`, {
       popularity: 25 + index * 4,
       canonicalScore: index * 6,
@@ -299,33 +299,45 @@ describe("editorial modes, ranking, and confidence", () => {
       directors: [`director-${index}`],
     }));
     const picks = recommendForProfile({ profile: profile(), catalog });
-    expect(picks.length).toBeGreaterThan(0);
-    expect(picks.length).toBeLessThanOrEqual(10);
+    expect(picks).toHaveLength(10);
     expect(new Set(picks.map((pick) => pick.title.id)).size).toBe(picks.length);
     expect(new Set(picks.map((pick) => pick.lane)).size).toBe(picks.length);
+    expect(picks.map((pick) => pick.lane)).toEqual(RECOMMENDATION_LANES);
+    const badges = picks.flatMap((pick) => pick.badge ? [pick.badge] : []);
+    expect(new Set(badges).size).toBe(badges.length);
     expect(picks.map((pick) => pick.rank)).toEqual(Array.from({ length: picks.length }, (_, index) => index + 1));
     expect(picks.every((pick) => RECOMMENDATION_LANES.includes(pick.lane))).toBe(true);
 
     for (const pick of picks) {
-      if (pick.lane === "Creator Match") {
+      if (pick.badge === "Creator Match") {
         expect(pick.contributions.some((contribution) =>
           ["directorAffinity", "writerAffinity", "cinematographerAffinity", "actorAffinity"].includes(contribution.feature) && contribution.value > 0,
         )).toBe(true);
       }
-      if (pick.lane === "Hidden Gem") {
+      if (pick.badge === "Hidden Gem") {
         expect(pick.title.popularity).toBeLessThanOrEqual(35);
       }
-      if (pick.lane === "Go Deeper") {
+      if (pick.badge === "Go Deeper") {
         expect(pick.contributions.some((contribution) =>
           ["genreMatch", "subgenreMatch", "directorAffinity", "writerAffinity", "cinematographerAffinity", "actorAffinity"].includes(contribution.feature) && contribution.value > 0,
         )).toBe(true);
       }
-      if (pick.lane === "Film School Pick") {
+      if (pick.badge === "Film School Pick") {
         expect(pick.title.criterionCollection || pick.title.canonicalMemberships.length > 0).toBe(true);
       }
     }
   });
 
+  it("fills a comedy top ten when ten supported Comedy candidates are eligible", () => {
+    const supported = Array.from({ length: 10 }, (_, index) => title("supported-" + index, {
+      genres: ["comedy"],
+      themes: ["comedic"],
+      popularity: 35 + index,
+    }));
+    const picks = recommendForProfile({ profile: profile(), catalog: supported, moods: ["comedy"], limit: 10 });
+    expect(picks).toHaveLength(10);
+    expect(picks.map((pick) => pick.rank)).toEqual([1,2,3,4,5,6,7,8,9,10]);
+  });
   it("provides evidence-based explanations plus separate raw and normalized scores", () => {
     const picks = recommendForProfile({ profile: profile(), catalog: [title("one")], moods: ["thriller"] });
     expect(picks[0].explanation.length).toBeGreaterThan(10);
