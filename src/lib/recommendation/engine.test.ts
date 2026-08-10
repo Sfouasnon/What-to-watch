@@ -142,6 +142,29 @@ describe("recommendation eligibility and scoring", () => {
       .toBeGreaterThan(fallback?.contributions.find((item) => item.feature === "moodMatch")?.value ?? 0);
   });
 
+  it("does not treat dark-comedy or satire keywords alone as generic Comedy evidence", () => {
+    const darkComedyIngredient = title("dark-comedy-ingredient", {
+      genres: ["comedy", "thriller", "drama"],
+      themes: ["dark comedy", "psychological thriller", "class conflict"],
+    });
+    const satireIngredient = title("satire-ingredient", {
+      genres: ["comedy", "drama"],
+      themes: ["satire", "social commentary"],
+    });
+    const actualSitcom = title("actual-sitcom", {
+      genres: ["comedy"],
+      subgenres: ["sitcom"],
+    });
+
+    const picks = recommendForProfile({
+      profile: profile(),
+      catalog: [darkComedyIngredient, satireIngredient, actualSitcom],
+      moods: ["comedy"],
+    });
+
+    expect(picks.map((pick) => pick.title.id)).toEqual(["actual-sitcom"]);
+  });
+
   it("excludes watched titles normally and selects favorites in rewatch mode", () => {
     const watched = title("watched");
     const p = profile({ ratings: [{ titleId: "watched", score: 9, watched: true, ratedAt: checkedAt }] });
@@ -315,7 +338,7 @@ describe("editorial modes, ranking, and confidence", () => {
         )).toBe(true);
       }
       if (pick.badge === "Hidden Gem") {
-        expect(pick.title.popularity).toBeLessThanOrEqual(35);
+        expect(pick.title.popularity).toBeLessThanOrEqual(15);
       }
       if (pick.badge === "Go Deeper") {
         expect(pick.contributions.some((contribution) =>
@@ -326,6 +349,26 @@ describe("editorial modes, ranking, and confidence", () => {
         expect(pick.title.criterionCollection || pick.title.canonicalMemberships.length > 0).toBe(true);
       }
     }
+  });
+
+  it("does not auto-label low current popularity alone as Hidden Gem", () => {
+    const candidates = Array.from({ length: 6 }, (_, index) => title(`known-title-${index}`, {
+      popularity: 20,
+      canonicalScore: 100,
+      subgenres: [`thriller-${index}`],
+      directors: [`director-${index}`],
+    }));
+    const p = profile({
+      questionnaire: { dimensionScores: {}, genreScores: { thriller: 7 } },
+    });
+    const picks = recommendForProfile({
+      profile: p,
+      catalog: candidates,
+      moods: ["thriller"],
+      limit: 6,
+    });
+    expect(picks).toHaveLength(6);
+    expect(picks.some((pick) => pick.badge === "Hidden Gem")).toBe(false);
   });
 
   it("fills a comedy top ten when ten supported Comedy candidates are eligible", () => {
