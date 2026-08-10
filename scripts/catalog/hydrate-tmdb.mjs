@@ -18,8 +18,18 @@ function argument(name) {
   return process.argv.find((value) => value.startsWith(prefix))?.slice(prefix.length) ?? null;
 }
 
-const LIMIT = Math.max(1, Math.min(1000, Number(argument("limit") ?? 100)));
-const DELAY_MS = Math.max(0, Number(argument("delay-ms") ?? 75));
+function integerArgument(name, fallback, { min, max }) {
+  const raw = argument(name);
+  if (raw === null) return fallback;
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value < min || value > max) {
+    throw new Error(`--${name} must be an integer between ${min} and ${max}.`);
+  }
+  return value;
+}
+
+const LIMIT = integerArgument("limit", 100, { min: 1, max: 1000 });
+const DELAY_MS = integerArgument("delay-ms", 75, { min: 0, max: 60000 });
 const mediaTypeFilter = argument("media-type");
 if (mediaTypeFilter && !["movie", "tv"].includes(mediaTypeFilter)) {
   throw new Error("--media-type must be movie or tv.");
