@@ -3,16 +3,21 @@ import { describe, expect, it } from "vitest";
 import { editorialClassification, editorialFamilyForSubgenre } from "./editorial";
 
 describe("editorial gold-set lookup", () => {
-  it("resolves Pulp Fiction by exact TMDB identity and ontology family", () => {
+  it("applies the human Pulp Fiction correction by exact TMDB identity", () => {
     expect(editorialClassification("movie", 680)).toMatchObject({
-      primarySubgenre: "dark-comedy",
-      primaryFamily: "comedy",
+      primarySubgenre: "crime-drama",
+      primaryFamily: "crime",
+      secondarySubgenre: "crime-thriller",
+      secondaryFamily: "thriller",
+      toneTags: ["wry", "stylized", "visceral"],
       ontologyVersion: "0.1.1",
     });
   });
 
   it("derives families from the versioned ontology rather than hard-coded lists", () => {
     expect(editorialFamilyForSubgenre("romantic-comedy")).toBe("comedy");
+    expect(editorialFamilyForSubgenre("crime-drama")).toBe("crime");
+    expect(editorialFamilyForSubgenre("crime-thriller")).toBe("thriller");
     expect(editorialFamilyForSubgenre("psychological-horror")).toBe("horror");
   });
 
