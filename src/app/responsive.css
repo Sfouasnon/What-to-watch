@@ -1,0 +1,76 @@
+/* Responsive guardrails that keep wide-screen layouts inside the viewport. */
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+@media (min-width: 980px) {
+  .home-screen.page-content {
+    width: min(100%, 1320px);
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    column-gap: clamp(40px, 4vw, 64px);
+  }
+
+  .home-screen > * {
+    min-width: 0;
+  }
+
+  .home-intro {
+    top: 128px;
+  }
+
+  .home-intro h1 {
+    max-width: none;
+    font-size: clamp(3.8rem, 4.5vw, 5.2rem);
+    line-height: 0.94;
+  }
+
+  .home-screen .choice-section,
+  .home-screen .vibe-section,
+  .home-screen .vibe-scroll {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .home-screen .vibe-section {
+    overflow: hidden;
+  }
+
+  .home-screen .vibe-scroll {
+    width: 100%;
+    margin-right: 0;
+    padding-right: 0;
+    grid-auto-columns: minmax(180px, 44%);
+  }
+}
+
+@media (min-width: 980px) and (max-height: 850px) {
+  .home-screen.page-content {
+    padding-top: 30px;
+    padding-bottom: 32px;
+  }
+
+  .home-intro {
+    top: 110px;
+  }
+
+  .home-screen .choice-section {
+    margin-top: 34px;
+    padding-top: 18px;
+  }
+
+  .home-screen .choice-section:first-of-type {
+    margin-top: 8px;
+  }
+
+  .home-screen .find-button {
+    min-height: 64px;
+    margin-top: 24px;
+  }
+
+  .home-screen .home-trust {
+    margin-top: 14px;
+  }
+}

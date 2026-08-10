@@ -3,6 +3,7 @@ import type { Viewport } from "next";
 import type { ReactNode } from "react";
 import { Manrope } from "next/font/google";
 import "./globals.css";
+import "./responsive.css";
 
 const manrope = Manrope({
   variable: "--font-manrope",
