@@ -9,7 +9,11 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "catalog:import-index": "node scripts/catalog/import-tmdb-index.mjs",
+    "catalog:hydrate": "node scripts/catalog/hydrate-tmdb.mjs",
+    "catalog:seed-gold": "node scripts/catalog/seed-gold-100.mjs",
+    "catalog:validate-gold": "vitest run src/lib/editorial/gold.test.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
