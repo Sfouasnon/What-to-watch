@@ -79,8 +79,6 @@ export function ProviderSelector({ region, selected, onChange, mode = "grid" }: 
 
   useEffect(() => {
     const controller = new AbortController();
-    setStatus("loading");
-    setShowAll(false);
 
     fetch(`/api/tmdb/providers?region=${encodeURIComponent(region)}`, { signal: controller.signal })
       .then(async (response) => {
