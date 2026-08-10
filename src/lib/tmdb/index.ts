@@ -9,6 +9,8 @@ export type {
   MetadataProvider,
   TitleSearchPage,
   TitleSearchResult,
+  WatchProviderCatalogItem,
+  WatchProviderCatalogResult,
   WatchProviderKind,
   WatchProviderMediaType,
   WatchProviderOffer,
