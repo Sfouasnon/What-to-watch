@@ -49,15 +49,55 @@ export type Title = {
   original_name: string | null;
   overview: string | null;
   release_date: string | null;
+  end_date: string | null;
+  runtime_minutes: number | null;
+  episode_runtime_minutes: number | null;
+  season_count: number | null;
+  episode_count: number | null;
+  original_language: string | null;
+  production_countries: string[];
   poster_path: string | null;
   backdrop_path: string | null;
   popularity: number | null;
   vote_average: number | null;
+  vote_count: number | null;
   canonical_score: number;
   external_ids: Json;
   metadata_source: string;
+  metadata_checked_at: string | null;
   created_at: string;
   updated_at: string;
+};
+
+export type CreditDepartment =
+  | "acting"
+  | "directing"
+  | "writing"
+  | "cinematography"
+  | "production"
+  | "other";
+
+export type Person = {
+  id: string;
+  tmdb_id: number | null;
+  name: string;
+  biography: string | null;
+  profile_path: string | null;
+  external_ids: Json;
+  metadata_checked_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type TitleCredit = {
+  id: string;
+  title_id: string;
+  person_id: string;
+  department: CreditDepartment;
+  job: string | null;
+  character_name: string | null;
+  billing_order: number | null;
+  credited: boolean;
 };
 
 export type Friendship = {
@@ -122,6 +162,12 @@ export type Database = {
         subscribed_at: string;
       }>;
       titles: Table<Title>;
+      people: Table<Person, Pick<Person, "name"> & Partial<Omit<Person, "name">>>;
+      title_credits: Table<
+        TitleCredit,
+        Pick<TitleCredit, "title_id" | "person_id" | "department"> &
+          Partial<Omit<TitleCredit, "title_id" | "person_id" | "department">>
+      >;
       ratings: Table<{
         id: string;
         profile_id: string;

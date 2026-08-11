@@ -4,6 +4,7 @@ import {
   buildAppCatalogTitle,
   GOLD_CATALOG_SIZE,
   normalizeGoldProviderName,
+  releaseYear,
   type CatalogClassificationRow,
   type CatalogInputRow,
   type CatalogTitleRow,
@@ -16,9 +17,11 @@ const pulpFictionTitle: CatalogTitleRow = {
   content_type: "movie",
   name: "Pulp Fiction",
   overview: "Two hit men, a boxer, and other Los Angeles figures collide across interlocking stories.",
+  release_date: null,
   runtime_minutes: 154,
   episode_runtime_minutes: null,
   season_count: null,
+  episode_count: null,
   original_language: "en",
   production_countries: ["US"],
   popularity: 83,
@@ -74,5 +77,44 @@ describe("recommendation catalog mapping", () => {
     expect(title?.director).toBe("Quentin Tarantino");
     expect(title?.poster).toBe("/icons/icon-512.png");
     expect(title?.availabilityType).toBe("subscription");
+  });
+
+  it("falls back to the pilot sample year until TMDB hydration supplies a release date", () => {
+    expect(releaseYear(pulpFictionTitle, { year: 1994 } as never)).toBe(1994);
+  });
+
+  it("prefers the hydrated release date over the pilot sample year", () => {
+    const hydrated = { ...pulpFictionTitle, release_date: "1994-09-10" };
+    expect(releaseYear(hydrated, { year: 1900 } as never)).toBe(1994);
+    expect(buildAppCatalogTitle(hydrated, pulpFictionInput, pulpFictionClassification)?.year).toBe(1994);
+  });
+
+  it("ignores an unusable release date rather than emitting NaN", () => {
+    for (const release_date of ["", "not-a-date", "0001-01-01"]) {
+      expect(releaseYear({ ...pulpFictionTitle, release_date }, { year: 1994 } as never)).toBe(1994);
+    }
+  });
+
+  it("serves hydrated TMDB artwork once poster and backdrop paths exist", () => {
+    const hydrated = { ...pulpFictionTitle, poster_path: "/poster.jpg", backdrop_path: "/backdrop.jpg" };
+    const title = buildAppCatalogTitle(hydrated, pulpFictionInput, pulpFictionClassification);
+
+    expect(title?.poster).toBe("https://image.tmdb.org/t/p/w780/poster.jpg");
+    expect(title?.backdrop).toBe("https://image.tmdb.org/t/p/w780/backdrop.jpg");
+  });
+
+  it("reuses the poster as a backdrop when TMDB has no backdrop", () => {
+    const hydrated = { ...pulpFictionTitle, poster_path: "/poster.jpg" };
+    const title = buildAppCatalogTitle(hydrated, pulpFictionInput, pulpFictionClassification);
+
+    expect(title?.backdrop).toBe("https://image.tmdb.org/t/p/w780/poster.jpg");
+  });
+
+  it("keeps editorial tags sourced from the classification, not from hydrated metadata", () => {
+    const hydrated = { ...pulpFictionTitle, release_date: "1994-09-10", poster_path: "/poster.jpg" };
+    const before = buildAppCatalogTitle(pulpFictionTitle, pulpFictionInput, pulpFictionClassification);
+    const after = buildAppCatalogTitle(hydrated, pulpFictionInput, pulpFictionClassification);
+
+    expect(after?.tags).toEqual(before?.tags);
   });
 });
