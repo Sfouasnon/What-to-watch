@@ -221,7 +221,7 @@ const vibes = [
   { id: "Surprise", label: "Surprise me", eyebrow: "NO RULES" },
 ];
 
-let catalog: Title[] = [
+const fallbackCatalog: Title[] = [
   {
     id: "prisoners",
     name: "Prisoners",
@@ -605,6 +605,8 @@ let catalog: Title[] = [
   },
 ];
 
+let catalog: Title[] = fallbackCatalog;
+
 const questionnaire = [
   ["cerebral", "I like stories that reward close attention."],
   ["emotional", "I am open to an emotionally heavy story when the payoff feels earned."],
@@ -779,6 +781,44 @@ function seededNoise(value: string) {
     hash = (hash * 31 + value.charCodeAt(index)) % 997;
   }
   return (hash / 997 - 0.5) * 8;
+}
+
+function migrateCatalogTitleIds(store: AppStore, nextCatalog: readonly Title[]): AppStore {
+  const identity = (title: Title) => `${title.name.trim().toLowerCase()}::${title.year}`;
+  const nextIdByIdentity = new Map(nextCatalog.map((title) => [identity(title), title.id]));
+  const legacyToNext = new Map(
+    fallbackCatalog.flatMap((title) => {
+      const nextId = nextIdByIdentity.get(identity(title));
+      return nextId && nextId !== title.id ? [[title.id, nextId] as const] : [];
+    }),
+  );
+  if (!legacyToNext.size) return store;
+
+  const migrateId = (titleId: string) => legacyToNext.get(titleId) ?? titleId;
+  const migrateRecord = <T,>(record: Record<string, T>) => {
+    const migrated: Record<string, T> = {};
+    for (const [titleId, value] of Object.entries(record)) {
+      const nextId = migrateId(titleId);
+      if (!(nextId in migrated) || nextId === titleId) migrated[nextId] = value;
+    }
+    return migrated;
+  };
+
+  return {
+    ...store,
+    profiles: store.profiles.map((profile) => ({ ...profile, ratings: migrateRecord(profile.ratings) })),
+    feedback: store.feedback.map((event) => ({ ...event, titleId: migrateId(event.titleId) })),
+    friendProfiles: store.friendProfiles.map((friend) => ({
+      ...friend,
+      ratings: migrateRecord(friend.ratings),
+      ratingDates: migrateRecord(friend.ratingDates),
+    })),
+    friendReviews: store.friendReviews.map((review) => ({ ...review, titleId: migrateId(review.titleId) })),
+    friendRecommendations: store.friendRecommendations.map((recommendation) => ({
+      ...recommendation,
+      titleId: migrateId(recommendation.titleId),
+    })),
+  };
 }
 
 type SocialProfile = Pick<FriendProfile, "id" | "name" | "avatar" | "color" | "ratings"> & {
@@ -1721,6 +1761,7 @@ export function WhatToWatchApp() {
     return () => window.clearTimeout(initialize);
   }, []);
   useEffect(() => {
+    if (!hydrated) return;
     const controller = new AbortController();
     fetch("/api/catalog/recommendation-titles", { signal: controller.signal })
       .then(async (response) => {
@@ -1732,6 +1773,7 @@ export function WhatToWatchApp() {
           throw new Error("Catalog payload is incomplete");
         }
         catalog = payload.titles;
+        setStore((current) => migrateCatalogTitleIds(current, payload.titles ?? []));
         forceCatalogRender((value) => value + 1);
       })
       .catch((error: unknown) => {
@@ -1739,7 +1781,7 @@ export function WhatToWatchApp() {
         // Keep the reviewed demo catalog as a safe fallback if the remote catalog is unavailable.
       });
     return () => controller.abort();
-  }, []);
+  }, [hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }, [store, hydrated]);
   useEffect(() => { if (!toast) return; const timer = window.setTimeout(() => setToast(""), 2800); return () => window.clearTimeout(timer); }, [toast]);
 
