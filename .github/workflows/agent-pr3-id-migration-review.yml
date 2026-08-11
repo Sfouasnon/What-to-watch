@@ -1,0 +1,103 @@
+name: Validate catalog ID migration
+
+on:
+  push:
+    branches:
+      - agent/supabase-recommendation-catalog
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/supabase-recommendation-catalog
+          fetch-depth: 0
+
+      - name: Preserve legacy ratings across TMDB IDs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("src/components/what-to-watch-app.tsx")
+          text = path.read_text()
+
+          declaration = "let catalog: Title[] = ["
+          assert text.count(declaration) == 1, "Expected current catalog declaration"
+          text = text.replace(declaration, "const fallbackCatalog: Title[] = [", 1)
+
+          questionnaire_anchor = "];\n\nconst questionnaire = ["
+          assert text.count(questionnaire_anchor) == 1, "Expected catalog/questionnaire boundary"
+          text = text.replace(
+              questionnaire_anchor,
+              "];\n\nlet catalog: Title[] = fallbackCatalog;\n\nconst questionnaire = [",
+              1,
+          )
+
+          noise_block = '''function seededNoise(value: string) {\n  let hash = 0;\n  for (let index = 0; index < value.length; index += 1) {\n    hash = (hash * 31 + value.charCodeAt(index)) % 997;\n  }\n  return (hash / 997 - 0.5) * 8;\n}\n'''
+          assert text.count(noise_block) == 1, "Expected seededNoise block"
+          migration = '''\nfunction migrateCatalogTitleIds(store: AppStore, nextCatalog: readonly Title[]): AppStore {\n  const identity = (title: Title) => `${title.name.trim().toLowerCase()}::${title.year}`;\n  const nextIdByIdentity = new Map(nextCatalog.map((title) => [identity(title), title.id]));\n  const legacyToNext = new Map(\n    fallbackCatalog.flatMap((title) => {\n      const nextId = nextIdByIdentity.get(identity(title));\n      return nextId && nextId !== title.id ? [[title.id, nextId] as const] : [];\n    }),\n  );\n  if (!legacyToNext.size) return store;\n\n  const migrateId = (titleId: string) => legacyToNext.get(titleId) ?? titleId;\n  const migrateRecord = <T,>(record: Record<string, T>) => {\n    const migrated: Record<string, T> = {};\n    for (const [titleId, value] of Object.entries(record)) {\n      const nextId = migrateId(titleId);\n      if (!(nextId in migrated) || nextId === titleId) migrated[nextId] = value;\n    }\n    return migrated;\n  };\n\n  return {\n    ...store,\n    profiles: store.profiles.map((profile) => ({ ...profile, ratings: migrateRecord(profile.ratings) })),\n    feedback: store.feedback.map((event) => ({ ...event, titleId: migrateId(event.titleId) })),\n    friendProfiles: store.friendProfiles.map((friend) => ({\n      ...friend,\n      ratings: migrateRecord(friend.ratings),\n      ratingDates: migrateRecord(friend.ratingDates),\n    })),\n    friendReviews: store.friendReviews.map((review) => ({ ...review, titleId: migrateId(review.titleId) })),\n    friendRecommendations: store.friendRecommendations.map((recommendation) => ({\n      ...recommendation,\n      titleId: migrateId(recommendation.titleId),\n    })),\n  };\n}\n'''
+          text = text.replace(noise_block, noise_block + migration, 1)
+
+          effect_start = '''  useEffect(() => {\n    const controller = new AbortController();\n    fetch("/api/catalog/recommendation-titles", { signal: controller.signal })\n'''
+          assert text.count(effect_start) == 1, "Expected remote catalog effect"
+          text = text.replace(
+              effect_start,
+              '''  useEffect(() => {\n    if (!hydrated) return;\n    const controller = new AbortController();\n    fetch("/api/catalog/recommendation-titles", { signal: controller.signal })\n''',
+              1,
+          )
+
+          assignment = '''        catalog = payload.titles;\n        forceCatalogRender((value) => value + 1);\n'''
+          assert text.count(assignment) == 1, "Expected catalog assignment"
+          text = text.replace(
+              assignment,
+              '''        catalog = payload.titles;\n        setStore((current) => migrateCatalogTitleIds(current, payload.titles ?? []));\n        forceCatalogRender((value) => value + 1);\n''',
+              1,
+          )
+
+          effect_end = '''    return () => controller.abort();\n  }, []);\n  useEffect(() => { if (hydrated) localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }, [store, hydrated]);\n'''
+          assert text.count(effect_end) == 1, "Expected catalog effect dependency anchor"
+          text = text.replace(
+              effect_end,
+              '''    return () => controller.abort();\n  }, [hydrated]);\n  useEffect(() => { if (hydrated) localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }, [store, hydrated]);\n''',
+              1,
+          )
+
+          path.write_text(text)
+          PY
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Commit validated migration
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/components/what-to-watch-app.tsx
+          git rm .github/workflows/agent-pr3-id-migration-review.yml
+          git commit -m "Preserve legacy ratings across catalog IDs"
+          git push origin HEAD:agent/supabase-recommendation-catalog
