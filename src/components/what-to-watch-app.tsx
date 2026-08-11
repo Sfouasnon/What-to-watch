@@ -221,7 +221,7 @@ const vibes = [
   { id: "Surprise", label: "Surprise me", eyebrow: "NO RULES" },
 ];
 
-const catalog: Title[] = [
+let catalog: Title[] = [
   {
     id: "prisoners",
     name: "Prisoners",
@@ -1056,8 +1056,8 @@ function buildRecommendations(
 
 function displayProvider(profile: ViewerProfile, title: Title) {
   const included = title.providers.find((provider) => profile.subscriptions.includes(provider));
-  if (included && title.availabilityType === "subscription") return { label: "Demo availability", provider: included };
-  if (title.availabilityType === "rental") return { label: "Demo rental option", provider: title.providers[0] };
+  if (included && title.availabilityType === "subscription") return { label: "Streaming availability", provider: included };
+  if (title.availabilityType === "rental") return { label: "Rental option", provider: title.providers[0] };
   return { label: "Check availability", provider: title.providers[0] };
 }
 
@@ -1519,7 +1519,7 @@ function RateScreen({ profile, onRate, onDetails }: { profile: ViewerProfile; on
     <main className="rate-screen page-content">
       <div className="page-heading"><p className="kicker">TEACH THE MODEL</p><h1>Rate what you&apos;ve seen.</h1><p>Every real rating matters more than a questionnaire answer.</p></div>
       <div className="search-box"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search movies and shows you've seen" aria-label="Search titles" />{query && <button onClick={() => setQuery("")} aria-label="Clear search"><X size={17} /></button>}</div>
-      <div className="filter-row"><button className={filter === "all" ? "is-active" : ""} onClick={() => setFilter("all")}>All titles</button><button className={filter === "rated" ? "is-active" : ""} onClick={() => setFilter("rated")}>My ratings <span>{Object.keys(profile.ratings).length}</span></button></div>
+      <div className="filter-row"><button className={filter === "all" ? "is-active" : ""} onClick={() => setFilter("all")}>All titles <span>{catalog.length}</span></button><button className={filter === "rated" ? "is-active" : ""} onClick={() => setFilter("rated")}>My ratings <span>{Object.keys(profile.ratings).length}</span></button></div>
       <div className="rating-list">
         {filtered.map((title) => (
           <article className="rating-row" key={title.id}>
@@ -1527,7 +1527,7 @@ function RateScreen({ profile, onRate, onDetails }: { profile: ViewerProfile; on
             <RatingPicker value={profile.ratings[title.id]} onRate={(score) => onRate(title.id, score)} compact />
           </article>
         ))}
-        {!filtered.length && <div className="empty-state"><Search size={24} /><strong>No title in the demo catalog</strong><p>Connect a TMDB key to search the complete movie and TV catalog.</p></div>}
+        {!filtered.length && <div className="empty-state"><Search size={24} /><strong>No matching title in the catalog</strong><p>Try a different title or clear the current filter.</p></div>}
       </div>
     </main>
   );
@@ -1697,6 +1697,7 @@ export function WhatToWatchApp() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [postRating, setPostRating] = useState<{ title: Title; rating: number } | null>(null);
   const [toast, setToast] = useState("");
+  const [, forceCatalogRender] = useState(0);
 
   useEffect(() => {
     const initialize = window.setTimeout(() => {
@@ -1718,6 +1719,26 @@ export function WhatToWatchApp() {
     }, 0);
     if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => undefined);
     return () => window.clearTimeout(initialize);
+  }, []);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/catalog/recommendation-titles", { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Catalog returned ${response.status}`);
+        return response.json() as Promise<{ source?: string; titleCount?: number; titles?: Title[] }>;
+      })
+      .then((payload) => {
+        if (!Array.isArray(payload.titles) || payload.titleCount !== 100 || payload.titles.length !== 100) {
+          throw new Error("Catalog payload is incomplete");
+        }
+        catalog = payload.titles;
+        forceCatalogRender((value) => value + 1);
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        // Keep the reviewed demo catalog as a safe fallback if the remote catalog is unavailable.
+      });
+    return () => controller.abort();
   }, []);
   useEffect(() => { if (hydrated) localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }, [store, hydrated]);
   useEffect(() => { if (!toast) return; const timer = window.setTimeout(() => setToast(""), 2800); return () => window.clearTimeout(timer); }, [toast]);
