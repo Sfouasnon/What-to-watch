@@ -25,6 +25,7 @@ const legacySelectionNames: Record<number, string> = {
   386: "Peacock",
   531: "Paramount+",
   1899: "Max",
+  2303: "Paramount+",
 };
 
 const fallbackProviders: WatchProviderCatalogItem[] = [
