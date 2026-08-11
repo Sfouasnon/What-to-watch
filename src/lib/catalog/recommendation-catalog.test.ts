@@ -1,12 +1,16 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  buildAppCatalogMoods,
   buildAppCatalogTitle,
   GOLD_CATALOG_SIZE,
   normalizeGoldProviderName,
   releaseYear,
   type CatalogClassificationRow,
   type CatalogInputRow,
+  type CatalogMoodRow,
+  type CatalogMoodRuleRow,
+  type CatalogTagRow,
   type CatalogTitleRow,
 } from "./recommendation-catalog";
 
@@ -73,6 +77,10 @@ describe("recommendation catalog mapping", () => {
     expect(title?.year).toBe(1994);
     expect(title?.providers).toEqual(["Max", "Prime Video"]);
     expect(title?.genres).toEqual(["Thriller", "Crime"]);
+    expect(title?.primarySubgenre).toBe("crime-drama");
+    expect(title?.secondarySubgenre).toBe("crime-thriller");
+    expect(title?.toneTags).toEqual(["wry", "stylized", "visceral"]);
+    expect(title?.pacing).toBe("fast");
     expect(title?.tags).toEqual(expect.arrayContaining(["crime-drama", "crime-thriller", "wry", "stylized", "visceral", "fast"]));
     expect(title?.director).toBe("Quentin Tarantino");
     expect(title?.poster).toBe("/icons/icon-512.png");
@@ -116,5 +124,37 @@ describe("recommendation catalog mapping", () => {
     const after = buildAppCatalogTitle(hydrated, pulpFictionInput, pulpFictionClassification);
 
     expect(after?.tags).toEqual(before?.tags);
+  });
+
+  it("maps ordered database moods and their tag rules into the app contract", () => {
+    const moods: CatalogMoodRow[] = [
+      { slug: "scare-me", prompt_label: "Scare me", threshold: "2.5", display_order: 2 },
+      { slug: "make-me-laugh", prompt_label: "Make me laugh", threshold: 1.5, display_order: 1 },
+    ];
+    const tags: CatalogTagRow[] = [
+      { id: "tag-horror", slug: "supernatural-horror", category: "subgenre" },
+      { id: "tag-playful", slug: "playful", category: "tone" },
+    ];
+    const rules: CatalogMoodRuleRow[] = [
+      { mood_slug: "scare-me", tag_id: "tag-horror", weight: "1.3" },
+      { mood_slug: "make-me-laugh", tag_id: "tag-playful", weight: 0.8 },
+    ];
+
+    expect(buildAppCatalogMoods(moods, rules, tags)).toEqual([
+      {
+        slug: "make-me-laugh",
+        promptLabel: "Make me laugh",
+        threshold: 1.5,
+        displayOrder: 1,
+        rules: [{ tag: "playful", category: "tone", weight: 0.8 }],
+      },
+      {
+        slug: "scare-me",
+        promptLabel: "Scare me",
+        threshold: 2.5,
+        displayOrder: 2,
+        rules: [{ tag: "supernatural-horror", category: "subgenre", weight: 1.3 }],
+      },
+    ]);
   });
 });

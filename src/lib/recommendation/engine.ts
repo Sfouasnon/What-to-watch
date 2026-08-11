@@ -27,8 +27,8 @@ export const defaultRecommendationConfig: RecommendationConfig = {
     actorAffinity: 5,
     writerAffinity: 7,
     cinematographerAffinity: 7,
-    genreMatch: 10,
-    subgenreMatch: 6,
+    genreMatch: 6,
+    subgenreMatch: 10,
     moodMatch: 13,
     vibeMatch: 9,
     decadeAffinity: 4,
@@ -86,6 +86,19 @@ const average = (values: readonly number[]) =>
   values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
 
 const unique = <T,>(values: readonly T[]) => [...new Set(values)];
+
+/**
+ * Preserves a strong genre dislike instead of allowing unrelated positive
+ * genre answers on a multi-genre title to average it away.
+ */
+export function questionnaireGenrePreference(values: readonly number[]): number {
+  if (!values.length) return 0;
+  const normalized = values.map((value) => clamp((value - 5.5) / 4.5, -1, 1));
+  const mean = average(normalized);
+  const minimum = Math.min(...normalized);
+  if (minimum > -0.6) return mean;
+  return Math.min(mean, mean * 0.4 + minimum * 0.6);
+}
 
 /** A single, smooth prior-decay formula used everywhere questionnaire evidence is blended. */
 export function questionnaireConfidence(
@@ -358,13 +371,14 @@ function scoreTitle(
   const profileRatingCount = rated.length;
   const questionnaireGenres = title.genres
     .map((genre) => profile.questionnaire?.genreScores[genre])
-    .filter((value): value is number => value !== undefined)
-    .map((value) => clamp((value - 4) / 3, -1, 1));
+    .filter((value): value is number => value !== undefined);
   const genreBehavior = affinityFromSharedValues(title.genres, rated, (item) => item.genres);
   const genrePreference = effectivePreference({
     behavioralPreference: genreBehavior.evidence ? genreBehavior.value : undefined,
     behavioralEvidence: genreBehavior.evidence,
-    questionnairePreference: questionnaireGenres.length ? average(questionnaireGenres) : questionnaireDimension(title, profile),
+    questionnairePreference: questionnaireGenres.length
+      ? questionnaireGenrePreference(questionnaireGenres)
+      : questionnaireDimension(title, profile),
     ratingCount: profileRatingCount,
     config: config.questionnaireDecay,
   });
@@ -373,8 +387,11 @@ function scoreTitle(
   const subgenre = affinityFromSharedValues(title.subgenres, rated, (item) => item.subgenres);
   add("subgenreMatch", config.weights.subgenreMatch * subgenre.value);
 
-  const moodSignal = moods.length ? 1 : 0;
-  if (moodSignal) add("moodMatch", config.weights.moodMatch, moodEvidence(title, moods));
+  const moodMatch = bestMoodMatch(title, moods);
+  const moodSignal = moodMatch?.signal ?? 0;
+  if (moods.length) {
+    add("moodMatch", config.weights.moodMatch * moodSignal, moodEvidence(title, moods));
+  }
 
   const creatorResults: Array<{ feature: string; weight: number; result: AffinityResult }> = [
     { feature: "directorAffinity", weight: config.weights.directorAffinity, result: creatorAffinity(title.directors, rated, "directors", profile, config) },
@@ -510,9 +527,80 @@ function laneScore(
 
 function matchesRequestedMood(title: Title, moods: readonly Mood[]): boolean {
   if (!moods.length) return true;
-  if (title.contentType === "stand-up") return moods.includes("stand-up");
-  const normalizedGenres = title.genres.map((genre) => genre.toLowerCase());
-  return moods.some((mood) => mood !== "stand-up" && normalizedGenres.includes(mood));
+  return moods.some((mood) => scoreMoodMatch(title, mood).qualifies);
+}
+
+export interface MoodMatchScore {
+  rawScore: number;
+  signal: number;
+  qualifies: boolean;
+  matchedTags: string[];
+}
+
+/**
+ * Scores one title against one editorial mood projection. Primary subgenre,
+ * tone, and pacing rules contribute their full weight; the secondary
+ * subgenre is deliberately discounted to 60%.
+ */
+export function scoreMoodMatch(title: Title, mood: Mood): MoodMatchScore {
+  const ruleByTag = new Map(mood.rules.map((rule) => [rule.tag, rule]));
+  const contributions: Array<{ tag: string; value: number }> = [];
+  const primarySubgenre = title.subgenres[0];
+  const secondarySubgenre = title.subgenres[1];
+
+  if (primarySubgenre) {
+    const rule = ruleByTag.get(primarySubgenre);
+    if (rule?.category === "subgenre") contributions.push({ tag: primarySubgenre, value: rule.weight });
+  }
+  if (secondarySubgenre) {
+    const rule = ruleByTag.get(secondarySubgenre);
+    if (rule?.category === "subgenre") contributions.push({ tag: secondarySubgenre, value: rule.weight * 0.6 });
+  }
+  for (const tone of unique(title.toneTags)) {
+    const rule = ruleByTag.get(tone);
+    if (rule?.category === "tone") contributions.push({ tag: tone, value: rule.weight });
+  }
+  const pacingRule = ruleByTag.get(title.pacing);
+  if (pacingRule?.category === "pacing") {
+    contributions.push({ tag: title.pacing, value: pacingRule.weight });
+  }
+
+  const rawScore = contributions.reduce((sum, contribution) => sum + contribution.value, 0);
+  const positiveSubgenres = mood.rules
+    .filter((rule) => rule.category === "subgenre" && rule.weight > 0)
+    .map((rule) => rule.weight)
+    .sort((a, b) => b - a);
+  const positiveTones = mood.rules
+    .filter((rule) => rule.category === "tone" && rule.weight > 0)
+    .map((rule) => rule.weight)
+    .sort((a, b) => b - a)
+    .slice(0, 3);
+  const strongestPacing = Math.max(
+    0,
+    ...mood.rules
+      .filter((rule) => rule.category === "pacing" && rule.weight > 0)
+      .map((rule) => rule.weight),
+  );
+  const maximumScore =
+    (positiveSubgenres[0] ?? 0) +
+    (positiveSubgenres[1] ?? 0) * 0.6 +
+    positiveTones.reduce((sum, weight) => sum + weight, 0) +
+    strongestPacing;
+
+  return {
+    rawScore,
+    signal: maximumScore > 0 ? clamp(rawScore / maximumScore, 0, 1) : 0,
+    qualifies: rawScore >= mood.threshold,
+    matchedTags: contributions
+      .sort((a, b) => b.value - a.value || a.tag.localeCompare(b.tag))
+      .map((contribution) => contribution.tag),
+  };
+}
+
+function bestMoodMatch(title: Title, moods: readonly Mood[]) {
+  return moods
+    .map((mood) => ({ mood, ...scoreMoodMatch(title, mood) }))
+    .sort((a, b) => b.signal - a.signal || b.rawScore - a.rawScore)[0];
 }
 
 function matchesVibeGate(
@@ -783,12 +871,10 @@ function bingeability(title: Title): number {
 }
 
 function moodEvidence(title: Title, moods: readonly Mood[]): string {
-  const matched = moods.find((mood) =>
-    title.contentType === "stand-up"
-      ? mood === "stand-up"
-      : title.genres.some((genre) => genre.toLowerCase() === mood),
-  );
-  return `You asked for ${matched ?? moods[0]}; ${title.name} is classified as ${title.contentType === "stand-up" ? "stand-up" : matched ?? title.genres[0]}.`;
+  const matched = bestMoodMatch(title, moods);
+  const label = matched?.mood.promptLabel ?? "this mood";
+  const strongestTag = matched?.matchedTags[0] ?? title.subgenres[0] ?? title.toneTags[0];
+  return `You asked for ${label}; ${title.name} matches through its ${strongestTag ?? "editorial"} classification.`;
 }
 
 function vibeEvidence(title: Title, vibes: readonly Vibe[]): string | undefined {

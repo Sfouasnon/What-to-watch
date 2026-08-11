@@ -11,6 +11,10 @@ export type AppCatalogTitle = {
   synopsis: string;
   genres: string[];
   tags: string[];
+  primarySubgenre?: string;
+  secondarySubgenre?: string;
+  toneTags?: string[];
+  pacing?: "slow" | "moderate" | "fast";
   director: string;
   writers: string[];
   cinematographer?: string;
@@ -21,6 +25,20 @@ export type AppCatalogTitle = {
   canonical?: string[];
   popularity: number;
   baseline: number;
+};
+
+export type AppCatalogMoodRule = {
+  tag: string;
+  category: "subgenre" | "tone" | "pacing" | "attribute";
+  weight: number;
+};
+
+export type AppCatalogMood = {
+  slug: string;
+  promptLabel: string;
+  threshold: number;
+  displayOrder: number;
+  rules: AppCatalogMoodRule[];
 };
 
 type GoldSampleTitle = {
@@ -84,6 +102,25 @@ export type CatalogClassificationRow = {
   review_status: "gold" | "accepted" | "needs_review" | "rejected";
 };
 
+export type CatalogMoodRow = {
+  slug: string;
+  prompt_label: string;
+  threshold: number | string;
+  display_order: number;
+};
+
+export type CatalogMoodRuleRow = {
+  mood_slug: string;
+  tag_id: string;
+  weight: number | string;
+};
+
+export type CatalogTagRow = {
+  id: string;
+  slug: string;
+  category: AppCatalogMoodRule["category"];
+};
+
 const sample = sampleJson as GoldSample;
 const sampleByIdentity = new Map(
   sample.titles.map((title) => [`${title.media_type}:${title.tmdb_id}`, title]),
@@ -117,6 +154,35 @@ const unique = (values: Array<string | null | undefined>) =>
 
 export function normalizeGoldProviderName(name: string) {
   return providerAliases[name] ?? name;
+}
+
+export function buildAppCatalogMoods(
+  moods: readonly CatalogMoodRow[],
+  rules: readonly CatalogMoodRuleRow[],
+  tags: readonly CatalogTagRow[],
+): AppCatalogMood[] {
+  const tagById = new Map(tags.map((tag) => [tag.id, tag]));
+  const rulesByMood = new Map<string, AppCatalogMoodRule[]>();
+
+  for (const rule of rules) {
+    const tag = tagById.get(rule.tag_id);
+    if (!tag) continue;
+    const current = rulesByMood.get(rule.mood_slug) ?? [];
+    current.push({ tag: tag.slug, category: tag.category, weight: asNumber(rule.weight) });
+    rulesByMood.set(rule.mood_slug, current);
+  }
+
+  return moods
+    .map((mood) => ({
+      slug: mood.slug,
+      promptLabel: mood.prompt_label,
+      threshold: asNumber(mood.threshold),
+      displayOrder: mood.display_order,
+      rules: (rulesByMood.get(mood.slug) ?? []).sort(
+        (a, b) => b.weight - a.weight || a.tag.localeCompare(b.tag),
+      ),
+    }))
+    .sort((a, b) => a.displayOrder - b.displayOrder);
 }
 
 function sampledProviders(rawPayload: unknown): string[] {
@@ -219,6 +285,10 @@ export function buildAppCatalogTitle(
     synopsis: title.overview ?? sampleTitle.overview ?? "No synopsis available yet.",
     genres: input.tmdb_genres ?? [],
     tags: derivedTags(title, classification, sampleTitle),
+    primarySubgenre: classification.primary_subgenre,
+    secondarySubgenre: classification.secondary_subgenre ?? undefined,
+    toneTags: classification.tone_tags ?? [],
+    pacing: classification.pacing ?? "moderate",
     director: input.directors?.[0] ?? "Unknown director",
     writers: input.writers ?? [],
     cinematographer: input.cinematographers?.[0],

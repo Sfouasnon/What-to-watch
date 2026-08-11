@@ -2,10 +2,14 @@ import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 
 import {
+  buildAppCatalogMoods,
   buildAppCatalogTitle,
   GOLD_CATALOG_SIZE,
   type CatalogClassificationRow,
   type CatalogInputRow,
+  type CatalogMoodRow,
+  type CatalogMoodRuleRow,
+  type CatalogTagRow,
   type CatalogTitleRow,
 } from "@/lib/catalog/recommendation-catalog";
 
@@ -25,13 +29,28 @@ export async function GET() {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 
-  const { data: classifications, error: classificationError } = await supabase
-    .from("title_editorial_classifications")
-    .select("title_id,primary_subgenre,secondary_subgenre,tone_tags,pacing,confidence,review_status")
-    .eq("review_status", "gold")
-    .order("title_id");
+  const [
+    { data: classifications, error: classificationError },
+    { data: moods, error: moodError },
+    { data: moodRules, error: moodRuleError },
+  ] = await Promise.all([
+    supabase
+      .from("title_editorial_classifications")
+      .select("title_id,primary_subgenre,secondary_subgenre,tone_tags,pacing,confidence,review_status")
+      .eq("review_status", "gold")
+      .order("title_id"),
+    supabase
+      .from("moods")
+      .select("slug,prompt_label,threshold,display_order")
+      .is("retired_at", null)
+      .order("display_order"),
+    supabase
+      .from("mood_tag_rules")
+      .select("mood_slug,tag_id,weight")
+      .order("mood_slug"),
+  ]);
 
-  if (classificationError) {
+  if (classificationError || moodError || moodRuleError) {
     return NextResponse.json(
       { error: "Unable to load editorial catalog." },
       { status: 502, headers: { "Cache-Control": "no-store" } },
@@ -42,6 +61,33 @@ export async function GET() {
   if (gold.length !== GOLD_CATALOG_SIZE) {
     return NextResponse.json(
       { error: `Expected ${GOLD_CATALOG_SIZE} gold classifications, found ${gold.length}.` },
+      { status: 503, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+
+  const catalogMoodRows = (moods ?? []) as CatalogMoodRow[];
+  const catalogMoodRuleRows = (moodRules ?? []) as CatalogMoodRuleRow[];
+  const moodTagIds = [...new Set(catalogMoodRuleRows.map((rule) => rule.tag_id))];
+  const { data: moodTags, error: moodTagError } = await supabase
+    .from("tags")
+    .select("id,slug,category")
+    .in("id", moodTagIds);
+
+  if (moodTagError) {
+    return NextResponse.json(
+      { error: "Unable to load mood vocabulary." },
+      { status: 502, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+
+  const catalogMoods = buildAppCatalogMoods(
+    catalogMoodRows,
+    catalogMoodRuleRows,
+    (moodTags ?? []) as CatalogTagRow[],
+  );
+  if (catalogMoods.length !== 8 || catalogMoods.some((mood) => !mood.rules.length)) {
+    return NextResponse.json(
+      { error: "Mood vocabulary is incomplete." },
       { status: 503, headers: { "Cache-Control": "no-store" } },
     );
   }
@@ -89,6 +135,7 @@ export async function GET() {
       source: "supabase-gold",
       titleCount: catalog.length,
       titles: catalog,
+      moods: catalogMoods,
     },
     { headers: { "Cache-Control": CACHE_CONTROL } },
   );
