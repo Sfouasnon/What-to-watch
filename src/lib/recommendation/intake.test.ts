@@ -18,17 +18,22 @@ describe("intake mapping", () => {
       dryComedy: 25,
       darkComedy: 75,
       horror: 20,
+      psychologicalHorror: 20,
       gore: 80,
+      goreTolerance: 80,
       "genre:Horror": 0,
       "tradeoff:0": 25,
       "tradeoff:1": 75,
       "tradeoff:2": 75,
     });
 
-    expect(Object.keys(QUESTIONNAIRE_DIMENSION_MAP)).toHaveLength(21);
-    expect(Object.keys(mapped.dimensionScores)).toHaveLength(19);
-    expect(mapped.dimensionScores.comedy).toBe(50);
-    expect(mapped.dimensionScores.horrorTolerance).toBe(50);
+    expect(Object.keys(QUESTIONNAIRE_DIMENSION_MAP)).toHaveLength(24);
+    expect(Object.keys(mapped.dimensionScores)).toHaveLength(22);
+    expect(mapped.dimensionScores.dryComedy).toBe(25);
+    expect(mapped.dimensionScores.darkComedy).toBe(75);
+    expect(mapped.dimensionScores.broadComedy).toBeDefined();
+    expect(mapped.dimensionScores.psychologicalHorror).toBe(20);
+    expect(mapped.dimensionScores.goreTolerance).toBe(80);
     expect(Object.keys(mapped.genreScores)).toHaveLength(21);
     expect(mapped.genreScores.Drama).toBe(7);
     expect(mapped.genreScores.Horror).toBe(1);

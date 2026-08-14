@@ -137,6 +137,27 @@ describe("personal taste behavior", () => {
     expect(recommendForProfile({ profile: viewer, catalog: [fast, slow] })[0].title.id).toBe("slow");
   });
 
+  it("keeps scripted comedy styles separate and never applies them to stand-up", () => {
+    const dry = title("dry", { genres: ["Comedy"], toneTags: ["dry-comedy"] });
+    const broad = title("broad", { genres: ["Comedy"], toneTags: ["slapstick"] });
+    const standup = title("standup", { contentType: "stand-up", genres: ["Stand-Up"], toneTags: ["dry-comedy"] });
+    const viewer = profile({
+      questionnaire: { dimensionScores: { dryComedy: 100, broadComedy: 0 }, genreScores: {} },
+    });
+    const picks = recommendForProfile({ profile: viewer, catalog: [broad, standup, dry] });
+    expect(picks[0].title.id).toBe("dry");
+    expect(picks.find((pick) => pick.title.id === "standup")?.contributions.find((item) => item.feature === "questionnaire")?.value ?? 0).toBe(0);
+  });
+
+  it("separates psychological horror preference from gore tolerance", () => {
+    const psychological = title("psychological", { genres: ["Horror"], toneTags: ["psychological-horror", "dread"] });
+    const graphic = title("graphic", { genres: ["Horror"], toneTags: ["body-horror", "visceral"] });
+    const viewer = profile({
+      questionnaire: { dimensionScores: { psychologicalHorror: 100, goreTolerance: 0 }, genreScores: { Horror: 7 } },
+    });
+    expect(recommendForProfile({ profile: viewer, catalog: [graphic, psychological] })[0].title.id).toBe("psychological");
+  });
+
   it("matches genre-matrix aliases and tag-level genres", () => {
     const historical = title("historical", { genres: ["History"], toneTags: ["based on true events"] });
     const darkComedy = title("dark-comedy", { genres: ["Comedy"], toneTags: ["dark comedy"] });

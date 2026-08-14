@@ -39,7 +39,7 @@ import {
   X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   defaultRecommendationConfig,
@@ -52,6 +52,16 @@ import {
   hasProminentActor,
 } from "@/lib/recommendation/actor-discovery";
 import { mapQuestionnaireAnswers } from "@/lib/recommendation/intake";
+import {
+  ANSWER_LABELS,
+  buildStartingTasteSummary,
+  conditionalQuestions,
+  CORE_QUESTIONS,
+  GENRE_LABELS,
+  GENRE_RATING_LABELS,
+  GENRES,
+  selectCalibrationTitle,
+} from "@/lib/recommendation/onboarding";
 import type {
   FriendContext as EngineFriendContext,
   Mood as EngineMood,
@@ -606,42 +616,6 @@ const fallbackCatalog: Title[] = [
 ];
 
 let catalog: Title[] = fallbackCatalog;
-
-const questionnaire = [
-  ["cerebral", "I like stories that reward close attention."],
-  ["emotional", "I am open to an emotionally heavy story when the payoff feels earned."],
-  ["darkness", "Moral ambiguity makes a story more interesting to me."],
-  ["thrill", "I like a movie to create tension early and keep tightening it."],
-  ["imagination", "Unusual worlds and speculative ideas draw me in."],
-  ["dryComedy", "Dry or deadpan humor is usually funnier to me than broad comedy."],
-  ["darkComedy", "I enjoy comedy that finds humor in uncomfortable subjects."],
-  ["standup", "A smart stand-up special is a good choice for my evening."],
-  ["character", "Fascinating characters can carry a simple plot for me."],
-  ["realism", "I am often drawn to stories that feel grounded in ordinary life."],
-  ["ambiguity", "I am comfortable with an ending that leaves room for interpretation."],
-  ["slowPace", "I can enjoy a patient film that takes its time revealing itself."],
-  ["novelty", "I would rather discover something new than replay a safe favorite."],
-  ["discovery", "I like finding great work that never became a major hit."],
-  ["classics", "I am happy to watch a movie from before I was born."],
-  ["international", "Subtitles do not make me less likely to choose a film."],
-  ["horror", "Psychological horror can be rewarding when it has more on its mind."],
-  ["gore", "Graphic body horror is something I can comfortably watch."],
-  ["rewatch", "Revisiting an old favorite often sounds better than taking a chance."],
-  ["tvCommitment", "I am willing to commit to a multi-season story."],
-  ["binge", "When a show clicks, I usually want several episodes at once."],
-] as const;
-
-const genreMatrix = [
-  "Drama", "Crime", "Thriller", "Mystery", "Action", "Adventure", "Science Fiction",
-  "Fantasy", "Horror", "Romance", "Comedy", "Dark Comedy", "Satire", "Animation",
-  "Documentary", "Historical", "War", "Western", "Musical", "Family", "Stand-up",
-];
-
-const forcedChoices = [
-  ["A beautifully made slow-burn mystery", "A propulsive thriller that grabs me immediately"],
-  ["A critically acclaimed movie I've somehow missed", "A new release everyone is talking about"],
-  ["A familiar favorite", "Something I've never heard of"],
-] as const;
 
 const seedProfiles: ViewerProfile[] = [
   {
@@ -1323,31 +1297,83 @@ function ProfileEditor({
 }
 
 function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; onChange: (profile: ViewerProfile) => void; onFinish: () => void }) {
-  const [step, setStep] = useState<"welcome" | "services" | "questionnaire" | "genres" | "tradeoffs" | "calibrate" | "summary">("welcome");
+  const [step, setStep] = useState<"welcome" | "services" | "genreLoves" | "genreAvoids" | "genreChoice" | "genreFineTune" | "questionnaire" | "calibrate" | "searchTitles" | "summary">("welcome");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [soughtGenres, setSoughtGenres] = useState<string[]>([]);
+  const [avoidedGenres, setAvoidedGenres] = useState<string[]>([]);
   const [genreAnswers, setGenreAnswers] = useState<Record<string, number>>(
-    Object.fromEntries(genreMatrix.map((genre) => [genre, 4])),
+    Object.fromEntries(GENRES.map((genre) => [genre, 4])),
   );
-  const [tradeoffAnswers, setTradeoffAnswers] = useState<number[]>([]);
+  const [genreIndex, setGenreIndex] = useState(0);
   const [ratings, setRatings] = useState<Record<string, number>>(profile.ratings);
-  const progress = step === "welcome" ? 6 : step === "services" ? 16 : step === "questionnaire" ? 16 + (questionIndex / questionnaire.length) * 34 : step === "genres" ? 55 : step === "tradeoffs" ? 68 : step === "calibrate" ? 80 : 100;
+  const [calibrationRatedIds, setCalibrationRatedIds] = useState<string[]>([]);
+  const [calibrationAskedIds, setCalibrationAskedIds] = useState<string[]>([]);
+  const [skippedIds, setSkippedIds] = useState<string[]>([]);
+  const [titleSearch, setTitleSearch] = useState("");
+  const questions = useMemo(
+    () => [...CORE_QUESTIONS, ...conditionalQuestions(soughtGenres, genreAnswers)],
+    [genreAnswers, soughtGenres],
+  );
+  const questionnaireScores = useMemo(
+    () => Object.fromEntries(Object.entries(answers).map(([key, value]) => [key, Math.round((value - 1) * 25)])),
+    [answers],
+  );
+  const summary = useMemo(
+    () => buildStartingTasteSummary(questionnaireScores, genreAnswers),
+    [genreAnswers, questionnaireScores],
+  );
+  const excludedCalibrationIds = new Set([
+    ...Object.keys(profile.ratings),
+    ...calibrationAskedIds,
+    ...skippedIds,
+  ]);
+  const calibrationTitle = calibrationRatedIds.length >= 8 ? undefined : selectCalibrationTitle(catalog, {
+    targetGenres: [...soughtGenres, ...avoidedGenres],
+    excludedIds: excludedCalibrationIds,
+    askedTitles: calibrationAskedIds.map((id) => catalog.find((title) => title.id === id)).filter((title): title is Title => Boolean(title)),
+  }) as Title | undefined;
+  const progress = step === "welcome" ? 5
+    : step === "services" ? 13
+      : step === "genreLoves" ? 22
+        : step === "genreAvoids" ? 31
+          : step === "genreChoice" || step === "genreFineTune" ? 40
+            : step === "questionnaire" ? 46 + (questionIndex / Math.max(questions.length, 1)) * 30
+              : step === "calibrate" || step === "searchTitles" ? 82
+                : 100;
+  const setGenreOutliers = () => {
+    setGenreAnswers(Object.fromEntries(GENRES.map((genre) => [
+      genre,
+      soughtGenres.includes(genre) ? 7 : avoidedGenres.includes(genre) ? 1 : 4,
+    ])));
+  };
   const answerQuestion = (score: number) => {
-    const [dimension] = questionnaire[questionIndex];
-    setAnswers((current) => ({ ...current, [`${dimension}:${questionIndex}`]: score }));
-    if (questionIndex < questionnaire.length - 1) setQuestionIndex((index) => index + 1);
-    else setStep("genres");
+    const question = questions[questionIndex];
+    if (!question) return;
+    setAnswers((current) => ({ ...current, [question.id]: score }));
+    if (questionIndex < questions.length - 1) setQuestionIndex((index) => index + 1);
+    else setStep("calibrate");
+  };
+  const toggleGenre = (genre: string, selected: string[], setter: (genres: string[]) => void) => {
+    if (selected.includes(genre)) setter(selected.filter((item) => item !== genre));
+    else if (selected.length < 5) setter([...selected, genre]);
+  };
+  const rateCalibrationTitle = (title: Title, score: number) => {
+    setRatings((current) => ({ ...current, [title.id]: score }));
+    setCalibrationRatedIds((current) => current.includes(title.id) ? current : [...current, title.id]);
+    setCalibrationAskedIds((current) => current.includes(title.id) ? current : [...current, title.id]);
+    setTitleSearch("");
+    setStep("calibrate");
+  };
+  const skipCalibrationTitle = () => {
+    if (!calibrationTitle) return;
+    setSkippedIds((current) => [...current, calibrationTitle.id]);
+    setCalibrationAskedIds((current) => [...current, calibrationTitle.id]);
   };
   const finish = () => {
-    const dimensions: Record<string, number[]> = {};
-    Object.entries(answers).forEach(([key, score]) => {
-      const dimension = key.split(":")[0];
-      dimensions[dimension] = [...(dimensions[dimension] ?? []), score];
-    });
-    const questionnaireScores = Object.fromEntries(Object.entries(dimensions).map(([key, values]) => [key, Math.round((values.reduce((sum, value) => sum + value, 0) / values.length - 1) * 25)]));
-    genreMatrix.forEach((genre) => { questionnaireScores[`genre:${genre}`] = Math.round(((genreAnswers[genre] ?? 4) - 1) * (100 / 6)); });
-    tradeoffAnswers.forEach((choice, index) => { questionnaireScores[`tradeoff:${index}`] = choice === 0 ? 25 : 75; });
-    onChange({ ...profile, questionnaire: questionnaireScores, ratings, onboardingCompleted: true });
+    const storedScores = { ...questionnaireScores };
+    GENRES.forEach((genre) => { storedScores[`genre:${genre}`] = Math.round(((genreAnswers[genre] ?? 4) - 1) * (100 / 6)); });
+    onChange({ ...profile, questionnaire: storedScores, ratings, onboardingCompleted: true });
     onFinish();
   };
   return (
@@ -1358,8 +1384,8 @@ function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; o
           <span className="onboarding-orbit"><Sparkles size={28} /></span>
           <p className="kicker">A BETTER STARTING POINT</p>
           <h1>Build your taste profile.</h1>
-          <p>Give us a quick sense of what you enjoy. We&apos;ll use it as a starting point, and your ratings will teach the app much more over time.</p>
-          <div className="onboarding-time"><Clock3 size={17} /><span><strong>About 5–8 minutes</strong><small>You can skip any part and refine it later.</small></span></div>
+          <p>Tell us what you seek out, answer a few plain-language questions, and rate a handful of titles chosen for your taste.</p>
+          <div className="onboarding-time"><Clock3 size={17} /><span><strong>About 4–6 minutes</strong><small>You can skip any part and refine it later.</small></span></div>
           <button className="primary-button" onClick={() => setStep("services")}>Let&apos;s begin <ChevronRight size={18} /></button>
           <button className="text-button" onClick={() => { onChange({ ...profile, onboardingCompleted: true }); onFinish(); }}>Skip for now</button>
         </section>
@@ -1372,57 +1398,128 @@ function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; o
             selected={profile.subscriptions}
             onChange={(subscriptions) => onChange({ ...profile, subscriptions })}
           />
-          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("welcome")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("questionnaire")}>Build my taste <ChevronRight size={18} /></button></div>
+          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("welcome")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("genreLoves")}>Build my taste <ChevronRight size={18} /></button></div>
         </section>
       )}
-      {step === "questionnaire" && (
+      {step === "genreLoves" && (
+        <GenreOutlierStep
+          kicker="YOUR GENRE BASELINE"
+          title="What do you actively look for?"
+          copy="Choose up to five. These become strong starting signals; everything else stays neutral."
+          selected={soughtGenres}
+          disabled={[]}
+          onToggle={(genre) => toggleGenre(genre, soughtGenres, setSoughtGenres)}
+        >
+          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("services")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("genreAvoids")}>Continue <ChevronRight size={18} /></button></div>
+        </GenreOutlierStep>
+      )}
+      {step === "genreAvoids" && (
+        <GenreOutlierStep
+          kicker="YOUR GENRE BASELINE"
+          title="What do you usually avoid?"
+          copy="Choose up to five. We’ll use these as cautions, not permanent bans."
+          selected={avoidedGenres}
+          disabled={soughtGenres}
+          onToggle={(genre) => toggleGenre(genre, avoidedGenres, setAvoidedGenres)}
+        >
+          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("genreLoves")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => { setGenreOutliers(); setStep("genreChoice"); }}>Continue <ChevronRight size={18} /></button></div>
+        </GenreOutlierStep>
+      )}
+      {step === "genreChoice" && (
+        <section className="onboarding-panel genre-choice-panel">
+          <p className="kicker">GENRES SET</p><h1>That&apos;s enough to get started.</h1><p className="lede">We’ll treat your picks as strong signals and leave the rest neutral. You can fine-tune every genre if you want more control.</p>
+          <div className="genre-choice-summary"><span>{soughtGenres.length} actively sought</span><span>{avoidedGenres.length} usually avoided</span><span>{GENRES.length - soughtGenres.length - avoidedGenres.length} left neutral</span></div>
+          <div className="onboarding-actions stacked-actions"><button className="text-button" onClick={() => setStep("genreAvoids")}><ArrowLeft size={16} /> Back</button><div><button className="secondary-button" onClick={() => { setGenreIndex(0); setStep("genreFineTune"); }}>Fine-tune every genre</button><button className="primary-button" onClick={() => { setQuestionIndex(0); setStep("questionnaire"); }}>Continue <ChevronRight size={18} /></button></div></div>
+        </section>
+      )}
+      {step === "genreFineTune" && (
         <section className="onboarding-panel question-panel">
-          <div className="question-count"><span>{questionIndex + 1} / {questionnaire.length}</span><button className="text-button" onClick={() => setStep("genres")}>Skip questions</button></div>
+          <div className="question-count"><span>{genreIndex + 1} / {GENRES.length}</span><button className="text-button" onClick={() => { setQuestionIndex(0); setStep("questionnaire"); }}>Finish fine-tuning</button></div>
+          <p className="kicker">FINE-TUNE YOUR GENRES</p><h2>{GENRE_LABELS[GENRES[genreIndex]]}</h2>
+          <div className="genre-answer-scale" role="radiogroup" aria-label={`${GENRE_LABELS[GENRES[genreIndex]]} preference`}>
+            {GENRE_RATING_LABELS.map((label, index) => <button key={label} className={genreAnswers[GENRES[genreIndex]] === index + 1 ? "is-active" : ""} onClick={() => { setGenreAnswers((current) => ({ ...current, [GENRES[genreIndex]]: index + 1 })); if (genreIndex < GENRES.length - 1) setGenreIndex((current) => current + 1); else { setQuestionIndex(0); setStep("questionnaire"); } }}><span>{index + 1}</span><strong>{label}</strong></button>)}
+          </div>
+          {genreIndex > 0 && <button className="text-button question-back" onClick={() => setGenreIndex((index) => index - 1)}><ArrowLeft size={16} /> Previous</button>}
+        </section>
+      )}
+      {step === "questionnaire" && questions[questionIndex] && (
+        <section className="onboarding-panel question-panel">
+          <div className="question-count"><span>{questionIndex + 1} / {questions.length}</span><button className="text-button" onClick={() => setStep("calibrate")}>Skip questions</button></div>
           <p className="kicker">WHAT SOUNDS LIKE YOU?</p>
-          <h2>{questionnaire[questionIndex][1]}</h2>
+          <p className="question-support">There are no right answers. Choose what usually fits, not what you want to watch tonight.</p>
+          <h2>{questions[questionIndex].prompt}</h2>
+          <p className="question-example">{questions[questionIndex].example}</p>
           <div className="answer-scale" role="radiogroup" aria-label="Agreement scale">
-            {[1, 2, 3, 4, 5].map((value) => <button key={value} onClick={() => answerQuestion(value)} aria-label={`${value} out of 5`}><span>{value}</span></button>)}
+            {ANSWER_LABELS.map((label, index) => <button key={label} className={answers[questions[questionIndex].id] === index + 1 ? "is-active" : ""} onClick={() => answerQuestion(index + 1)}><span>{index + 1}</span><strong>{label}</strong></button>)}
           </div>
-          <div className="scale-labels"><span>Not me</span><span>Very much me</span></div>
-          {questionIndex > 0 && <button className="text-button question-back" onClick={() => setQuestionIndex((index) => index - 1)}><ArrowLeft size={16} /> Previous</button>}
-        </section>
-      )}
-      {step === "genres" && (
-        <section className="onboarding-panel genre-panel">
-          <p className="kicker">QUICK GENRE PASS</p><h1>How much do you enjoy these?</h1><p className="lede">Use the middle when it depends. Stand-up stays separate from scripted comedy.</p>
-          <div className="genre-matrix">
-            {genreMatrix.map((genre) => <label key={genre}><span><strong>{genre}</strong><small>{genreAnswers[genre]}/7</small></span><input type="range" min="1" max="7" value={genreAnswers[genre]} onChange={(event) => setGenreAnswers((current) => ({ ...current, [genre]: Number(event.target.value) }))} aria-label={`${genre} preference`} /></label>)}
-          </div>
-          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("questionnaire")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("tradeoffs")}>A few tradeoffs <ChevronRight size={18} /></button></div>
-        </section>
-      )}
-      {step === "tradeoffs" && (
-        <section className="onboarding-panel tradeoff-panel">
-          <p className="kicker">CHOOSE WHAT SOUNDS BETTER</p><h1>Go with your instinct.</h1><p className="lede">A few real choices give us stronger signal than another generic score.</p>
-          <div className="tradeoff-list">
-            {forcedChoices.map((choice, index) => <fieldset key={choice[0]}><legend>Tonight, which would you choose?</legend>{choice.map((option, optionIndex) => <button type="button" key={option} className={tradeoffAnswers[index] === optionIndex ? "is-active" : ""} onClick={() => setTradeoffAnswers((current) => { const next = [...current]; next[index] = optionIndex; return next; })}><span>{optionIndex === 0 ? "A" : "B"}</span><strong>{option}</strong>{tradeoffAnswers[index] === optionIndex && <Check size={16} />}</button>)}</fieldset>)}
-          </div>
-          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("genres")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("calibrate")}>Rate some titles <ChevronRight size={18} /></button></div>
+          <p className="question-note">Haven’t seen the examples? Just answer based on the question.</p>
+          <button className="text-button question-back" onClick={() => questionIndex > 0 ? setQuestionIndex((index) => index - 1) : setStep("genreChoice")}><ArrowLeft size={16} /> Previous</button>
         </section>
       )}
       {step === "calibrate" && (
-        <section className="onboarding-panel">
-          <p className="kicker">THE SIGNAL THAT MATTERS MOST</p><h1>Rate what you&apos;ve seen.</h1><p className="lede">Ratings carry much more weight than the questionnaire. Add a few now; you can keep going later.</p>
-          <div className="calibration-list">
-            {catalog.slice(0, 10).map((title) => <CompactRatingRow key={title.id} title={title} value={ratings[title.id]} onRate={(score) => setRatings((current) => ({ ...current, [title.id]: score }))} />)}
+        <section className="onboarding-panel calibration-panel">
+          <p className="kicker">A FEW USEFUL RATINGS</p><h1>Help us sharpen the picture.</h1><p className="lede">Each title is chosen to clarify the preferences you just shared. Four to six useful ratings is plenty.</p>
+          {calibrationTitle ? (
+            <div className="calibration-card">
+              <div className="calibration-poster"><Image src={calibrationTitle.poster} alt={`Poster for ${calibrationTitle.name}`} fill sizes="180px" /></div>
+              <div><p className="kicker">RATE 1–10</p><h2>{calibrationTitle.name}</h2><p>{calibrationTitle.year} · {calibrationTitle.kind} · {calibrationTitle.genres.join(", ")}</p><RatingPicker value={ratings[calibrationTitle.id]} onRate={(score) => rateCalibrationTitle(calibrationTitle, score)} /></div>
+            </div>
+          ) : <div className="calibration-empty"><Check size={24} /><strong>That’s enough signal for now.</strong></div>}
+          <div className="calibration-options">
+            {calibrationTitle && <><button className="secondary-button" onClick={skipCalibrationTitle}>Haven&apos;t seen it</button><button className="secondary-button" onClick={skipCalibrationTitle}>Don&apos;t remember it well enough</button></>}
+            <button className="secondary-button" onClick={() => setStep("searchTitles")}><Search size={16} /> Search for something I&apos;ve seen</button>
           </div>
-          <div className="onboarding-actions"><span className="rating-count">{Object.keys(ratings).length} rated</span><button className="primary-button" onClick={() => setStep("summary")}>See my starting taste <ChevronRight size={18} /></button></div>
+          <div className="onboarding-actions"><span className="rating-count"><strong>{calibrationRatedIds.length}</strong> useful rating{calibrationRatedIds.length === 1 ? "" : "s"}</span><button className="primary-button" onClick={() => setStep("summary")}>{calibrationRatedIds.length >= 4 ? "See my starting taste" : "Finish for now"} <ChevronRight size={18} /></button></div>
+        </section>
+      )}
+      {step === "searchTitles" && (
+        <section className="onboarding-panel title-search-panel">
+          <p className="kicker">CHOOSE SOMETHING YOU KNOW</p><h1>Search for a title.</h1><p className="lede">Pick a movie, series, or stand-up special you remember well enough to rate.</p>
+          <label className="calibration-search"><Search size={18} /><input autoFocus value={titleSearch} onChange={(event) => setTitleSearch(event.target.value)} placeholder="Start typing a title" /></label>
+          <div className="calibration-list">
+            {titleSearch.trim().length >= 2 && catalog.filter((title) => title.name.toLowerCase().includes(titleSearch.trim().toLowerCase()) && !calibrationRatedIds.includes(title.id)).slice(0, 8).map((title) => <CompactRatingRow key={title.id} title={title} value={ratings[title.id]} onRate={(score) => rateCalibrationTitle(title, score)} />)}
+          </div>
+          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("calibrate")}><ArrowLeft size={16} /> Back</button></div>
         </section>
       )}
       {step === "summary" && (
         <section className="onboarding-panel onboarding-summary">
-          <span className="summary-ring"><Check size={27} /></span><p className="kicker">YOUR STARTING TASTE</p><h1>A thoughtful explorer.</h1><p>You seem drawn to layered characters, precise filmmaking, and stories that leave a little room for interpretation.</p>
-          <div className="taste-tags"><span>Cerebral stories</span><span>Character-driven</span><span>Patient thrillers</span><span>World cinema</span><span>Visual craft</span></div>
+          <span className="summary-ring"><Check size={27} /></span><p className="kicker">YOUR STARTING TASTE</p><h1>{summary.headline}</h1><p>{summary.description}</p>
+          {summary.tags.length > 0 && <div className="taste-tags">{summary.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>}
           <p className="form-note"><Info size={16} /> These are starting assumptions. Every rating makes them more personal.</p>
           <button className="primary-button" onClick={finish}>Find something tonight <ChevronRight size={18} /></button>
         </section>
       )}
     </main>
+  );
+}
+
+function GenreOutlierStep({
+  kicker,
+  title,
+  copy,
+  selected,
+  disabled,
+  onToggle,
+  children,
+}: {
+  kicker: string;
+  title: string;
+  copy: string;
+  selected: string[];
+  disabled: string[];
+  onToggle: (genre: string) => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="onboarding-panel genre-panel">
+      <p className="kicker">{kicker}</p><h1>{title}</h1><p className="lede">{copy}</p>
+      <div className="genre-selection-count">{selected.length} / 5 selected</div>
+      <div className="genre-chip-grid">
+        {GENRES.map((genre) => <button key={genre} type="button" disabled={disabled.includes(genre)} className={selected.includes(genre) ? "is-active" : ""} onClick={() => onToggle(genre)} aria-pressed={selected.includes(genre)}><span>{GENRE_LABELS[genre]}</span>{selected.includes(genre) && <Check size={15} />}</button>)}
+      </div>
+      {children}
+    </section>
   );
 }
 

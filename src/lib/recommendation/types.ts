@@ -114,6 +114,9 @@ export type QuestionnaireDimension =
   | "thrill"
   | "imagination"
   | "comedy"
+  | "dryComedy"
+  | "darkComedy"
+  | "broadComedy"
   | "standUp"
   | "characterOrientation"
   | "realism"
@@ -124,6 +127,8 @@ export type QuestionnaireDimension =
   | "classicOpenness"
   | "internationalOpenness"
   | "horrorTolerance"
+  | "psychologicalHorror"
+  | "goreTolerance"
   | "rewatchOrientation"
   | "televisionCommitment"
   | "bingePreference";

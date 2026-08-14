@@ -666,7 +666,13 @@ function questionnaireGenrePreferences(title: Title, profile: Profile): number[]
   if (!genreScores) return [];
   const normalize = (value: string) => value.toLowerCase().replaceAll("-", " ").trim();
   const scoresByGenre = new Map(Object.entries(genreScores).map(([genre, value]) => [normalize(genre), value]));
+  if (title.contentType === "stand-up") {
+    const standUpScore = scoresByGenre.get("stand up");
+    return standUpScore === undefined ? [] : [standUpScore];
+  }
   const candidateTerms = unique([...title.genres, ...title.subgenres, ...title.toneTags].map(normalize));
+  const standUpIndex = candidateTerms.indexOf("stand up");
+  if (standUpIndex >= 0) candidateTerms.splice(standUpIndex, 1);
   if (candidateTerms.includes("history")) candidateTerms.push("historical");
   return unique(candidateTerms)
     .map((genre) => scoresByGenre.get(genre))
@@ -681,15 +687,21 @@ function questionnairePreference(
 ): number | undefined {
   const scores = profile.questionnaire?.dimensionScores;
   if (!scores) return undefined;
-  const tags = [...title.genres, ...title.subgenres, ...title.toneTags].map((value) => value.toLowerCase());
+  const tags = [...title.genres, ...title.subgenres, ...title.toneTags]
+    .map((value) => value.toLowerCase().replaceAll("-", " ").trim());
   const has = (...values: string[]) => tags.some((tag) => values.includes(tag));
+  const scripted = title.contentType !== "stand-up";
+  const horror = has("horror", "supernatural horror", "psychological horror", "body horror", "slasher");
   const characteristicSignals: Array<[keyof typeof scores, number]> = [
     ["cerebral", has("mystery", "cerebral", "investigative", "ambiguous", "nonlinear") ? 1 : 0],
     ["emotionalIntensity", has("emotional", "intense", "bittersweet", "tragic", "heartfelt") ? 1 : 0],
     ["darknessTolerance", has("dark", "bleak", "crime", "moral ambiguity", "psychological") ? 1 : 0],
     ["thrill", has("action", "thriller", "suspense", "fast", "twisty", "spectacle") ? 1 : 0],
     ["imagination", has("science fiction", "fantasy", "surreal", "imaginative", "nonlinear") ? 1 : 0],
-    ["comedy", has("comedy", "dark comedy", "dry comedy", "satire", "visual comedy", "buddy comedy") ? 1 : 0],
+    ["comedy", scripted && has("comedy", "dark comedy", "dry comedy", "satire", "visual comedy", "buddy comedy") ? 1 : 0],
+    ["dryComedy", scripted && has("dry comedy", "deadpan", "wry", "understated") ? 1 : 0],
+    ["darkComedy", scripted && has("dark comedy", "black comedy", "awkward comedy", "absurdist comedy", "cynical") ? 1 : 0],
+    ["broadComedy", scripted && has("broad comedy", "slapstick", "buddy comedy", "visual comedy", "parody spoof", "raunchy", "sex comedy") ? 1 : 0],
     ["standUp", title.contentType === "stand-up" ? 1 : 0],
     ["characterOrientation", has("character study", "ensemble", "character-driven") ? 1 : 0],
     ["realism", has("based on true events", "procedural", "realist", "grounded", "documentary") ? 1 : 0],
@@ -700,6 +712,8 @@ function questionnairePreference(
     ["classicOpenness", clamp((2000 - title.year) / 60, 0, 1)],
     ["internationalOpenness", !title.languages.includes("en") || !title.countries.includes(profile.region) ? 1 : 0],
     ["horrorTolerance", has("horror", "creature", "gore", "body horror", "psychological") ? 1 : 0],
+    ["psychologicalHorror", horror && has("psychological horror", "psychological", "dread", "unsettling", "slow burn") ? 1 : 0],
+    ["goreTolerance", horror && has("gore", "graphic", "body horror", "visceral", "slasher") ? 1 : 0],
     ["rewatchOrientation", familiarity],
     ["televisionCommitment", title.contentType === "series" ? clamp((title.seasons ?? 1) / 5, 0.25, 1) : 0],
     ["bingePreference", title.contentType === "series" ? bingeability(title) : 0],
