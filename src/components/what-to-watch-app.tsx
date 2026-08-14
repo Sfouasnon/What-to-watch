@@ -46,6 +46,11 @@ import {
   importTunedConfiguration,
   recommendForProfile,
 } from "@/lib/recommendation/engine";
+import {
+  actorOptionsForSubscriptions,
+  filterTitlesForFavoriteActors,
+  hasProminentActor,
+} from "@/lib/recommendation/actor-discovery";
 import { mapQuestionnaireAnswers } from "@/lib/recommendation/intake";
 import type {
   FriendContext as EngineFriendContext,
@@ -60,7 +65,7 @@ import type {
 
 import { ProviderSelector } from "./provider-selector";
 
-type Screen = "home" | "results" | "rate" | "taste" | "settings";
+type Screen = "home" | "actor" | "results" | "rate" | "taste" | "settings";
 type ContentKind = "Movie" | "Series" | "Stand-up";
 type AvailabilityType = "subscription" | "free" | "rental";
 type RentalMode = "never" | "exceptional" | "always";
@@ -101,6 +106,7 @@ type ViewerProfile = {
   onboardingCompleted: boolean;
   region: string;
   subscriptions: string[];
+  favoriteActors: string[];
   ratings: Record<string, number>;
   questionnaire: Record<string, number>;
   rentalMode: RentalMode;
@@ -647,6 +653,7 @@ const seedProfiles: ViewerProfile[] = [
     onboardingCompleted: true,
     region: "US",
     subscriptions: ["Netflix", "Hulu", "Disney+", "Apple TV+", "Prime Video", "Max", "Peacock", "Paramount+", "Criterion Channel"],
+    favoriteActors: [],
     ratings: {
       arrival: 10,
       "the-bear": 9,
@@ -674,6 +681,7 @@ const seedProfiles: ViewerProfile[] = [
     onboardingCompleted: true,
     region: "US",
     subscriptions: ["Netflix", "Hulu", "Disney+", "Apple TV+", "Prime Video", "Max", "Peacock", "Paramount+", "Criterion Channel"],
+    favoriteActors: [],
     ratings: {
       "perfect-days": 10,
       "reservation-dogs": 9,
@@ -700,6 +708,7 @@ const seedProfiles: ViewerProfile[] = [
     onboardingCompleted: true,
     region: "US",
     subscriptions: ["Netflix", "Hulu", "Disney+", "Apple TV+", "Prime Video", "Max", "Peacock", "Paramount+", "Criterion Channel"],
+    favoriteActors: [],
     ratings: {},
     questionnaire: {},
     rentalMode: "never",
@@ -1058,8 +1067,12 @@ function buildRecommendations(
   selectedMoods: string[],
   selectedVibe: string,
   store: AppStore,
+  options: { favoriteActors?: readonly string[] } = {},
 ): Recommendation[] {
-  const engineCatalog = catalog.map((title) => toEngineTitle(title, profile.region));
+  const sourceCatalog = options.favoriteActors?.length
+    ? filterTitlesForFavoriteActors(catalog, options.favoriteActors, profile.subscriptions)
+    : catalog;
+  const engineCatalog = sourceCatalog.map((title) => toEngineTitle(title, profile.region));
   const config: RecommendationConfig = {
     ...defaultRecommendationConfig,
     modelVersion: String(profile.modelVersion),
@@ -1086,7 +1099,7 @@ function buildRecommendations(
       source: "search" as const,
     })),
     questionnaire: mapQuestionnaireAnswers(profile.questionnaire),
-    favoritePeople: { actors: [], directors: [], writers: [], cinematographers: [] },
+    favoritePeople: { actors: profile.favoriteActors, directors: [], writers: [], cinematographers: [] },
   };
   const recommendations = recommendForProfile({
     profile: engineProfile,
@@ -1186,7 +1199,7 @@ function BottomNav({ screen, onChange }: { screen: Screen; onChange: (screen: Sc
     <nav className="bottom-nav" aria-label="Primary navigation">
       {items.map((item) => {
         const Icon = item.icon;
-        const active = item.screen === screen || (screen === "results" && item.screen === "home");
+        const active = item.screen === screen || (["actor", "results"].includes(screen) && item.screen === "home");
         return (
           <button key={item.screen} className={active ? "is-active" : ""} onClick={() => onChange(item.screen)}>
             <Icon size={20} strokeWidth={active ? 2.2 : 1.7} />
@@ -1269,6 +1282,7 @@ function ProfileEditor({
       onboardingCompleted: false,
       region: source?.region ?? "US",
       subscriptions: source ? [...source.subscriptions] : [],
+      favoriteActors: [],
       ratings: {},
       questionnaire: {},
       rentalMode: source?.rentalMode ?? "exceptional",
@@ -1450,6 +1464,7 @@ function HomeScreen({
   selectedVibe,
   setSelectedVibe,
   onFind,
+  onActorFind,
 }: {
   profile: ViewerProfile;
   selectedMoods: string[];
@@ -1457,6 +1472,7 @@ function HomeScreen({
   selectedVibe: string;
   setSelectedVibe: (vibe: string) => void;
   onFind: () => void;
+  onActorFind: () => void;
 }) {
   const ratingCount = Object.keys(profile.ratings).length;
   return (
@@ -1483,26 +1499,107 @@ function HomeScreen({
         </div>
       </section>
       <button className="find-button" onClick={onFind}><span><Sparkles size={19} /> Find something</span><small>{ratingCount > 0 ? `Tuned from ${ratingCount} ratings` : "Using your starting taste"}</small></button>
+      <button className="actor-find-button" onClick={onActorFind}>
+        <span className="actor-find-button__icon"><UserCheck size={21} /></span>
+        <span><strong>Find something with your favorite actor</strong><small>Prominent roles available on your services</small></span>
+        <ChevronRight size={18} />
+      </button>
       <div className="home-trust"><ShieldCheck size={15} /><p><strong>No chatbot. No taste feed.</strong> Ten considered picks from an explainable model.</p></div>
     </main>
   );
 }
 
-function ResultsScreen({ profile, recommendations, onBack, onDetails, onFeedback }: { profile: ViewerProfile; recommendations: Recommendation[]; onBack: () => void; onDetails: (title: Title) => void; onFeedback: (message: string, title?: Title) => void }) {
+function ActorDiscoveryScreen({
+  profile,
+  onChange,
+  onFind,
+  onBack,
+}: {
+  profile: ViewerProfile;
+  onChange: (actors: string[]) => void;
+  onFind: (actors: string[]) => void;
+  onBack: () => void;
+}) {
+  const [query, setQuery] = useState("");
+  const options = actorOptionsForSubscriptions(catalog, profile.subscriptions);
+  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const suggestions = options
+    .filter((option) => !normalizedQuery || option.name.toLocaleLowerCase().includes(normalizedQuery))
+    .slice(0, normalizedQuery ? 12 : 8);
+  const toggleActor = (name: string) => {
+    const selected = profile.favoriteActors.some((actor) => actor.toLocaleLowerCase() === name.toLocaleLowerCase());
+    onChange(selected
+      ? profile.favoriteActors.filter((actor) => actor.toLocaleLowerCase() !== name.toLocaleLowerCase())
+      : [...profile.favoriteActors, name]);
+  };
+
+  return (
+    <main className="actor-screen page-content">
+      <div className="subpage-heading actor-screen__heading">
+        <button className="icon-button" onClick={onBack} aria-label="Back"><ArrowLeft size={20} /></button>
+        <div><p className="kicker">CAST-LED DISCOVERY</p><h1>Who do you want to watch?</h1></div>
+      </div>
+      <p className="actor-screen__intro">Choose one or more favorites. We&apos;ll only show movies and series where they have a prominent role and the title is included with one of {profile.name}&apos;s services.</p>
+
+      {profile.favoriteActors.length > 0 && (
+        <section className="actor-selection" aria-labelledby="favorite-actors-heading">
+          <div className="section-heading"><div><p className="section-number">01</p><h2 id="favorite-actors-heading">Your favorite actors</h2></div><span>{profile.favoriteActors.length} selected</span></div>
+          <div className="actor-chips">
+            {profile.favoriteActors.map((actor) => <button key={actor} onClick={() => toggleActor(actor)}>{actor}<X size={14} aria-hidden="true" /><span className="visually-hidden">Remove</span></button>)}
+          </div>
+        </section>
+      )}
+
+      <section className="actor-search-section" aria-labelledby="actor-search-heading">
+        <div className="section-heading"><div><p className="section-number">{profile.favoriteActors.length ? "02" : "01"}</p><h2 id="actor-search-heading">Search actors</h2></div><span>Prominent cast only</span></div>
+        <label className="actor-search">
+          <Search size={19} aria-hidden="true" />
+          <span className="visually-hidden">Actor name</span>
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try Samuel L. Jackson" autoComplete="off" />
+          {query && <button type="button" onClick={() => setQuery("")} aria-label="Clear actor search"><X size={16} /></button>}
+        </label>
+        <div className="actor-suggestions" aria-live="polite">
+          {suggestions.map((option) => {
+            const selected = profile.favoriteActors.some((actor) => actor.toLocaleLowerCase() === option.name.toLocaleLowerCase());
+            return (
+              <button key={option.name} className={selected ? "is-active" : ""} onClick={() => toggleActor(option.name)}>
+                <span className="actor-suggestion__avatar">{option.name.split(/\s+/).slice(0, 2).map((part) => part[0]).join("")}</span>
+                <span><strong>{option.name}</strong><small>{option.availableTitleCount} prominent role{option.availableTitleCount === 1 ? "" : "s"} on your services</small></span>
+                {selected ? <Check size={17} /> : <Plus size={17} />}
+              </button>
+            );
+          })}
+          {!suggestions.length && <div className="actor-empty"><Search size={22} /><strong>No available prominent roles found</strong><p>Try another actor or update your subscribed services.</p></div>}
+        </div>
+      </section>
+
+      <button className="find-button actor-results-button" disabled={!profile.favoriteActors.length} onClick={() => onFind(profile.favoriteActors)}>
+        <span><UserCheck size={19} /> Show available titles</span>
+        <small>{profile.favoriteActors.length ? `Featuring ${profile.favoriteActors.join(", ")}` : "Choose at least one actor"}</small>
+      </button>
+      <div className="actor-screen__note"><ShieldCheck size={15} /><p>“Prominent” means the actor is in the catalog&apos;s principal cast, not a cameo or incidental credit.</p></div>
+    </main>
+  );
+}
+
+function ResultsScreen({ profile, recommendations, focusActors = [], onBack, onDetails, onFeedback }: { profile: ViewerProfile; recommendations: Recommendation[]; focusActors?: string[]; onBack: () => void; onDetails: (title: Title) => void; onFeedback: (message: string, title?: Title) => void }) {
+  const actorFocused = focusActors.length > 0;
   return (
     <main className="results-screen page-content">
-      <div className="results-heading"><button className="icon-button" onClick={onBack} aria-label="Back"><ArrowLeft size={20} /></button><div><p className="kicker">TOP {recommendations.length} · ONE GOOD NIGHT</p><h1>{recommendations.length === 10 ? "Here’s your top ten." : `${recommendations.length} picks fit tonight.`}</h1></div><button className="icon-button" onClick={onBack} aria-label="Adjust choices"><RefreshCw size={18} /></button></div>
+      <div className="results-heading"><button className="icon-button" onClick={onBack} aria-label="Back"><ArrowLeft size={20} /></button><div><p className="kicker">{actorFocused ? `${recommendations.length} ON YOUR SERVICES · PROMINENT ROLES` : `TOP ${recommendations.length} · ONE GOOD NIGHT`}</p><h1>{actorFocused ? `With ${focusActors.join(" or ")}.` : recommendations.length === 10 ? "Here’s your top ten." : `${recommendations.length} picks fit tonight.`}</h1></div><button className="icon-button" onClick={onBack} aria-label={actorFocused ? "Change actors" : "Adjust choices"}><RefreshCw size={18} /></button></div>
       <div className="recommendation-stack">
-        {recommendations.map((recommendation, index) => <RecommendationCard key={recommendation.title.id} profile={profile} recommendation={recommendation} priority={index === 0} onDetails={onDetails} onFeedback={onFeedback} />)}
+        {recommendations.map((recommendation, index) => <RecommendationCard key={recommendation.title.id} profile={profile} recommendation={recommendation} priority={index === 0} focusActors={focusActors} onDetails={onDetails} onFeedback={onFeedback} />)}
+        {!recommendations.length && <div className="results-empty"><UserCheck size={28} /><h2>Nothing prominent is included right now.</h2><p>Try another favorite actor or update your services. Rentals and incidental credits stay out of this list.</p><button className="secondary-button" onClick={onBack}>Choose another actor</button></div>}
       </div>
       <p className="availability-disclaimer"><Info size={14} /> Provider labels use demo seed data until a TMDB key is connected. The production data layer rechecks region and availability type.</p>
     </main>
   );
 }
 
-function RecommendationCard({ profile, recommendation, priority, onDetails, onFeedback }: { profile: ViewerProfile; recommendation: Recommendation; priority: boolean; onDetails: (title: Title) => void; onFeedback: (message: string, title?: Title) => void }) {
+function RecommendationCard({ profile, recommendation, priority, focusActors = [], onDetails, onFeedback }: { profile: ViewerProfile; recommendation: Recommendation; priority: boolean; focusActors?: string[]; onDetails: (title: Title) => void; onFeedback: (message: string, title?: Title) => void }) {
   const { title } = recommendation;
   const availability = displayProvider(profile, title);
+  const matchedActors = focusActors.filter((actor) => hasProminentActor(title, actor));
   return (
     <article className={`recommendation-card ${priority ? "recommendation-card--hero" : ""}`}>
       <div className="recommendation-card__label"><span>#{String(recommendation.rank).padStart(2, "0")} · {recommendation.lane}</span><small>{priority ? "Highest confidence" : recommendation.lane === "Wild Card" ? "Most adventurous" : recommendation.rank < 5 ? "Strong personal fit" : "A wider orbit"}</small></div>
@@ -1510,6 +1607,7 @@ function RecommendationCard({ profile, recommendation, priority, onDetails, onFe
       <div className="recommendation-card__body">
         <div className="title-meta"><span>{title.year}</span><span>{title.kind}</span><span>{title.runtime}</span></div>
         <div className="title-row"><h2>{title.name}</h2><button className="icon-button" onClick={() => onFeedback("Saved to your watchlist")} aria-label="Save"><Bookmark size={19} /></button></div>
+        {matchedActors.length > 0 && <div className="actor-match"><UserCheck size={16} /><span><strong>Prominent role</strong> · {matchedActors.join(", ")}</span></div>}
         <p className="recommendation-reason">{recommendation.explanation}</p>
         <div className="availability-row"><span className="provider-mark">{availability.provider.slice(0, 2)}</span><div><small>{availability.label}</small><strong>{availability.provider}</strong></div>{recommendation.rental && <span className="rental-note">Rental</span>}</div>
         {recommendation.friendContext && <FriendBanner context={recommendation.friendContext} />}
@@ -1763,6 +1861,7 @@ export function WhatToWatchApp() {
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
   const [selectedVibe, setSelectedVibe] = useState("");
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [resultActors, setResultActors] = useState<string[]>([]);
   const [detailsTitle, setDetailsTitle] = useState<Title | null>(null);
   const [person, setPerson] = useState<string | null>(null);
   const [feedbackTitle, setFeedbackTitle] = useState<Title | undefined>();
@@ -1778,7 +1877,11 @@ export function WhatToWatchApp() {
         if (saved) {
           const parsed = JSON.parse(saved) as Partial<AppStore>;
           if (Array.isArray(parsed.profiles)) setStore({
-            profiles: parsed.profiles.map((savedProfile) => ({ ...savedProfile, shareWithFriends: savedProfile.shareWithFriends ?? "ratings_and_reviews" })),
+            profiles: parsed.profiles.map((savedProfile) => ({
+              ...savedProfile,
+              favoriteActors: Array.isArray(savedProfile.favoriteActors) ? savedProfile.favoriteActors : [],
+              shareWithFriends: savedProfile.shareWithFriends ?? "ratings_and_reviews",
+            })),
             feedback: Array.isArray(parsed.feedback) ? parsed.feedback : [],
             friendProfiles: Array.isArray(parsed.friendProfiles) ? parsed.friendProfiles : seedFriendProfiles,
             friendships: Array.isArray(parsed.friendships) ? parsed.friendships : seedFriendships,
@@ -1823,7 +1926,17 @@ export function WhatToWatchApp() {
   const addProfile = (next: ViewerProfile) => { setStore((current) => ({ ...current, profiles: [...current.profiles, next] })); setActiveProfileId(next.id); setProfileEditor(null); setShowProfiles(false); };
   const deleteProfile = (id: string) => { if (store.profiles.length <= 1) { setToast("Keep at least one profile"); return; } setStore((current) => ({ ...current, profiles: current.profiles.filter((item) => item.id !== id), feedback: current.feedback.filter((item) => item.profileId !== id), friendships: current.friendships.filter((item) => item.requesterProfileId !== id && item.addresseeProfileId !== id), friendReviews: current.friendReviews.filter((item) => item.authorProfileId !== id), friendRecommendations: current.friendRecommendations.filter((item) => item.senderProfileId !== id && item.recipientProfileId !== id) })); if (activeProfileId === id) { setActiveProfileId(null); setShowProfiles(true); } };
   const rate = (id: string, score: number) => { if (!profile) return; const title = titleById(id); updateProfile({ ...profile, ratings: { ...profile.ratings, [id]: score } }); setToast(`${title?.name ?? "Title"} rated ${score}/10`); if (title && score >= 8) setPostRating({ title, rating: score }); };
-  const find = () => { if (!profile) return; const result = buildRecommendations(profile, selectedMoods, selectedVibe || "Surprise", store); setRecommendations(result); setScreen("results"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const find = () => { if (!profile) return; const result = buildRecommendations(profile, selectedMoods, selectedVibe || "Surprise", store); setResultActors([]); setRecommendations(result); setScreen("results"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const findWithActors = (actors: string[]) => {
+    if (!profile) return;
+    const favoriteActors = [...new Set(actors.map((actor) => actor.trim()).filter(Boolean))];
+    const nextProfile = { ...profile, favoriteActors };
+    updateProfile(nextProfile);
+    setResultActors(favoriteActors);
+    setRecommendations(buildRecommendations(nextProfile, [], "Surprise", store, { favoriteActors }));
+    setScreen("results");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const recordFeedback = (title: Title, value: { reason?: RecommendationFeedbackReason; recommendationScore?: number; label: string }) => {
     if (!profile) return;
     const event: FeedbackEvent = {
@@ -1832,8 +1945,8 @@ export function WhatToWatchApp() {
       titleId: title.id,
       reason: value.reason,
       recommendationScore: value.recommendationScore,
-      moods: [...selectedMoods],
-      vibe: selectedVibe || "Surprise",
+      moods: resultActors.length ? [] : [...selectedMoods],
+      vibe: resultActors.length ? "Surprise" : selectedVibe || "Surprise",
       createdAt: new Date().toISOString(),
     };
     setStore((current) => ({ ...current, feedback: [...current.feedback, event] }));
@@ -1883,8 +1996,9 @@ export function WhatToWatchApp() {
   return (
     <div className="app-shell">
       <AppHeader profile={profile} onProfiles={() => setShowProfiles(true)} onMenu={() => setScreen("settings")} />
-      {screen === "home" && <HomeScreen profile={profile} selectedMoods={selectedMoods} setSelectedMoods={setSelectedMoods} selectedVibe={selectedVibe} setSelectedVibe={setSelectedVibe} onFind={find} />}
-      {screen === "results" && <ResultsScreen profile={profile} recommendations={recommendations.length ? recommendations : buildRecommendations(profile, selectedMoods, selectedVibe, store)} onBack={() => setScreen("home")} onDetails={setDetailsTitle} onFeedback={feedback} />}
+      {screen === "home" && <HomeScreen profile={profile} selectedMoods={selectedMoods} setSelectedMoods={setSelectedMoods} selectedVibe={selectedVibe} setSelectedVibe={setSelectedVibe} onFind={find} onActorFind={() => setScreen("actor")} />}
+      {screen === "actor" && <ActorDiscoveryScreen profile={profile} onChange={(favoriteActors) => updateProfile({ ...profile, favoriteActors })} onFind={findWithActors} onBack={() => setScreen("home")} />}
+      {screen === "results" && <ResultsScreen profile={profile} recommendations={recommendations} focusActors={resultActors} onBack={() => setScreen(resultActors.length ? "actor" : "home")} onDetails={setDetailsTitle} onFeedback={feedback} />}
       {screen === "rate" && <RateScreen profile={profile} onRate={rate} onDetails={setDetailsTitle} />}
       {screen === "taste" && <TasteScreen profile={profile} onRate={() => setScreen("rate")} />}
       {screen === "settings" && <SettingsScreen profile={profile} feedback={store.feedback.filter((item) => item.profileId === profile.id)} store={store} onChange={updateProfile} onProfiles={() => setProfileEditor("manage")} onToast={setToast} onFriendship={changeFriendship} />}
