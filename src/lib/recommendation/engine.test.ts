@@ -128,6 +128,53 @@ describe("availability and content gates", () => {
 });
 
 describe("personal taste behavior", () => {
+  it("uses questionnaire dimensions independently from genre ratings", () => {
+    const slow = title("slow", { pacing: "slow", toneTags: ["slow-burn"] });
+    const fast = title("fast", { pacing: "fast", toneTags: ["fast"] });
+    const viewer = profile({
+      questionnaire: { dimensionScores: { slowPacing: 100 }, genreScores: { Thriller: 4 } },
+    });
+    expect(recommendForProfile({ profile: viewer, catalog: [fast, slow] })[0].title.id).toBe("slow");
+  });
+
+  it("matches genre-matrix aliases and tag-level genres", () => {
+    const historical = title("historical", { genres: ["History"], toneTags: ["based on true events"] });
+    const darkComedy = title("dark-comedy", { genres: ["Comedy"], toneTags: ["dark comedy"] });
+    const neutral = title("neutral", { genres: ["Drama"], toneTags: ["warm"] });
+    const historicalViewer = profile({
+      questionnaire: { dimensionScores: {}, genreScores: { Historical: 7, Drama: 4 } },
+    });
+    const comedyViewer = profile({
+      questionnaire: { dimensionScores: {}, genreScores: { "Dark Comedy": 7, Comedy: 4, Drama: 4 } },
+    });
+    expect(recommendForProfile({ profile: historicalViewer, catalog: [neutral, historical] })[0].title.id).toBe("historical");
+    expect(recommendForProfile({ profile: comedyViewer, catalog: [neutral, darkComedy] })[0].title.id).toBe("dark-comedy");
+  });
+
+  it("uses forced-choice pace, release, and familiarity tradeoffs", () => {
+    const familiarSlowCanon = title("familiar-slow-canon", {
+      pacing: "slow",
+      canonicalScore: 90,
+      trendingScore: 10,
+    });
+    const novelFastRelease = title("novel-fast-release", {
+      pacing: "fast",
+      canonicalScore: 10,
+      trendingScore: 90,
+      subgenres: ["Unfamiliar"],
+      toneTags: ["new"],
+    });
+    const viewer = profile({
+      questionnaire: {
+        dimensionScores: {},
+        genreScores: {},
+        tradeoffScores: { pace: 1, release: 1, familiarity: 1 },
+      },
+    });
+    expect(recommendForProfile({ profile: viewer, catalog: [familiarSlowCanon, novelFastRelease] })[0].title.id)
+      .toBe("novel-fast-release");
+  });
+
   it("excludes watched titles normally and selects favorites in rewatch mode", () => {
     const watched = title("watched");
     const unseen = title("unseen");
@@ -187,6 +234,43 @@ describe("personal taste behavior", () => {
     expect(recommendForProfile({ profile: a, catalog })[0].title.id).toBe("a-next");
     expect(recommendForProfile({ profile: b, catalog })[0].title.id).toBe("b-next");
     expect(a.ratings).not.toBe(b.ratings);
+  });
+
+  it("hard-excludes explicit rejection and availability feedback", () => {
+    const catalog = [title("already"), title("unwanted"), title("wrong-data"), title("gone"), title("eligible")];
+    const feedback = [
+      { titleId: "already", reason: "already-seen" as const },
+      { titleId: "unwanted", reason: "not-interested" as const },
+      { titleId: "wrong-data", reason: "misclassified" as const },
+      { titleId: "gone", reason: "not-available" as const },
+    ].map((item) => ({ ...item, profileId: "p1", modelVersion: "1", createdAt: NOW }));
+    expect(recommendForProfile({ profile: profile(), catalog, feedback }).map((pick) => pick.title.id)).toEqual(["eligible"]);
+  });
+
+  it("keeps wrong-night feedback contextual instead of corrupting long-term taste", () => {
+    const candidate = title("candidate");
+    const feedback = [{
+      profileId: "p1",
+      titleId: candidate.id,
+      modelVersion: "1",
+      reason: "good-wrong-night" as const,
+      context: { moods: ["thriller" as const], vibes: ["try-something-new" as const] },
+      createdAt: NOW,
+    }];
+    expect(recommendForProfile({ profile: profile(), catalog: [candidate], moods: ["thriller"], vibes: ["try-something-new"], feedback })).toEqual([]);
+    expect(recommendForProfile({ profile: profile(), catalog: [candidate], moods: ["thriller"], vibes: ["surprise-me"], feedback })).toHaveLength(1);
+  });
+
+  it("learns soft aversions and recommendation-quality scores from feedback", () => {
+    const dark = title("dark", { toneTags: ["dark"], actors: ["Actor A"] });
+    const light = title("light", { toneTags: ["warm"], actors: ["Actor B"] });
+    const feedback = [
+      { profileId: "p1", titleId: "dark", modelVersion: "1", reason: "too-dark" as const, createdAt: NOW },
+      { profileId: "p1", titleId: "dark", modelVersion: "1", recommendationScore: 2, createdAt: NOW },
+    ];
+    const picks = recommendForProfile({ profile: profile(), catalog: [dark, light], feedback });
+    expect(picks[0].title.id).toBe("light");
+    expect(picks.find((pick) => pick.title.id === "dark")?.contributions.some((item) => item.feature === "feedbackMatch")).toBe(true);
   });
 });
 

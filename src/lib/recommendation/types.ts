@@ -148,6 +148,7 @@ export interface QuestionnaireProfile {
   completedAt?: string;
   dimensionScores: Partial<Record<QuestionnaireDimension, number>>;
   genreScores: Record<string, number>;
+  tradeoffScores?: Partial<Record<"pace" | "release" | "familiarity", number>>;
 }
 
 export interface FavoritePeople {
@@ -175,23 +176,29 @@ export interface Profile {
   favoritePeople: FavoritePeople;
 }
 
+export type RecommendationFeedbackReason =
+  | "already-seen"
+  | "not-interested"
+  | "wrong-mood"
+  | "too-dark"
+  | "too-light"
+  | "too-old"
+  | "too-long"
+  | "disliked-actor"
+  | "misclassified"
+  | "not-available"
+  | "good-wrong-night";
+
 export interface RecommendationFeedback {
   profileId: string;
   titleId: string;
   modelVersion: string;
   recommendationScore?: number;
-  reason?:
-    | "already-seen"
-    | "not-interested"
-    | "wrong-mood"
-    | "too-dark"
-    | "too-light"
-    | "too-old"
-    | "too-long"
-    | "disliked-actor"
-    | "misclassified"
-    | "not-available"
-    | "good-wrong-night";
+  reason?: RecommendationFeedbackReason;
+  context?: {
+    moods?: Mood[];
+    vibes?: Vibe[];
+  };
   createdAt: string;
 }
 
@@ -201,6 +208,9 @@ export interface RecommendationWeights {
   writerAffinity: number;
   cinematographerAffinity: number;
   genreMatch: number;
+  questionnaireMatch: number;
+  tradeoffMatch: number;
+  feedbackMatch: number;
   subgenreMatch: number;
   moodMatch: number;
   vibeMatch: number;
@@ -329,6 +339,7 @@ export interface RecommendForProfileInput {
   config?: RecommendationConfig;
   limit?: number;
   social?: SocialRecommendationInput;
+  feedback?: readonly RecommendationFeedback[];
 }
 
 export interface PreferenceBlendInput {

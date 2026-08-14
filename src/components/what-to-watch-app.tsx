@@ -41,6 +41,23 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import {
+  defaultRecommendationConfig,
+  importTunedConfiguration,
+  recommendForProfile,
+} from "@/lib/recommendation/engine";
+import { mapQuestionnaireAnswers } from "@/lib/recommendation/intake";
+import type {
+  FriendContext as EngineFriendContext,
+  Mood as EngineMood,
+  RecommendationConfig,
+  RecommendationFeedbackReason,
+  RecommendationWeights,
+  SocialRecommendationInput,
+  Title as EngineTitle,
+  Vibe as EngineVibe,
+} from "@/lib/recommendation/types";
+
 import { ProviderSelector } from "./provider-selector";
 
 type Screen = "home" | "results" | "rate" | "taste" | "settings";
@@ -50,15 +67,7 @@ type RentalMode = "never" | "exceptional" | "always";
 type ShareMode = "ratings_and_reviews" | "ratings_only" | "nothing";
 type FriendshipStatus = "pending" | "accepted" | "declined" | "blocked";
 
-type ModelWeights = {
-  directorAffinity: number;
-  genreMatch: number;
-  moodMatch: number;
-  canonicalSignal: number;
-  questionnairePrior: number;
-  dislikedPenalty: number;
-  explorationBonus: number;
-};
+type ModelWeights = RecommendationWeights;
 
 type Title = {
   id: string;
@@ -160,7 +169,10 @@ type FeedbackEvent = {
   id: string;
   profileId: string;
   titleId: string;
-  reason: string;
+  reason?: RecommendationFeedbackReason | string;
+  recommendationScore?: number;
+  moods?: string[];
+  vibe?: string;
   createdAt: string;
 };
 
@@ -175,25 +187,7 @@ type AppStore = {
 
 const STORAGE_KEY = "what-to-watch:v4";
 
-const DEFAULT_WEIGHTS: ModelWeights = {
-  directorAffinity: 1.15,
-  genreMatch: 1,
-  moodMatch: 1.25,
-  canonicalSignal: 1,
-  questionnairePrior: 1,
-  dislikedPenalty: 1,
-  explorationBonus: 0.35,
-};
-
-const WEIGHT_LIMITS: Record<keyof ModelWeights, [number, number]> = {
-  directorAffinity: [0, 3],
-  genreMatch: [0, 3],
-  moodMatch: [0, 3],
-  canonicalSignal: [0, 3],
-  questionnairePrior: [0, 2],
-  dislikedPenalty: [0, 3],
-  explorationBonus: [0, 1.5],
-};
+const DEFAULT_WEIGHTS: ModelWeights = defaultRecommendationConfig.weights;
 
 const moods: { id: string; label: string; icon: LucideIcon }[] = [
   { id: "Comedy", label: "Comedy", icon: Sparkles },
@@ -775,14 +769,6 @@ const seedFriendRecommendations: FriendRecommendation[] = [
   { id: "rec-jane-maya-after-yang", senderProfileId: "friend-jane", recipientProfileId: "maya", titleId: "after-yang", note: "This has the gentle, human sci-fi feeling you always respond to.", createdAt: "2026-08-04T21:15:00.000Z" },
 ];
 
-function seededNoise(value: string) {
-  let hash = 0;
-  for (let index = 0; index < value.length; index += 1) {
-    hash = (hash * 31 + value.charCodeAt(index)) % 997;
-  }
-  return (hash / 997 - 0.5) * 8;
-}
-
 function migrateCatalogTitleIds(store: AppStore, nextCatalog: readonly Title[]): AppStore {
   const identity = (title: Title) => `${title.name.trim().toLowerCase()}::${title.year}`;
   const nextIdByIdentity = new Map(nextCatalog.map((title) => [identity(title), title.id]));
@@ -928,169 +914,212 @@ function friendEvidence(profile: ViewerProfile, titleId: string, store: AppStore
   };
 }
 
+const UI_VIBE_TO_ENGINE: Record<string, EngineVibe> = {
+  Favorite: "rewatch-favorite",
+  Classic: "rediscover-classic",
+  New: "try-something-new",
+  International: "popular-international",
+  Binge: "bingeable-tv",
+  Trending: "trending-series",
+  Hidden: "hidden-gem",
+  Director: "complete-director",
+  Criterion: "criterion-pick",
+  FilmSchool: "film-school-night",
+  BlindSpot: "blind-spot",
+  Deeper: "go-deeper",
+  Friends: "friends-picks",
+  Surprise: "surprise-me",
+};
+
+const FEEDBACK_OPTIONS: ReadonlyArray<{ label: string; reason: RecommendationFeedbackReason }> = [
+  { label: "Already seen", reason: "already-seen" },
+  { label: "Not interested", reason: "not-interested" },
+  { label: "Wrong mood", reason: "wrong-mood" },
+  { label: "Too dark", reason: "too-dark" },
+  { label: "Too light", reason: "too-light" },
+  { label: "Too old", reason: "too-old" },
+  { label: "Too long", reason: "too-long" },
+  { label: "Don't like this actor", reason: "disliked-actor" },
+  { label: "Not really this genre", reason: "misclassified" },
+  { label: "Not actually available", reason: "not-available" },
+  { label: "Good suggestion, wrong night", reason: "good-wrong-night" },
+];
+
+function parseRuntime(runtime: string): number | undefined {
+  const hours = Number(runtime.match(/(\d+)h/)?.[1] ?? 0);
+  const minuteRange = runtime.match(/(\d+)[–-](\d+)m/);
+  const minutes = minuteRange
+    ? (Number(minuteRange[1]) + Number(minuteRange[2])) / 2
+    : Number(runtime.match(/(\d+)m/)?.[1] ?? 0);
+  const total = hours * 60 + minutes;
+  return total || undefined;
+}
+
+function toEngineTitle(title: Title, region: string): EngineTitle {
+  const runtimeMinutes = parseRuntime(title.runtime);
+  const international = title.tags.includes("international");
+  const seasons = Number(title.runtime.match(/(\d+) seasons?/)?.[1] ?? 0) || undefined;
+  return {
+    id: title.id,
+    name: title.name,
+    year: title.year,
+    contentType: title.kind === "Movie" ? "movie" : title.kind === "Series" ? "series" : "stand-up",
+    synopsis: title.synopsis,
+    runtimeMinutes: title.kind === "Series" ? undefined : runtimeMinutes,
+    episodeRuntimeMinutes: title.kind === "Series" ? runtimeMinutes : undefined,
+    seasons,
+    completed: title.kind === "Series" ? seasons !== undefined : undefined,
+    serialized: title.kind === "Series" ? title.tags.includes("bingeable") : undefined,
+    genres: title.genres,
+    subgenres: title.tags,
+    toneTags: title.tags,
+    themes: [],
+    pacing: title.tags.some((tag) => ["fast", "propulsive"].includes(tag))
+      ? "fast"
+      : title.tags.some((tag) => ["slow-burn", "meditative"].includes(tag))
+        ? "slow"
+        : "moderate",
+    countries: [international ? "International" : region],
+    languages: [international ? "international" : "en"],
+    directors: [title.director],
+    writers: title.writers,
+    cinematographers: title.cinematographer ? [title.cinematographer] : [],
+    actors: title.cast,
+    canonicalScore: title.baseline,
+    canonicalMemberships: (title.canonical ?? []).map((list) => ({ list, source: "demo", version: "1" })),
+    criterionCollection: Boolean(title.criterion),
+    popularity: title.popularity,
+    trendingScore: title.popularity,
+    availability: title.providers.map((serviceId) => ({
+      serviceId,
+      region,
+      kind: title.availabilityType,
+      checkedAt: "2026-08-13T00:00:00.000Z",
+      source: "demo",
+    })),
+    posterUrl: title.poster,
+    backdropUrl: title.backdrop,
+  };
+}
+
+function toSocialInput(store: AppStore, activeProfileId: string): SocialRecommendationInput {
+  const profiles: SocialProfile[] = [
+    ...store.friendProfiles,
+    ...store.profiles.filter((profile) => profile.id !== activeProfileId).map((profile) => ({
+      id: profile.id,
+      name: profile.name,
+      avatar: profile.avatar,
+      color: profile.color,
+      ratings: profile.ratings,
+      ratingDates: {},
+      sharing: profile.shareWithFriends,
+    })),
+  ];
+  return {
+    friendProfiles: profiles.map((friend) => ({
+      profileId: friend.id,
+      displayName: friend.name,
+      shareWithFriends: friend.sharing,
+      ratings: Object.entries(friend.ratings).map(([titleId, score]) => ({
+        titleId,
+        score,
+        watched: true,
+        ratedAt: friend.ratingDates?.[titleId] ?? "2026-01-01T00:00:00.000Z",
+      })),
+    })),
+    friendships: store.friendships.map((friendship) => ({
+      requesterProfileId: friendship.requesterProfileId,
+      addresseeProfileId: friendship.addresseeProfileId,
+      status: friendship.status === "blocked" ? "declined" : friendship.status,
+    })),
+    reviews: store.friendReviews.map((review) => ({
+      authorProfileId: review.authorProfileId,
+      titleId: review.titleId,
+      note: review.note,
+      createdAt: review.createdAt,
+    })),
+    recommendations: store.friendRecommendations.map((recommendation) => ({
+      senderProfileId: recommendation.senderProfileId,
+      recipientProfileId: recommendation.recipientProfileId,
+      titleId: recommendation.titleId,
+      note: recommendation.note,
+      createdAt: recommendation.createdAt,
+    })),
+  };
+}
+
+function normalizedFeedbackReason(reason?: string): RecommendationFeedbackReason | undefined {
+  if (!reason) return undefined;
+  return FEEDBACK_OPTIONS.find((option) => option.label === reason || option.reason === reason)?.reason;
+}
+
 function buildRecommendations(
   profile: ViewerProfile,
   selectedMoods: string[],
   selectedVibe: string,
   store: AppStore,
 ): Recommendation[] {
-  const weights = { ...DEFAULT_WEIGHTS, ...profile.weights };
-  const wantsRewatch = selectedVibe === "Favorite";
-  const rated = Object.entries(profile.ratings);
-  const ratedTitles = rated.flatMap(([id, score]) => {
-    const title = catalog.find((candidate) => candidate.id === id);
-    return title ? [{ title, score }] : [];
-  });
-  const likedTitles = ratedTitles.filter(({ score }) => score >= 8);
-  const dislikedTitles = ratedTitles.filter(({ score }) => score <= 4);
-  const directorEvidence = new Map<string, number>();
-  const genreEvidence = new Map<string, number[]>();
-  likedTitles.forEach(({ title, score }) => {
-    directorEvidence.set(title.director, (directorEvidence.get(title.director) ?? 0) + 1);
-    title.genres.forEach((genre) => genreEvidence.set(genre, [...(genreEvidence.get(genre) ?? []), score]));
-  });
-  const rejected = new Set(
-    store.feedback
-      .filter((event) => event.profileId === profile.id && !event.reason.startsWith("Recommendation rated") && event.reason !== "Good suggestion, wrong night")
-      .map((event) => event.titleId),
-  );
-  const questionnaireWeight = Math.max(0.12, Math.exp(-rated.length / 12)) * weights.questionnairePrior;
-  const questionnaireSignal = (title: Title) => {
-    const genreValues = title.genres
-      .map((genre) => profile.questionnaire[`genre:${genre}`])
-      .filter((value): value is number => typeof value === "number");
-    const genrePrior = genreValues.length
-      ? genreValues.reduce((sum, value) => sum + (value - 50) / 50, 0) / genreValues.length
-      : 0;
-    const traits: Array<[string, boolean]> = [
-      ["cerebral", title.tags.some((tag) => ["cerebral", "investigative", "ambiguous", "nonlinear"].includes(tag))],
-      ["darkness", title.tags.some((tag) => ["dark", "moral ambiguity", "psychological"].includes(tag))],
-      ["ambiguity", title.tags.includes("ambiguous")],
-      ["slowPace", title.tags.includes("slow-burn") || title.tags.includes("meditative")],
-      ["international", title.tags.includes("international")],
-      ["standup", title.kind === "Stand-up"],
-      ["binge", title.kind === "Series" && title.tags.includes("bingeable")],
-      ["classics", title.year < 1985],
-    ];
-    const traitPrior = traits.reduce((sum, [key, applies]) => {
-      const value = profile.questionnaire[key];
-      return applies && typeof value === "number" ? sum + (value - 50) / 50 : sum;
-    }, 0);
-    return (genrePrior * 7 + traitPrior * 2.25) * questionnaireWeight;
+  const engineCatalog = catalog.map((title) => toEngineTitle(title, profile.region));
+  const config: RecommendationConfig = {
+    ...defaultRecommendationConfig,
+    modelVersion: String(profile.modelVersion),
+    weights: { ...defaultRecommendationConfig.weights, ...profile.weights },
   };
-  const candidates = catalog
-    .filter((title) => (wantsRewatch ? (profile.ratings[title.id] ?? 0) >= 8 : !profile.ratings[title.id]))
-    .map((title) => {
-      const social = friendEvidence(profile, title.id, store);
-      const moodScore = selectedMoods.length
-        ? selectedMoods.some((mood) => title.genres.includes(mood) || (mood === "Comedy" && title.genres.includes("Comedy")))
-          ? 12 * weights.moodMatch
-          : -18 * weights.moodMatch
-        : 2;
-      const included =
-        title.availabilityType === "subscription" &&
-        title.providers.some((provider) => profile.subscriptions.includes(provider));
-      const availabilityScore = included && title.availabilityType === "subscription" ? 10 : title.availabilityType === "free" ? 4 : -8;
-      const directorCount = directorEvidence.get(title.director) ?? 0;
-      const directorScore = directorCount * 3.5 * weights.directorAffinity;
-      const genreScore = title.genres.reduce((sum, genre) => {
-        const scores = genreEvidence.get(genre) ?? [];
-        return sum + (scores.length ? ((scores.reduce((total, score) => total + score, 0) / scores.length) - 7) * 2 : 0);
-      }, 0) * weights.genreMatch;
-      const dislikedOverlap = dislikedTitles.reduce((sum, item) => {
-        const sharedGenres = item.title.genres.filter((genre) => title.genres.includes(genre)).length;
-        return sum + sharedGenres + (item.title.director === title.director ? 2 : 0);
-      }, 0);
-      const negativeScore = dislikedOverlap * -3 * weights.dislikedPenalty + (rejected.has(title.id) ? -18 : 0);
-      const canonicalScore = ((title.criterion ? 4 : 0) + (title.canonical?.length ?? 0) * 2) * weights.canonicalSignal;
-      let vibeScore = 0;
-      if (selectedVibe === "Classic" && (title.canonical?.length || title.year < 1985)) vibeScore += 12;
-      if (selectedVibe === "International" && title.tags.includes("international")) vibeScore += 12;
-      if (selectedVibe === "Binge" && title.kind === "Series") vibeScore += 14;
-      if (selectedVibe === "Trending") vibeScore += (title.popularity - 50) / 4;
-      if (selectedVibe === "Hidden" && title.popularity < 65) vibeScore += 10;
-      if (selectedVibe === "New" && title.popularity < 80) vibeScore += 5;
-      if (selectedVibe === "Director" && directorCount > 0) vibeScore += 13;
-      if (selectedVibe === "Criterion" && title.criterion) vibeScore += 16;
-      if (selectedVibe === "FilmSchool" && (title.canonical?.length || title.year < 1990)) vibeScore += 14;
-      if (selectedVibe === "BlindSpot" && title.canonical?.length && title.popularity > 65) vibeScore += 12;
-      if (selectedVibe === "Deeper" && (directorCount > 0 || title.genres.some((genre) => genreEvidence.has(genre)))) vibeScore += 10;
-      if (selectedVibe === "Favorite") vibeScore += (profile.ratings[title.id] ?? 0) * 1.5;
-      if (selectedVibe === "Friends" && social.context) vibeScore += social.score;
-      if (selectedMoods.includes("Stand-up") && title.kind !== "Stand-up") vibeScore -= 40;
-      if (!selectedMoods.includes("Stand-up") && title.kind === "Stand-up") vibeScore -= 16;
-      return {
-        title,
-        raw: title.baseline + moodScore + availabilityScore + directorScore + genreScore + negativeScore + canonicalScore + vibeScore + questionnaireSignal(title),
-        included,
-        directorCount,
-        friendContext: social.context,
-      };
-    });
-
-  const bestSubscription = Math.max(
-    0,
-    ...candidates.filter((candidate) => candidate.included).map((candidate) => candidate.raw),
-  );
-  const allowed = candidates.filter((candidate) => {
-    if (candidate.title.availabilityType === "subscription") return candidate.included;
-    if (candidate.title.availabilityType === "free") return true;
-    if (profile.rentalMode === "never") return false;
-    if (profile.rentalMode === "always") return true;
-    return candidate.raw >= bestSubscription + 8;
+  const engineProfile = {
+    id: profile.id,
+    accountId: profile.id,
+    displayName: profile.name,
+    avatar: profile.avatar,
+    createdAt: "2026-01-01T00:00:00.000Z",
+    onboardingCompleted: profile.onboardingCompleted,
+    guest: profile.guest,
+    region: profile.region,
+    modelVersion: String(profile.modelVersion),
+    subscriptions: profile.subscriptions,
+    rentalMode: profile.rentalMode,
+    allowAdSupported: true,
+    ratings: Object.entries(profile.ratings).map(([titleId, score]) => ({
+      titleId,
+      score,
+      watched: true,
+      ratedAt: "2026-01-01T00:00:00.000Z",
+      source: "search" as const,
+    })),
+    questionnaire: mapQuestionnaireAnswers(profile.questionnaire),
+    favoritePeople: { actors: [], directors: [], writers: [], cinematographers: [] },
+  };
+  const recommendations = recommendForProfile({
+    profile: engineProfile,
+    catalog: engineCatalog,
+    moods: selectedMoods.map((mood) => mood.toLowerCase() as EngineMood),
+    vibes: [UI_VIBE_TO_ENGINE[selectedVibe] ?? "surprise-me"],
+    config,
+    social: toSocialInput(store, profile.id),
+    feedback: store.feedback.map((item) => ({
+      profileId: item.profileId,
+      titleId: item.titleId,
+      modelVersion: String(profile.modelVersion),
+      reason: normalizedFeedbackReason(item.reason),
+      recommendationScore: item.recommendationScore,
+      context: {
+        moods: item.moods?.map((mood) => mood.toLowerCase() as EngineMood),
+        vibes: item.vibe ? [UI_VIBE_TO_ENGINE[item.vibe] ?? "surprise-me"] : undefined,
+      },
+      createdAt: item.createdAt,
+    })),
   });
-
-  const lanes = [
-    { name: "Best Bet", exploration: 0.12 },
-    { name: "Close Second", exploration: 0.18 },
-    { name: "Right Mood", exploration: 0.24 },
-    { name: "Creator Match", exploration: 0.32 },
-    { name: "Something Different", exploration: 0.44 },
-    { name: "Hidden Gem", exploration: 0.56 },
-    { name: "Go Deeper", exploration: 0.66 },
-    { name: "Film School Pick", exploration: 0.74 },
-    { name: "Left Field", exploration: 0.86 },
-    { name: "Wild Card", exploration: 1 },
-  ];
-  const used = new Set<string>();
-  return lanes.flatMap((lane, index) => {
-    const ranked = allowed
-      .filter((candidate) => !used.has(candidate.title.id))
-      .map((candidate) => ({
-        ...candidate,
-        laneScore:
-          candidate.raw +
-          seededNoise(`${profile.id}:${profile.modelVersion}:${candidate.title.id}:${selectedMoods.join()}:${selectedVibe}`) * lane.exploration * (1 + weights.explorationBonus) +
-          (lane.name === "Creator Match" && candidate.directorCount > 0 ? 6 : 0) +
-          (lane.name === "Something Different" && !candidate.title.genres.some((genre) => genreEvidence.has(genre)) ? 5 : 0) +
-          (lane.name === "Hidden Gem" && candidate.title.popularity < 65 ? 6 : 0) +
-          (lane.name === "Film School Pick" && (candidate.title.canonical?.length || candidate.title.criterion) ? 7 : 0) +
-          (lane.name === "Wild Card" && candidate.title.popularity < 68 ? 5 : 0),
-      }))
-      .sort((a, b) => b.laneScore - a.laneScore);
-    const pick = ranked[0];
-    if (!pick) return [];
-    used.add(pick.title.id);
-    const mood = selectedMoods[0]?.toLowerCase();
-    const creatorSignal = pick.directorCount >= 2
-      ? ` You have two or more strong ratings for ${pick.title.director}'s work.`
-      : pick.directorCount === 1
-        ? ` One strong ${pick.title.director} rating gives this a modest creator boost.`
-      : "";
-    const explanation = wantsRewatch
-      ? `You gave this ${profile.ratings[pick.title.id]}/10, and it still fits tonight's ${mood ?? "easy"} mood.`
-      : lane.name === "Wild Card"
-        ? `A more adventurous pick with ${pick.title.tags.slice(0, 2).join(" and ")} qualities that still overlap with your taste.`
-        : `It matches your interest in ${pick.title.tags.slice(0, 2).join(" and ")}${mood ? `, while fitting a ${mood} night` : ""}.${creatorSignal}`;
-    return {
-      rank: index + 1,
-      lane: lane.name,
-      title: pick.title,
-      match: Math.max(71, Math.min(97, Math.round(82 + (pick.raw - 90) * 0.45 - lane.exploration * 3))),
-      explanation,
-      rental: !pick.included && pick.title.availabilityType === "rental",
-      friendContext: pick.friendContext,
-    } satisfies Recommendation;
+  return recommendations.flatMap((recommendation) => {
+    const title = titleById(recommendation.title.id);
+    if (!title) return [];
+    return [{
+      rank: recommendation.rank,
+      lane: recommendation.lane,
+      title,
+      match: recommendation.matchScore,
+      explanation: recommendation.explanation,
+      rental: recommendation.requiresPayment && title.availabilityType === "rental",
+      friendContext: recommendation.friendContext as EngineFriendContext | undefined,
+    } satisfies Recommendation];
   });
 }
 
@@ -1651,13 +1680,17 @@ function SettingsScreen({ profile, feedback, store, onChange, onProfiles, onToas
       const parsed = JSON.parse(await file.text()) as Record<string, unknown>;
       if (parsed.schemaVersion !== 1 || !parsed.weights || typeof parsed.weights !== "object") throw new Error("Missing weights");
       const rawWeights = parsed.weights as Record<string, unknown>;
-      const safeWeights: Partial<ModelWeights> = {};
-      (Object.entries(WEIGHT_LIMITS) as Array<[keyof ModelWeights, [number, number]]>).forEach(([key, [minimum, maximum]]) => {
-        const value = rawWeights[key];
-        if (typeof value === "number" && Number.isFinite(value) && value >= minimum && value <= maximum) safeWeights[key] = value;
-      });
-      if (!Object.keys(safeWeights).length) throw new Error("No supported weights");
-      onChange({ ...profile, weights: { ...profile.weights, ...safeWeights }, modelVersion: profile.modelVersion + 1 });
+      const hasSupportedWeight = Object.keys(DEFAULT_WEIGHTS).some(
+        (key) => typeof rawWeights[key] === "number" && Number.isFinite(rawWeights[key]),
+      );
+      if (!hasSupportedWeight) throw new Error("No supported weights");
+      const currentConfig: RecommendationConfig = {
+        ...defaultRecommendationConfig,
+        modelVersion: String(profile.modelVersion),
+        weights: { ...defaultRecommendationConfig.weights, ...profile.weights },
+      };
+      const imported = importTunedConfiguration(parsed, currentConfig);
+      onChange({ ...profile, weights: imported.weights, modelVersion: profile.modelVersion + 1 });
       onToast(`Configuration imported as model v${profile.modelVersion + 1}. Raw history was untouched.`);
     } catch { onToast("That file is not a valid tuning configuration"); }
   };
@@ -1716,9 +1749,8 @@ function PostRatingSheet({ title, rating, friends, initialReview, onClose, onSav
   );
 }
 
-function FeedbackSheet({ title, onClose, onSubmit }: { title?: Title; onClose: () => void; onSubmit: (message: string) => void }) {
-  const options = ["Already seen", "Not interested", "Wrong mood", "Too dark", "Too light", "Too old", "Too long", "Don't like this actor", "Not really this genre", "Not actually available", "Good suggestion, wrong night"];
-  return <div className="modal-scrim" role="dialog" aria-modal="true" aria-label="Recommendation feedback"><div className="sheet feedback-sheet"><div className="sheet__header"><div><p className="kicker">HELP THE NEXT PICK</p><h2>{title ? `How did ${title.name} land?` : "Tell us more"}</h2></div><button className="icon-button" onClick={onClose} aria-label="Close"><X size={20} /></button></div><div className="feedback-grid">{options.map((option) => <button key={option} onClick={() => onSubmit(option)}>{option}<ChevronRight size={15} /></button>)}</div><div className="recommendation-score"><strong>How good was this recommendation?</strong><RatingPicker onRate={(score) => onSubmit(`Recommendation rated ${score}/10`)} /></div></div></div>;
+function FeedbackSheet({ title, onClose, onSubmit }: { title?: Title; onClose: () => void; onSubmit: (value: { reason?: RecommendationFeedbackReason; recommendationScore?: number; label: string }) => void }) {
+  return <div className="modal-scrim" role="dialog" aria-modal="true" aria-label="Recommendation feedback"><div className="sheet feedback-sheet"><div className="sheet__header"><div><p className="kicker">HELP THE NEXT PICK</p><h2>{title ? `How did ${title.name} land?` : "Tell us more"}</h2></div><button className="icon-button" onClick={onClose} aria-label="Close"><X size={20} /></button></div><div className="feedback-grid">{FEEDBACK_OPTIONS.map((option) => <button key={option.reason} onClick={() => onSubmit({ ...option })}>{option.label}<ChevronRight size={15} /></button>)}</div><div className="recommendation-score"><strong>How good was this recommendation?</strong><RatingPicker onRate={(recommendationScore) => onSubmit({ recommendationScore, label: `Recommendation rated ${recommendationScore}/10` })} /></div></div></div>;
 }
 
 export function WhatToWatchApp() {
@@ -1728,8 +1760,8 @@ export function WhatToWatchApp() {
   const [showProfiles, setShowProfiles] = useState(true);
   const [profileEditor, setProfileEditor] = useState<"create" | "manage" | null>(null);
   const [screen, setScreen] = useState<Screen>("home");
-  const [selectedMoods, setSelectedMoods] = useState<string[]>(["Thriller"]);
-  const [selectedVibe, setSelectedVibe] = useState("New");
+  const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
+  const [selectedVibe, setSelectedVibe] = useState("");
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [detailsTitle, setDetailsTitle] = useState<Title | null>(null);
   const [person, setPerson] = useState<string | null>(null);
@@ -1792,10 +1824,25 @@ export function WhatToWatchApp() {
   const deleteProfile = (id: string) => { if (store.profiles.length <= 1) { setToast("Keep at least one profile"); return; } setStore((current) => ({ ...current, profiles: current.profiles.filter((item) => item.id !== id), feedback: current.feedback.filter((item) => item.profileId !== id), friendships: current.friendships.filter((item) => item.requesterProfileId !== id && item.addresseeProfileId !== id), friendReviews: current.friendReviews.filter((item) => item.authorProfileId !== id), friendRecommendations: current.friendRecommendations.filter((item) => item.senderProfileId !== id && item.recipientProfileId !== id) })); if (activeProfileId === id) { setActiveProfileId(null); setShowProfiles(true); } };
   const rate = (id: string, score: number) => { if (!profile) return; const title = titleById(id); updateProfile({ ...profile, ratings: { ...profile.ratings, [id]: score } }); setToast(`${title?.name ?? "Title"} rated ${score}/10`); if (title && score >= 8) setPostRating({ title, rating: score }); };
   const find = () => { if (!profile) return; const result = buildRecommendations(profile, selectedMoods, selectedVibe || "Surprise", store); setRecommendations(result); setScreen("results"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const recordFeedback = (title: Title, value: { reason?: RecommendationFeedbackReason; recommendationScore?: number; label: string }) => {
+    if (!profile) return;
+    const event: FeedbackEvent = {
+      id: crypto.randomUUID(),
+      profileId: profile.id,
+      titleId: title.id,
+      reason: value.reason,
+      recommendationScore: value.recommendationScore,
+      moods: [...selectedMoods],
+      vibe: selectedVibe || "Surprise",
+      createdAt: new Date().toISOString(),
+    };
+    setStore((current) => ({ ...current, feedback: [...current.feedback, event] }));
+    setRecommendations((current) => current.filter((recommendation) => recommendation.title.id !== title.id));
+    setToast(`Feedback saved: ${value.label}`);
+  };
   const feedback = (message: string, title?: Title) => {
     if (title && message === "Not interested" && profile) {
-      setStore((current) => ({ ...current, feedback: [...current.feedback, { id: crypto.randomUUID(), profileId: profile.id, titleId: title.id, reason: message, createdAt: new Date().toISOString() }] }));
-      setToast(`${title.name} removed from future picks`);
+      recordFeedback(title, { reason: "not-interested", label: "Not interested" });
       return;
     }
     if (title) { setFeedbackTitle(title); setShowFeedback(true); } else setToast(message);
@@ -1845,10 +1892,9 @@ export function WhatToWatchApp() {
       {detailsTitle && <DetailsSheet profile={profile} title={detailsTitle} friendContext={friendEvidence(profile, detailsTitle.id, store).context} onClose={() => setDetailsTitle(null)} onPerson={(name) => { setPerson(name); setDetailsTitle(null); }} onRate={(score) => rate(detailsTitle.id, score)} onRecommend={() => setPostRating({ title: detailsTitle, rating: profile.ratings[detailsTitle.id] })} />}
       {person && <PersonSheet person={person} profile={profile} onClose={() => setPerson(null)} onTitle={(title) => { setPerson(null); setDetailsTitle(title); }} />}
       {profileEditor && <ProfileEditor profiles={store.profiles} mode={profileEditor} onClose={() => setProfileEditor(null)} onSave={addProfile} onUpdate={updateProfile} onDelete={deleteProfile} />}
-      {showFeedback && <FeedbackSheet title={feedbackTitle} onClose={() => setShowFeedback(false)} onSubmit={(message) => {
-        if (feedbackTitle) setStore((current) => ({ ...current, feedback: [...current.feedback, { id: crypto.randomUUID(), profileId: profile.id, titleId: feedbackTitle.id, reason: message, createdAt: new Date().toISOString() }] }));
+      {showFeedback && <FeedbackSheet title={feedbackTitle} onClose={() => setShowFeedback(false)} onSubmit={(value) => {
+        if (feedbackTitle) recordFeedback(feedbackTitle, value);
         setShowFeedback(false);
-        setToast(`Feedback saved: ${message}`);
       }} />}
       {postRating && <PostRatingSheet title={postRating.title} rating={postRating.rating} friends={acceptedFriendIds(profile.id, store).flatMap((id) => { const friend = socialProfileById(store, id); return friend ? [friend] : []; })} initialReview={store.friendReviews.find((item) => item.authorProfileId === profile.id && item.titleId === postRating.title.id)?.note} onClose={() => setPostRating(null)} onSave={saveSocialReaction} />}
       {toast && <div className="toast"><Check size={16} />{toast}</div>}

@@ -48,7 +48,13 @@ The production domain lives in `src/lib/recommendation/` and keeps raw and norma
 
 Questionnaire influence follows one centralized exponential decay formula. Observed ratings gain confidence as evidence grows and can override an early questionnaire prior. Explanations are assembled from the same evidence used by the scorer.
 
+The browser experience calls this same domain engine through a data adapter; there is no second UI-side ranking formula. All 21 taste statements map to canonical dimensions, genre answers retain their 1–7 scale, and the three forced choices map to pace, release, and familiarity preferences.
+
 Hard gates run before ranking: profile region, subscribed services, ad-supported preference, watched-title exclusion (outside rewatch mode), stand-up separation, and rental policy. Results are unique and capped at ten.
+
+Tonight's mood is a hard content gate. Vibes that promise a concrete catalog subset—rewatch, classic, international, bingeable TV, trending series, director completion, Criterion, film-school, blind-spot, and go-deeper—are also hard gates. Discovery, hidden-gem, surprise, and Friend's Picks remain ranking preferences so they can broaden results without producing an unnecessarily empty list.
+
+Per-title feedback is first-class evidence. Already-seen, not-interested, misclassified, and unavailable feedback excludes that title. Wrong-mood and good-but-wrong-night feedback suppresses it only for the matching tonight context. Too-dark, too-light, too-old, too-long, disliked-actor, and recommendation-quality scores adjust future candidates with the corresponding or similar features.
 
 Friend evidence is calculated in a separate, capped layer. A Friend’s Picks request combines explicit recommendations, high ratings, recency, useful notes, friend count, and compatibility learned only from overlapping ratings. It cannot bypass mood, watched-title, or availability gates, and it never rewrites the viewer’s personal ratings, questionnaire priors, affinities, or model weights. Normal recommendations keep their original ranking while still showing a small friend banner when the selected title happens to have relevant activity.
 
