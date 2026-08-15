@@ -16,9 +16,14 @@ The gold set is a benchmark, not a template to mutate. New classifier versions s
 1. `npm run catalog:import-index` mirrors TMDB's daily valid movie/TV ID exports into `tmdb_catalog_index`.
 2. `npm run catalog:hydrate -- --limit=100` progressively hydrates high-popularity non-adult titles into `titles`, `title_genres`, and `title_classification_inputs`.
 3. `npm run catalog:seed-gold` persists the 100 benchmark titles and their authoritative classifications into Supabase.
-4. A future classifier writes only the differentiated editorial layer (`primary_subgenre`, optional `secondary_subgenre`, `tone_tags`, and `pacing`) to `title_editorial_classifications`, with classifier version, confidence, and review status.
+4. `npm run catalog:prepare-batches`, `catalog:queue-batch`, and `catalog:export-batch` create controlled hydration and classification packets.
+5. Reconciliation/finalization scripts validate model output against the ontology before classifications are eligible for publication.
 
 The bulk classifier should not overwrite `review_status = 'gold'` rows. Low-confidence or ambiguous generated results should be routed to review rather than silently promoted.
+
+## Storage policy
+
+Git contains the reusable ontology, benchmark, workflow documentation, scripts, tests, and migrations. Dated manifests, model input/output packets, provider caches, and generated preview catalogs are local operational artifacts and are ignored by Git. At larger scale, immutable run artifacts should move to object storage with their run IDs and checksums recorded in the database; finalized catalog rows belong in Supabase rather than repository JSON.
 
 ## Environment
 

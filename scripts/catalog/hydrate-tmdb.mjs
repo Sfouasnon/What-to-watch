@@ -147,6 +147,16 @@ async function hydrateIndexRow(row, genreMap) {
     .single();
   if (titleError) throw titleError;
 
+  const { data: existingInput, error: existingInputError } = await supabase
+    .from("title_classification_inputs")
+    .select("raw_payload")
+    .eq("title_id", title.id)
+    .maybeSingle();
+  if (existingInputError) throw existingInputError;
+  const existingRawPayload = existingInput?.raw_payload && typeof existingInput.raw_payload === "object" && !Array.isArray(existingInput.raw_payload)
+    ? existingInput.raw_payload
+    : {};
+
   const inputRow = {
     title_id: title.id,
     overview: detail.overview || null,
@@ -160,6 +170,7 @@ async function hydrateIndexRow(row, genreMap) {
     metadata_version: "tmdb-classification-input-v1",
     captured_at: new Date().toISOString(),
     raw_payload: {
+      ...existingRawPayload,
       tmdb_id: row.tmdb_id,
       media_type: mediaType,
       original_language: detail.original_language ?? null,
@@ -172,10 +183,16 @@ async function hydrateIndexRow(row, genreMap) {
     },
   };
 
-  const { error: inputError } = await supabase
-    .from("title_classification_inputs")
-    .upsert(inputRow, { onConflict: "title_id" });
-  if (inputError) throw inputError;
+  // Classification evidence is append-only through this general hydrator.
+  // In particular, it must never refresh the frozen input packet behind a gold
+  // classification. A later, explicitly versioned evidence migration can copy
+  // or supersede these packets without weakening the gold benchmark.
+  if (!existingInput) {
+    const { error: inputError } = await supabase
+      .from("title_classification_inputs")
+      .insert(inputRow);
+    if (inputError) throw inputError;
+  }
 
   const genreRows = [];
   for (const tmdbGenre of detail.genres ?? []) {
