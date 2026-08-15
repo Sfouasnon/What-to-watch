@@ -108,3 +108,18 @@ npm run catalog:validate-local -- \
 ```
 
 Repeat `--artifact` for runs that produced multiple final artifacts. Validation requires exact identity coverage, controlled ontology values, two or three unique tone tags, valid pacing, unique preview IDs, and complete recommendation metadata.
+
+## Publish an approved release
+
+The publisher uses the same explicit manifest and final artifacts, plus the TMDB provider cache. It is a dry run unless `--write` is supplied:
+
+```bash
+npm run catalog:publish-classifications -- \
+  --manifest=curation/batches/<manifest>.json \
+  --artifact=curation/classification/<run>/outputs/final-classifications.json \
+  --providers=curation/preview/tmdb-watch-providers-us.json
+
+# Repeat the exact command with --write only after reviewing the summary.
+```
+
+Repeat `--artifact` for every final artifact in the release. Publication is chunked and idempotent. The service key has no direct editorial or availability write grants; bounded database functions validate each title, ontology value, tone set, protected gold boundary, provider record, and availability window before changing data.

@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import {
   buildAppCatalogTitle,
   GOLD_CATALOG_SIZE,
+  type CatalogAvailabilityRow,
   type CatalogCastContextRow,
   type CatalogClassificationRow,
   type CatalogInputRow,
@@ -11,6 +12,21 @@ import {
 } from "@/lib/catalog/recommendation-catalog";
 
 const CACHE_CONTROL = "public, s-maxage=300, stale-while-revalidate=3600";
+const MINIMUM_PUBLISHED_CATALOG_SIZE = 1_000;
+const QUERY_CHUNK_SIZE = 200;
+
+async function fetchInChunks<T>(
+  titleIds: readonly string[],
+  query: (ids: string[]) => PromiseLike<{ data: T[] | null; error: unknown }>,
+) {
+  const data: T[] = [];
+  for (let index = 0; index < titleIds.length; index += QUERY_CHUNK_SIZE) {
+    const result = await query(titleIds.slice(index, index + QUERY_CHUNK_SIZE));
+    if (result.error) return { data: [], error: result.error };
+    data.push(...(result.data ?? []));
+  }
+  return { data, error: null };
+}
 
 export async function GET() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
@@ -26,11 +42,22 @@ export async function GET() {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 
-  const { data: classifications, error: classificationError } = await supabase
-    .from("title_editorial_classifications")
-    .select("title_id,primary_subgenre,secondary_subgenre,tone_tags,pacing,confidence,review_status")
-    .eq("review_status", "gold")
-    .order("title_id");
+  const classifications: CatalogClassificationRow[] = [];
+  let classificationError: unknown = null;
+  for (let from = 0; ; from += 500) {
+    const result = await supabase
+      .from("title_editorial_classifications")
+      .select("title_id,primary_subgenre,secondary_subgenre,tone_tags,pacing,confidence,review_status")
+      .in("review_status", ["gold", "accepted"])
+      .order("title_id")
+      .range(from, from + 499);
+    if (result.error) {
+      classificationError = result.error;
+      break;
+    }
+    classifications.push(...((result.data ?? []) as CatalogClassificationRow[]));
+    if ((result.data ?? []).length < 500) break;
+  }
 
   if (classificationError) {
     return NextResponse.json(
@@ -39,35 +66,44 @@ export async function GET() {
     );
   }
 
-  const gold = (classifications ?? []) as CatalogClassificationRow[];
-  if (gold.length !== GOLD_CATALOG_SIZE) {
+  const goldCount = classifications.filter((classification) => classification.review_status === "gold").length;
+  if (goldCount !== GOLD_CATALOG_SIZE || classifications.length < MINIMUM_PUBLISHED_CATALOG_SIZE) {
     return NextResponse.json(
-      { error: `Expected ${GOLD_CATALOG_SIZE} gold classifications, found ${gold.length}.` },
+      {
+        error: `Expected ${GOLD_CATALOG_SIZE} gold and at least ${MINIMUM_PUBLISHED_CATALOG_SIZE} published classifications; found ${goldCount}/${classifications.length}.`,
+      },
       { status: 503, headers: { "Cache-Control": "no-store" } },
     );
   }
 
-  const titleIds = gold.map((classification) => classification.title_id);
+  const titleIds = classifications.map((classification) => classification.title_id);
   const [
     { data: titles, error: titleError },
     { data: inputs, error: inputError },
     { data: castContexts, error: castContextError },
+    { data: availability, error: availabilityError },
   ] = await Promise.all([
-    supabase
+    fetchInChunks<CatalogTitleRow>(titleIds, (ids) => supabase
       .from("titles")
       .select("id,tmdb_id,tmdb_media_type,content_type,name,overview,release_date,runtime_minutes,episode_runtime_minutes,season_count,episode_count,original_language,production_countries,popularity,vote_average,vote_count,canonical_score,poster_path,backdrop_path")
-      .in("id", titleIds),
-    supabase
+      .in("id", ids)),
+    fetchInChunks<CatalogInputRow>(titleIds, (ids) => supabase
       .from("title_classification_inputs")
       .select("title_id,tmdb_genres,directors,writers,cinematographers,principal_cast,keywords,raw_payload")
-      .in("title_id", titleIds),
-    supabase
+      .in("title_id", ids)),
+    fetchInChunks<CatalogCastContextRow>(titleIds, (ids) => supabase
       .from("title_cast_context_cache")
       .select("title_id,cast_context")
-      .in("title_id", titleIds),
+      .in("title_id", ids)),
+    fetchInChunks<CatalogAvailabilityRow>(titleIds, (ids) => supabase
+      .from("availability_offers")
+      .select("title_id,provider_name,offer_type")
+      .in("title_id", ids)
+      .eq("region", "US")
+      .gt("expires_at", new Date().toISOString())),
   ]);
 
-  if (titleError || inputError || castContextError) {
+  if (titleError || inputError || castContextError || availabilityError) {
     return NextResponse.json(
       { error: "Unable to load catalog metadata." },
       { status: 502, headers: { "Cache-Control": "no-store" } },
@@ -80,17 +116,27 @@ export async function GET() {
     context.title_id,
     (context as CatalogCastContextRow).cast_context,
   ]));
-  const catalog = gold.flatMap((classification) => {
+  const availabilityById = new Map<string, CatalogAvailabilityRow[]>();
+  for (const offer of availability ?? []) {
+    availabilityById.set(offer.title_id, [...(availabilityById.get(offer.title_id) ?? []), offer]);
+  }
+  const catalog = classifications.flatMap((classification) => {
     const title = titleById.get(classification.title_id);
     const input = inputById.get(classification.title_id);
     if (!title || !input) return [];
-    const mapped = buildAppCatalogTitle(title, input, classification, castContextById.get(classification.title_id));
+    const mapped = buildAppCatalogTitle(
+      title,
+      input,
+      classification,
+      castContextById.get(classification.title_id),
+      availabilityById.get(classification.title_id),
+    );
     return mapped ? [mapped] : [];
   });
 
-  if (catalog.length !== GOLD_CATALOG_SIZE) {
+  if (catalog.length !== classifications.length) {
     return NextResponse.json(
-      { error: `Expected ${GOLD_CATALOG_SIZE} mapped titles, found ${catalog.length}.` },
+      { error: `Expected ${classifications.length} mapped titles, found ${catalog.length}.` },
       { status: 503, headers: { "Cache-Control": "no-store" } },
     );
   }
@@ -99,7 +145,7 @@ export async function GET() {
 
   return NextResponse.json(
     {
-      source: "supabase-gold",
+      source: "supabase-editorial",
       titleCount: catalog.length,
       titles: catalog,
     },
