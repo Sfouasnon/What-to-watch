@@ -78,6 +78,10 @@ describe("recommendation catalog mapping", () => {
     expect(title?.providers).toEqual(["Max", "Prime Video"]);
     expect(title?.genres).toEqual(["Thriller", "Crime"]);
     expect(title?.tags).toEqual(expect.arrayContaining(["crime-drama", "crime-thriller", "wry", "stylized", "visceral", "fast"]));
+    expect(title?.primarySubgenre).toBe("crime-drama");
+    expect(title?.secondarySubgenre).toBe("crime-thriller");
+    expect(title?.toneTags).toEqual(["wry", "stylized", "visceral"]);
+    expect(title?.pacing).toBe("fast");
     expect(title?.director).toBe("Quentin Tarantino");
     expect(title?.poster).toBe("/icons/icon-512.png");
     expect(title?.availabilityType).toBe("subscription");

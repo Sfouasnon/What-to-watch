@@ -125,9 +125,47 @@ describe("availability and content gates", () => {
     expect(recommendForProfile({ profile: profile(), catalog: [standup, comedy], moods: ["comedy"] }).map((pick) => pick.title.id)).toEqual(["comedy"]);
     expect(recommendForProfile({ profile: profile(), catalog: [standup, comedy], moods: ["stand-up"] }).map((pick) => pick.title.id)).toEqual(["standup"]);
   });
+
+  it("requires a comedy-led primary classification for an explicit comedy mood", () => {
+    const comedyFirst = title("comedy-first", {
+      genres: ["Comedy", "Drama"],
+      primarySubgenre: "dark-comedy",
+      subgenres: ["dark-comedy", "crime-drama"],
+    });
+    const comedyAdjacent = title("comedy-adjacent", {
+      genres: ["Comedy", "Drama", "Fantasy"],
+      primarySubgenre: "urban-fantasy",
+      secondarySubgenre: "horror-comedy",
+      subgenres: ["urban-fantasy", "horror-comedy"],
+    });
+    expect(recommendForProfile({
+      profile: profile(),
+      catalog: [comedyAdjacent, comedyFirst],
+      moods: ["comedy"],
+    }).map((pick) => pick.title.id)).toEqual(["comedy-first"]);
+  });
 });
 
 describe("personal taste behavior", () => {
+  it("does not let a liked broad genre cancel an explicit animation aversion", () => {
+    const liveAction = title("live-action", { genres: ["Comedy"], primarySubgenre: "dark-comedy" });
+    const animated = title("animated", {
+      genres: ["Comedy", "Animation"],
+      primarySubgenre: "family-sitcom",
+    });
+    const ratedCatalog = [
+      title("liked-comedy", { genres: ["Comedy"] }),
+      title("disliked-animation-a", { genres: ["Comedy", "Animation", "Family"] }),
+      title("disliked-animation-b", { genres: ["Comedy", "Animation", "Family"] }),
+    ];
+    const viewer = profile({
+      ratings: [rating("liked-comedy", 10), rating("disliked-animation-a", 1), rating("disliked-animation-b", 1)],
+      questionnaire: { dimensionScores: {}, genreScores: { Comedy: 7, Animation: 1, Family: 1 } },
+    });
+    const picks = recommendForProfile({ profile: viewer, catalog: [...ratedCatalog, animated, liveAction], moods: ["comedy"] });
+    expect(picks[0].title.id).toBe("live-action");
+    expect(picks.some((pick) => pick.title.id === "animated")).toBe(false);
+  });
   it("uses questionnaire dimensions independently from genre ratings", () => {
     const slow = title("slow", { pacing: "slow", toneTags: ["slow-burn"] });
     const fast = title("fast", { pacing: "fast", toneTags: ["fast"] });
@@ -330,6 +368,51 @@ describe("editorial modes, ranking, and confidence", () => {
     expect(new Set(picks.map((pick) => pick.title.id)).size).toBe(10);
     expect(picks[0].rank).toBe(1);
     expect(picks[9].rank).toBe(10);
+  });
+
+  it("fills a top ten after strict vibe matches run out without violating mood or availability", () => {
+    const exact = Array.from({ length: 4 }, (_, index) => title(`criterion-${index}`, {
+      genres: ["Comedy"],
+      primarySubgenre: "satire",
+      criterionCollection: true,
+    }));
+    const nearby = Array.from({ length: 8 }, (_, index) => title(`nearby-${index}`, {
+      genres: ["Comedy"],
+      primarySubgenre: "satire",
+    }));
+    const picks = recommendForProfile({
+      profile: profile(),
+      catalog: [...nearby, ...exact],
+      moods: ["comedy"],
+      vibes: ["criterion-pick"],
+    });
+    expect(picks).toHaveLength(10);
+    expect(picks.slice(0, 4).every((pick) => pick.title.criterionCollection)).toBe(true);
+    expect(picks.slice(4).every((pick) => !pick.title.criterionCollection)).toBe(true);
+    expect(picks[4].evidence.join(" ")).toContain("nearby match");
+
+    const tenAvailable = recommendForProfile({
+      profile: profile(),
+      catalog: [...nearby.slice(0, 6), ...exact],
+      moods: ["comedy"],
+      vibes: ["criterion-pick"],
+      limit: 11,
+    });
+    expect(tenAvailable).toHaveLength(10);
+  });
+
+  it("supports a fresh next page while preserving ten-result defaults", () => {
+    const catalog = Array.from({ length: 22 }, (_, index) => title(`candidate-${index}`));
+    const first = recommendForProfile({ profile: profile(), catalog });
+    const second = recommendForProfile({
+      profile: profile(),
+      catalog,
+      excludeTitleIds: first.map((pick) => pick.title.id),
+      limit: 11,
+    });
+    expect(first).toHaveLength(10);
+    expect(second).toHaveLength(11);
+    expect(second.some((pick) => first.some((firstPick) => firstPick.title.id === pick.title.id))).toBe(false);
   });
 
   it("provides evidence-based explanations plus separate raw and normalized scores", () => {

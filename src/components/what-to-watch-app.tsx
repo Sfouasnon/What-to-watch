@@ -97,6 +97,10 @@ type Title = {
   synopsis: string;
   genres: string[];
   tags: string[];
+  primarySubgenre?: string;
+  secondarySubgenre?: string;
+  toneTags?: string[];
+  pacing?: "slow" | "moderate" | "fast";
   director: string;
   writers: string[];
   cinematographer?: string;
@@ -958,14 +962,18 @@ function toEngineTitle(title: Title, region: string): EngineTitle {
     completed: title.kind === "Series" ? seasons !== undefined : undefined,
     serialized: title.kind === "Series" ? title.tags.includes("bingeable") : undefined,
     genres: title.genres,
-    subgenres: title.tags,
-    toneTags: title.tags,
+    primarySubgenre: title.primarySubgenre,
+    secondarySubgenre: title.secondarySubgenre,
+    subgenres: title.primarySubgenre
+      ? [title.primarySubgenre, title.secondarySubgenre].filter((value): value is string => Boolean(value))
+      : title.tags,
+    toneTags: title.toneTags ?? title.tags,
     themes: [],
-    pacing: title.tags.some((tag) => ["fast", "propulsive"].includes(tag))
+    pacing: title.pacing ?? (title.tags.some((tag) => ["fast", "propulsive"].includes(tag))
       ? "fast"
       : title.tags.some((tag) => ["slow-burn", "meditative"].includes(tag))
         ? "slow"
-        : "moderate",
+        : "moderate"),
     countries: [international ? "International" : region],
     languages: [international ? "international" : "en"],
     directors: [title.director],
@@ -1046,7 +1054,7 @@ function buildRecommendations(
   selectedMoods: string[],
   selectedVibe: string,
   store: AppStore,
-  options: { favoriteActors?: readonly string[] } = {},
+  options: { favoriteActors?: readonly string[]; excludeTitleIds?: readonly string[]; limit?: number } = {},
 ): Recommendation[] {
   const sourceCatalog = options.favoriteActors?.length
     ? filterTitlesForFavoriteActors(catalog, options.favoriteActors, profile.subscriptions)
@@ -1086,6 +1094,8 @@ function buildRecommendations(
     moods: selectedMoods.map((mood) => mood.toLowerCase() as EngineMood),
     vibes: [UI_VIBE_TO_ENGINE[selectedVibe] ?? "surprise-me"],
     config,
+    limit: options.limit,
+    excludeTitleIds: options.excludeTitleIds,
     social: toSocialInput(store, profile.id),
     feedback: store.feedback.map((item) => ({
       profileId: item.profileId,
@@ -1685,14 +1695,16 @@ function ActorDiscoveryScreen({
   );
 }
 
-function ResultsScreen({ profile, recommendations, focusActors = [], onBack, onDetails, onFeedback }: { profile: ViewerProfile; recommendations: Recommendation[]; focusActors?: string[]; onBack: () => void; onDetails: (title: Title) => void; onFeedback: (message: string, title?: Title) => void }) {
+function ResultsScreen({ profile, recommendations, focusActors = [], page = 0, hasMore = false, onMore, onBack, onDetails, onFeedback }: { profile: ViewerProfile; recommendations: Recommendation[]; focusActors?: string[]; page?: number; hasMore?: boolean; onMore: () => void; onBack: () => void; onDetails: (title: Title) => void; onFeedback: (message: string, title?: Title) => void }) {
   const actorFocused = focusActors.length > 0;
+  const heading = page > 0 ? "Ten more for tonight." : recommendations.length === 10 ? "Here’s your top ten." : `${recommendations.length} picks fit tonight.`;
   return (
     <main className="results-screen page-content">
-      <div className="results-heading"><button className="icon-button" onClick={onBack} aria-label="Back"><ArrowLeft size={20} /></button><div><p className="kicker">{actorFocused ? `${recommendations.length} ON YOUR SERVICES · PROMINENT ROLES` : `TOP ${recommendations.length} · ONE GOOD NIGHT`}</p><h1>{actorFocused ? `With ${focusActors.join(" or ")}.` : recommendations.length === 10 ? "Here’s your top ten." : `${recommendations.length} picks fit tonight.`}</h1></div><button className="icon-button" onClick={onBack} aria-label={actorFocused ? "Change actors" : "Adjust choices"}><RefreshCw size={18} /></button></div>
+      <div className="results-heading"><button className="icon-button" onClick={onBack} aria-label="Back"><ArrowLeft size={20} /></button><div><p className="kicker">{actorFocused ? `${recommendations.length} ON YOUR SERVICES · PROMINENT ROLES` : page > 0 ? `ANOTHER ${recommendations.length} · ONE GOOD NIGHT` : `TOP ${recommendations.length} · ONE GOOD NIGHT`}</p><h1>{actorFocused ? `With ${focusActors.join(" or ")}.` : heading}</h1></div><button className="icon-button" onClick={onBack} aria-label={actorFocused ? "Change actors" : "Adjust choices"}><RefreshCw size={18} /></button></div>
       <div className="recommendation-stack">
         {recommendations.map((recommendation, index) => <RecommendationCard key={recommendation.title.id} profile={profile} recommendation={recommendation} priority={index === 0} focusActors={focusActors} onDetails={onDetails} onFeedback={onFeedback} />)}
         {!recommendations.length && <div className="results-empty"><UserCheck size={28} /><h2>Nothing prominent is included right now.</h2><p>Try another favorite actor or update your services. Rentals and incidental credits stay out of this list.</p><button className="secondary-button" onClick={onBack}>Choose another actor</button></div>}
+        {hasMore && <button className="secondary-button another-ten-button" onClick={onMore}>Another 10 <RefreshCw size={16} /></button>}
       </div>
       <p className="availability-disclaimer"><Info size={14} /> Provider labels use demo seed data until a TMDB key is connected. The production data layer rechecks region and availability type.</p>
     </main>
@@ -1914,7 +1926,7 @@ function SettingsScreen({ profile, feedback, store, onChange, onProfiles, onToas
   if (section === "friends") return <SettingsSubpage title="Friends" onBack={() => setSection("main")}><FriendsSettingsContent acceptedFriends={acceptedFriends} incomingRequests={incomingRequests} outgoingIds={outgoingIds} suggestedFriends={suggestedFriends} store={store} onFriendship={onFriendship} /></SettingsSubpage>;
   if (section === "algorithm") return <SettingsSubpage title="Algorithm Lab" onBack={() => setSection("main")}><p className="settings-intro">Tune the model without ever rewriting your ratings or watch history.</p><div className="model-card"><div><p className="kicker">CURRENT</p><h3>Model v{profile.modelVersion}</h3><span>Deterministic · profile isolated</span></div><strong>{Object.keys(profile.ratings).length}<small> ratings</small></strong></div><div className="performance-grid"><div><strong>{feedback.length}</strong><span>Feedback events</span></div><div><strong>{Object.keys(profile.questionnaire).length}</strong><span>Taste signals</span></div><div><strong>10</strong><span>Ranked lanes</span></div></div><button className="settings-action" onClick={exportData}><span><Download size={18} /><span><strong>Export training package</strong><small>Ratings, predictions, signals, and current weights</small></span></span><ChevronRight size={17} /></button><button className="settings-action" onClick={() => importRef.current?.click()}><span><Upload size={18} /><span><strong>Import tuned configuration</strong><small>Only approved weights and thresholds can change</small></span></span><ChevronRight size={17} /></button><input ref={importRef} className="visually-hidden" type="file" accept="application/json" onChange={(event) => importConfig(event.target.files?.[0])} /><div className="safety-note"><ShieldCheck size={18} /><p><strong>History safety is enforced.</strong> Imported files cannot overwrite ratings, watched history, recommendation history, or raw feedback.</p></div></SettingsSubpage>;
   if (section === "privacy") return <SettingsSubpage title="Privacy" onBack={() => setSection("main")}><PrivacySettingsContent profile={profile} onChange={onChange} /></SettingsSubpage>;
-  if (section === "attributions") return <SettingsSubpage title="Attributions" onBack={() => setSection("main")}><div className="attribution-card"><strong>TMDB</strong><p>This product uses the TMDB API but is not endorsed or certified by TMDB. Title metadata, posters, and related imagery may be supplied by TMDB.</p></div><div className="attribution-card"><strong>JustWatch</strong><p>Watch-provider data exposed through TMDB may be powered by JustWatch. Availability can change and should be rechecked before viewing.</p></div><p className="settings-intro">What to Watch is an independent application and does not claim endorsement from any streaming service or editorial collection.</p></SettingsSubpage>;
+  if (section === "attributions") return <SettingsSubpage title="Attributions" onBack={() => setSection("main")}><div className="attribution-card"><a className="attribution-logo-link" href="https://www.themoviedb.org" target="_blank" rel="noreferrer" aria-label="Visit The Movie Database"><Image className="tmdb-attribution-logo" src="/brand/tmdb-blue-square.svg" alt="The Movie Database (TMDB)" width={185} height={133} /></a><p>This product uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB. Title metadata, posters, and related imagery may be supplied by TMDB.</p></div><div className="attribution-card"><strong>JustWatch</strong><p>Watch-provider data exposed through TMDB may be powered by JustWatch. Availability can change and should be rechecked before viewing.</p></div><p className="settings-intro">What to Watch is an independent application and does not claim endorsement from any streaming service or editorial collection.</p></SettingsSubpage>;
   const rows = [
     { label: "Account", detail: "Sign in or continue in demo", icon: CircleUserRound, action: () => router.push("/account") },
     { label: "Profiles", detail: profile.guest ? "Guest" : "Household", icon: UsersRound, action: onProfiles },
@@ -1969,6 +1981,9 @@ export function WhatToWatchApp() {
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
   const [selectedVibe, setSelectedVibe] = useState("");
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [seenRecommendationIds, setSeenRecommendationIds] = useState<string[]>([]);
+  const [hasMoreRecommendations, setHasMoreRecommendations] = useState(false);
+  const [resultPage, setResultPage] = useState(0);
   const [resultActors, setResultActors] = useState<string[]>([]);
   const [detailsTitle, setDetailsTitle] = useState<Title | null>(null);
   const [person, setPerson] = useState<string | null>(null);
@@ -2012,7 +2027,12 @@ export function WhatToWatchApp() {
         return response.json() as Promise<{ source?: string; titleCount?: number; titles?: Title[] }>;
       })
       .then((payload) => {
-        if (!Array.isArray(payload.titles) || payload.titleCount !== 100 || payload.titles.length !== 100) {
+        if (
+          !Array.isArray(payload.titles)
+          || !Number.isInteger(payload.titleCount)
+          || (payload.titleCount ?? 0) < 100
+          || payload.titles.length !== payload.titleCount
+        ) {
           throw new Error("Catalog payload is incomplete");
         }
         catalog = payload.titles;
@@ -2034,16 +2054,36 @@ export function WhatToWatchApp() {
   const addProfile = (next: ViewerProfile) => { setStore((current) => ({ ...current, profiles: [...current.profiles, next] })); setActiveProfileId(next.id); setProfileEditor(null); setShowProfiles(false); };
   const deleteProfile = (id: string) => { if (store.profiles.length <= 1) { setToast("Keep at least one profile"); return; } setStore((current) => ({ ...current, profiles: current.profiles.filter((item) => item.id !== id), feedback: current.feedback.filter((item) => item.profileId !== id), friendships: current.friendships.filter((item) => item.requesterProfileId !== id && item.addresseeProfileId !== id), friendReviews: current.friendReviews.filter((item) => item.authorProfileId !== id), friendRecommendations: current.friendRecommendations.filter((item) => item.senderProfileId !== id && item.recipientProfileId !== id) })); if (activeProfileId === id) { setActiveProfileId(null); setShowProfiles(true); } };
   const rate = (id: string, score: number) => { if (!profile) return; const title = titleById(id); updateProfile({ ...profile, ratings: { ...profile.ratings, [id]: score } }); setToast(`${title?.name ?? "Title"} rated ${score}/10`); if (title && score >= 8) setPostRating({ title, rating: score }); };
-  const find = () => { if (!profile) return; const result = buildRecommendations(profile, selectedMoods, selectedVibe || "Surprise", store); setResultActors([]); setRecommendations(result); setScreen("results"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const showRecommendationPage = (result: Recommendation[], actors: string[] = [], page = 0) => {
+    const visible = result.slice(0, 10);
+    setResultActors(actors);
+    setRecommendations(visible);
+    setSeenRecommendationIds((current) => page === 0 ? visible.map((item) => item.title.id) : [...current, ...visible.map((item) => item.title.id)]);
+    setHasMoreRecommendations(result.length > 10);
+    setResultPage(page);
+    setScreen("results");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const find = () => {
+    if (!profile) return;
+    showRecommendationPage(buildRecommendations(profile, selectedMoods, selectedVibe || "Surprise", store, { limit: 11 }));
+  };
   const findWithActors = (actors: string[]) => {
     if (!profile) return;
     const favoriteActors = [...new Set(actors.map((actor) => actor.trim()).filter(Boolean))];
     const nextProfile = { ...profile, favoriteActors };
     updateProfile(nextProfile);
-    setResultActors(favoriteActors);
-    setRecommendations(buildRecommendations(nextProfile, [], "Surprise", store, { favoriteActors }));
-    setScreen("results");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    showRecommendationPage(buildRecommendations(nextProfile, [], "Surprise", store, { favoriteActors, limit: 11 }), favoriteActors);
+  };
+  const anotherTen = () => {
+    if (!profile) return;
+    const result = buildRecommendations(profile, resultActors.length ? [] : selectedMoods, resultActors.length ? "Surprise" : selectedVibe || "Surprise", store, {
+      favoriteActors: resultActors,
+      excludeTitleIds: seenRecommendationIds,
+      limit: 11,
+    });
+    if (!result.length) { setHasMoreRecommendations(false); return; }
+    showRecommendationPage(result, resultActors, resultPage + 1);
   };
   const recordFeedback = (title: Title, value: { reason?: RecommendationFeedbackReason; recommendationScore?: number; label: string }) => {
     if (!profile) return;
@@ -2106,7 +2146,7 @@ export function WhatToWatchApp() {
       <AppHeader profile={profile} onProfiles={() => setShowProfiles(true)} onMenu={() => setScreen("settings")} />
       {screen === "home" && <HomeScreen profile={profile} selectedMoods={selectedMoods} setSelectedMoods={setSelectedMoods} selectedVibe={selectedVibe} setSelectedVibe={setSelectedVibe} onFind={find} onActorFind={() => setScreen("actor")} />}
       {screen === "actor" && <ActorDiscoveryScreen profile={profile} onChange={(favoriteActors) => updateProfile({ ...profile, favoriteActors })} onFind={findWithActors} onBack={() => setScreen("home")} />}
-      {screen === "results" && <ResultsScreen profile={profile} recommendations={recommendations} focusActors={resultActors} onBack={() => setScreen(resultActors.length ? "actor" : "home")} onDetails={setDetailsTitle} onFeedback={feedback} />}
+      {screen === "results" && <ResultsScreen profile={profile} recommendations={recommendations} focusActors={resultActors} page={resultPage} hasMore={hasMoreRecommendations} onMore={anotherTen} onBack={() => setScreen(resultActors.length ? "actor" : "home")} onDetails={setDetailsTitle} onFeedback={feedback} />}
       {screen === "rate" && <RateScreen profile={profile} onRate={rate} onDetails={setDetailsTitle} />}
       {screen === "taste" && <TasteScreen profile={profile} onRate={() => setScreen("rate")} />}
       {screen === "settings" && <SettingsScreen profile={profile} feedback={store.feedback.filter((item) => item.profileId === profile.id)} store={store} onChange={updateProfile} onProfiles={() => setProfileEditor("manage")} onToast={setToast} onFriendship={changeFriendship} />}

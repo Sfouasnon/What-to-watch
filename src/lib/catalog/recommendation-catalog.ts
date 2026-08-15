@@ -12,6 +12,10 @@ export type AppCatalogTitle = {
   synopsis: string;
   genres: string[];
   tags: string[];
+  primarySubgenre: string;
+  secondarySubgenre?: string;
+  toneTags: string[];
+  pacing: "slow" | "moderate" | "fast";
   director: string;
   writers: string[];
   cinematographer?: string;
@@ -266,6 +270,10 @@ export function buildAppCatalogTitle(
     synopsis: title.overview ?? sampleTitle.overview ?? "No synopsis available yet.",
     genres: input.tmdb_genres ?? [],
     tags: derivedTags(title, classification, sampleTitle),
+    primarySubgenre: classification.primary_subgenre,
+    ...(classification.secondary_subgenre ? { secondarySubgenre: classification.secondary_subgenre } : {}),
+    toneTags: classification.tone_tags ?? [],
+    pacing: classification.pacing ?? "moderate",
     director: input.directors?.[0] ?? "Unknown director",
     writers: input.writers ?? [],
     cinematographer: input.cinematographers?.[0],

@@ -96,6 +96,8 @@ export interface Title {
   completed?: boolean;
   serialized?: boolean;
   genres: string[];
+  primarySubgenre?: string;
+  secondarySubgenre?: string;
   subgenres: string[];
   toneTags: string[];
   themes: string[];
@@ -373,6 +375,7 @@ export interface RecommendForProfileInput {
   lane?: RecommendationLane;
   config?: RecommendationConfig;
   limit?: number;
+  excludeTitleIds?: readonly string[];
   social?: SocialRecommendationInput;
   feedback?: readonly RecommendationFeedback[];
 }

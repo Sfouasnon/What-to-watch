@@ -203,6 +203,7 @@ export function importTunedConfiguration(
 
 interface ScoredCandidate {
   title: Title;
+  exactVibeMatch: boolean;
   intrinsicScore: number;
   novelty: number;
   creatorSignal: number;
@@ -233,13 +234,15 @@ export function recommendForProfile({
   lane,
   config = defaultRecommendationConfig,
   limit,
+  excludeTitleIds = [],
   social,
   feedback = [],
 }: RecommendForProfileInput): Recommendation[] {
-  const safeLimit = Math.min(10, Math.max(0, Math.floor(limit ?? config.thresholds.maxRecommendations)));
+  const safeLimit = Math.min(100, Math.max(0, Math.floor(limit ?? config.thresholds.maxRecommendations)));
   if (!safeLimit || !catalog.length) return [];
 
   const titleById = new Map(catalog.map((title) => [title.id, title]));
+  const excludedTitleIdsSet = new Set(excludeTitleIds);
   const rated = profile.ratings
     .map((rating) => ({ rating, title: titleById.get(rating.titleId) }))
     .filter((entry): entry is { rating: Profile["ratings"][number]; title: Title } => Boolean(entry.title));
@@ -258,15 +261,19 @@ export function recommendForProfile({
   const rewatchMode = vibes.includes("rewatch-favorite");
 
   const preAvailability = catalog
+    .filter((title) => !excludedTitleIdsSet.has(title.id))
     .filter((title) => matchesRequestedMood(title, moods))
+    .filter((title) => !matchesStrongGenreAvoidance(title, profile, rated, config))
     .filter((title) => !excludedByFeedback.has(title.id))
     .filter((title) =>
       rewatchMode
         ? watchedIds.has(title.id) && (profile.ratings.find((rating) => rating.titleId === title.id)?.score ?? 0) >= 7
         : !watchedIds.has(title.id),
     )
-    .filter((title) => matchesVibeGate(title, vibes, profile, rated, config))
-    .map((title) => scoreTitle(title, profile, rated, moods, vibes, config, social, profileFeedback, titleById));
+    .map((title) => ({
+      ...scoreTitle(title, profile, rated, moods, vibes, config, social, profileFeedback, titleById),
+      exactVibeMatch: matchesVibeGate(title, vibes, profile, rated, config),
+    }));
 
   const watchable = preAvailability
     .map((candidate) => {
@@ -298,12 +305,17 @@ export function recommendForProfile({
       : candidate.intrinsicScore >= bestIncluded + config.thresholds.rentalExceptionalMargin;
   });
 
-  const count = Math.min(safeLimit, eligible.length);
+  const exactEligible = eligible.filter((candidate) => candidate.exactVibeMatch);
+  const minimumPageSize = Math.min(config.thresholds.maxRecommendations, safeLimit);
+  const recommendationPool = exactEligible.length >= minimumPageSize || eligible.length < minimumPageSize
+    ? exactEligible
+    : eligible;
+  const count = Math.min(safeLimit, recommendationPool.length);
   const selected: Recommendation[] = [];
-  const remaining = [...eligible];
+  const remaining = [...recommendationPool];
 
   for (let index = 0; index < count; index += 1) {
-    const recommendationLane = RECOMMENDATION_LANES[index];
+    const recommendationLane = RECOMMENDATION_LANES[index % RECOMMENDATION_LANES.length];
     const scoringLane = lane ?? recommendationLane;
     const exploration = config.exploration[scoringLane];
     const ranked = remaining
@@ -313,6 +325,7 @@ export function recommendForProfile({
       }))
       .sort(
         (a, b) =>
+          Number(b.candidate.exactVibeMatch) - Number(a.candidate.exactVibeMatch) ||
           b.score - a.score ||
           b.candidate.intrinsicScore - a.candidate.intrinsicScore ||
           a.candidate.title.id.localeCompare(b.candidate.title.id),
@@ -323,6 +336,9 @@ export function recommendForProfile({
     const requiresPayment =
       candidate.primaryAvailability.kind === "rental" || candidate.primaryAvailability.kind === "purchase";
     const evidence = buildEvidence(candidate, moods, vibes, recommendationLane, requiresPayment);
+    if (!candidate.exactVibeMatch && vibes.length) {
+      evidence.push(`This is a strong nearby match used after the exact ${vibes[0].replaceAll("-", " ")} options.`);
+    }
     const narrative = buildRecommendationNarrative({
       title: candidate.title,
       profile,
@@ -383,7 +399,7 @@ function scoreTitle(
   social?: SocialRecommendationInput,
   feedback: readonly RecommendationFeedback[] = [],
   titleById: ReadonlyMap<string, Title> = new Map(),
-): Omit<ScoredCandidate, "availability" | "primaryAvailability"> {
+): Omit<ScoredCandidate, "availability" | "primaryAvailability" | "exactVibeMatch"> {
   const contributions: FeatureContribution[] = [];
   const evidence: string[] = [];
   let score = 50;
@@ -398,16 +414,20 @@ function scoreTitle(
   };
 
   const profileRatingCount = rated.length;
-  const questionnaireGenres = questionnaireGenrePreferences(title, profile)
-    .map((value) => clamp((value - 4) / 3, -1, 1));
-  const genreBehavior = affinityFromSharedValues(title.genres, rated, (item) => item.genres);
-  const genrePreference = effectivePreference({
-    behavioralPreference: genreBehavior.evidence ? genreBehavior.value : undefined,
-    behavioralEvidence: genreBehavior.evidence,
-    questionnairePreference: questionnaireGenres.length ? average(questionnaireGenres) : undefined,
-    ratingCount: profileRatingCount,
-    config: config.questionnaireDecay,
+  const genreSignals = unique(title.genres).flatMap((genre) => {
+    const behavior = affinityFromSharedValues([genre], rated, (item) => item.genres);
+    const questionnaire = questionnaireGenrePreference(genre, profile);
+    if (!behavior.evidence && questionnaire === undefined) return [];
+    return [effectivePreference({
+      behavioralPreference: behavior.evidence ? behavior.value : undefined,
+      behavioralEvidence: behavior.evidence,
+      questionnairePreference: questionnaire,
+      ratingCount: profileRatingCount,
+      config: config.questionnaireDecay,
+    })];
   });
+  const genrePreference = cautiousPreference(genreSignals);
+  const genreBehavior = affinityFromSharedValues(title.genres, rated, (item) => item.genres);
   add("genreMatch", config.weights.genreMatch * genrePreference);
 
   const subgenre = affinityFromSharedValues(title.subgenres, rated, (item) => item.subgenres);
@@ -579,7 +599,29 @@ function matchesRequestedMood(title: Title, moods: readonly Mood[]): boolean {
   if (!moods.length) return true;
   if (title.contentType === "stand-up") return moods.includes("stand-up");
   const normalizedGenres = title.genres.map((genre) => genre.toLowerCase());
-  return moods.some((mood) => mood !== "stand-up" && normalizedGenres.includes(mood));
+  return moods.some((mood) => {
+    if (mood === "stand-up") return false;
+    if (mood === "comedy" && title.primarySubgenre) return isComedyLedSubgenre(title.primarySubgenre);
+    return normalizedGenres.includes(mood);
+  });
+}
+
+function matchesStrongGenreAvoidance(
+  title: Title,
+  profile: Profile,
+  rated: Array<{ rating: Profile["ratings"][number]; title: Title }>,
+  config: RecommendationConfig,
+): boolean {
+  const questionnaireGenres = new Map(
+    Object.entries(profile.questionnaire?.genreScores ?? {}).map(([genre, score]) => [genre.toLowerCase(), score]),
+  );
+  return title.genres.some((genre) => {
+    const questionnaireScore = questionnaireGenres.get(genre.toLowerCase());
+    if (questionnaireScore === undefined || questionnaireScore > 1.5) return false;
+    const matchingRatings = rated.filter(({ title: ratedTitle }) => ratedTitle.genres.includes(genre));
+    return matchingRatings.length >= 2
+      && average(matchingRatings.map(({ rating }) => rating.score)) <= config.thresholds.stronglyDislikedRating;
+  });
 }
 
 function matchesVibeGate(
@@ -671,22 +713,30 @@ function affinityFromSharedValues(
   };
 }
 
-function questionnaireGenrePreferences(title: Title, profile: Profile): number[] {
+function questionnaireGenrePreference(term: string, profile: Profile): number | undefined {
   const genreScores = profile.questionnaire?.genreScores;
-  if (!genreScores) return [];
+  if (!genreScores) return undefined;
   const normalize = (value: string) => value.toLowerCase().replaceAll("-", " ").trim();
   const scoresByGenre = new Map(Object.entries(genreScores).map(([genre, value]) => [normalize(genre), value]));
-  if (title.contentType === "stand-up") {
-    const standUpScore = scoresByGenre.get("stand up");
-    return standUpScore === undefined ? [] : [standUpScore];
-  }
-  const candidateTerms = unique([...title.genres, ...title.subgenres, ...title.toneTags].map(normalize));
-  const standUpIndex = candidateTerms.indexOf("stand up");
-  if (standUpIndex >= 0) candidateTerms.splice(standUpIndex, 1);
-  if (candidateTerms.includes("history")) candidateTerms.push("historical");
-  return unique(candidateTerms)
-    .map((genre) => scoresByGenre.get(genre))
-    .filter((value): value is number => value !== undefined);
+  const normalized = normalize(term);
+  const score = scoresByGenre.get(normalized)
+    ?? (normalized === "history" ? scoresByGenre.get("historical") : undefined);
+  return score === undefined ? undefined : clamp((score - 4) / 3, -1, 1);
+}
+
+function cautiousPreference(values: readonly number[]): number {
+  if (!values.length) return 0;
+  const strongestAversion = Math.min(0, ...values);
+  return clamp(average(values) + strongestAversion * 0.6, -1, 1);
+}
+
+function isComedyLedSubgenre(value: string): boolean {
+  const normalized = value.toLowerCase();
+  return normalized.includes("comedy")
+    || normalized.includes("sitcom")
+    || normalized === "satire"
+    || normalized === "news-satire"
+    || normalized === "sketch-comedy";
 }
 
 function questionnairePreference(
