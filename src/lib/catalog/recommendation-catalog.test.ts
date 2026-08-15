@@ -88,6 +88,8 @@ describe("recommendation catalog mapping", () => {
     expect(title?.director).toBe("Quentin Tarantino");
     expect(title?.poster).toBe("/icons/icon-512.png");
     expect(title?.availabilityType).toBe("subscription");
+    expect(title?.canonical).toContain("Rotten Tomatoes all-time #286");
+    expect(title?.canonicalScore).toBeGreaterThanOrEqual(55);
   });
 
   it("validates cached cast references before exposing them to the app", () => {
@@ -137,7 +139,7 @@ describe("recommendation catalog mapping", () => {
     const title = buildAppCatalogTitle(hydrated, pulpFictionInput, pulpFictionClassification);
 
     expect(title?.poster).toBe("https://image.tmdb.org/t/p/w780/poster.jpg");
-    expect(title?.backdrop).toBe("https://image.tmdb.org/t/p/w780/backdrop.jpg");
+    expect(title?.backdrop).toBe("https://image.tmdb.org/t/p/original/backdrop.jpg");
   });
 
   it("reuses the poster as a backdrop when TMDB has no backdrop", () => {
@@ -177,8 +179,10 @@ describe("recommendation catalog mapping", () => {
       [],
       [{
         title_id: "expanded-title-id",
+        provider_key: "prime-video",
         provider_name: "Amazon Prime Video",
         offer_type: "subscription",
+        deeplink_url: "https://example.com/title/999999",
       }],
     );
 
@@ -187,6 +191,12 @@ describe("recommendation catalog mapping", () => {
       name: "Expanded Catalog Title",
       year: 2025,
       providers: ["Prime Video"],
+      watchOptions: [{
+        provider: "Prime Video",
+        offerType: "subscription",
+        deeplinkUrl: "https://example.com/title/999999",
+      }],
+      watchOptionsUrl: "https://www.themoviedb.org/movie/999999/watch?locale=US",
       availabilityType: "subscription",
     }));
   });
@@ -199,5 +209,7 @@ describe("recommendation catalog mapping", () => {
     );
 
     expect(title?.providers).toEqual([]);
+    expect(title?.watchOptions).toEqual([]);
+    expect(title?.watchOptionsUrl).toBe("https://www.themoviedb.org/movie/999998/watch?locale=US");
   });
 });

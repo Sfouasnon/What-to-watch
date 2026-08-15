@@ -97,7 +97,7 @@ export async function GET() {
       .in("title_id", ids)),
     fetchInChunks<CatalogAvailabilityRow>(titleIds, (ids) => supabase
       .from("availability_offers")
-      .select("title_id,provider_name,offer_type")
+      .select("title_id,provider_key,provider_name,offer_type,deeplink_url")
       .in("title_id", ids)
       .eq("region", "US")
       .gt("expires_at", new Date().toISOString())),

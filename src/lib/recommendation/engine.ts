@@ -267,7 +267,11 @@ export function recommendForProfile({
     .filter((title) => !excludedByFeedback.has(title.id))
     .filter((title) =>
       rewatchMode
-        ? watchedIds.has(title.id) && (profile.ratings.find((rating) => rating.titleId === title.id)?.score ?? 0) >= 7
+        ? (
+          watchedIds.has(title.id) && (profile.ratings.find((rating) => rating.titleId === title.id)?.score ?? 0) >= 7
+        ) || (
+          !watchedIds.has(title.id) && title.canonicalScore >= config.thresholds.canonicalMinimum
+        )
         : !watchedIds.has(title.id),
     )
     .map((title) => ({
@@ -371,6 +375,45 @@ export function recommendForProfile({
       friendContext: candidate.friendContext,
     });
     remaining.splice(remaining.indexOf(candidate), 1);
+  }
+
+  const remainingCatalogSize = catalog.filter((title) => !excludedTitleIdsSet.has(title.id)).length;
+  const allRegionServices = unique(catalog.flatMap((title) => title.availability
+    .filter((option) => option.region === profile.region)
+    .map((option) => option.serviceId)));
+  const maximallyRelaxed = !moods.length && !vibes.length && profile.rentalMode === "always" &&
+    allRegionServices.every((serviceId) => profile.subscriptions.includes(serviceId));
+
+  if (selected.length < minimumPageSize && remainingCatalogSize >= minimumPageSize && !maximallyRelaxed) {
+    const fallback = recommendForProfile({
+      profile: {
+        ...profile,
+        subscriptions: unique([...profile.subscriptions, ...allRegionServices]),
+        rentalMode: "always",
+        allowAdSupported: true,
+      },
+      catalog,
+      moods: [],
+      vibes: [],
+      lane,
+      config,
+      limit: safeLimit - selected.length,
+      excludeTitleIds: [...excludeTitleIds, ...selected.map((recommendation) => recommendation.title.id)],
+      social,
+      feedback,
+    }).map((recommendation, index) => {
+      const globalIndex = selected.length + index;
+      return {
+        ...recommendation,
+        rank: globalIndex + 1,
+        lane: lane ?? RECOMMENDATION_LANES[globalIndex % RECOMMENDATION_LANES.length],
+        evidence: [
+          ...recommendation.evidence,
+          "This nearby recommendation fills the set after the exact filters ran out of eligible titles.",
+        ],
+      };
+    });
+    return [...selected, ...fallback].slice(0, safeLimit);
   }
 
   return selected;

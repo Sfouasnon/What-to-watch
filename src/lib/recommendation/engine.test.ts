@@ -144,6 +144,27 @@ describe("availability and content gates", () => {
       moods: ["comedy"],
     }).map((pick) => pick.title.id)).toEqual(["comedy-first"]);
   });
+
+  it("keeps American Psycho-style black comedy secondary to its psychological-thriller promise", () => {
+    const americanPsycho = title("american-psycho", {
+      genres: ["Thriller", "Drama", "Crime"],
+      primarySubgenre: "psychological-thriller",
+      secondarySubgenre: "black-comedy",
+      subgenres: ["psychological-thriller", "black-comedy"],
+      toneTags: ["cynical", "satirical", "unsettling"],
+    });
+
+    expect(recommendForProfile({
+      profile: profile(),
+      catalog: [americanPsycho],
+      moods: ["comedy"],
+    })).toEqual([]);
+    expect(recommendForProfile({
+      profile: profile(),
+      catalog: [americanPsycho],
+      moods: ["thriller"],
+    })).toHaveLength(1);
+  });
 });
 
 describe("personal taste behavior", () => {
@@ -240,6 +261,26 @@ describe("personal taste behavior", () => {
     const viewer = profile({ ratings: [rating("watched", 9)] });
     expect(recommendForProfile({ profile: viewer, catalog: [watched, unseen] }).map((pick) => pick.title.id)).toEqual(["unseen"]);
     expect(recommendForProfile({ profile: viewer, catalog: [watched, unseen], vibes: ["rewatch-favorite"] }).map((pick) => pick.title.id)).toEqual(["watched"]);
+  });
+
+  it("uses canon titles as familiar fallbacks when the profile has no rated favorite", () => {
+    const canon = title("all-time-canon", {
+      canonicalScore: 88,
+      canonicalMemberships: [{
+        list: "Rotten Tomatoes all-time #40",
+        source: "Rotten Tomatoes",
+        version: "2026-08-15",
+        position: 40,
+      }],
+    });
+    const ordinary = title("ordinary", { canonicalScore: 20 });
+    const picks = recommendForProfile({
+      profile: profile(),
+      catalog: [ordinary, canon],
+      vibes: ["rewatch-favorite"],
+    });
+
+    expect(picks.map((pick) => pick.title.id)).toEqual(["all-time-canon"]);
   });
 
   it("learns creator affinity from repeated ratings", () => {
@@ -368,6 +409,22 @@ describe("editorial modes, ranking, and confidence", () => {
     expect(new Set(picks.map((pick) => pick.title.id)).size).toBe(10);
     expect(picks[0].rank).toBe(1);
     expect(picks[9].rank).toBe(10);
+  });
+
+  it("backfills ten nearby titles when an exact mood has no catalog matches", () => {
+    const catalog = Array.from({ length: 13 }, (_, index) => title(`drama-${index}`, {
+      genres: ["Drama"],
+      primarySubgenre: "character-study",
+      popularity: 30 + index,
+    }));
+    const picks = recommendForProfile({
+      profile: profile(),
+      catalog,
+      moods: ["stand-up"],
+    });
+    expect(picks).toHaveLength(10);
+    expect(new Set(picks.map((pick) => pick.title.id)).size).toBe(10);
+    expect(picks[0].evidence.join(" ")).toContain("fills the set after the exact filters ran out");
   });
 
   it("fills a top ten after strict vibe matches run out without violating mood or availability", () => {

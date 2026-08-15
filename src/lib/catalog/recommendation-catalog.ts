@@ -1,4 +1,5 @@
 import sampleJson from "../../../curation/pilot/sample-100.json";
+import rottenTomatoesCanonJson from "../../../curation/reference/rotten-tomatoes-top-300.json";
 import type { CastContextPerson } from "../recommendation/types";
 
 export type AppCatalogTitle = {
@@ -22,9 +23,16 @@ export type AppCatalogTitle = {
   cast: string[];
   castContext: CastContextPerson[];
   providers: string[];
+  watchOptions: Array<{
+    provider: string;
+    offerType: "subscription" | "free" | "rental" | "purchase";
+    deeplinkUrl?: string;
+  }>;
+  watchOptionsUrl: string;
   availabilityType: "subscription" | "free" | "rental";
   criterion?: boolean;
   canonical?: string[];
+  canonicalScore: number;
   popularity: number;
   baseline: number;
 };
@@ -45,6 +53,10 @@ type GoldSampleTitle = {
 type GoldSample = {
   title_count: number;
   titles: GoldSampleTitle[];
+};
+
+type RottenTomatoesCanon = {
+  movies: Array<{ rank: number; title: string; year: number; rotten_tomatoes_url: string }>;
 };
 
 export type CatalogTitleRow = {
@@ -87,8 +99,10 @@ export type CatalogCastContextRow = {
 
 export type CatalogAvailabilityRow = {
   title_id: string;
+  provider_key: string;
   provider_name: string;
   offer_type: "subscription" | "free_ad_supported" | "rent" | "buy";
+  deeplink_url: string | null;
 };
 
 export type CatalogClassificationRow = {
@@ -102,11 +116,23 @@ export type CatalogClassificationRow = {
 };
 
 const sample = sampleJson as GoldSample;
+const rottenTomatoesCanon = rottenTomatoesCanonJson as RottenTomatoesCanon;
 const sampleByIdentity = new Map(
   sample.titles.map((title) => [`${title.media_type}:${title.tmdb_id}`, title]),
 );
 
 export const GOLD_CATALOG_SIZE = sample.title_count;
+
+const normalizeCanonTitle = (value: string) => value
+  .toLocaleLowerCase()
+  .normalize("NFKD")
+  .replace(/[’']/g, "")
+  .replace(/[^a-z0-9]+/g, " ")
+  .trim();
+const rottenTomatoesByIdentity = new Map(rottenTomatoesCanon.movies.map((movie) => [
+  `${normalizeCanonTitle(movie.title)}:${movie.year}`,
+  movie,
+]));
 
 const providerAliases: Record<string, string> = {
   "Amazon Prime Video": "Prime Video",
@@ -263,6 +289,13 @@ function availabilityType(rows: readonly CatalogAvailabilityRow[]): AppCatalogTi
   return "subscription";
 }
 
+function appOfferType(value: CatalogAvailabilityRow["offer_type"]): AppCatalogTitle["watchOptions"][number]["offerType"] {
+  if (value === "free_ad_supported") return "free";
+  if (value === "rent") return "rental";
+  if (value === "buy") return "purchase";
+  return "subscription";
+}
+
 export function buildAppCatalogTitle(
   title: CatalogTitleRow,
   input: CatalogInputRow,
@@ -276,19 +309,30 @@ export function buildAppCatalogTitle(
     ...sampledProviders(input.raw_payload),
     ...availability.map((row) => normalizeGoldProviderName(row.provider_name)),
   ]);
+  const watchOptions = availability.map((row) => ({
+    provider: normalizeGoldProviderName(row.provider_name),
+    offerType: appOfferType(row.offer_type),
+    ...(row.deeplink_url ? { deeplinkUrl: row.deeplink_url } : {}),
+  }));
 
   const canonicalScore = asNumber(title.canonical_score);
+  const titleYear = releaseYear(title, sampleTitle);
+  const rottenTomatoesEntry = rottenTomatoesByIdentity.get(`${normalizeCanonTitle(displayTitleName(title.name))}:${titleYear}`);
+  const rottenTomatoesScore = rottenTomatoesEntry
+    ? Math.round(100 - ((rottenTomatoesEntry.rank - 1) / 299) * 45)
+    : 0;
+  const aggregateCanonicalScore = Math.max(canonicalScore, rottenTomatoesScore);
   const artwork = title.poster_path
     ? `https://image.tmdb.org/t/p/w780${title.poster_path}`
     : "/icons/icon-512.png";
   const backdrop = title.backdrop_path
-    ? `https://image.tmdb.org/t/p/w780${title.backdrop_path}`
+    ? `https://image.tmdb.org/t/p/original${title.backdrop_path}`
     : artwork;
 
   return {
     id: `tmdb:${title.tmdb_media_type}:${title.tmdb_id}`,
     name: displayTitleName(title.name),
-    year: releaseYear(title, sampleTitle),
+    year: titleYear,
     kind: contentKind(title, classification),
     runtime: runtimeLabel(title, sampleTitle),
     poster: artwork,
@@ -306,9 +350,15 @@ export function buildAppCatalogTitle(
     cast: input.principal_cast ?? [],
     castContext: cachedCastContext({ cast_context: castContext }),
     providers,
+    watchOptions,
+    watchOptionsUrl: `https://www.themoviedb.org/${title.tmdb_media_type}/${title.tmdb_id}/watch?locale=US`,
     availabilityType: availabilityType(availability),
     criterion: providers.includes("Criterion Channel"),
-    canonical: canonicalScore > 0 ? [`Canonical score ${Math.round(canonicalScore)}`] : undefined,
+    canonical: unique([
+      canonicalScore > 0 ? `Canonical score ${Math.round(canonicalScore)}` : null,
+      rottenTomatoesEntry ? `Rotten Tomatoes all-time #${rottenTomatoesEntry.rank}` : null,
+    ]),
+    canonicalScore: aggregateCanonicalScore,
     popularity: normalizedPopularity(title.popularity),
     baseline: baselineScore(title, sampleTitle),
   };
