@@ -20,6 +20,7 @@ import {
   LockKeyhole,
   Menu,
   MessageSquareText,
+  Mic2,
   MoreHorizontal,
   Play,
   Plus,
@@ -40,11 +41,11 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import type { AppCatalogMood, AppCatalogTitle } from "@/lib/catalog/recommendation-catalog";
-
 import { ProviderSelector } from "./provider-selector";
 
 type Screen = "home" | "results" | "rate" | "taste" | "settings";
+type ContentKind = "Movie" | "Series" | "Stand-up";
+type AvailabilityType = "subscription" | "free" | "rental";
 type RentalMode = "never" | "exceptional" | "always";
 type ShareMode = "ratings_and_reviews" | "ratings_only" | "nothing";
 type FriendshipStatus = "pending" | "accepted" | "declined" | "blocked";
@@ -59,7 +60,28 @@ type ModelWeights = {
   explorationBonus: number;
 };
 
-type Title = AppCatalogTitle;
+type Title = {
+  id: string;
+  name: string;
+  year: number;
+  kind: ContentKind;
+  runtime: string;
+  poster: string;
+  backdrop: string;
+  synopsis: string;
+  genres: string[];
+  tags: string[];
+  director: string;
+  writers: string[];
+  cinematographer?: string;
+  cast: string[];
+  providers: string[];
+  availabilityType: AvailabilityType;
+  criterion?: boolean;
+  canonical?: string[];
+  popularity: number;
+  baseline: number;
+};
 
 type ViewerProfile = {
   id: string;
@@ -173,26 +195,13 @@ const WEIGHT_LIMITS: Record<keyof ModelWeights, [number, number]> = {
   explorationBonus: [0, 1.5],
 };
 
-const moodIcons: Record<string, LucideIcon> = {
-  "edge-of-my-seat": Compass,
-  "make-me-laugh": Sparkles,
-  "comfort-watch": Bookmark,
-  "engage-me": Film,
-  "move-me": Play,
-  "take-me-somewhere-else": Tv,
-  "scare-me": LockKeyhole,
-  "fall-in-love": UserCheck,
-};
-
-const fallbackMoods: AppCatalogMood[] = [
-  { slug: "edge-of-my-seat", promptLabel: "Keep me on edge", threshold: 1, displayOrder: 1, rules: [{ tag: "tense", category: "tone", weight: 1 }] },
-  { slug: "make-me-laugh", promptLabel: "Make me laugh", threshold: 1, displayOrder: 2, rules: [{ tag: "wry", category: "tone", weight: 1 }] },
-  { slug: "comfort-watch", promptLabel: "Comfort watch", threshold: 1, displayOrder: 3, rules: [{ tag: "warm", category: "tone", weight: 1 }] },
-  { slug: "engage-me", promptLabel: "Engage me", threshold: 1, displayOrder: 4, rules: [{ tag: "cerebral", category: "tone", weight: 1 }] },
-  { slug: "move-me", promptLabel: "Move me", threshold: 1, displayOrder: 5, rules: [{ tag: "earnest", category: "tone", weight: 1 }] },
-  { slug: "take-me-somewhere-else", promptLabel: "Take me somewhere else", threshold: 1, displayOrder: 6, rules: [{ tag: "international", category: "attribute", weight: 1 }] },
-  { slug: "scare-me", promptLabel: "Scare me", threshold: 1, displayOrder: 7, rules: [{ tag: "menacing", category: "tone", weight: 1 }] },
-  { slug: "fall-in-love", promptLabel: "Make me fall in love", threshold: 1, displayOrder: 8, rules: [{ tag: "romantic", category: "tone", weight: 1 }] },
+const moods: { id: string; label: string; icon: LucideIcon }[] = [
+  { id: "Comedy", label: "Comedy", icon: Sparkles },
+  { id: "Stand-up", label: "Stand-up", icon: Mic2 },
+  { id: "Drama", label: "Drama", icon: Film },
+  { id: "Thriller", label: "Thriller", icon: Compass },
+  { id: "Action", label: "Action", icon: Play },
+  { id: "Horror", label: "Horror", icon: Bookmark },
 ];
 
 const vibes = [
@@ -919,40 +928,11 @@ function friendEvidence(profile: ViewerProfile, titleId: string, store: AppStore
   };
 }
 
-function appMoodMatch(title: Title, mood: AppCatalogMood) {
-  const ruleByTag = new Map(mood.rules.map((rule) => [rule.tag, rule]));
-  const contributions: number[] = [];
-  const primary = title.primarySubgenre ?? title.tags[0];
-  const secondary = title.secondarySubgenre ?? title.tags[1];
-  const primaryRule = primary ? ruleByTag.get(primary) : undefined;
-  const secondaryRule = secondary ? ruleByTag.get(secondary) : undefined;
-  if (primaryRule?.category === "subgenre") contributions.push(primaryRule.weight);
-  if (secondaryRule?.category === "subgenre") contributions.push(secondaryRule.weight * 0.6);
-  for (const tone of title.toneTags ?? title.tags) {
-    const rule = ruleByTag.get(tone);
-    if (rule?.category === "tone") contributions.push(rule.weight);
-  }
-  const pacing = title.pacing ?? (title.tags.includes("fast") ? "fast" : title.tags.includes("slow-burn") ? "slow" : "moderate");
-  const pacingRule = ruleByTag.get(pacing);
-  if (pacingRule?.category === "pacing") contributions.push(pacingRule.weight);
-
-  const rawScore = contributions.reduce((sum, value) => sum + value, 0);
-  const subgenres = mood.rules.filter((rule) => rule.category === "subgenre").map((rule) => rule.weight).sort((a, b) => b - a);
-  const tones = mood.rules.filter((rule) => rule.category === "tone").map((rule) => rule.weight).sort((a, b) => b - a).slice(0, 3);
-  const pacingMaximum = Math.max(0, ...mood.rules.filter((rule) => rule.category === "pacing").map((rule) => rule.weight));
-  const maximumScore = (subgenres[0] ?? 0) + (subgenres[1] ?? 0) * 0.6 + tones.reduce((sum, value) => sum + value, 0) + pacingMaximum;
-  return {
-    qualifies: rawScore >= mood.threshold,
-    signal: maximumScore ? Math.max(0, Math.min(1, rawScore / maximumScore)) : 0,
-  };
-}
-
 function buildRecommendations(
   profile: ViewerProfile,
   selectedMoods: string[],
   selectedVibe: string,
   store: AppStore,
-  availableMoods: readonly AppCatalogMood[],
 ): Recommendation[] {
   const weights = { ...DEFAULT_WEIGHTS, ...profile.weights };
   const wantsRewatch = selectedVibe === "Favorite";
@@ -998,16 +978,15 @@ function buildRecommendations(
     }, 0);
     return (genrePrior * 7 + traitPrior * 2.25) * questionnaireWeight;
   };
-  const requestedMoods = availableMoods.filter((mood) => selectedMoods.includes(mood.slug));
   const candidates = catalog
     .filter((title) => (wantsRewatch ? (profile.ratings[title.id] ?? 0) >= 8 : !profile.ratings[title.id]))
-    .filter((title) => !requestedMoods.length || requestedMoods.some((mood) => appMoodMatch(title, mood).qualifies))
     .map((title) => {
       const social = friendEvidence(profile, title.id, store);
-      const moodSignal = requestedMoods.length
-        ? Math.max(...requestedMoods.map((mood) => appMoodMatch(title, mood).signal))
-        : 0;
-      const moodScore = 12 * moodSignal * weights.moodMatch;
+      const moodScore = selectedMoods.length
+        ? selectedMoods.some((mood) => title.genres.includes(mood) || (mood === "Comedy" && title.genres.includes("Comedy")))
+          ? 12 * weights.moodMatch
+          : -18 * weights.moodMatch
+        : 2;
       const included =
         title.availabilityType === "subscription" &&
         title.providers.some((provider) => profile.subscriptions.includes(provider));
@@ -1038,6 +1017,8 @@ function buildRecommendations(
       if (selectedVibe === "Deeper" && (directorCount > 0 || title.genres.some((genre) => genreEvidence.has(genre)))) vibeScore += 10;
       if (selectedVibe === "Favorite") vibeScore += (profile.ratings[title.id] ?? 0) * 1.5;
       if (selectedVibe === "Friends" && social.context) vibeScore += social.score;
+      if (selectedMoods.includes("Stand-up") && title.kind !== "Stand-up") vibeScore -= 40;
+      if (!selectedMoods.includes("Stand-up") && title.kind === "Stand-up") vibeScore -= 16;
       return {
         title,
         raw: title.baseline + moodScore + availabilityScore + directorScore + genreScore + negativeScore + canonicalScore + vibeScore + questionnaireSignal(title),
@@ -1435,7 +1416,6 @@ function AppHeader({ profile, onProfiles, onMenu }: { profile: ViewerProfile; on
 
 function HomeScreen({
   profile,
-  moods: availableMoods,
   selectedMoods,
   setSelectedMoods,
   selectedVibe,
@@ -1443,7 +1423,6 @@ function HomeScreen({
   onFind,
 }: {
   profile: ViewerProfile;
-  moods: readonly AppCatalogMood[];
   selectedMoods: string[];
   setSelectedMoods: (moods: string[]) => void;
   selectedVibe: string;
@@ -1461,10 +1440,10 @@ function HomeScreen({
       <section className="choice-section" aria-labelledby="mood-heading">
         <div className="section-heading"><div><p className="section-number">01</p><h2 id="mood-heading">Choose a mood</h2></div><span>{selectedMoods.length}/2</span></div>
         <div className="mood-grid">
-          {availableMoods.map((mood) => {
-            const Icon = moodIcons[mood.slug] ?? Sparkles;
-            const active = selectedMoods.includes(mood.slug);
-            return <button key={mood.slug} className={`mood-chip ${active ? "is-active" : ""}`} onClick={() => setSelectedMoods(active ? selectedMoods.filter((item) => item !== mood.slug) : selectedMoods.length < 2 ? [...selectedMoods, mood.slug] : [selectedMoods[1], mood.slug])}><Icon size={18} /><span>{mood.promptLabel}</span>{active && <Check size={15} />}</button>;
+          {moods.map((mood) => {
+            const Icon = mood.icon;
+            const active = selectedMoods.includes(mood.id);
+            return <button key={mood.id} className={`mood-chip ${active ? "is-active" : ""}`} onClick={() => setSelectedMoods(active ? selectedMoods.filter((item) => item !== mood.id) : selectedMoods.length < 2 ? [...selectedMoods, mood.id] : [selectedMoods[1], mood.id])}><Icon size={18} /><span>{mood.label}</span>{active && <Check size={15} />}</button>;
           })}
         </div>
       </section>
@@ -1749,8 +1728,7 @@ export function WhatToWatchApp() {
   const [showProfiles, setShowProfiles] = useState(true);
   const [profileEditor, setProfileEditor] = useState<"create" | "manage" | null>(null);
   const [screen, setScreen] = useState<Screen>("home");
-  const [catalogMoods, setCatalogMoods] = useState<AppCatalogMood[]>(fallbackMoods);
-  const [selectedMoods, setSelectedMoods] = useState<string[]>(["edge-of-my-seat"]);
+  const [selectedMoods, setSelectedMoods] = useState<string[]>(["Thriller"]);
   const [selectedVibe, setSelectedVibe] = useState("New");
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [detailsTitle, setDetailsTitle] = useState<Title | null>(null);
@@ -1788,18 +1766,13 @@ export function WhatToWatchApp() {
     fetch("/api/catalog/recommendation-titles", { signal: controller.signal })
       .then(async (response) => {
         if (!response.ok) throw new Error(`Catalog returned ${response.status}`);
-        return response.json() as Promise<{ source?: string; titleCount?: number; titles?: Title[]; moods?: AppCatalogMood[] }>;
+        return response.json() as Promise<{ source?: string; titleCount?: number; titles?: Title[] }>;
       })
       .then((payload) => {
-        if (!Array.isArray(payload.titles) || payload.titleCount !== 100 || payload.titles.length !== 100 || !Array.isArray(payload.moods) || payload.moods.length !== 8) {
+        if (!Array.isArray(payload.titles) || payload.titleCount !== 100 || payload.titles.length !== 100) {
           throw new Error("Catalog payload is incomplete");
         }
         catalog = payload.titles;
-        setCatalogMoods(payload.moods);
-        setSelectedMoods((current) => {
-          const valid = current.filter((slug) => payload.moods?.some((mood) => mood.slug === slug));
-          return valid.length ? valid : [payload.moods?.[0]?.slug ?? "edge-of-my-seat"];
-        });
         setStore((current) => migrateCatalogTitleIds(current, payload.titles ?? []));
         forceCatalogRender((value) => value + 1);
       })
@@ -1818,7 +1791,7 @@ export function WhatToWatchApp() {
   const addProfile = (next: ViewerProfile) => { setStore((current) => ({ ...current, profiles: [...current.profiles, next] })); setActiveProfileId(next.id); setProfileEditor(null); setShowProfiles(false); };
   const deleteProfile = (id: string) => { if (store.profiles.length <= 1) { setToast("Keep at least one profile"); return; } setStore((current) => ({ ...current, profiles: current.profiles.filter((item) => item.id !== id), feedback: current.feedback.filter((item) => item.profileId !== id), friendships: current.friendships.filter((item) => item.requesterProfileId !== id && item.addresseeProfileId !== id), friendReviews: current.friendReviews.filter((item) => item.authorProfileId !== id), friendRecommendations: current.friendRecommendations.filter((item) => item.senderProfileId !== id && item.recipientProfileId !== id) })); if (activeProfileId === id) { setActiveProfileId(null); setShowProfiles(true); } };
   const rate = (id: string, score: number) => { if (!profile) return; const title = titleById(id); updateProfile({ ...profile, ratings: { ...profile.ratings, [id]: score } }); setToast(`${title?.name ?? "Title"} rated ${score}/10`); if (title && score >= 8) setPostRating({ title, rating: score }); };
-  const find = () => { if (!profile) return; const result = buildRecommendations(profile, selectedMoods, selectedVibe || "Surprise", store, catalogMoods); setRecommendations(result); setScreen("results"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const find = () => { if (!profile) return; const result = buildRecommendations(profile, selectedMoods, selectedVibe || "Surprise", store); setRecommendations(result); setScreen("results"); window.scrollTo({ top: 0, behavior: "smooth" }); };
   const feedback = (message: string, title?: Title) => {
     if (title && message === "Not interested" && profile) {
       setStore((current) => ({ ...current, feedback: [...current.feedback, { id: crypto.randomUUID(), profileId: profile.id, titleId: title.id, reason: message, createdAt: new Date().toISOString() }] }));
@@ -1863,8 +1836,8 @@ export function WhatToWatchApp() {
   return (
     <div className="app-shell">
       <AppHeader profile={profile} onProfiles={() => setShowProfiles(true)} onMenu={() => setScreen("settings")} />
-      {screen === "home" && <HomeScreen profile={profile} moods={catalogMoods} selectedMoods={selectedMoods} setSelectedMoods={setSelectedMoods} selectedVibe={selectedVibe} setSelectedVibe={setSelectedVibe} onFind={find} />}
-      {screen === "results" && <ResultsScreen profile={profile} recommendations={recommendations.length ? recommendations : buildRecommendations(profile, selectedMoods, selectedVibe, store, catalogMoods)} onBack={() => setScreen("home")} onDetails={setDetailsTitle} onFeedback={feedback} />}
+      {screen === "home" && <HomeScreen profile={profile} selectedMoods={selectedMoods} setSelectedMoods={setSelectedMoods} selectedVibe={selectedVibe} setSelectedVibe={setSelectedVibe} onFind={find} />}
+      {screen === "results" && <ResultsScreen profile={profile} recommendations={recommendations.length ? recommendations : buildRecommendations(profile, selectedMoods, selectedVibe, store)} onBack={() => setScreen("home")} onDetails={setDetailsTitle} onFeedback={feedback} />}
       {screen === "rate" && <RateScreen profile={profile} onRate={rate} onDetails={setDetailsTitle} />}
       {screen === "taste" && <TasteScreen profile={profile} onRate={() => setScreen("rate")} />}
       {screen === "settings" && <SettingsScreen profile={profile} feedback={store.feedback.filter((item) => item.profileId === profile.id)} store={store} onChange={updateProfile} onProfiles={() => setProfileEditor("manage")} onToast={setToast} onFriendship={changeFriendship} />}

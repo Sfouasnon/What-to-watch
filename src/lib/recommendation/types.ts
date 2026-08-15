@@ -1,19 +1,8 @@
 export const CONTENT_TYPES = ["movie", "series", "stand-up"] as const;
 export type ContentType = (typeof CONTENT_TYPES)[number];
 
-export interface MoodTagRule {
-  tag: string;
-  category: "subgenre" | "tone" | "pacing" | "attribute";
-  weight: number;
-}
-
-/** A data-driven mood loaded from the editorial ontology, not a fixed slug union. */
-export interface Mood {
-  slug: string;
-  promptLabel: string;
-  threshold: number;
-  rules: readonly MoodTagRule[];
-}
+export const MOODS = ["comedy", "stand-up", "drama", "thriller", "action", "horror"] as const;
+export type Mood = (typeof MOODS)[number];
 
 export const VIBES = [
   "rewatch-favorite",

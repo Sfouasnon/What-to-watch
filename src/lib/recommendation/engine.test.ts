@@ -5,12 +5,10 @@ import {
   defaultRecommendationConfig,
   effectivePreference,
   importTunedConfiguration,
-  questionnaireGenrePreference,
   questionnaireConfidence,
   recommendForProfile,
-  scoreMoodMatch,
 } from "./engine";
-import { RECOMMENDATION_LANES, type Mood, type Profile, type Rating, type SocialRecommendationInput, type Title } from "./types";
+import { RECOMMENDATION_LANES, type Profile, type Rating, type SocialRecommendationInput, type Title } from "./types";
 
 const NOW = "2026-08-08T00:00:00.000Z";
 
@@ -63,16 +61,6 @@ function title(id: string, overrides: Partial<Title> = {}): Title {
     popularity: 50,
     trendingScore: 20,
     availability: [{ serviceId: "netflix", region: "US", kind: "subscription", checkedAt: NOW, source: "demo" }],
-    ...overrides,
-  };
-}
-
-function mood(slug = "edge-of-my-seat", overrides: Partial<Mood> = {}): Mood {
-  return {
-    slug,
-    promptLabel: slug.replaceAll("-", " "),
-    threshold: 1,
-    rules: [{ tag: "Mystery", category: "subgenre", weight: 1 }],
     ...overrides,
   };
 }
@@ -131,58 +119,11 @@ describe("availability and content gates", () => {
     expect(picks.find((pick) => pick.title.id === "exceptional-rental")?.requiresPayment).toBe(true);
   });
 
-  it("uses editorial mood rules instead of TMDB genre labels", () => {
-    const pulpFiction = title("pulp-fiction", { genres: ["Comedy", "Crime"], subgenres: ["crime-drama"] });
-    const actualComedy = title("actual-comedy", { genres: ["Drama"], subgenres: ["romantic-comedy"] });
-    const makeMeLaugh = mood("make-me-laugh", {
-      threshold: 1,
-      rules: [{ tag: "romantic-comedy", category: "subgenre", weight: 1.2 }],
-    });
-
-    expect(recommendForProfile({ profile: profile(), catalog: [pulpFiction, actualComedy], moods: [makeMeLaugh] }).map((pick) => pick.title.id)).toEqual(["actual-comedy"]);
-  });
-
-  it("scores primary, secondary, tone, and pacing rules at their specified strengths", () => {
-    const result = scoreMoodMatch(
-      title("scored", { subgenres: ["primary", "secondary"], toneTags: ["tense"], pacing: "fast" }),
-      mood("edge-of-my-seat", {
-        threshold: 3,
-        rules: [
-          { tag: "primary", category: "subgenre", weight: 2 },
-          { tag: "secondary", category: "subgenre", weight: 2 },
-          { tag: "tense", category: "tone", weight: 0.5 },
-          { tag: "fast", category: "pacing", weight: 0.25 },
-        ],
-      }),
-    );
-
-    expect(result.rawScore).toBeCloseTo(3.95);
-    expect(result.qualifies).toBe(true);
-    expect(result.signal).toBeGreaterThan(0);
-    expect(result.signal).toBeLessThanOrEqual(1);
-  });
-
-  it("uses the mood score to discriminate between titles that both clear the gate", () => {
-    const requestedMood = mood("engage-me", {
-      threshold: 1,
-      rules: [
-        { tag: "strong-fit", category: "subgenre", weight: 2 },
-        { tag: "weak-fit", category: "subgenre", weight: 1 },
-      ],
-    });
-    const picks = recommendForProfile({
-      profile: profile(),
-      catalog: [
-        title("weak", { subgenres: ["weak-fit"] }),
-        title("strong", { subgenres: ["strong-fit"] }),
-      ],
-      moods: [requestedMood],
-    });
-
-    expect(picks[0].title.id).toBe("strong");
-    const strongContribution = picks[0].contributions.find((item) => item.feature === "moodMatch")?.value;
-    const weakContribution = picks[1].contributions.find((item) => item.feature === "moodMatch")?.value;
-    expect(strongContribution).toBeGreaterThan(weakContribution ?? 0);
+  it("keeps stand-up separate from scripted comedy", () => {
+    const standup = title("standup", { contentType: "stand-up", genres: ["Stand-Up"] });
+    const comedy = title("comedy", { genres: ["Comedy"] });
+    expect(recommendForProfile({ profile: profile(), catalog: [standup, comedy], moods: ["comedy"] }).map((pick) => pick.title.id)).toEqual(["comedy"]);
+    expect(recommendForProfile({ profile: profile(), catalog: [standup, comedy], moods: ["stand-up"] }).map((pick) => pick.title.id)).toEqual(["standup"]);
   });
 });
 
@@ -203,7 +144,7 @@ describe("personal taste behavior", () => {
       title("other-next", { directors: ["Someone Else"] }),
     ];
     const viewer = profile({ ratings: [rating("fincher-seen-1", 10), rating("fincher-seen-2", 9)] });
-    const picks = recommendForProfile({ profile: viewer, catalog, moods: [mood()] });
+    const picks = recommendForProfile({ profile: viewer, catalog, moods: ["thriller"] });
     expect(picks[0].title.id).toBe("fincher-next");
     expect(picks[0].explanation).toContain("David Fincher");
   });
@@ -233,23 +174,6 @@ describe("personal taste behavior", () => {
     });
     const picks = recommendForProfile({ profile: viewer, catalog: [...seen, horror, neutral] });
     expect(picks[0].title.id).toBe("horror-next");
-  });
-
-  it("keeps a strong questionnaire dislike from being averaged into a positive prior", () => {
-    expect(questionnaireGenrePreference([2, 10])).toBeLessThan(0);
-    expect(questionnaireGenrePreference([5.5])).toBe(0);
-    expect(questionnaireGenrePreference([7])).toBeLessThan(questionnaireGenrePreference([10]));
-
-    const animationComedy = title("animation-comedy", { genres: ["Animation", "Comedy"] });
-    const comedy = title("comedy", { genres: ["Comedy"] });
-    const viewer = profile({
-      questionnaire: {
-        dimensionScores: {},
-        genreScores: { Animation: 2, Comedy: 10 },
-      },
-    });
-    const picks = recommendForProfile({ profile: viewer, catalog: [animationComedy, comedy] });
-    expect(picks[0].title.id).toBe("comedy");
   });
 
   it("never allows one profile's evidence to leak into another", () => {
@@ -304,7 +228,7 @@ describe("editorial modes, ranking, and confidence", () => {
   });
 
   it("provides evidence-based explanations plus separate raw and normalized scores", () => {
-    const picks = recommendForProfile({ profile: profile(), catalog: [title("one")], moods: [mood()] });
+    const picks = recommendForProfile({ profile: profile(), catalog: [title("one")], moods: ["thriller"] });
     expect(picks[0].explanation.length).toBeGreaterThan(10);
     expect(picks[0].evidence.length).toBeGreaterThan(0);
     expect(Number.isFinite(picks[0].rawScore)).toBe(true);
@@ -323,12 +247,6 @@ describe("editorial modes, ranking, and confidence", () => {
     expect(effectivePreference({ behavioralPreference: 1, behavioralEvidence: 20, questionnairePreference: -1, ratingCount: 100 })).toBeGreaterThan(0.7);
   });
 
-  it("weights editorial subgenres above broad TMDB genres", () => {
-    expect(defaultRecommendationConfig.weights.subgenreMatch).toBeGreaterThan(
-      defaultRecommendationConfig.weights.genreMatch,
-    );
-  });
-
   it("ships enough serializable demo inventory for a top ten", () => {
     const picks = recommendForProfile({ profile: demoProfiles[0], catalog: demoCatalog });
     expect(picks).toHaveLength(10);
@@ -342,7 +260,7 @@ describe("friends as contextual recommendation evidence", () => {
     const picks = recommendForProfile({
       profile: viewer,
       catalog: [title("a-control"), title("social-pick")],
-      moods: [mood()],
+      moods: ["thriller"],
       vibes: ["friends-picks"],
       social: social(),
     });
@@ -430,10 +348,10 @@ describe("friends as contextual recommendation evidence", () => {
     const catalog = [
       title("watched"),
       title("unavailable", { availability: [] }),
-      title("wrong-mood", { genres: ["Comedy"], subgenres: ["romantic-comedy"] }),
+      title("wrong-mood", { genres: ["Comedy"] }),
       title("eligible"),
     ];
-    const picks = recommendForProfile({ profile: viewer, catalog, moods: [mood()], vibes: ["friends-picks"], social: gateSocial });
+    const picks = recommendForProfile({ profile: viewer, catalog, moods: ["thriller"], vibes: ["friends-picks"], social: gateSocial });
     expect(picks.map((pick) => pick.title.id)).toEqual(["eligible"]);
   });
 
