@@ -34,6 +34,13 @@ const mediaTypeFilter = argument("media-type");
 if (mediaTypeFilter && !["movie", "tv"].includes(mediaTypeFilter)) {
   throw new Error("--media-type must be movie or tv.");
 }
+const forcedContentType = argument("content-type");
+if (forcedContentType && !["movie", "tv_series", "standup_special"].includes(forcedContentType)) {
+  throw new Error("--content-type must be movie, tv_series, or standup_special.");
+}
+if (forcedContentType === "standup_special" && mediaTypeFilter !== "movie") {
+  throw new Error("--content-type=standup_special requires --media-type=movie.");
+}
 
 class TmdbError extends Error {
   constructor(status, message) {
@@ -117,7 +124,7 @@ async function hydrateIndexRow(row, genreMap) {
   const titleRow = {
     tmdb_id: row.tmdb_id,
     tmdb_media_type: mediaType,
-    content_type: mediaType === "movie" ? "movie" : "tv_series",
+    content_type: forcedContentType ?? (mediaType === "movie" ? "movie" : "tv_series"),
     name: mediaType === "movie" ? detail.title : detail.name,
     original_name: mediaType === "movie" ? detail.original_title : detail.original_name,
     overview: detail.overview || null,

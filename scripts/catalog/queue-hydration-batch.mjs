@@ -48,6 +48,20 @@ if (foreignQueue.length) {
 }
 
 const existingIdentities = new Set((eligibleQueue ?? []).map((row) => `${row.media_type}:${row.tmdb_id}`));
+for (const mediaType of ["movie", "tv"]) {
+  const tmdbIds = batch.titles
+    .filter((title) => title.mediaType === mediaType)
+    .map((title) => title.tmdbId);
+  for (let index = 0; index < tmdbIds.length; index += 100) {
+    const { data, error } = await supabase
+      .from("tmdb_catalog_index")
+      .select("media_type,tmdb_id")
+      .eq("media_type", mediaType)
+      .in("tmdb_id", tmdbIds.slice(index, index + 100));
+    if (error) throw error;
+    for (const row of data ?? []) existingIdentities.add(`${row.media_type}:${row.tmdb_id}`);
+  }
+}
 const selectionDate = String(manifest.generatedAt).slice(0, 10);
 const rows = batch.titles
   .filter((title) => !existingIdentities.has(`${title.mediaType}:${title.tmdbId}`))

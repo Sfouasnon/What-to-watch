@@ -45,6 +45,7 @@ next-env.d.ts
 /_to_delete/
 /catalog-buildout-plan.html
 /pr4-tmdb-gold-hydration.patch
+/supabase/.temp/
 /curation/batches/*.json
 /curation/classification/
 /curation/classification-experiments/*/

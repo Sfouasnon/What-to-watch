@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "overrides": [
+    {
+      "media_type": "movie",
+      "tmdb_id": 1359,
+      "title": "American Psycho",
+      "set": {
+        "primary_subgenre": "psychological-thriller",
+        "secondary_subgenre": "black-comedy"
+      },
+      "reason": "Psychological thriller is the viewing promise; black comedy is an important secondary mode but should not qualify the title for an explicit Comedy request.",
+      "approved_at": "2026-08-15"
+    }
+  ]
+}

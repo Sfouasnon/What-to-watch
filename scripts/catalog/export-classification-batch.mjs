@@ -176,6 +176,7 @@ const llmTitles = batch.titles.map((selected, index) => {
     batch_position: index + 1,
     tmdb_id: title.tmdb_id,
     media_type: title.tmdb_media_type,
+    content_type: title.content_type,
     title: title.name,
     original_title: title.original_name,
     year: year(title.release_date),

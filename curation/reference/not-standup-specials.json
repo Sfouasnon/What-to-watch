@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "standup-special-exclusions-v1",
+  "updatedAt": "2026-08-15",
+  "titles": [
+    {
+      "tmdbId": 1140498,
+      "name": "Is This Thing On?",
+      "reason": "Narrative feature about a character entering the New York comedy scene."
+    },
+    {
+      "tmdbId": 571721,
+      "name": "The Last Hangover",
+      "reason": "Scripted biblical Hangover parody, not a recorded stand-up performance."
+    },
+    {
+      "tmdbId": 394499,
+      "name": "Porta dos Fundos: Contrato Vitalício",
+      "reason": "Scripted narrative feature, not a recorded stand-up performance."
+    }
+  ]
+}

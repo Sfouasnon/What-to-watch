@@ -4,6 +4,12 @@ import { fileURLToPath } from "node:url";
 
 import { createClient } from "@supabase/supabase-js";
 
+import {
+  databaseOfferType,
+  normalizedProvider,
+  providerKey,
+} from "./lib/provider-normalization.mjs";
+
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
@@ -63,46 +69,6 @@ function classifierVersion(artifact) {
   return `${workflow}:${models.join("+") || "recorded-in-artifact"}`.slice(0, 160);
 }
 
-const knownServices = [
-  { slug: "netflix", label: "Netflix", matches: (name) => name.startsWith("netflix") },
-  { slug: "prime-video", label: "Prime Video", matches: (name) => name.includes("prime video") },
-  { slug: "hulu", label: "Hulu", matches: (name) => name === "hulu" },
-  { slug: "criterion-channel", label: "Criterion Channel", matches: (name) => name === "criterion channel" },
-  { slug: "disney-plus", label: "Disney+", matches: (name) => name === "disney+" },
-  { slug: "apple-tv-plus", label: "Apple TV+", matches: (name) => name === "apple tv+" },
-  { slug: "max", label: "Max", matches: (name) => name === "max" || name.startsWith("hbo max ") },
-  { slug: "paramount-plus", label: "Paramount+", matches: (name) => name.startsWith("paramount plus") || name.startsWith("paramount+") },
-  { slug: "peacock", label: "Peacock", matches: (name) => name.startsWith("peacock") },
-];
-
-function normalizedProvider(rawName) {
-  const trimmed = rawName.trim();
-  const normalized = trimmed.toLocaleLowerCase();
-  const service = knownServices.find((candidate) => candidate.matches(normalized));
-  return {
-    providerName: service?.label ?? trimmed,
-    serviceSlug: service?.slug ?? null,
-  };
-}
-
-function providerKey(value) {
-  const slug = value
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLocaleLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 121);
-  if (!slug) throw new Error(`Unable to derive provider key for ${value}`);
-  return slug;
-}
-
-function offerType(value) {
-  if (value === "free") return "free_ad_supported";
-  if (value === "rental") return "rent";
-  return "subscription";
-}
-
 async function fetchInChunks(supabase, table, columns, field, values, chunkSize = 150) {
   const rows = [];
   for (const chunk of chunks(values, chunkSize)) {
@@ -118,22 +84,30 @@ const manifestPath = options.get("manifest")?.[0];
 const artifactPaths = options.get("artifact") ?? [];
 const providersPath = options.get("providers")?.[0];
 const ontologyPath = options.get("ontology")?.[0] ?? "curation/ontology/v0.1.1/ontology.json";
-if (!manifestPath || !artifactPaths.length || !providersPath) {
+const overridesPath = options.get("overrides")?.[0] ?? "curation/editorial-overrides-v1.json";
+if (!manifestPath || !artifactPaths.length) {
   throw new Error(
-    "Usage: node scripts/catalog/publish-classification-catalog.mjs --manifest=<path> --artifact=<path> [--artifact=<path> ...] --providers=<path> [--write]",
+    "Usage: node scripts/catalog/publish-classification-catalog.mjs --manifest=<path> --artifact=<path> [--artifact=<path> ...] [--providers=<path>] [--write]",
   );
 }
 
-const [manifest, ontology, providersCache, ...artifacts] = await Promise.all([
+const [manifest, ontology, overridesArtifact, ...artifacts] = await Promise.all([
   readJson(manifestPath),
   readJson(ontologyPath),
-  readJson(providersPath),
+  readJson(overridesPath),
   ...artifactPaths.map(readJson),
 ]);
+const providersCache = providersPath ? await readJson(providersPath) : null;
 const manifestTitles = manifest.batches.flatMap((batch) => batch.titles);
 const expectedIdentities = new Set(manifestTitles.map(manifestIdentity));
-if (manifest.titleCount !== 900 || manifestTitles.length !== 900 || expectedIdentities.size !== 900) {
-  throw new Error(`Expected one 900-title manifest, found ${manifest.titleCount}/${manifestTitles.length}/${expectedIdentities.size}.`);
+const expectedTitleCount = Number(manifest.titleCount);
+if (
+  !Number.isInteger(expectedTitleCount) || expectedTitleCount < 1 || expectedTitleCount > 10_000 ||
+  manifestTitles.length !== expectedTitleCount || expectedIdentities.size !== expectedTitleCount
+) {
+  throw new Error(
+    `Manifest title count mismatch: declared ${manifest.titleCount}, rows ${manifestTitles.length}, unique identities ${expectedIdentities.size}.`,
+  );
 }
 
 const allowedSubgenres = new Set(
@@ -141,35 +115,60 @@ const allowedSubgenres = new Set(
 );
 const allowedTones = new Set(ontology.tone_tags.map((tone) => tone.id));
 const allowedPacing = new Set(ontology.pacing.map((pace) => pace.id));
+const overridesByIdentity = new Map();
+for (const override of overridesArtifact.overrides ?? []) {
+  const overrideIdentity = identity(override);
+  if (overridesByIdentity.has(overrideIdentity)) throw new Error(`Duplicate editorial override ${overrideIdentity}.`);
+  if (!override.set || typeof override.set !== "object" || Array.isArray(override.set)) {
+    throw new Error(`Invalid editorial override payload for ${overrideIdentity}.`);
+  }
+  overridesByIdentity.set(overrideIdentity, override);
+}
 const classificationsByIdentity = new Map();
 for (const [artifactIndex, artifact] of artifacts.entries()) {
   for (const row of artifact.classifications ?? []) {
     const rowIdentity = identity(row);
+    const override = overridesByIdentity.get(rowIdentity);
+    const effectiveRow = override ? { ...row, ...override.set } : row;
     if (!expectedIdentities.has(rowIdentity)) throw new Error(`Unexpected classification ${rowIdentity}.`);
     if (classificationsByIdentity.has(rowIdentity)) throw new Error(`Duplicate classification ${rowIdentity}.`);
-    if (!allowedSubgenres.has(row.primary_subgenre)) throw new Error(`Invalid primary subgenre for ${rowIdentity}.`);
-    if (row.secondary_subgenre !== null && row.secondary_subgenre !== undefined && !allowedSubgenres.has(row.secondary_subgenre)) {
+    if (!allowedSubgenres.has(effectiveRow.primary_subgenre)) throw new Error(`Invalid primary subgenre for ${rowIdentity}.`);
+    if (effectiveRow.secondary_subgenre !== null && effectiveRow.secondary_subgenre !== undefined && !allowedSubgenres.has(effectiveRow.secondary_subgenre)) {
       throw new Error(`Invalid secondary subgenre for ${rowIdentity}.`);
     }
-    if (row.secondary_subgenre === row.primary_subgenre) throw new Error(`Duplicate subgenres for ${rowIdentity}.`);
-    if (!Array.isArray(row.tone_tags) || row.tone_tags.length < 2 || row.tone_tags.length > 3) {
+    if (effectiveRow.secondary_subgenre === effectiveRow.primary_subgenre) throw new Error(`Duplicate subgenres for ${rowIdentity}.`);
+    if (!Array.isArray(effectiveRow.tone_tags) || effectiveRow.tone_tags.length < 2 || effectiveRow.tone_tags.length > 3) {
       throw new Error(`Invalid tone count for ${rowIdentity}.`);
     }
-    if (new Set(row.tone_tags).size !== row.tone_tags.length || row.tone_tags.some((tone) => !allowedTones.has(tone))) {
+    if (new Set(effectiveRow.tone_tags).size !== effectiveRow.tone_tags.length || effectiveRow.tone_tags.some((tone) => !allowedTones.has(tone))) {
       throw new Error(`Invalid tone tags for ${rowIdentity}.`);
     }
-    if (!allowedPacing.has(row.pacing)) throw new Error(`Invalid pacing for ${rowIdentity}.`);
-    classificationsByIdentity.set(rowIdentity, { row, artifact, artifactPath: artifactPaths[artifactIndex] });
+    if (!allowedPacing.has(effectiveRow.pacing)) throw new Error(`Invalid pacing for ${rowIdentity}.`);
+    classificationsByIdentity.set(rowIdentity, {
+      row: effectiveRow,
+      artifact,
+      artifactPath: artifactPaths[artifactIndex],
+      override,
+    });
   }
 }
-if (classificationsByIdentity.size !== 900) throw new Error(`Expected 900 classifications, found ${classificationsByIdentity.size}.`);
-
-const providerEntries = Object.entries(providersCache.titles ?? {});
-if (providerEntries.length !== 900 || new Set(providerEntries.map(([key]) => key)).size !== 900) {
-  throw new Error(`Expected 900 provider-cache identities, found ${providerEntries.length}.`);
+if (classificationsByIdentity.size !== expectedTitleCount) {
+  throw new Error(`Expected ${expectedTitleCount} classifications, found ${classificationsByIdentity.size}.`);
 }
-for (const [key] of providerEntries) {
-  if (!expectedIdentities.has(key)) throw new Error(`Unexpected provider-cache identity ${key}.`);
+const unappliedOverrides = [...overridesByIdentity.keys()].filter((key) => expectedIdentities.has(key) && !classificationsByIdentity.has(key));
+if (unappliedOverrides.length) throw new Error(`Unapplied editorial overrides: ${unappliedOverrides.join(", ")}`);
+
+const providerEntries = Object.entries(providersCache?.titles ?? {});
+if (providersCache) {
+  if (
+    providerEntries.length !== expectedTitleCount ||
+    new Set(providerEntries.map(([key]) => key)).size !== expectedTitleCount
+  ) {
+    throw new Error(`Expected ${expectedTitleCount} provider-cache identities, found ${providerEntries.length}.`);
+  }
+  for (const [key] of providerEntries) {
+    if (!expectedIdentities.has(key)) throw new Error(`Unexpected provider-cache identity ${key}.`);
+  }
 }
 
 const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
@@ -199,11 +198,11 @@ const existingClassifications = await fetchInChunks(
   titleIds,
 );
 if (existingClassifications.some((row) => row.review_status === "gold")) {
-  throw new Error("The 900-title manifest overlaps a protected gold classification.");
+  throw new Error("The publication manifest overlaps a protected gold classification.");
 }
 
 const classificationPayload = [...expectedIdentities].map((key) => {
-  const { row, artifact, artifactPath } = classificationsByIdentity.get(key);
+  const { row, artifact, artifactPath, override } = classificationsByIdentity.get(key);
   const confidence = confidenceFor(row);
   return {
     title_id: queueByIdentity.get(key).title_id,
@@ -228,11 +227,17 @@ const classificationPayload = [...expectedIdentities].map((key) => {
       low_confidence_flag: row.review_status === "automated_low_confidence" || confidence < 0.75,
       field_sources: row.field_sources ?? null,
       rationale: row.rationale ?? null,
+      editorial_override: override ? {
+        schema_version: overridesArtifact.schema_version,
+        artifact: overridesPath,
+        reason: override.reason ?? null,
+        approved_at: override.approved_at ?? null,
+      } : null,
     },
   };
 });
 
-const availabilityPayload = [...expectedIdentities].map((key) => {
+const availabilityPayload = providersCache ? [...expectedIdentities].map((key) => {
   const cached = providersCache.titles[key];
   const checkedAt = new Date(cached.checkedAt);
   if (Number.isNaN(checkedAt.getTime())) throw new Error(`Invalid checkedAt for ${key}.`);
@@ -240,7 +245,7 @@ const availabilityPayload = [...expectedIdentities].map((key) => {
   const offers = new Map();
   for (const rawProvider of cached.providers ?? []) {
     const provider = normalizedProvider(rawProvider);
-    const type = offerType(cached.availabilityType);
+    const type = databaseOfferType(cached.availabilityType);
     const keyForOffer = `${providerKey(provider.providerName)}:${type}`;
     offers.set(keyForOffer, {
       provider_key: providerKey(provider.providerName),
@@ -256,7 +261,7 @@ const availabilityPayload = [...expectedIdentities].map((key) => {
     expires_at: expiresAt.toISOString(),
     offers: [...offers.values()],
   };
-});
+}) : [];
 
 const summary = {
   mode: WRITE ? "write" : "dry-run",
@@ -265,8 +270,9 @@ const summary = {
   existingClassifications: existingClassifications.length,
   accepted: classificationPayload.filter((row) => row.review_status === "accepted").length,
   lowConfidenceFlags: classificationPayload.filter((row) => row.source_payload.low_confidence_flag).length,
-  titlesWithProviders: availabilityPayload.filter((row) => row.offers.length > 0).length,
-  titlesWithoutProviders: availabilityPayload.filter((row) => row.offers.length === 0).length,
+  providerSource: providersPath ?? null,
+  titlesWithProviders: providersCache ? availabilityPayload.filter((row) => row.offers.length > 0).length : null,
+  titlesWithoutProviders: providersCache ? availabilityPayload.filter((row) => row.offers.length === 0).length : null,
   availabilityOffers: availabilityPayload.reduce((sum, row) => sum + row.offers.length, 0),
 };
 
