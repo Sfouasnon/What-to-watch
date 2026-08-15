@@ -54,9 +54,11 @@ export type CatalogTitleRow = {
   content_type: "movie" | "tv_series" | "standup_special";
   name: string;
   overview: string | null;
+  release_date: string | null;
   runtime_minutes: number | null;
   episode_runtime_minutes: number | null;
   season_count: number | null;
+  episode_count: number | null;
   original_language: string | null;
   production_countries: string[] | null;
   popularity: number | string | null;
@@ -198,6 +200,16 @@ function baselineScore(title: CatalogTitleRow, sampleTitle: GoldSampleTitle) {
   return clamp(Math.round(58 + voteAverage * 3 + voteEvidence), 72, 95);
 }
 
+/**
+ * Prefers the hydrated TMDB release date over the pilot sample's year, so the
+ * catalog reflects live metadata once `catalog:hydrate-gold` has run and still
+ * renders correctly before it has.
+ */
+export function releaseYear(title: CatalogTitleRow, sampleTitle: GoldSampleTitle) {
+  const year = Number(title.release_date?.slice(0, 4));
+  return Number.isInteger(year) && year > 1870 ? year : sampleTitle.year;
+}
+
 function runtimeLabel(title: CatalogTitleRow, sampleTitle: GoldSampleTitle) {
   const minutes = title.content_type === "tv_series"
     ? title.episode_runtime_minutes ?? sampleTitle.runtime ?? null
@@ -262,7 +274,7 @@ export function buildAppCatalogTitle(
   return {
     id: `tmdb:${title.tmdb_media_type}:${title.tmdb_id}`,
     name: displayTitleName(title.name),
-    year: sampleTitle.year,
+    year: releaseYear(title, sampleTitle),
     kind: contentKind(title, classification),
     runtime: runtimeLabel(title, sampleTitle),
     poster: artwork,

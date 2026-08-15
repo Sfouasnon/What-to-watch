@@ -1,6 +1,3 @@
--- Mutable TMDB cast context belongs beside immutable classification evidence,
--- not inside it. Keep this cache server-only and independently refreshable.
-
 create table public.title_cast_context_cache (
   title_id uuid primary key references public.titles(id) on delete cascade,
   source text not null default 'tmdb',
@@ -15,8 +12,6 @@ alter table public.title_cast_context_cache enable row level security;
 revoke all on table public.title_cast_context_cache from anon, authenticated;
 grant select, insert, update on table public.title_cast_context_cache to service_role;
 
--- Move any cache written during the transition out of the frozen classifier
--- packet, then restore its append-only service-role boundary.
 insert into public.title_cast_context_cache (
   title_id,
   source,

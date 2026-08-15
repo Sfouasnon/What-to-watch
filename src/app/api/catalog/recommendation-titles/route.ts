@@ -55,7 +55,7 @@ export async function GET() {
   ] = await Promise.all([
     supabase
       .from("titles")
-      .select("id,tmdb_id,tmdb_media_type,content_type,name,overview,runtime_minutes,episode_runtime_minutes,season_count,original_language,production_countries,popularity,vote_average,vote_count,canonical_score,poster_path,backdrop_path")
+      .select("id,tmdb_id,tmdb_media_type,content_type,name,overview,release_date,runtime_minutes,episode_runtime_minutes,season_count,episode_count,original_language,production_countries,popularity,vote_average,vote_count,canonical_score,poster_path,backdrop_path")
       .in("id", titleIds),
     supabase
       .from("title_classification_inputs")
