@@ -17,6 +17,7 @@ import {
   type Title,
   type Vibe,
 } from "./types";
+import { buildRecommendationNarrative } from "./narrative";
 
 const REFERENCE_YEAR = 2026;
 
@@ -322,6 +323,14 @@ export function recommendForProfile({
     const requiresPayment =
       candidate.primaryAvailability.kind === "rental" || candidate.primaryAvailability.kind === "purchase";
     const evidence = buildEvidence(candidate, moods, vibes, recommendationLane, requiresPayment);
+    const narrative = buildRecommendationNarrative({
+      title: candidate.title,
+      profile,
+      moods,
+      vibes,
+      lane: recommendationLane,
+      evidence,
+    });
     const normalizedScore = normalizeScore(winner.score, config);
     const matchScore = Math.round(
       config.normalization.minimumDisplayMatch +
@@ -335,7 +344,8 @@ export function recommendForProfile({
       rawScore: round(winner.score, 3),
       normalizedScore: round(normalizedScore, 4),
       matchScore,
-      explanation: evidence.slice(0, 2).join(" "),
+      explanation: [narrative.fit, narrative.cast, narrative.setup].filter(Boolean).join(" "),
+      narrative,
       evidence,
       contributions: [...candidate.contributions].sort((a, b) => Math.abs(b.value) - Math.abs(a.value)),
       availability: candidate.availability,

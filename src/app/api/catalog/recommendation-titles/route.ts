@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import {
   buildAppCatalogTitle,
   GOLD_CATALOG_SIZE,
+  type CatalogCastContextRow,
   type CatalogClassificationRow,
   type CatalogInputRow,
   type CatalogTitleRow,
@@ -47,7 +48,11 @@ export async function GET() {
   }
 
   const titleIds = gold.map((classification) => classification.title_id);
-  const [{ data: titles, error: titleError }, { data: inputs, error: inputError }] = await Promise.all([
+  const [
+    { data: titles, error: titleError },
+    { data: inputs, error: inputError },
+    { data: castContexts, error: castContextError },
+  ] = await Promise.all([
     supabase
       .from("titles")
       .select("id,tmdb_id,tmdb_media_type,content_type,name,overview,runtime_minutes,episode_runtime_minutes,season_count,original_language,production_countries,popularity,vote_average,vote_count,canonical_score,poster_path,backdrop_path")
@@ -56,9 +61,13 @@ export async function GET() {
       .from("title_classification_inputs")
       .select("title_id,tmdb_genres,directors,writers,cinematographers,principal_cast,keywords,raw_payload")
       .in("title_id", titleIds),
+    supabase
+      .from("title_cast_context_cache")
+      .select("title_id,cast_context")
+      .in("title_id", titleIds),
   ]);
 
-  if (titleError || inputError) {
+  if (titleError || inputError || castContextError) {
     return NextResponse.json(
       { error: "Unable to load catalog metadata." },
       { status: 502, headers: { "Cache-Control": "no-store" } },
@@ -67,11 +76,15 @@ export async function GET() {
 
   const titleById = new Map((titles ?? []).map((title) => [title.id, title as CatalogTitleRow]));
   const inputById = new Map((inputs ?? []).map((input) => [input.title_id, input as CatalogInputRow]));
+  const castContextById = new Map((castContexts ?? []).map((context) => [
+    context.title_id,
+    (context as CatalogCastContextRow).cast_context,
+  ]));
   const catalog = gold.flatMap((classification) => {
     const title = titleById.get(classification.title_id);
     const input = inputById.get(classification.title_id);
     if (!title || !input) return [];
-    const mapped = buildAppCatalogTitle(title, input, classification);
+    const mapped = buildAppCatalogTitle(title, input, classification, castContextById.get(classification.title_id));
     return mapped ? [mapped] : [];
   });
 

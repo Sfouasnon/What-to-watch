@@ -64,6 +64,26 @@ export interface CanonicalMembership {
   position?: number;
 }
 
+export interface CastReferenceCredit {
+  externalId: string;
+  tmdbId: number;
+  mediaType: "movie" | "tv";
+  name: string;
+  year: number;
+  character?: string | null;
+  billingOrder?: number | null;
+  popularity: number;
+  voteCount: number;
+}
+
+export interface CastContextPerson {
+  tmdbPersonId: number;
+  name: string;
+  character?: string | null;
+  billingOrder: number;
+  references: CastReferenceCredit[];
+}
+
 export interface Title {
   id: string;
   name: string;
@@ -86,6 +106,7 @@ export interface Title {
   writers: string[];
   cinematographers: string[];
   actors: string[];
+  castContext?: CastContextPerson[];
   canonicalScore: number;
   canonicalMemberships: CanonicalMembership[];
   criterionCollection: boolean;
@@ -271,6 +292,14 @@ export interface FeatureContribution {
   evidence?: string;
 }
 
+export interface RecommendationNarrative {
+  header: string;
+  heading: string;
+  fit: string;
+  cast?: string;
+  setup: string;
+}
+
 export interface Recommendation {
   rank: number;
   lane: RecommendationLane;
@@ -279,6 +308,7 @@ export interface Recommendation {
   normalizedScore: number;
   matchScore: number;
   explanation: string;
+  narrative: RecommendationNarrative;
   evidence: string[];
   contributions: FeatureContribution[];
   availability: AvailabilityOption[];

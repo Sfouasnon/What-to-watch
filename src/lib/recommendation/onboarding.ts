@@ -40,7 +40,7 @@ export const GENRE_RATING_LABELS = [
   "Always interested",
 ] as const;
 
-export const ANSWER_LABELS = ["Not at all", "Not really", "It depends", "Usually", "Definitely"] as const;
+export const ANSWER_LABELS = ["Not at all", "Not usually", "Sometimes", "Usually", "Absolutely"] as const;
 
 export type TasteQuestion = {
   id: string;
@@ -51,89 +51,89 @@ export type TasteQuestion = {
 export const CORE_QUESTIONS: readonly TasteQuestion[] = [
   {
     id: "cerebral",
-    prompt: "Do you like figuring things out as you watch?",
-    example: "Inception, Severance, The Game, and Chinatown all give you something to piece together.",
+    prompt: "Complicated, thought-provoking movies and shows excite me.",
+    example: "Inception, Severance, The Game, and Chinatown are my sweet spot.",
   },
   {
     id: "emotional",
-    prompt: "Do you like stories that hit you emotionally?",
-    example: "Manchester by the Sea, Aftersun, This Is Us, and The Last of Us don’t hold back emotionally.",
+    prompt: "I want stories that hit me emotionally.",
+    example: "Manchester by the Sea, Aftersun, This Is Us, and The Last of Us don’t hold back.",
   },
   {
     id: "darkness",
-    prompt: "Do you like darker stories where it’s hard to tell who’s right?",
-    example: "The characters in Breaking Bad, The Sopranos, Sicario, and Nightcrawler rarely fit neatly into ‘good’ or ‘bad.’",
+    prompt: "I’m drawn to darker stories where right and wrong are hard to separate.",
+    example: "Breaking Bad, The Sopranos, Sicario, and Nightcrawler live in the gray.",
   },
   {
     id: "slowPace",
-    prompt: "Do you enjoy stories that take their time?",
-    example: "Better Call Saul, Perfect Days, The Power of the Dog, and There Will Be Blood are happy to take the scenic route.",
+    prompt: "I’m happy to let a great story take its time.",
+    example: "Better Call Saul, Perfect Days, The Power of the Dog, and There Will Be Blood reward patience.",
   },
   {
     id: "character",
-    prompt: "Can great characters carry a simple story for you?",
-    example: "Mad Men, The Bear, Lady Bird, and Lost in Translation put their characters front and center.",
+    prompt: "Great characters can carry a simple story for me.",
+    example: "Mad Men, The Bear, Lady Bird, and Lost in Translation put character before plot.",
   },
   {
     id: "ambiguity",
-    prompt: "Are you okay when a story doesn’t explain everything?",
-    example: "Think The Leftovers, Mulholland Drive, Enemy, or The Sopranos finale.",
+    prompt: "I like stories that leave some questions unanswered.",
+    example: "The Leftovers, Mulholland Drive, Enemy, and The Sopranos finale leave room for interpretation.",
   },
   {
     id: "discovery",
-    prompt: "Do you like finding great movies or shows that fly under the radar?",
-    example: "Do Coherence, The Vast of Night, Patriot, or Rectify sound like your sweet spot?",
+    prompt: "Finding something great that most people missed excites me.",
+    example: "Coherence, The Vast of Night, Patriot, and Rectify are hidden gems worth seeking out.",
   },
   {
     id: "classics",
-    prompt: "Are you open to older movies and shows?",
-    example: "Would 12 Angry Men, Casablanca, The Twilight Zone, or Columbo be welcome choices?",
+    prompt: "A great story doesn’t need to be new.",
+    example: "12 Angry Men, Casablanca, The Twilight Zone, and Columbo still feel essential.",
   },
   {
     id: "international",
-    prompt: "Are you happy watching something with subtitles?",
-    example: "Parasite, Dark, Squid Game, and Pan’s Labyrinth are all part of the conversation here.",
+    prompt: "Subtitles never get in the way of a great story.",
+    example: "Parasite, Dark, Squid Game, and Pan’s Labyrinth open the door to stories from around the world.",
   },
   {
     id: "tvCommitment",
-    prompt: "Would you start a show knowing it has several seasons?",
-    example: "Would you settle in for The Wire, The Sopranos, Game of Thrones, or Better Call Saul?",
+    prompt: "I’ll commit to several seasons when a show earns it.",
+    example: "The Wire, The Sopranos, Game of Thrones, and Better Call Saul make the long commitment worthwhile.",
   },
   {
     id: "binge",
-    prompt: "Do you like watching several episodes in one sitting?",
-    example: "Shows such as The Bear, Beef, Slow Horses, and Only Murders in the Building can make ‘one more episode’ an easy choice.",
+    prompt: "When a show clicks, one episode is rarely enough.",
+    example: "The Bear, Beef, Slow Horses, and Only Murders in the Building make ‘one more’ an easy choice.",
   },
 ] as const;
 
 const COMEDY_QUESTIONS: readonly TasteQuestion[] = [
   {
     id: "dryComedy",
-    prompt: "Is dry, straight-faced humor your kind of funny?",
-    example: "The Brits do it well with The Office (UK) and Peep Show, while Veep is a strong American contender.",
+    prompt: "Dry, straight-faced humor is my kind of funny.",
+    example: "The Office (UK), Peep Show, and Veep let the straight face do the work.",
   },
   {
     id: "darkComedy",
-    prompt: "Do you like comedy that finds humor in dark or uncomfortable situations?",
-    example: "Colin Farrell in In Bruges is a good reference point, along with Barry, Fargo, and The Menu.",
+    prompt: "I like comedy that finds the laugh in dark or uncomfortable situations.",
+    example: "In Bruges, Barry, Fargo, and The Menu find humor where you least expect it.",
   },
   {
     id: "broadComedy",
-    prompt: "Do big, obvious jokes and high-energy comedy work for you?",
-    example: "Would Happy Gilmore, The Hangover, Modern Family, or Bridesmaids sound like a good night?",
+    prompt: "Big jokes, physical comedy, and high energy work for me.",
+    example: "Happy Gilmore, The Hangover, Modern Family, and Bridesmaids go big and commit to the joke.",
   },
 ] as const;
 
 const HORROR_QUESTIONS: readonly TasteQuestion[] = [
   {
     id: "psychologicalHorror",
-    prompt: "Do you like horror that gets inside your head?",
-    example: "Hereditary, The Babadook, The Shining, and Midnight Mass build fear through dread and psychology.",
+    prompt: "The best horror gets inside my head.",
+    example: "Hereditary, The Babadook, The Shining, and Midnight Mass build fear through psychology and dread.",
   },
   {
     id: "goreTolerance",
-    prompt: "How okay are you with bloody or graphic scenes?",
-    example: "Saw, The Substance, Evil Dead Rise, and The Boys don’t shy away from showing the damage.",
+    prompt: "Blood and graphic violence don’t put me off.",
+    example: "Saw, The Substance, Evil Dead Rise, and The Boys show the damage instead of cutting away.",
   },
 ] as const;
 

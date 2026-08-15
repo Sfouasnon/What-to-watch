@@ -9,10 +9,10 @@ The product intentionally avoids an infinite feed and an LLM/chatbot recommendat
 ## Product experience
 
 - Independent household and guest profiles with profile-specific services, region, ratings, questionnaire state, and model version
-- Original cold-start flow with 21 taste statements, a 21-genre matrix, three forced choices, and title calibration
+- Questionnaire-first cold start with 11 plain-language core statements, genre outliers, conditional comedy/horror follow-ups, and adaptive title calibration
 - Separate mood and viewing-intent controls, including stand-up as its own medium
 - Ten ranked lanes: Best Bet, Close Second, Right Mood, Creator Match, Something Different, Hidden Gem, Go Deeper, Film School Pick, Left Field, and Wild Card
-- Clear match explanations, provider/rental labels, title details, credits, people filmographies, ratings, and structured recommendation feedback
+- Personalized match narratives grounded in scoring evidence, cached TMDB cast history, title details, and the viewer’s own ratings
 - Mutual profile friendships, a Friend’s Picks vibe, and compact friend context only when it helps choose a title
 - Optional 1–4 sentence reactions and multi-friend recommendations after a positive rating, with no inbox, feed, unread count, or notification loop
 - Taste dashboard, profile management, streaming controls, and an Algorithm Lab with safe JSON export/import
@@ -48,7 +48,9 @@ The production domain lives in `src/lib/recommendation/` and keeps raw and norma
 
 Questionnaire influence follows one centralized exponential decay formula. Observed ratings gain confidence as evidence grows and can override an early questionnaire prior. Explanations are assembled from the same evidence used by the scorer.
 
-The browser experience calls this same domain engine through a data adapter; there is no second UI-side ranking formula. All 21 taste statements map to canonical dimensions, genre answers retain their 1–7 scale, and the three forced choices map to pace, release, and familiarity preferences.
+The browser experience calls this same domain engine through a data adapter; there is no second UI-side ranking formula. Eleven core statements map explicitly to canonical dimensions. Genre outliers establish strong likes and cautions, while optional 1–7 fine-tuning preserves more nuance. Scripted-comedy and horror follow-ups appear only when the selected genres make them useful. Title calibration then chooses titles that clarify the viewer’s strongest or least-certain preference axes instead of presenting a generic fixed set.
+
+Recommendation copy is composed from the same evidence packet used for ranking. It explains the requested mood, the title’s subgenre/tone/pace, a relevant questionnaire or rating signal, and the title setup. A server-side enrichment job caches principal-cast projects from TMDB combined credits. When possible, the narrative favors a project the viewer personally rated highly; otherwise it uses a recognizable prior credit without making an unsupported quality claim.
 
 Hard gates run before ranking: profile region, subscribed services, ad-supported preference, watched-title exclusion (outside rewatch mode), stand-up separation, and rental policy. Results are unique and capped at ten.
 
@@ -106,6 +108,15 @@ supabase db push
 ```
 
 Add the project URL and publishable/anon key to local and Vercel environment variables. `/account` then enables passwordless email sign-in; without those variables it clearly identifies browser-local demo mode.
+
+To preview and then write the bounded cast-history cache for up to 100 gold titles:
+
+```bash
+node --env-file=.env.local scripts/catalog/enrich-cast-context.mjs --limit=3
+node --env-file=.env.local scripts/catalog/enrich-cast-context.mjs --limit=100 --write
+```
+
+The job stores only six principal cast members and at most eight ranked released credits per person in the server-only `title_cast_context_cache`. Classification input packets stay append-only and are never rewritten by cache refreshes.
 
 ## Quality gate
 

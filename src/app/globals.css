@@ -804,9 +804,6 @@ button:disabled {
 .genre-chip-grid button.is-active svg { color: var(--accent); }
 .genre-chip-grid button:disabled { cursor: not-allowed; opacity: 0.28; }
 
-.genre-choice-panel { padding-top: 80px; }
-.genre-choice-summary { display: grid; margin-top: 34px; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.genre-choice-summary span { padding: 18px 14px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted-bright); background: rgba(255, 255, 255, 0.02); font-size: 0.68rem; text-align: center; }
 .stacked-actions > div { display: flex; gap: 10px; }
 
 .genre-answer-scale { display: grid; margin-top: 22px; gap: 7px; }
@@ -1172,15 +1169,16 @@ button:disabled {
 
 .recommendation-card__label {
   display: flex;
-  min-height: 46px;
+  min-height: 68px;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  gap: 24px;
+  padding: 13px 18px;
   border-bottom: 1px solid var(--line);
 }
 
-.recommendation-card__label > span { color: var(--accent); font-size: 0.62rem; font-weight: 900; letter-spacing: 0.17em; text-transform: uppercase; }
-.recommendation-card__label small { color: var(--muted); font-size: 0.6rem; }
+.recommendation-card__label > span { flex: 0 0 auto; color: var(--accent); font-size: 0.68rem; font-weight: 900; letter-spacing: 0.17em; text-transform: uppercase; }
+.recommendation-card__label small { max-width: 58%; color: var(--muted-bright); font-family: var(--font-display); font-size: 0.88rem; line-height: 1.35; text-align: right; }
 
 .recommendation-card__poster {
   position: relative;
@@ -1282,14 +1280,12 @@ button:disabled {
   display: none;
 }
 
-.recommendation-card:not(.recommendation-card--hero) .recommendation-reason {
+.recommendation-card:not(.recommendation-card--hero) .recommendation-story {
   display: -webkit-box;
   margin-top: 10px;
   overflow: hidden;
-  font-size: 0.78rem;
-  line-height: 1.4;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 8;
 }
 
 .recommendation-card:not(.recommendation-card--hero) .availability-row {
@@ -1359,12 +1355,18 @@ button:disabled {
 .title-row .icon-button { width: 39px; height: 39px; flex: 0 0 auto; }
 
 .recommendation-reason {
-  margin: 18px 0 0;
+  margin: 8px 0 0;
   color: var(--muted-bright);
   font-family: var(--font-display);
   font-size: 0.98rem;
   line-height: 1.55;
 }
+
+.recommendation-story { margin-top: 20px; }
+.recommendation-story h3 { margin: 0; color: var(--paper); font-size: 0.72rem; font-weight: 850; letter-spacing: 0.1em; text-transform: uppercase; }
+.recommendation-cast { margin: 10px 0 0; color: var(--paper); font-size: 0.78rem; line-height: 1.5; }
+.recommendation-setup { display: grid; gap: 4px; margin: 12px 0 0; color: var(--muted); font-size: 0.75rem; line-height: 1.5; }
+.recommendation-setup strong { color: var(--muted-bright); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; }
 
 .availability-row,
 .details-availability {

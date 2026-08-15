@@ -63,10 +63,12 @@ import {
   selectCalibrationTitle,
 } from "@/lib/recommendation/onboarding";
 import type {
+  CastContextPerson as EngineCastContextPerson,
   FriendContext as EngineFriendContext,
   Mood as EngineMood,
   RecommendationConfig,
   RecommendationFeedbackReason,
+  RecommendationNarrative,
   RecommendationWeights,
   SocialRecommendationInput,
   Title as EngineTitle,
@@ -99,6 +101,7 @@ type Title = {
   writers: string[];
   cinematographer?: string;
   cast: string[];
+  castContext?: EngineCastContextPerson[];
   providers: string[];
   availabilityType: AvailabilityType;
   criterion?: boolean;
@@ -177,6 +180,7 @@ type Recommendation = {
   title: Title;
   match: number;
   explanation: string;
+  narrative: RecommendationNarrative;
   rental: boolean;
   friendContext?: FriendContext;
 };
@@ -968,6 +972,7 @@ function toEngineTitle(title: Title, region: string): EngineTitle {
     writers: title.writers,
     cinematographers: title.cinematographer ? [title.cinematographer] : [],
     actors: title.cast,
+    castContext: title.castContext,
     canonicalScore: title.baseline,
     canonicalMemberships: (title.canonical ?? []).map((list) => ({ list, source: "demo", version: "1" })),
     criterionCollection: Boolean(title.criterion),
@@ -1104,6 +1109,7 @@ function buildRecommendations(
       title,
       match: recommendation.matchScore,
       explanation: recommendation.explanation,
+      narrative: recommendation.narrative,
       rental: recommendation.requiresPayment && title.availabilityType === "rental",
       friendContext: recommendation.friendContext as EngineFriendContext | undefined,
     } satisfies Recommendation];
@@ -1131,7 +1137,7 @@ function ProfileAvatar({ profile, large = false }: { profile: ViewerProfile; lar
 
 function Logo({ compact = false }: { compact?: boolean }) {
   return (
-    <div className={`brand ${compact ? "brand--compact" : ""}`} aria-label="What to Watch">
+    <div className={`brand ${compact ? "brand--compact" : ""}`}>
       <span className="brand__mark">W</span>
       {!compact && <span className="brand__name">WHAT TO WATCH</span>}
     </div>
@@ -1297,7 +1303,7 @@ function ProfileEditor({
 }
 
 function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; onChange: (profile: ViewerProfile) => void; onFinish: () => void }) {
-  const [step, setStep] = useState<"welcome" | "services" | "genreLoves" | "genreAvoids" | "genreChoice" | "genreFineTune" | "questionnaire" | "calibrate" | "searchTitles" | "summary">("welcome");
+  const [step, setStep] = useState<"welcome" | "services" | "questionnaire" | "genreLoves" | "genreAvoids" | "genreFineTune" | "conditional" | "calibrate" | "searchTitles" | "summary">("welcome");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [soughtGenres, setSoughtGenres] = useState<string[]>([]);
@@ -1311,10 +1317,11 @@ function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; o
   const [calibrationAskedIds, setCalibrationAskedIds] = useState<string[]>([]);
   const [skippedIds, setSkippedIds] = useState<string[]>([]);
   const [titleSearch, setTitleSearch] = useState("");
-  const questions = useMemo(
-    () => [...CORE_QUESTIONS, ...conditionalQuestions(soughtGenres, genreAnswers)],
+  const followUpQuestions = useMemo(
+    () => conditionalQuestions(soughtGenres, genreAnswers),
     [genreAnswers, soughtGenres],
   );
+  const activeQuestions = step === "conditional" ? followUpQuestions : CORE_QUESTIONS;
   const questionnaireScores = useMemo(
     () => Object.fromEntries(Object.entries(answers).map(([key, value]) => [key, Math.round((value - 1) * 25)])),
     [answers],
@@ -1335,24 +1342,30 @@ function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; o
   }) as Title | undefined;
   const progress = step === "welcome" ? 5
     : step === "services" ? 13
-      : step === "genreLoves" ? 22
-        : step === "genreAvoids" ? 31
-          : step === "genreChoice" || step === "genreFineTune" ? 40
-            : step === "questionnaire" ? 46 + (questionIndex / Math.max(questions.length, 1)) * 30
-              : step === "calibrate" || step === "searchTitles" ? 82
+      : step === "questionnaire" ? 18 + (questionIndex / CORE_QUESTIONS.length) * 34
+        : step === "genreLoves" ? 56
+          : step === "genreAvoids" || step === "genreFineTune" ? 65
+            : step === "conditional" ? 70 + (questionIndex / Math.max(followUpQuestions.length, 1)) * 10
+              : step === "calibrate" || step === "searchTitles" ? 84
                 : 100;
-  const setGenreOutliers = () => {
-    setGenreAnswers(Object.fromEntries(GENRES.map((genre) => [
+  const genreOutlierScores = () => Object.fromEntries(GENRES.map((genre) => [
       genre,
       soughtGenres.includes(genre) ? 7 : avoidedGenres.includes(genre) ? 1 : 4,
-    ])));
+    ]));
+  const continueAfterGenres = (nextGenreAnswers: Record<string, number>) => {
+    setGenreAnswers(nextGenreAnswers);
+    setQuestionIndex(0);
+    setStep(conditionalQuestions(soughtGenres, nextGenreAnswers).length ? "conditional" : "calibrate");
   };
   const answerQuestion = (score: number) => {
-    const question = questions[questionIndex];
+    const question = activeQuestions[questionIndex];
     if (!question) return;
     setAnswers((current) => ({ ...current, [question.id]: score }));
-    if (questionIndex < questions.length - 1) setQuestionIndex((index) => index + 1);
-    else setStep("calibrate");
+    if (questionIndex < activeQuestions.length - 1) setQuestionIndex((index) => index + 1);
+    else {
+      setQuestionIndex(0);
+      setStep(step === "questionnaire" ? "genreLoves" : "calibrate");
+    }
   };
   const toggleGenre = (genre: string, selected: string[], setter: (genres: string[]) => void) => {
     if (selected.includes(genre)) setter(selected.filter((item) => item !== genre));
@@ -1398,7 +1411,21 @@ function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; o
             selected={profile.subscriptions}
             onChange={(subscriptions) => onChange({ ...profile, subscriptions })}
           />
-          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("welcome")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("genreLoves")}>Build my taste <ChevronRight size={18} /></button></div>
+          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("welcome")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => { setQuestionIndex(0); setStep("questionnaire"); }}>Build my taste <ChevronRight size={18} /></button></div>
+        </section>
+      )}
+      {(step === "questionnaire" || step === "conditional") && activeQuestions[questionIndex] && (
+        <section className="onboarding-panel question-panel">
+          <div className="question-count"><span>{questionIndex + 1} / {activeQuestions.length}</span><button className="text-button" onClick={() => { setQuestionIndex(0); setStep(step === "questionnaire" ? "genreLoves" : "calibrate"); }}>Skip questions</button></div>
+          <p className="kicker">{step === "questionnaire" ? "WHAT PULLS YOU IN?" : "A LITTLE MORE DETAIL"}</p>
+          <p className="question-support">Choose what usually feels like you—not what you want to watch tonight.</p>
+          <h2>{activeQuestions[questionIndex].prompt}</h2>
+          <p className="question-example">{activeQuestions[questionIndex].example}</p>
+          <div className="answer-scale" role="radiogroup" aria-label="How much this sounds like you">
+            {ANSWER_LABELS.map((label, index) => <button key={label} role="radio" className={answers[activeQuestions[questionIndex].id] === index + 1 ? "is-active" : ""} onClick={() => answerQuestion(index + 1)} aria-checked={answers[activeQuestions[questionIndex].id] === index + 1}><span>{index + 1}</span><strong>{label}</strong></button>)}
+          </div>
+          <p className="question-note">Haven’t seen the examples? Just answer based on the statement.</p>
+          <button className="text-button question-back" onClick={() => questionIndex > 0 ? setQuestionIndex((index) => index - 1) : setStep(step === "questionnaire" ? "services" : "genreAvoids")}><ArrowLeft size={16} /> Previous</button>
         </section>
       )}
       {step === "genreLoves" && (
@@ -1410,7 +1437,7 @@ function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; o
           disabled={[]}
           onToggle={(genre) => toggleGenre(genre, soughtGenres, setSoughtGenres)}
         >
-          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("services")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("genreAvoids")}>Continue <ChevronRight size={18} /></button></div>
+          <div className="onboarding-actions"><button className="text-button" onClick={() => { setQuestionIndex(CORE_QUESTIONS.length - 1); setStep("questionnaire"); }}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("genreAvoids")}>Continue <ChevronRight size={18} /></button></div>
         </GenreOutlierStep>
       )}
       {step === "genreAvoids" && (
@@ -1422,38 +1449,17 @@ function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; o
           disabled={soughtGenres}
           onToggle={(genre) => toggleGenre(genre, avoidedGenres, setAvoidedGenres)}
         >
-          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("genreLoves")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => { setGenreOutliers(); setStep("genreChoice"); }}>Continue <ChevronRight size={18} /></button></div>
+          <div className="onboarding-actions stacked-actions"><button className="text-button" onClick={() => setStep("genreLoves")}><ArrowLeft size={16} /> Back</button><div><button className="secondary-button" onClick={() => { setGenreAnswers(genreOutlierScores()); setGenreIndex(0); setStep("genreFineTune"); }}>Fine-tune genres</button><button className="primary-button" onClick={() => continueAfterGenres(genreOutlierScores())}>Continue <ChevronRight size={18} /></button></div></div>
         </GenreOutlierStep>
-      )}
-      {step === "genreChoice" && (
-        <section className="onboarding-panel genre-choice-panel">
-          <p className="kicker">GENRES SET</p><h1>That&apos;s enough to get started.</h1><p className="lede">We’ll treat your picks as strong signals and leave the rest neutral. You can fine-tune every genre if you want more control.</p>
-          <div className="genre-choice-summary"><span>{soughtGenres.length} actively sought</span><span>{avoidedGenres.length} usually avoided</span><span>{GENRES.length - soughtGenres.length - avoidedGenres.length} left neutral</span></div>
-          <div className="onboarding-actions stacked-actions"><button className="text-button" onClick={() => setStep("genreAvoids")}><ArrowLeft size={16} /> Back</button><div><button className="secondary-button" onClick={() => { setGenreIndex(0); setStep("genreFineTune"); }}>Fine-tune every genre</button><button className="primary-button" onClick={() => { setQuestionIndex(0); setStep("questionnaire"); }}>Continue <ChevronRight size={18} /></button></div></div>
-        </section>
       )}
       {step === "genreFineTune" && (
         <section className="onboarding-panel question-panel">
-          <div className="question-count"><span>{genreIndex + 1} / {GENRES.length}</span><button className="text-button" onClick={() => { setQuestionIndex(0); setStep("questionnaire"); }}>Finish fine-tuning</button></div>
+          <div className="question-count"><span>{genreIndex + 1} / {GENRES.length}</span><button className="text-button" onClick={() => continueAfterGenres(genreAnswers)}>Finish fine-tuning</button></div>
           <p className="kicker">FINE-TUNE YOUR GENRES</p><h2>{GENRE_LABELS[GENRES[genreIndex]]}</h2>
           <div className="genre-answer-scale" role="radiogroup" aria-label={`${GENRE_LABELS[GENRES[genreIndex]]} preference`}>
-            {GENRE_RATING_LABELS.map((label, index) => <button key={label} className={genreAnswers[GENRES[genreIndex]] === index + 1 ? "is-active" : ""} onClick={() => { setGenreAnswers((current) => ({ ...current, [GENRES[genreIndex]]: index + 1 })); if (genreIndex < GENRES.length - 1) setGenreIndex((current) => current + 1); else { setQuestionIndex(0); setStep("questionnaire"); } }}><span>{index + 1}</span><strong>{label}</strong></button>)}
+            {GENRE_RATING_LABELS.map((label, index) => <button key={label} role="radio" className={genreAnswers[GENRES[genreIndex]] === index + 1 ? "is-active" : ""} aria-checked={genreAnswers[GENRES[genreIndex]] === index + 1} onClick={() => { const next = { ...genreAnswers, [GENRES[genreIndex]]: index + 1 }; setGenreAnswers(next); if (genreIndex < GENRES.length - 1) setGenreIndex((current) => current + 1); else continueAfterGenres(next); }}><span>{index + 1}</span><strong>{label}</strong></button>)}
           </div>
           {genreIndex > 0 && <button className="text-button question-back" onClick={() => setGenreIndex((index) => index - 1)}><ArrowLeft size={16} /> Previous</button>}
-        </section>
-      )}
-      {step === "questionnaire" && questions[questionIndex] && (
-        <section className="onboarding-panel question-panel">
-          <div className="question-count"><span>{questionIndex + 1} / {questions.length}</span><button className="text-button" onClick={() => setStep("calibrate")}>Skip questions</button></div>
-          <p className="kicker">WHAT SOUNDS LIKE YOU?</p>
-          <p className="question-support">There are no right answers. Choose what usually fits, not what you want to watch tonight.</p>
-          <h2>{questions[questionIndex].prompt}</h2>
-          <p className="question-example">{questions[questionIndex].example}</p>
-          <div className="answer-scale" role="radiogroup" aria-label="Agreement scale">
-            {ANSWER_LABELS.map((label, index) => <button key={label} className={answers[questions[questionIndex].id] === index + 1 ? "is-active" : ""} onClick={() => answerQuestion(index + 1)}><span>{index + 1}</span><strong>{label}</strong></button>)}
-          </div>
-          <p className="question-note">Haven’t seen the examples? Just answer based on the question.</p>
-          <button className="text-button question-back" onClick={() => questionIndex > 0 ? setQuestionIndex((index) => index - 1) : setStep("genreChoice")}><ArrowLeft size={16} /> Previous</button>
         </section>
       )}
       {step === "calibrate" && (
@@ -1699,13 +1705,18 @@ function RecommendationCard({ profile, recommendation, priority, focusActors = [
   const matchedActors = focusActors.filter((actor) => hasProminentActor(title, actor));
   return (
     <article className={`recommendation-card ${priority ? "recommendation-card--hero" : ""}`}>
-      <div className="recommendation-card__label"><span>#{String(recommendation.rank).padStart(2, "0")} · {recommendation.lane}</span><small>{priority ? "Highest confidence" : recommendation.lane === "Wild Card" ? "Most adventurous" : recommendation.rank < 5 ? "Strong personal fit" : "A wider orbit"}</small></div>
+      <div className="recommendation-card__label"><span>#{String(recommendation.rank).padStart(2, "0")} · {recommendation.lane}</span><small>{recommendation.narrative.header}</small></div>
       <button className="recommendation-card__poster" onClick={() => onDetails(title)} aria-label={`Open details for ${title.name}`}><Poster title={title} priority={priority} /><span className="match-badge"><strong>{recommendation.match}%</strong><small>MATCH</small></span>{recommendation.rental && <span className="rental-banner">WORTH RENTING</span>}</button>
       <div className="recommendation-card__body">
         <div className="title-meta"><span>{title.year}</span><span>{title.kind}</span><span>{title.runtime}</span></div>
         <div className="title-row"><h2>{title.name}</h2><button className="icon-button" onClick={() => onFeedback("Saved to your watchlist")} aria-label="Save"><Bookmark size={19} /></button></div>
         {matchedActors.length > 0 && <div className="actor-match"><UserCheck size={16} /><span><strong>Prominent role</strong> · {matchedActors.join(", ")}</span></div>}
-        <p className="recommendation-reason">{recommendation.explanation}</p>
+        <div className="recommendation-story">
+          <h3>{recommendation.narrative.heading}</h3>
+          <p className="recommendation-reason">{recommendation.narrative.fit}</p>
+          {recommendation.narrative.cast && <p className="recommendation-cast">{recommendation.narrative.cast}</p>}
+          <p className="recommendation-setup"><strong>The setup</strong>{recommendation.narrative.setup}</p>
+        </div>
         <div className="availability-row"><span className="provider-mark">{availability.provider.slice(0, 2)}</span><div><small>{availability.label}</small><strong>{availability.provider}</strong></div>{recommendation.rental && <span className="rental-note">Rental</span>}</div>
         {recommendation.friendContext && <FriendBanner context={recommendation.friendContext} />}
         <div className="card-actions"><button className="secondary-button" onClick={() => onDetails(title)}>Details</button><button className="ghost-button" onClick={() => onFeedback("Not interested", title)}>Not interested</button><button className="more-button" onClick={() => onFeedback("Tell us how this pick landed", title)} aria-label="More feedback"><MoreHorizontal size={20} /></button></div>
