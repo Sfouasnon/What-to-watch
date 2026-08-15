@@ -18,8 +18,9 @@ The gold set is a benchmark, not a template to mutate. New classifier versions s
 3. `npm run catalog:seed-gold` persists the 100 benchmark titles and their authoritative classifications into Supabase.
 4. `npm run catalog:prepare-batches`, `catalog:queue-batch`, and `catalog:export-batch` create controlled hydration and classification packets.
 5. Reconciliation/finalization scripts validate model output against the ontology before classifications are eligible for publication.
+6. `npm run catalog:publish-classifications` performs a dry run by default, then publishes an explicitly supplied manifest, final artifacts, and provider cache only when `--write` is present.
 
-The bulk classifier should not overwrite `review_status = 'gold'` rows. Low-confidence or ambiguous generated results should be routed to review rather than silently promoted.
+The publisher cannot overwrite `review_status = 'gold'` rows. Final artifacts retain low-confidence flags and original review provenance in `source_payload`, even when the approved release is published as `accepted`.
 
 ## Storage policy
 

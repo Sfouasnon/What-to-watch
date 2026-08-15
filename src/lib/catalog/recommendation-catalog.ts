@@ -85,6 +85,12 @@ export type CatalogCastContextRow = {
   cast_context: unknown;
 };
 
+export type CatalogAvailabilityRow = {
+  title_id: string;
+  provider_name: string;
+  offer_type: "subscription" | "free_ad_supported" | "rent" | "buy";
+};
+
 export type CatalogClassificationRow = {
   title_id: string;
   primary_subgenre: string;
@@ -193,9 +199,9 @@ function normalizedPopularity(value: number | string | null) {
   return clamp(Math.round(25 + Math.log10(1 + raw) * 25), 25, 100);
 }
 
-function baselineScore(title: CatalogTitleRow, sampleTitle: GoldSampleTitle) {
-  const voteAverage = asNumber(title.vote_average, sampleTitle.vote_average ?? 6.5);
-  const voteCount = Math.max(0, title.vote_count ?? sampleTitle.vote_count ?? 0);
+function baselineScore(title: CatalogTitleRow, sampleTitle?: GoldSampleTitle) {
+  const voteAverage = asNumber(title.vote_average, sampleTitle?.vote_average ?? 6.5);
+  const voteCount = Math.max(0, title.vote_count ?? sampleTitle?.vote_count ?? 0);
   const voteEvidence = Math.min(8, Math.log10(1 + voteCount) * 2);
   return clamp(Math.round(58 + voteAverage * 3 + voteEvidence), 72, 95);
 }
@@ -205,15 +211,15 @@ function baselineScore(title: CatalogTitleRow, sampleTitle: GoldSampleTitle) {
  * catalog reflects live metadata once `catalog:hydrate-gold` has run and still
  * renders correctly before it has.
  */
-export function releaseYear(title: CatalogTitleRow, sampleTitle: GoldSampleTitle) {
+export function releaseYear(title: CatalogTitleRow, sampleTitle?: GoldSampleTitle) {
   const year = Number(title.release_date?.slice(0, 4));
-  return Number.isInteger(year) && year > 1870 ? year : sampleTitle.year;
+  return Number.isInteger(year) && year > 1870 ? year : sampleTitle?.year ?? 0;
 }
 
-function runtimeLabel(title: CatalogTitleRow, sampleTitle: GoldSampleTitle) {
+function runtimeLabel(title: CatalogTitleRow, sampleTitle?: GoldSampleTitle) {
   const minutes = title.content_type === "tv_series"
-    ? title.episode_runtime_minutes ?? sampleTitle.runtime ?? null
-    : title.runtime_minutes ?? sampleTitle.runtime ?? null;
+    ? title.episode_runtime_minutes ?? sampleTitle?.runtime ?? null
+    : title.runtime_minutes ?? sampleTitle?.runtime ?? null;
 
   if (title.content_type === "tv_series") {
     const episode = minutes ? `${minutes}m episodes` : "Series";
@@ -234,10 +240,10 @@ function contentKind(title: CatalogTitleRow, classification: CatalogClassificati
 function derivedTags(
   title: CatalogTitleRow,
   classification: CatalogClassificationRow,
-  sampleTitle: GoldSampleTitle,
+  sampleTitle?: GoldSampleTitle,
 ) {
-  const countries = title.production_countries ?? sampleTitle.origin_country ?? [];
-  const language = title.original_language ?? sampleTitle.original_language;
+  const countries = title.production_countries ?? sampleTitle?.origin_country ?? [];
+  const language = title.original_language ?? sampleTitle?.original_language;
   const international = Boolean(language && language !== "en") || countries.some((country) => country !== "US");
   return unique([
     classification.primary_subgenre,
@@ -250,18 +256,26 @@ function derivedTags(
   ]);
 }
 
+function availabilityType(rows: readonly CatalogAvailabilityRow[]): AppCatalogTitle["availabilityType"] {
+  if (rows.some((row) => row.offer_type === "subscription")) return "subscription";
+  if (rows.some((row) => row.offer_type === "free_ad_supported")) return "free";
+  if (rows.some((row) => row.offer_type === "rent" || row.offer_type === "buy")) return "rental";
+  return "subscription";
+}
+
 export function buildAppCatalogTitle(
   title: CatalogTitleRow,
   input: CatalogInputRow,
   classification: CatalogClassificationRow,
   castContext: unknown = [],
+  availability: readonly CatalogAvailabilityRow[] = [],
 ): AppCatalogTitle | null {
   if (!title.tmdb_id || !title.tmdb_media_type) return null;
   const sampleTitle = sampleByIdentity.get(`${title.tmdb_media_type}:${title.tmdb_id}`);
-  if (!sampleTitle) return null;
-
-  const providers = sampledProviders(input.raw_payload);
-  if (!providers.length) return null;
+  const providers = unique([
+    ...sampledProviders(input.raw_payload),
+    ...availability.map((row) => normalizeGoldProviderName(row.provider_name)),
+  ]);
 
   const canonicalScore = asNumber(title.canonical_score);
   const artwork = title.poster_path
@@ -279,7 +293,7 @@ export function buildAppCatalogTitle(
     runtime: runtimeLabel(title, sampleTitle),
     poster: artwork,
     backdrop,
-    synopsis: title.overview ?? sampleTitle.overview ?? "No synopsis available yet.",
+    synopsis: title.overview ?? sampleTitle?.overview ?? "No synopsis available yet.",
     genres: input.tmdb_genres ?? [],
     tags: derivedTags(title, classification, sampleTitle),
     primarySubgenre: classification.primary_subgenre,
@@ -292,8 +306,8 @@ export function buildAppCatalogTitle(
     cast: input.principal_cast ?? [],
     castContext: cachedCastContext({ cast_context: castContext }),
     providers,
-    availabilityType: "subscription",
-    criterion: false,
+    availabilityType: availabilityType(availability),
+    criterion: providers.includes("Criterion Channel"),
     canonical: canonicalScore > 0 ? [`Canonical score ${Math.round(canonicalScore)}`] : undefined,
     popularity: normalizedPopularity(title.popularity),
     baseline: baselineScore(title, sampleTitle),

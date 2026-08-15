@@ -154,4 +154,50 @@ describe("recommendation catalog mapping", () => {
 
     expect(after?.tags).toEqual(before?.tags);
   });
+
+  it("maps hydrated titles outside the original gold sample", () => {
+    const title = buildAppCatalogTitle(
+      {
+        ...pulpFictionTitle,
+        id: "expanded-title-id",
+        tmdb_id: 999999,
+        name: "EXPANDED CATALOG TITLE",
+        release_date: "2025-06-01",
+      },
+      {
+        ...pulpFictionInput,
+        title_id: "expanded-title-id",
+        raw_payload: {},
+      },
+      {
+        ...pulpFictionClassification,
+        title_id: "expanded-title-id",
+        review_status: "accepted",
+      },
+      [],
+      [{
+        title_id: "expanded-title-id",
+        provider_name: "Amazon Prime Video",
+        offer_type: "subscription",
+      }],
+    );
+
+    expect(title).toEqual(expect.objectContaining({
+      id: "tmdb:movie:999999",
+      name: "Expanded Catalog Title",
+      year: 2025,
+      providers: ["Prime Video"],
+      availabilityType: "subscription",
+    }));
+  });
+
+  it("keeps a classified catalog title even when no current US provider is known", () => {
+    const title = buildAppCatalogTitle(
+      { ...pulpFictionTitle, tmdb_id: 999998, release_date: "2024-01-01" },
+      { ...pulpFictionInput, raw_payload: {} },
+      { ...pulpFictionClassification, review_status: "accepted" },
+    );
+
+    expect(title?.providers).toEqual([]);
+  });
 });
