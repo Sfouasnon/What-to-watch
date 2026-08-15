@@ -9,10 +9,10 @@ The product intentionally avoids an infinite feed and an LLM/chatbot recommendat
 ## Product experience
 
 - Independent household and guest profiles with profile-specific services, region, ratings, questionnaire state, and model version
-- Original cold-start flow with 21 taste statements, a 21-genre matrix, three forced choices, and title calibration
+- Questionnaire-first cold start with 11 plain-language core statements, genre outliers, conditional comedy/horror follow-ups, and adaptive title calibration
 - Separate mood and viewing-intent controls, including stand-up as its own medium
 - Ten ranked lanes: Best Bet, Close Second, Right Mood, Creator Match, Something Different, Hidden Gem, Go Deeper, Film School Pick, Left Field, and Wild Card
-- Clear match explanations, provider/rental labels, title details, credits, people filmographies, ratings, and structured recommendation feedback
+- Personalized match narratives grounded in scoring evidence, cached TMDB cast history, title details, and the viewer’s own ratings
 - Mutual profile friendships, a Friend’s Picks vibe, and compact friend context only when it helps choose a title
 - Optional 1–4 sentence reactions and multi-friend recommendations after a positive rating, with no inbox, feed, unread count, or notification loop
 - Taste dashboard, profile management, streaming controls, and an Algorithm Lab with safe JSON export/import
@@ -48,7 +48,15 @@ The production domain lives in `src/lib/recommendation/` and keeps raw and norma
 
 Questionnaire influence follows one centralized exponential decay formula. Observed ratings gain confidence as evidence grows and can override an early questionnaire prior. Explanations are assembled from the same evidence used by the scorer.
 
+The browser experience calls this same domain engine through a data adapter; there is no second UI-side ranking formula. Eleven core statements map explicitly to canonical dimensions. Genre outliers establish strong likes and cautions, while optional 1–7 fine-tuning preserves more nuance. Scripted-comedy and horror follow-ups appear only when the selected genres make them useful. Title calibration then chooses titles that clarify the viewer’s strongest or least-certain preference axes instead of presenting a generic fixed set.
+
+Recommendation copy is composed from the same evidence packet used for ranking. It explains the requested mood, the title’s subgenre/tone/pace, a relevant questionnaire or rating signal, and the title setup. A server-side enrichment job caches principal-cast projects from TMDB combined credits. When possible, the narrative favors a project the viewer personally rated highly; otherwise it uses a recognizable prior credit without making an unsupported quality claim.
+
 Hard gates run before ranking: profile region, subscribed services, ad-supported preference, watched-title exclusion (outside rewatch mode), stand-up separation, and rental policy. Results are unique and capped at ten.
+
+Tonight's mood is a hard content gate. Vibes that promise a concrete catalog subset—rewatch, classic, international, bingeable TV, trending series, director completion, Criterion, film-school, blind-spot, and go-deeper—are also hard gates. Discovery, hidden-gem, surprise, and Friend's Picks remain ranking preferences so they can broaden results without producing an unnecessarily empty list.
+
+Per-title feedback is first-class evidence. Already-seen, not-interested, misclassified, and unavailable feedback excludes that title. Wrong-mood and good-but-wrong-night feedback suppresses it only for the matching tonight context. Too-dark, too-light, too-old, too-long, disliked-actor, and recommendation-quality scores adjust future candidates with the corresponding or similar features.
 
 Friend evidence is calculated in a separate, capped layer. A Friend’s Picks request combines explicit recommendations, high ratings, recency, useful notes, friend count, and compatibility learned only from overlapping ratings. It cannot bypass mood, watched-title, or availability gates, and it never rewrites the viewer’s personal ratings, questionnaire priors, affinities, or model weights. Normal recommendations keep their original ranking while still showing a small friend banner when the selected title happens to have relevant activity.
 
@@ -103,7 +111,7 @@ Add the project URL and publishable/anon key to local and Vercel environment var
 
 ## Catalog pipeline
 
-All catalog scripts require `TMDB_TOKEN`, `NEXT_PUBLIC_SUPABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY`, and hydration additionally requires `supabase/migrations/0005_catalog_hydration_grants.sql`. Supabase checks PostgreSQL object grants before RLS, and the service-role key bypasses RLS but never object grants, so without 0005 the hydrator stops on its first write with an explicit pointer to that migration.
+All catalog scripts require `TMDB_TOKEN`, `NEXT_PUBLIC_SUPABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY`, and hydration additionally requires `supabase/migrations/20260811190840_catalog_hydration_grants.sql`. Supabase checks PostgreSQL object grants before RLS, and the service-role key bypasses RLS but never object grants, so without that migration the hydrator stops on its first write with an explicit pointer to it.
 
 ```bash
 npm run catalog:seed-gold      # 100 pilot titles + gold editorial classifications
@@ -129,6 +137,15 @@ npm run catalog:hydrate-gold -- --limit=10 --delay-ms=250
 ```
 
 `scripts/catalog/hydrate-tmdb.mjs` remains the queue-driven hydrator for the wider TMDB catalog index; `hydrate-gold-100.mjs` targets the pilot 100 by identity instead.
+
+To preview and then write the bounded cast-history cache for up to 100 gold titles:
+
+```bash
+node --env-file=.env.local scripts/catalog/enrich-cast-context.mjs --limit=3
+node --env-file=.env.local scripts/catalog/enrich-cast-context.mjs --limit=100 --write
+```
+
+The job stores only six principal cast members and at most eight ranked released credits per person in the server-only `title_cast_context_cache`. Classification input packets stay append-only and are never rewritten by cache refreshes.
 
 ## Quality gate
 

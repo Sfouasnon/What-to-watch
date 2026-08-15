@@ -1,4 +1,5 @@
 import sampleJson from "../../../curation/pilot/sample-100.json";
+import type { CastContextPerson } from "../recommendation/types";
 
 export type AppCatalogTitle = {
   id: string;
@@ -11,10 +12,15 @@ export type AppCatalogTitle = {
   synopsis: string;
   genres: string[];
   tags: string[];
+  primarySubgenre: string;
+  secondarySubgenre?: string;
+  toneTags: string[];
+  pacing: "slow" | "moderate" | "fast";
   director: string;
   writers: string[];
   cinematographer?: string;
   cast: string[];
+  castContext: CastContextPerson[];
   providers: string[];
   availabilityType: "subscription" | "free" | "rental";
   criterion?: boolean;
@@ -74,6 +80,11 @@ export type CatalogInputRow = {
   raw_payload: unknown;
 };
 
+export type CatalogCastContextRow = {
+  title_id: string;
+  cast_context: unknown;
+};
+
 export type CatalogClassificationRow = {
   title_id: string;
   primary_subgenre: string;
@@ -124,6 +135,57 @@ function sampledProviders(rawPayload: unknown): string[] {
   const value = (rawPayload as { sampled_streaming_providers?: unknown }).sampled_streaming_providers;
   if (!Array.isArray(value)) return [];
   return unique(value.filter((item): item is string => typeof item === "string").map(normalizeGoldProviderName));
+}
+
+const finiteNumber = (value: unknown): value is number => typeof value === "number" && Number.isFinite(value);
+
+function cachedCastContext(rawPayload: unknown): CastContextPerson[] {
+  if (!rawPayload || typeof rawPayload !== "object" || Array.isArray(rawPayload)) return [];
+  const value = (rawPayload as { cast_context?: unknown }).cast_context;
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((person) => {
+    if (!person || typeof person !== "object" || Array.isArray(person)) return [];
+    const candidate = person as Record<string, unknown>;
+    if (!finiteNumber(candidate.tmdbPersonId) || typeof candidate.name !== "string" || !finiteNumber(candidate.billingOrder)) return [];
+    const references = Array.isArray(candidate.references) ? candidate.references.flatMap((reference) => {
+      if (!reference || typeof reference !== "object" || Array.isArray(reference)) return [];
+      const item = reference as Record<string, unknown>;
+      if (
+        typeof item.externalId !== "string" || !finiteNumber(item.tmdbId) ||
+        (item.mediaType !== "movie" && item.mediaType !== "tv") || typeof item.name !== "string" ||
+        !finiteNumber(item.year) || !finiteNumber(item.popularity) || !finiteNumber(item.voteCount)
+      ) return [];
+      const mediaType: "movie" | "tv" = item.mediaType;
+      return [{
+        externalId: item.externalId,
+        tmdbId: item.tmdbId,
+        mediaType,
+        name: item.name,
+        year: item.year,
+        character: typeof item.character === "string" ? item.character : null,
+        billingOrder: finiteNumber(item.billingOrder) ? item.billingOrder : null,
+        popularity: item.popularity,
+        voteCount: item.voteCount,
+      }];
+    }) : [];
+    return [{
+      tmdbPersonId: candidate.tmdbPersonId,
+      name: candidate.name,
+      character: typeof candidate.character === "string" ? candidate.character : null,
+      billingOrder: candidate.billingOrder,
+      references,
+    }];
+  });
+}
+
+export function displayTitleName(name: string) {
+  const words = name.trim().split(/\s+/);
+  if (words.length < 2 || name !== name.toLocaleUpperCase() || !/[A-Z]/.test(name)) return name;
+  const preservedAcronyms = new Set(["TV", "UK", "US", "USA", "U.S.", "II", "III", "IV"]);
+  return words.map((word) => {
+    if (/^\d+$/.test(word) || preservedAcronyms.has(word)) return word;
+    return word[0] + word.slice(1).toLocaleLowerCase();
+  }).join(" ");
 }
 
 function normalizedPopularity(value: number | string | null) {
@@ -192,6 +254,7 @@ export function buildAppCatalogTitle(
   title: CatalogTitleRow,
   input: CatalogInputRow,
   classification: CatalogClassificationRow,
+  castContext: unknown = [],
 ): AppCatalogTitle | null {
   if (!title.tmdb_id || !title.tmdb_media_type) return null;
   const sampleTitle = sampleByIdentity.get(`${title.tmdb_media_type}:${title.tmdb_id}`);
@@ -210,7 +273,7 @@ export function buildAppCatalogTitle(
 
   return {
     id: `tmdb:${title.tmdb_media_type}:${title.tmdb_id}`,
-    name: title.name,
+    name: displayTitleName(title.name),
     year: releaseYear(title, sampleTitle),
     kind: contentKind(title, classification),
     runtime: runtimeLabel(title, sampleTitle),
@@ -219,10 +282,15 @@ export function buildAppCatalogTitle(
     synopsis: title.overview ?? sampleTitle.overview ?? "No synopsis available yet.",
     genres: input.tmdb_genres ?? [],
     tags: derivedTags(title, classification, sampleTitle),
+    primarySubgenre: classification.primary_subgenre,
+    ...(classification.secondary_subgenre ? { secondarySubgenre: classification.secondary_subgenre } : {}),
+    toneTags: classification.tone_tags ?? [],
+    pacing: classification.pacing ?? "moderate",
     director: input.directors?.[0] ?? "Unknown director",
     writers: input.writers ?? [],
     cinematographer: input.cinematographers?.[0],
     cast: input.principal_cast ?? [],
+    castContext: cachedCastContext({ cast_context: castContext }),
     providers,
     availabilityType: "subscription",
     criterion: false,

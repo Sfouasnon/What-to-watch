@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildAppCatalogTitle,
+  displayTitleName,
   GOLD_CATALOG_SIZE,
   normalizeGoldProviderName,
   releaseYear,
@@ -64,6 +65,12 @@ describe("recommendation catalog mapping", () => {
     expect(normalizeGoldProviderName("Netflix")).toBe("Netflix");
   });
 
+  it("softens multi-word all-caps API titles without damaging acronyms", () => {
+    expect(displayTitleName("72 HOURS")).toBe("72 Hours");
+    expect(displayTitleName("THE BEAR")).toBe("The Bear");
+    expect(displayTitleName("RRR")).toBe("RRR");
+  });
+
   it("maps a gold row into the existing app catalog contract", () => {
     const title = buildAppCatalogTitle(pulpFictionTitle, pulpFictionInput, pulpFictionClassification);
 
@@ -74,9 +81,39 @@ describe("recommendation catalog mapping", () => {
     expect(title?.providers).toEqual(["Max", "Prime Video"]);
     expect(title?.genres).toEqual(["Thriller", "Crime"]);
     expect(title?.tags).toEqual(expect.arrayContaining(["crime-drama", "crime-thriller", "wry", "stylized", "visceral", "fast"]));
+    expect(title?.primarySubgenre).toBe("crime-drama");
+    expect(title?.secondarySubgenre).toBe("crime-thriller");
+    expect(title?.toneTags).toEqual(["wry", "stylized", "visceral"]);
+    expect(title?.pacing).toBe("fast");
     expect(title?.director).toBe("Quentin Tarantino");
     expect(title?.poster).toBe("/icons/icon-512.png");
     expect(title?.availabilityType).toBe("subscription");
+  });
+
+  it("validates cached cast references before exposing them to the app", () => {
+    const title = buildAppCatalogTitle(pulpFictionTitle, {
+      ...pulpFictionInput,
+      raw_payload: { sampled_streaming_providers: ["Netflix"] },
+    }, pulpFictionClassification, [{
+          tmdbPersonId: 2231,
+          name: "Samuel L. Jackson",
+          billingOrder: 1,
+          character: "Jules",
+          references: [{
+            externalId: "tmdb:movie:329",
+            tmdbId: 329,
+            mediaType: "movie",
+            name: "Jurassic Park",
+            year: 1993,
+            popularity: 80,
+            voteCount: 16000,
+          }],
+        }]);
+    expect(title?.castContext[0]).toEqual(expect.objectContaining({
+      tmdbPersonId: 2231,
+      name: "Samuel L. Jackson",
+      references: [expect.objectContaining({ name: "Jurassic Park" })],
+    }));
   });
 
   it("falls back to the pilot sample year until TMDB hydration supplies a release date", () => {

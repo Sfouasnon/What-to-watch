@@ -9,6 +9,7 @@ import {
   type QuestionnaireDecayConfig,
   type Recommendation,
   type RecommendationConfig,
+  type RecommendationFeedback,
   type RecommendationLane,
   type RecommendationWeights,
   type RecommendForProfileInput,
@@ -16,6 +17,7 @@ import {
   type Title,
   type Vibe,
 } from "./types";
+import { buildRecommendationNarrative } from "./narrative";
 
 const REFERENCE_YEAR = 2026;
 
@@ -28,6 +30,9 @@ export const defaultRecommendationConfig: RecommendationConfig = {
     writerAffinity: 7,
     cinematographerAffinity: 7,
     genreMatch: 10,
+    questionnaireMatch: 7,
+    tradeoffMatch: 6,
+    feedbackMatch: 12,
     subgenreMatch: 6,
     moodMatch: 13,
     vibeMatch: 9,
@@ -198,6 +203,7 @@ export function importTunedConfiguration(
 
 interface ScoredCandidate {
   title: Title;
+  exactVibeMatch: boolean;
   intrinsicScore: number;
   novelty: number;
   creatorSignal: number;
@@ -228,27 +234,46 @@ export function recommendForProfile({
   lane,
   config = defaultRecommendationConfig,
   limit,
+  excludeTitleIds = [],
   social,
+  feedback = [],
 }: RecommendForProfileInput): Recommendation[] {
-  const safeLimit = Math.min(10, Math.max(0, Math.floor(limit ?? config.thresholds.maxRecommendations)));
+  const safeLimit = Math.min(100, Math.max(0, Math.floor(limit ?? config.thresholds.maxRecommendations)));
   if (!safeLimit || !catalog.length) return [];
 
   const titleById = new Map(catalog.map((title) => [title.id, title]));
+  const excludedTitleIdsSet = new Set(excludeTitleIds);
   const rated = profile.ratings
     .map((rating) => ({ rating, title: titleById.get(rating.titleId) }))
     .filter((entry): entry is { rating: Profile["ratings"][number]; title: Title } => Boolean(entry.title));
   const watchedIds = new Set(rated.filter(({ rating }) => rating.watched).map(({ rating }) => rating.titleId));
+  const profileFeedback = feedback.filter((item) => item.profileId === profile.id);
+  const excludedByFeedback = new Set(
+    profileFeedback.flatMap((item) =>
+      item.reason && (
+        ["already-seen", "not-interested", "misclassified", "not-available"].includes(item.reason) ||
+        (["wrong-mood", "good-wrong-night"].includes(item.reason) && feedbackMatchesTonight(item, moods, vibes))
+      )
+        ? [item.titleId]
+        : [],
+    ),
+  );
   const rewatchMode = vibes.includes("rewatch-favorite");
 
   const preAvailability = catalog
+    .filter((title) => !excludedTitleIdsSet.has(title.id))
     .filter((title) => matchesRequestedMood(title, moods))
+    .filter((title) => !matchesStrongGenreAvoidance(title, profile, rated, config))
+    .filter((title) => !excludedByFeedback.has(title.id))
     .filter((title) =>
       rewatchMode
         ? watchedIds.has(title.id) && (profile.ratings.find((rating) => rating.titleId === title.id)?.score ?? 0) >= 7
         : !watchedIds.has(title.id),
     )
-    .filter((title) => matchesVibeGate(title, vibes, profile, rated, config))
-    .map((title) => scoreTitle(title, profile, rated, moods, vibes, config, social));
+    .map((title) => ({
+      ...scoreTitle(title, profile, rated, moods, vibes, config, social, profileFeedback, titleById),
+      exactVibeMatch: matchesVibeGate(title, vibes, profile, rated, config),
+    }));
 
   const watchable = preAvailability
     .map((candidate) => {
@@ -280,12 +305,17 @@ export function recommendForProfile({
       : candidate.intrinsicScore >= bestIncluded + config.thresholds.rentalExceptionalMargin;
   });
 
-  const count = Math.min(safeLimit, eligible.length);
+  const exactEligible = eligible.filter((candidate) => candidate.exactVibeMatch);
+  const minimumPageSize = Math.min(config.thresholds.maxRecommendations, safeLimit);
+  const recommendationPool = exactEligible.length >= minimumPageSize || eligible.length < minimumPageSize
+    ? exactEligible
+    : eligible;
+  const count = Math.min(safeLimit, recommendationPool.length);
   const selected: Recommendation[] = [];
-  const remaining = [...eligible];
+  const remaining = [...recommendationPool];
 
   for (let index = 0; index < count; index += 1) {
-    const recommendationLane = RECOMMENDATION_LANES[index];
+    const recommendationLane = RECOMMENDATION_LANES[index % RECOMMENDATION_LANES.length];
     const scoringLane = lane ?? recommendationLane;
     const exploration = config.exploration[scoringLane];
     const ranked = remaining
@@ -295,6 +325,7 @@ export function recommendForProfile({
       }))
       .sort(
         (a, b) =>
+          Number(b.candidate.exactVibeMatch) - Number(a.candidate.exactVibeMatch) ||
           b.score - a.score ||
           b.candidate.intrinsicScore - a.candidate.intrinsicScore ||
           a.candidate.title.id.localeCompare(b.candidate.title.id),
@@ -305,6 +336,17 @@ export function recommendForProfile({
     const requiresPayment =
       candidate.primaryAvailability.kind === "rental" || candidate.primaryAvailability.kind === "purchase";
     const evidence = buildEvidence(candidate, moods, vibes, recommendationLane, requiresPayment);
+    if (!candidate.exactVibeMatch && vibes.length) {
+      evidence.push(`This is a strong nearby match used after the exact ${vibes[0].replaceAll("-", " ")} options.`);
+    }
+    const narrative = buildRecommendationNarrative({
+      title: candidate.title,
+      profile,
+      moods,
+      vibes,
+      lane: recommendationLane,
+      evidence,
+    });
     const normalizedScore = normalizeScore(winner.score, config);
     const matchScore = Math.round(
       config.normalization.minimumDisplayMatch +
@@ -318,7 +360,8 @@ export function recommendForProfile({
       rawScore: round(winner.score, 3),
       normalizedScore: round(normalizedScore, 4),
       matchScore,
-      explanation: evidence.slice(0, 2).join(" "),
+      explanation: [narrative.fit, narrative.cast, narrative.setup].filter(Boolean).join(" "),
+      narrative,
       evidence,
       contributions: [...candidate.contributions].sort((a, b) => Math.abs(b.value) - Math.abs(a.value)),
       availability: candidate.availability,
@@ -333,6 +376,19 @@ export function recommendForProfile({
   return selected;
 }
 
+function feedbackMatchesTonight(
+  feedback: RecommendationFeedback,
+  moods: readonly Mood[],
+  vibes: readonly Vibe[],
+): boolean {
+  const feedbackMoods = feedback.context?.moods ?? [];
+  const feedbackVibes = feedback.context?.vibes ?? [];
+  if (!feedbackMoods.length && !feedbackVibes.length) return false;
+  const moodMatches = !feedbackMoods.length || feedbackMoods.some((mood) => moods.includes(mood));
+  const vibeMatches = !feedbackVibes.length || feedbackVibes.some((vibe) => vibes.includes(vibe));
+  return moodMatches && vibeMatches;
+}
+
 function scoreTitle(
   title: Title,
   profile: Profile,
@@ -341,7 +397,9 @@ function scoreTitle(
   vibes: readonly Vibe[],
   config: RecommendationConfig,
   social?: SocialRecommendationInput,
-): Omit<ScoredCandidate, "availability" | "primaryAvailability"> {
+  feedback: readonly RecommendationFeedback[] = [],
+  titleById: ReadonlyMap<string, Title> = new Map(),
+): Omit<ScoredCandidate, "availability" | "primaryAvailability" | "exactVibeMatch"> {
   const contributions: FeatureContribution[] = [];
   const evidence: string[] = [];
   let score = 50;
@@ -356,18 +414,20 @@ function scoreTitle(
   };
 
   const profileRatingCount = rated.length;
-  const questionnaireGenres = title.genres
-    .map((genre) => profile.questionnaire?.genreScores[genre])
-    .filter((value): value is number => value !== undefined)
-    .map((value) => clamp((value - 4) / 3, -1, 1));
-  const genreBehavior = affinityFromSharedValues(title.genres, rated, (item) => item.genres);
-  const genrePreference = effectivePreference({
-    behavioralPreference: genreBehavior.evidence ? genreBehavior.value : undefined,
-    behavioralEvidence: genreBehavior.evidence,
-    questionnairePreference: questionnaireGenres.length ? average(questionnaireGenres) : questionnaireDimension(title, profile),
-    ratingCount: profileRatingCount,
-    config: config.questionnaireDecay,
+  const genreSignals = unique(title.genres).flatMap((genre) => {
+    const behavior = affinityFromSharedValues([genre], rated, (item) => item.genres);
+    const questionnaire = questionnaireGenrePreference(genre, profile);
+    if (!behavior.evidence && questionnaire === undefined) return [];
+    return [effectivePreference({
+      behavioralPreference: behavior.evidence ? behavior.value : undefined,
+      behavioralEvidence: behavior.evidence,
+      questionnairePreference: questionnaire,
+      ratingCount: profileRatingCount,
+      config: config.questionnaireDecay,
+    })];
   });
+  const genrePreference = cautiousPreference(genreSignals);
+  const genreBehavior = affinityFromSharedValues(title.genres, rated, (item) => item.genres);
   add("genreMatch", config.weights.genreMatch * genrePreference);
 
   const subgenre = affinityFromSharedValues(title.subgenres, rated, (item) => item.subgenres);
@@ -424,6 +484,33 @@ function scoreTitle(
     : 0;
   const novelty = clamp(1 - maxWatchedSimilarity, 0, 1);
   add("noveltyBonus", config.weights.noveltyBonus * novelty * (vibes.includes("try-something-new") ? 1 : 0.35));
+
+  const questionnaireFit = questionnairePreference(title, profile, novelty, maxWatchedSimilarity);
+  const effectiveQuestionnaireFit = effectivePreference({
+    behavioralPreference: genreBehavior.evidence ? 0 : undefined,
+    behavioralEvidence: genreBehavior.evidence,
+    questionnairePreference: questionnaireFit,
+    ratingCount: profileRatingCount,
+    config: config.questionnaireDecay,
+  });
+  add("questionnaireMatch", config.weights.questionnaireMatch * effectiveQuestionnaireFit);
+
+  const tradeoffFit = tradeoffPreference(title, profile, novelty);
+  const effectiveTradeoffFit = effectivePreference({
+    questionnairePreference: tradeoffFit,
+    ratingCount: profileRatingCount,
+    config: config.questionnaireDecay,
+  });
+  add("tradeoffMatch", config.weights.tradeoffMatch * effectiveTradeoffFit);
+
+  const learnedFeedback = feedbackPreference(title, feedback, titleById);
+  add(
+    "feedbackMatch",
+    config.weights.feedbackMatch * learnedFeedback,
+    Math.abs(learnedFeedback) >= 0.2
+      ? "Your earlier recommendation feedback directly adjusted this match."
+      : undefined,
+  );
 
   const vibeSignal = vibeScore(title, vibes, profile, rated, creatorSignal, novelty, config);
   add("vibeMatch", config.weights.vibeMatch * vibeSignal, vibeEvidence(title, vibes));
@@ -512,7 +599,29 @@ function matchesRequestedMood(title: Title, moods: readonly Mood[]): boolean {
   if (!moods.length) return true;
   if (title.contentType === "stand-up") return moods.includes("stand-up");
   const normalizedGenres = title.genres.map((genre) => genre.toLowerCase());
-  return moods.some((mood) => mood !== "stand-up" && normalizedGenres.includes(mood));
+  return moods.some((mood) => {
+    if (mood === "stand-up") return false;
+    if (mood === "comedy" && title.primarySubgenre) return isComedyLedSubgenre(title.primarySubgenre);
+    return normalizedGenres.includes(mood);
+  });
+}
+
+function matchesStrongGenreAvoidance(
+  title: Title,
+  profile: Profile,
+  rated: Array<{ rating: Profile["ratings"][number]; title: Title }>,
+  config: RecommendationConfig,
+): boolean {
+  const questionnaireGenres = new Map(
+    Object.entries(profile.questionnaire?.genreScores ?? {}).map(([genre, score]) => [genre.toLowerCase(), score]),
+  );
+  return title.genres.some((genre) => {
+    const questionnaireScore = questionnaireGenres.get(genre.toLowerCase());
+    if (questionnaireScore === undefined || questionnaireScore > 1.5) return false;
+    const matchingRatings = rated.filter(({ title: ratedTitle }) => ratedTitle.genres.includes(genre));
+    return matchingRatings.length >= 2
+      && average(matchingRatings.map(({ rating }) => rating.score)) <= config.thresholds.stronglyDislikedRating;
+  });
 }
 
 function matchesVibeGate(
@@ -604,26 +713,126 @@ function affinityFromSharedValues(
   };
 }
 
-function questionnaireDimension(title: Title, profile: Profile): number | undefined {
+function questionnaireGenrePreference(term: string, profile: Profile): number | undefined {
+  const genreScores = profile.questionnaire?.genreScores;
+  if (!genreScores) return undefined;
+  const normalize = (value: string) => value.toLowerCase().replaceAll("-", " ").trim();
+  const scoresByGenre = new Map(Object.entries(genreScores).map(([genre, value]) => [normalize(genre), value]));
+  const normalized = normalize(term);
+  const score = scoresByGenre.get(normalized)
+    ?? (normalized === "history" ? scoresByGenre.get("historical") : undefined);
+  return score === undefined ? undefined : clamp((score - 4) / 3, -1, 1);
+}
+
+function cautiousPreference(values: readonly number[]): number {
+  if (!values.length) return 0;
+  const strongestAversion = Math.min(0, ...values);
+  return clamp(average(values) + strongestAversion * 0.6, -1, 1);
+}
+
+function isComedyLedSubgenre(value: string): boolean {
+  const normalized = value.toLowerCase();
+  return normalized.includes("comedy")
+    || normalized.includes("sitcom")
+    || normalized === "satire"
+    || normalized === "news-satire"
+    || normalized === "sketch-comedy";
+}
+
+function questionnairePreference(
+  title: Title,
+  profile: Profile,
+  novelty: number,
+  familiarity: number,
+): number | undefined {
   const scores = profile.questionnaire?.dimensionScores;
   if (!scores) return undefined;
-  const dimensions: Array<keyof typeof scores> = [];
-  const tags = [...title.genres, ...title.subgenres, ...title.toneTags].map((value) => value.toLowerCase());
-  if (tags.some((tag) => ["mystery", "cerebral", "political", "nonlinear"].includes(tag))) dimensions.push("cerebral");
-  if (tags.some((tag) => ["dark", "bleak", "crime"].includes(tag))) dimensions.push("darknessTolerance");
-  if (tags.some((tag) => ["action", "thriller", "suspense"].includes(tag))) dimensions.push("thrill");
-  if (tags.some((tag) => ["science fiction", "fantasy", "surreal"].includes(tag))) dimensions.push("imagination");
-  if (title.contentType === "stand-up") dimensions.push("standUp");
-  if (title.genres.some((genre) => genre.toLowerCase() === "comedy")) dimensions.push("comedy");
-  if (title.genres.some((genre) => genre.toLowerCase() === "horror")) dimensions.push("horrorTolerance");
-  if (title.pacing === "slow") dimensions.push("slowPacing");
-  if (!title.languages.includes("en")) dimensions.push("internationalOpenness");
-  if (title.year < 1980) dimensions.push("classicOpenness");
-  const values = unique(dimensions)
-    .map((dimension) => scores[dimension])
-    .filter((value): value is number => value !== undefined)
-    .map((value) => clamp((value - 50) / 50, -1, 1));
+  const tags = [...title.genres, ...title.subgenres, ...title.toneTags]
+    .map((value) => value.toLowerCase().replaceAll("-", " ").trim());
+  const has = (...values: string[]) => tags.some((tag) => values.includes(tag));
+  const scripted = title.contentType !== "stand-up";
+  const horror = has("horror", "supernatural horror", "psychological horror", "body horror", "slasher");
+  const characteristicSignals: Array<[keyof typeof scores, number]> = [
+    ["cerebral", has("mystery", "cerebral", "investigative", "ambiguous", "nonlinear") ? 1 : 0],
+    ["emotionalIntensity", has("emotional", "intense", "bittersweet", "tragic", "heartfelt") ? 1 : 0],
+    ["darknessTolerance", has("dark", "bleak", "crime", "moral ambiguity", "psychological") ? 1 : 0],
+    ["thrill", has("action", "thriller", "suspense", "fast", "twisty", "spectacle") ? 1 : 0],
+    ["imagination", has("science fiction", "fantasy", "surreal", "imaginative", "nonlinear") ? 1 : 0],
+    ["comedy", scripted && has("comedy", "dark comedy", "dry comedy", "satire", "visual comedy", "buddy comedy") ? 1 : 0],
+    ["dryComedy", scripted && has("dry comedy", "deadpan", "wry", "understated") ? 1 : 0],
+    ["darkComedy", scripted && has("dark comedy", "black comedy", "awkward comedy", "absurdist comedy", "cynical") ? 1 : 0],
+    ["broadComedy", scripted && has("broad comedy", "slapstick", "buddy comedy", "visual comedy", "parody spoof", "raunchy", "sex comedy") ? 1 : 0],
+    ["standUp", title.contentType === "stand-up" ? 1 : 0],
+    ["characterOrientation", has("character study", "ensemble", "character-driven") ? 1 : 0],
+    ["realism", has("based on true events", "procedural", "realist", "grounded", "documentary") ? 1 : 0],
+    ["ambiguityTolerance", has("ambiguous", "twisty", "nonlinear", "mystery") ? 1 : 0],
+    ["slowPacing", title.pacing === "slow" ? 1 : 0],
+    ["novelty", novelty],
+    ["discovery", clamp((70 - title.popularity) / 50, 0, 1)],
+    ["classicOpenness", clamp((2000 - title.year) / 60, 0, 1)],
+    ["internationalOpenness", !title.languages.includes("en") || !title.countries.includes(profile.region) ? 1 : 0],
+    ["horrorTolerance", has("horror", "creature", "gore", "body horror", "psychological") ? 1 : 0],
+    ["psychologicalHorror", horror && has("psychological horror", "psychological", "dread", "unsettling", "slow burn") ? 1 : 0],
+    ["goreTolerance", horror && has("gore", "graphic", "body horror", "visceral", "slasher") ? 1 : 0],
+    ["rewatchOrientation", familiarity],
+    ["televisionCommitment", title.contentType === "series" ? clamp((title.seasons ?? 1) / 5, 0.25, 1) : 0],
+    ["bingePreference", title.contentType === "series" ? bingeability(title) : 0],
+  ];
+  const values = characteristicSignals.flatMap(([dimension, signal]) => {
+    const value = scores[dimension];
+    return value === undefined || signal <= 0 ? [] : [clamp((value - 50) / 50, -1, 1) * signal];
+  });
   return values.length ? average(values) : undefined;
+}
+
+function tradeoffPreference(title: Title, profile: Profile, novelty: number): number | undefined {
+  const scores = profile.questionnaire?.tradeoffScores;
+  if (!scores) return undefined;
+  const values: number[] = [];
+  if (scores.pace !== undefined && title.pacing !== "moderate") {
+    values.push(scores.pace * (title.pacing === "fast" ? 1 : -1));
+  }
+  if (scores.release !== undefined) {
+    const releaseSignal = clamp(title.trendingScore / 100 - title.canonicalScore / 100, -1, 1);
+    if (Math.abs(releaseSignal) > 0.05) values.push(scores.release * releaseSignal);
+  }
+  if (scores.familiarity !== undefined) {
+    values.push(scores.familiarity * (novelty * 2 - 1));
+  }
+  return values.length ? average(values) : undefined;
+}
+
+function feedbackPreference(
+  title: Title,
+  feedback: readonly RecommendationFeedback[],
+  titleById: ReadonlyMap<string, Title>,
+): number {
+  const tags = [...title.genres, ...title.subgenres, ...title.toneTags].map((value) => value.toLowerCase());
+  const has = (...values: string[]) => tags.some((tag) => values.includes(tag));
+  const darkSignal = has("dark", "bleak", "crime", "horror", "psychological", "moral ambiguity") ? 1 : 0;
+  const lightSignal = has("gentle", "warm", "family", "visual comedy", "broad comedy") ? 1 : 0;
+  const oldSignal = clamp((REFERENCE_YEAR - title.year - 20) / 60, 0, 1);
+  const minutes = title.contentType === "series" ? title.episodeRuntimeMinutes : title.runtimeMinutes;
+  const longSignal = minutes ? clamp((minutes - 100) / 80, 0, 1) : 0;
+  let signal = 0;
+
+  for (const item of feedback) {
+    const source = titleById.get(item.titleId);
+    const similarity = source ? titleSimilarity(title, source) : item.titleId === title.id ? 1 : 0;
+    if (item.recommendationScore !== undefined && similarity > 0) {
+      signal += clamp((item.recommendationScore - 5.5) / 4.5, -1, 1) * similarity * 0.7;
+    }
+    if (item.reason === "too-dark") signal -= darkSignal * 0.55;
+    if (item.reason === "too-light") signal -= lightSignal * 0.55;
+    if (item.reason === "too-old") signal -= oldSignal * 0.55;
+    if (item.reason === "too-long") signal -= longSignal * 0.55;
+    if (item.reason === "disliked-actor" && source && title.actors.some((actor) => source.actors.includes(actor))) {
+      signal -= 0.8;
+    }
+    if (item.reason === "good-wrong-night" && similarity > 0) signal += similarity * 0.2;
+  }
+
+  return clamp(signal, -1, 1);
 }
 
 function vibeScore(

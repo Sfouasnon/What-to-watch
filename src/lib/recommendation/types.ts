@@ -64,6 +64,26 @@ export interface CanonicalMembership {
   position?: number;
 }
 
+export interface CastReferenceCredit {
+  externalId: string;
+  tmdbId: number;
+  mediaType: "movie" | "tv";
+  name: string;
+  year: number;
+  character?: string | null;
+  billingOrder?: number | null;
+  popularity: number;
+  voteCount: number;
+}
+
+export interface CastContextPerson {
+  tmdbPersonId: number;
+  name: string;
+  character?: string | null;
+  billingOrder: number;
+  references: CastReferenceCredit[];
+}
+
 export interface Title {
   id: string;
   name: string;
@@ -76,6 +96,8 @@ export interface Title {
   completed?: boolean;
   serialized?: boolean;
   genres: string[];
+  primarySubgenre?: string;
+  secondarySubgenre?: string;
   subgenres: string[];
   toneTags: string[];
   themes: string[];
@@ -86,6 +108,7 @@ export interface Title {
   writers: string[];
   cinematographers: string[];
   actors: string[];
+  castContext?: CastContextPerson[];
   canonicalScore: number;
   canonicalMemberships: CanonicalMembership[];
   criterionCollection: boolean;
@@ -114,6 +137,9 @@ export type QuestionnaireDimension =
   | "thrill"
   | "imagination"
   | "comedy"
+  | "dryComedy"
+  | "darkComedy"
+  | "broadComedy"
   | "standUp"
   | "characterOrientation"
   | "realism"
@@ -124,6 +150,8 @@ export type QuestionnaireDimension =
   | "classicOpenness"
   | "internationalOpenness"
   | "horrorTolerance"
+  | "psychologicalHorror"
+  | "goreTolerance"
   | "rewatchOrientation"
   | "televisionCommitment"
   | "bingePreference";
@@ -148,6 +176,7 @@ export interface QuestionnaireProfile {
   completedAt?: string;
   dimensionScores: Partial<Record<QuestionnaireDimension, number>>;
   genreScores: Record<string, number>;
+  tradeoffScores?: Partial<Record<"pace" | "release" | "familiarity", number>>;
 }
 
 export interface FavoritePeople {
@@ -175,23 +204,29 @@ export interface Profile {
   favoritePeople: FavoritePeople;
 }
 
+export type RecommendationFeedbackReason =
+  | "already-seen"
+  | "not-interested"
+  | "wrong-mood"
+  | "too-dark"
+  | "too-light"
+  | "too-old"
+  | "too-long"
+  | "disliked-actor"
+  | "misclassified"
+  | "not-available"
+  | "good-wrong-night";
+
 export interface RecommendationFeedback {
   profileId: string;
   titleId: string;
   modelVersion: string;
   recommendationScore?: number;
-  reason?:
-    | "already-seen"
-    | "not-interested"
-    | "wrong-mood"
-    | "too-dark"
-    | "too-light"
-    | "too-old"
-    | "too-long"
-    | "disliked-actor"
-    | "misclassified"
-    | "not-available"
-    | "good-wrong-night";
+  reason?: RecommendationFeedbackReason;
+  context?: {
+    moods?: Mood[];
+    vibes?: Vibe[];
+  };
   createdAt: string;
 }
 
@@ -201,6 +236,9 @@ export interface RecommendationWeights {
   writerAffinity: number;
   cinematographerAffinity: number;
   genreMatch: number;
+  questionnaireMatch: number;
+  tradeoffMatch: number;
+  feedbackMatch: number;
   subgenreMatch: number;
   moodMatch: number;
   vibeMatch: number;
@@ -256,6 +294,14 @@ export interface FeatureContribution {
   evidence?: string;
 }
 
+export interface RecommendationNarrative {
+  header: string;
+  heading: string;
+  fit: string;
+  cast?: string;
+  setup: string;
+}
+
 export interface Recommendation {
   rank: number;
   lane: RecommendationLane;
@@ -264,6 +310,7 @@ export interface Recommendation {
   normalizedScore: number;
   matchScore: number;
   explanation: string;
+  narrative: RecommendationNarrative;
   evidence: string[];
   contributions: FeatureContribution[];
   availability: AvailabilityOption[];
@@ -328,7 +375,9 @@ export interface RecommendForProfileInput {
   lane?: RecommendationLane;
   config?: RecommendationConfig;
   limit?: number;
+  excludeTitleIds?: readonly string[];
   social?: SocialRecommendationInput;
+  feedback?: readonly RecommendationFeedback[];
 }
 
 export interface PreferenceBlendInput {
