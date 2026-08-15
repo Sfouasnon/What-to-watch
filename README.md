@@ -101,6 +101,35 @@ supabase db push
 
 Add the project URL and publishable/anon key to local and Vercel environment variables. `/account` then enables passwordless email sign-in; without those variables it clearly identifies browser-local demo mode.
 
+## Catalog pipeline
+
+All catalog scripts require `TMDB_TOKEN`, `NEXT_PUBLIC_SUPABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY`, and hydration additionally requires `supabase/migrations/0005_catalog_hydration_grants.sql`. Supabase checks PostgreSQL object grants before RLS, and the service-role key bypasses RLS but never object grants, so without 0005 the hydrator stops on its first write with an explicit pointer to that migration.
+
+```bash
+npm run catalog:seed-gold      # 100 pilot titles + gold editorial classifications
+npm run catalog:hydrate-gold   # factual TMDB metadata, artwork, and normalized credits
+npm run catalog:validate-gold  # assert the gold benchmark is intact
+```
+
+`catalog:seed-gold` establishes identity and editorial truth from `curation/`. `catalog:hydrate-gold` then fills in what the pilot sample never carried: posters and backdrops, release and end dates, runtimes, season/episode counts, external ids, refreshed genre links, and normalized `people`/`title_credits` rows.
+
+The two concerns stay strictly separated:
+
+- Hydration writes only the factual allowlist in `scripts/catalog/lib/tmdb-mapping.mjs`. Writing any other column on `titles` throws before a request is sent.
+- Hydration never writes `title_editorial_classifications`. The script snapshots the gold rows before it runs and re-compares afterwards, failing the run on any drift. The database enforces the same rule independently through the `protect_gold_editorial_classification` trigger.
+- Hydration never rewrites `title_classification_inputs`. That packet is the frozen evidence the gold labels were derived from, so refreshing it would change the benchmark's provenance.
+- Migration 0005 grants `service_role` DML on the factual tables only. Both editorial tables keep `select` and nothing else, so the separation holds at the object-privilege level even if the application-side guards were bypassed.
+
+A sparse TMDB response never blanks good metadata: when a fresh value is null and a value is already persisted, the persisted value is kept.
+
+```bash
+npm run catalog:hydrate-gold -- --dry-run              # report without writing
+npm run catalog:hydrate-gold -- --media-type=tv        # series only
+npm run catalog:hydrate-gold -- --limit=10 --delay-ms=250
+```
+
+`scripts/catalog/hydrate-tmdb.mjs` remains the queue-driven hydrator for the wider TMDB catalog index; `hydrate-gold-100.mjs` targets the pilot 100 by identity instead.
+
 ## Quality gate
 
 ```bash

@@ -13,6 +13,7 @@
     "catalog:import-index": "node scripts/catalog/import-tmdb-index.mjs",
     "catalog:hydrate": "node scripts/catalog/hydrate-tmdb.mjs",
     "catalog:seed-gold": "node scripts/catalog/seed-gold-100.mjs",
+    "catalog:hydrate-gold": "node scripts/catalog/hydrate-gold-100.mjs",
     "catalog:validate-gold": "vitest run src/lib/editorial/gold.test.ts"
   },
   "dependencies": {
