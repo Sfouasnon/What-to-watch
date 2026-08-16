@@ -17,7 +17,7 @@ import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.activity.ComponentActivity
-import androidx.webkit.WebViewCompat
+import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import org.json.JSONObject
 
@@ -100,7 +100,7 @@ class MainActivity : ComponentActivity() {
         }
 
         if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
-            WebViewCompat.setAlgorithmicDarkeningAllowed(webView, false)
+            WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.settings, false)
         }
 
         setContentView(webView)
@@ -136,15 +136,15 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
             webView.evaluateJavascript(
                 "document.activeElement && document.activeElement.click && document.activeElement.click()",
                 null,
             )
             return true
         }
-        return super.dispatchKeyEvent(event)
+        return super.onKeyDown(keyCode, event)
     }
 
     private fun openExternal(target: String) {

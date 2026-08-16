@@ -15,6 +15,25 @@ This Android TV project wraps the dedicated `/tv` route in a small native WebVie
 3. If testing a preview rather than production, change `WEB_APP_URL` in `app/build.gradle.kts` to that preview's `/tv` URL.
 4. Build the debug APK with **Build → Build APK(s)**. Android Studio writes it below `app/build/outputs/apk/debug/`.
 
+## Build with the Gradle Wrapper
+
+The checked-in Wrapper pins Gradle 8.11.1, the version required by Android Gradle Plugin 8.9.1, and verifies the downloaded distribution with its published SHA-256 checksum. Install JDK 17 and Android SDK 35, then run:
+
+```bash
+cd android-tv
+JAVA_HOME=/path/to/jdk-17 \
+ANDROID_HOME=/path/to/android-sdk \
+./gradlew lintDebug testDebugUnitTest assembleDebug
+```
+
+The debug APK is written to `app/build/outputs/apk/debug/app-debug.apk`. On the development Mac used for the 2026-08-15 device pass, the corresponding environment is:
+
+```bash
+JAVA_HOME=/opt/homebrew/opt/openjdk@17 \
+ANDROID_HOME=/opt/homebrew/share/android-commandlinetools \
+./gradlew lintDebug testDebugUnitTest assembleDebug
+```
+
 ## Sideload
 
 ```bash
