@@ -28,7 +28,9 @@ class MainActivity : ComponentActivity() {
         val hosts: Set<String> = emptySet(),
         val webHosts: Set<String> = hosts,
         val forcedPackage: String? = null,
+        val forcedClass: String? = null,
         val action: String? = null,
+        val dataExtraName: String? = null,
         val contentExtra: String? = null,
     )
 
@@ -39,6 +41,9 @@ class MainActivity : ComponentActivity() {
             packages = setOf("com.netflix.ninja"),
             hosts = setOf("netflix.com"),
             forcedPackage = "com.netflix.ninja",
+            forcedClass = "com.netflix.ninja.MainActivity",
+            action = Intent.ACTION_VIEW,
+            dataExtraName = "amzn_deeplink_data",
         ),
         "prime-video" to primeVideoContract(),
         "max-amazon-channel" to primeVideoContract(),
@@ -164,9 +169,27 @@ class MainActivity : ComponentActivity() {
         if (!allowUnverified && payload.optString("verificationStatus") != "verified") return null
         if (payload.optString("platform") !in setOf("web", "android_tv", "fire_tv")) return null
 
+        val targetKind = payload.optString("targetKind")
+        if (targetKind == "android_string_extra") {
+            val packageName = payload.optString("packageName")
+            val componentName = payload.optString("componentName")
+            val action = payload.optString("action")
+            val extraName = payload.optString("dataExtraName")
+            val extraValue = payload.optString("dataExtraValue")
+            if (
+                packageName !in contract.packages || packageName != contract.forcedPackage ||
+                componentName != contract.forcedClass || action != contract.action ||
+                extraName != contract.dataExtraName ||
+                extraValue.length !in 1..512 || extraValue.any { it.isISOControl() }
+            ) return null
+            return Intent(action)
+                .setClassName(packageName, componentName)
+                .putExtra(extraName, extraValue)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
         val targetUri = payload.optString("targetUri")
         if (targetUri.length !in 1..4096) return null
-        val targetKind = payload.optString("targetKind")
         val isIntentUri = targetUri.startsWith("intent:")
         if (targetKind !in setOf("uri", "android_intent_uri")) return null
         if ((targetKind == "android_intent_uri") != isIntentUri) return null

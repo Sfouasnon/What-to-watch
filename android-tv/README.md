@@ -23,9 +23,15 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 adb shell monkey -p com.whattowatch.tv 1
 ```
 
-The shell only keeps the What to Watch HTTPS origin inside its WebView. Watch options become directly launchable only after a content-specific target has been verified on a real device. The catalog stores web, Android TV, and Fire TV targets separately and may prefer an exact Android TV target over a contentless Fire TV app launch.
+The shell only keeps the What to Watch HTTPS origin inside its WebView. Watch options become directly launchable only after a content-specific target has been verified on a real device. The catalog stores web, Android TV, and Fire TV targets separately. A provider target may be a URI, a serialized Android intent URI, or a scalar string extra named by the provider's Fire TV launcher capability.
 
-Resolver-provided Android intent strings are never forwarded wholesale. The shell extracts the proposed data/action/content ID, checks it against a provider allowlist, and creates a fresh intent without inherited extras or components. Current contracts cover Netflix, Prime Video and Amazon Channels, Hulu, Disney+, Max, Peacock, and Paramount+.
+Resolver-provided Android intent strings are never forwarded wholesale. The shell extracts the proposed data/action/content ID, checks it against a provider allowlist, and creates a fresh intent without inherited extras or components. Scalar-extra targets require an exact allowlisted package, class, action, and extra name; arbitrary JSON fields never become Android intent extras. Current contracts cover Netflix, Prime Video and Amazon Channels, Hulu, Disney+, Max, Peacock, and Paramount+.
+
+### Production Fire TV evidence, 2026-08-15
+
+Device `AFTDCT31`, Fire OS build `PS7713.5443N`, exposed signed-in PLAY capabilities for Netflix, Hulu, Disney+, and Peacock. Max exposed SIGN_IN because that app was signed out; Paramount+ was not installed. Netflix 13.1.2 advertised `android.intent.action.VIEW`, `com.netflix.ninja.MainActivity`, flags `268435456`, and the scalar extra `amzn_deeplink_data`.
+
+For *Bo Burnham: Inside*, the WatchHub HTTPS/intent candidate opened Netflix's top page and is rejected. A cold-start replay with `amzn_deeplink_data=81289483` opened the exact title and is the verified Fire TV target. Raw device fingerprints, package declarations, and logcat captures live under the Git-ignored `.firetv-captures/` directory.
 
 ## Verify a launch target on the television
 
@@ -65,6 +71,23 @@ Only debug builds accept the `launch_target_json` ADB extra.
    ```
 
 Use `--status=rejected` when the target opens the wrong surface. If the resolver later changes the target, publication automatically resets it to `unverified`.
+
+When Comrade reports a scalar `DATA_EXTRA_NAME`, record the typed contract before verifying it:
+
+```bash
+npm run catalog:record-fire-tv-extra -- \
+  --tmdb=movie:823754 \
+  --provider=netflix \
+  --package=com.netflix.ninja \
+  --component=com.netflix.ninja.MainActivity \
+  --action=android.intent.action.VIEW \
+  --data-extra-name=amzn_deeplink_data \
+  --data-extra-value=81289483 \
+  --device-model=AFTDCT31 \
+  --fire-os-build=PS7713.5443N \
+  --app-version=13.1.2 \
+  --write
+```
 
 ## Amazon Content SDK versus provider deep links
 

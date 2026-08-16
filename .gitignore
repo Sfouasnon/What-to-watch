@@ -52,3 +52,4 @@ next-env.d.ts
 /curation/preview/
 /src/data/preview-catalog-*.json
 /scripts/catalog/build-preview-catalog.mjs
+/.firetv-captures/

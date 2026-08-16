@@ -51,7 +51,7 @@ if (!offers?.length) throw new Error(`No current US ${providerKey} offer found f
 const offerIds = offers.map((offer) => offer.id);
 const { data: allTargets, error: targetError } = await supabase
   .from("offer_launch_targets")
-  .select("id,availability_offer_id,platform,target_kind,target_uri,package_name,component_name,action,content_specific,external_source,verification_status,verified_at,verification_notes,expires_at")
+  .select("id,availability_offer_id,platform,target_kind,target_uri,package_name,component_name,action,data_extra_name,data_extra_value,content_specific,external_source,verification_status,verified_at,verification_notes,expires_at")
   .in("availability_offer_id", offerIds)
   .eq("external_source", source)
   .gt("expires_at", new Date().toISOString());
@@ -95,6 +95,8 @@ console.log(JSON.stringify({
     packageName: target.package_name,
     componentName: target.component_name,
     action: target.action,
+    dataExtraName: target.data_extra_name,
+    dataExtraValue: target.data_extra_value,
     contentSpecific: target.content_specific,
     verificationStatus: WRITE ? status : target.verification_status,
     webUrl: webByOffer.get(target.availability_offer_id) ?? null,

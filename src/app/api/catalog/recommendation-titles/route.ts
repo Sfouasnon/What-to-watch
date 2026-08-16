@@ -116,7 +116,7 @@ export async function GET() {
     offerIds,
     (ids) => supabase
       .from("offer_launch_targets")
-      .select("availability_offer_id,platform,target_kind,target_uri,package_name,component_name,action,content_specific,verification_status")
+      .select("availability_offer_id,platform,target_kind,target_uri,package_name,component_name,action,data_extra_name,data_extra_value,content_specific,verification_status")
       .in("availability_offer_id", ids)
       .eq("verification_status", "verified")
       .eq("content_specific", true)

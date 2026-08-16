@@ -40,11 +40,13 @@ export type AppCatalogTitle = {
 export type AppLaunchTarget = {
   providerKey: string;
   platform: "web" | "android_tv" | "fire_tv";
-  targetKind: "uri" | "android_intent_uri";
-  targetUri: string;
+  targetKind: "uri" | "android_intent_uri" | "android_string_extra";
+  targetUri?: string;
   packageName?: string;
   componentName?: string;
   action?: string;
+  dataExtraName?: string;
+  dataExtraValue?: string;
   contentSpecific: true;
   verificationStatus: "verified";
   webUrl?: string;
@@ -123,11 +125,13 @@ export type CatalogAvailabilityRow = {
 export type CatalogLaunchTargetRow = {
   availability_offer_id: string;
   platform: "web" | "android_tv" | "fire_tv";
-  target_kind: "uri" | "android_intent_uri";
-  target_uri: string;
+  target_kind: "uri" | "android_intent_uri" | "android_string_extra";
+  target_uri: string | null;
   package_name: string | null;
   component_name: string | null;
   action: string | null;
+  data_extra_name: string | null;
+  data_extra_value: string | null;
   content_specific: boolean;
   verification_status: "unverified" | "verified" | "rejected";
 };
@@ -335,10 +339,12 @@ function appLaunchTarget(row: CatalogAvailabilityRow): AppLaunchTarget | undefin
     providerKey: row.provider_key,
     platform: selected.platform,
     targetKind: selected.target_kind,
-    targetUri: selected.target_uri,
+    ...(selected.target_uri ? { targetUri: selected.target_uri } : {}),
     ...(selected.package_name ? { packageName: selected.package_name } : {}),
     ...(selected.component_name ? { componentName: selected.component_name } : {}),
     ...(selected.action ? { action: selected.action } : {}),
+    ...(selected.data_extra_name ? { dataExtraName: selected.data_extra_name } : {}),
+    ...(selected.data_extra_value ? { dataExtraValue: selected.data_extra_value } : {}),
     contentSpecific: true,
     verificationStatus: "verified",
     ...(webUrl ? { webUrl } : {}),

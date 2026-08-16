@@ -24,6 +24,7 @@
     "catalog:refresh-providers": "node scripts/catalog/refresh-provider-availability.mjs",
     "catalog:refresh-launch-targets": "node scripts/catalog/refresh-watchhub-launch-targets.mjs",
     "catalog:verify-launch-target": "node scripts/catalog/verify-offer-launch-target.mjs",
+    "catalog:record-fire-tv-extra": "node scripts/catalog/record-fire-tv-extra-target.mjs",
     "catalog:refresh-canon": "node scripts/catalog/refresh-rotten-tomatoes-canon.mjs",
     "catalog:prepare-standup": "node scripts/catalog/prepare-standup-batch.mjs",
     "catalog:prepare-standup-ontology": "node scripts/catalog/prepare-standup-ontology-pass.mjs",
