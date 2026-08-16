@@ -1,10 +1,11 @@
 .root {
-  --tv-bg: #080708;
-  --tv-panel: #242126;
-  --tv-panel-bright: #343037;
+  --tv-bg: linear-gradient(90deg, #030303 0%, #111 48%, #3b3b3b 100%);
+  --tv-panel: #1d1d1d;
+  --tv-panel-bright: #303030;
   --tv-paper: #fff8e9;
   --tv-muted: #cec6b8;
-  --tv-accent: #f3c36c;
+  --tv-accent: #c99745;
+  --tv-gold-gradient: linear-gradient(90deg, #86531e 0%, #d6a955 44%, #f0d084 57%, #a96727 100%);
   position: fixed;
   inset: 0;
   overflow: hidden;
@@ -20,9 +21,9 @@
 
 .root :is(button, input):focus-visible {
   z-index: 5;
-  outline: 6px solid var(--tv-accent);
+  outline: 6px solid #d2a34f;
   outline-offset: 5px;
-  box-shadow: 0 0 0 12px rgba(243, 195, 108, 0.2), 0 20px 55px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 0 0 12px rgba(169, 103, 39, 0.28), 0 20px 55px rgba(0, 0, 0, 0.55);
   transform: scale(1.035);
 }
 
@@ -42,7 +43,7 @@
 }
 
 .brand { display: flex; align-items: center; gap: 16px; font-size: 18px; letter-spacing: 0.14em; }
-.brand span { display: grid; width: 46px; height: 46px; place-items: center; border: 3px solid var(--tv-accent); color: var(--tv-accent); font-family: Georgia, serif; font-size: 30px; }
+.brand span { display: grid; width: 46px; height: 46px; place-items: center; border: 3px solid #b87b32; color: var(--tv-accent); font-family: Georgia, serif; font-size: 30px; }
 .remoteHint { color: var(--tv-muted); font-size: 15px; font-weight: 800; letter-spacing: 0.08em; }
 
 .center,
@@ -58,13 +59,13 @@
 .center { align-items: center; gap: 24px; text-align: center; }
 .center h1, .choiceScreen h1 { margin: 0; font-family: Georgia, serif; font-size: clamp(52px, 5.2vw, 88px); font-weight: 400; line-height: 0.98; }
 .center p { max-width: 760px; color: var(--tv-muted); font-size: 25px; }
-.center button { display: flex; min-height: 72px; align-items: center; gap: 14px; padding: 0 28px; border-radius: 12px; background: var(--tv-accent); color: #15100a; font-size: 23px; font-weight: 900; }
-.kicker { margin: 0 0 18px; color: var(--tv-accent); font-size: 18px; font-weight: 900; letter-spacing: 0.18em; }
+.center button { display: flex; min-height: 72px; align-items: center; gap: 14px; padding: 0 28px; border-radius: 12px; background: var(--tv-gold-gradient); color: #15100a; font-size: 23px; font-weight: 900; }
+.kicker { margin: 0 0 18px; color: var(--tv-accent); font-size: 18px; font-weight: 900; letter-spacing: 0.18em; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55); }
 .lede { margin: 22px 0 30px; color: var(--tv-muted); font-size: 25px; }
 
 .profileGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 26px; margin-top: 48px; }
 .profileCard { display: grid; min-height: 280px; place-items: center; gap: 12px; padding: 28px; border: 3px solid #4b444b; border-radius: 18px; background: var(--tv-panel); }
-.profileCard > span { display: grid; width: 110px; height: 110px; place-items: center; border-radius: 50%; color: #17110a; background: var(--tv-accent); font-size: 54px; font-weight: 900; }
+.profileCard > span { display: grid; width: 110px; height: 110px; place-items: center; border-radius: 50%; color: #17110a; background: var(--tv-gold-gradient); font-size: 54px; font-weight: 900; }
 .profileCard strong { font-family: Georgia, serif; font-size: 34px; }
 .profileCard small { color: var(--tv-muted); font-size: 19px; }
 .createProfileCard { border-style: dashed; }
@@ -115,7 +116,7 @@
 .root .vibeCard:focus-visible { transform: translateY(-8px) scale(1.07); filter: saturate(1.18); }
 .actionRow { display: flex; flex-wrap: wrap; gap: 22px; }
 .primaryAction, .secondaryAction { display: inline-flex; min-height: 76px; align-items: center; justify-content: center; gap: 14px; padding: 0 32px; border-radius: 12px; font-size: 22px; font-weight: 900; }
-.primaryAction { background: var(--tv-accent); color: #17110a !important; }
+.primaryAction { background: var(--tv-gold-gradient); color: #17110a !important; }
 .primaryAction:disabled { opacity: 0.4; }
 .secondaryAction { border: 3px solid #625a62; background: var(--tv-panel); }
 .resultsActions { align-items: flex-start; flex-direction: column; }
@@ -148,11 +149,27 @@
 .providerCards small { color: var(--tv-muted); font-size: 16px; }
 .watchNotice { max-width: 1100px; margin: -8px 0 24px; padding: 18px 22px; border-left: 5px solid var(--tv-accent); color: var(--tv-paper); background: #2c2520; font-size: 20px; }
 
+@supports (-webkit-background-clip: text) {
+  .brand span,
+  .kicker {
+    background: var(--tv-gold-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
 @media (max-width: 1100px), (max-height: 700px) {
   .header { height: 70px; padding: 0 42px; }
   .remoteHint { display: none; }
   .choiceScreen { padding: 94px 5vw 28px; }
   .choiceScreen h1 { font-size: 50px; }
+  .profileSetupScreen { justify-content: flex-start; padding-top: 92px; padding-bottom: 44px; }
+  .profileSetupScreen .kicker { margin-bottom: 10px; }
+  .profileSetupScreen .lede { margin: 12px 0 16px; font-size: 20px; }
+  .profileSetupScreen .nameField { gap: 8px; margin: 8px 0 20px; }
+  .profileSetupScreen .nameField input { min-height: 64px; font-size: 30px; }
+  .profileSetupScreen :is(.primaryAction, .secondaryAction) { min-height: 64px; }
   .moodGrid button { min-height: 82px; }
   .vibeRail { margin-left: -5vw; margin-right: -5vw; padding-left: 5vw; padding-right: 5vw; }
   .vibeRail button { min-width: 270px; min-height: 170px; }

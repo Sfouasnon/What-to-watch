@@ -554,7 +554,7 @@ export function WhatToWatchTv() {
       ) : null}
 
       {!loading && !error && screen === "create-profile" && draftProfile ? (
-        <main className={styles.choiceScreen}>
+        <main className={`${styles.choiceScreen} ${styles.profileSetupScreen}`}>
           <p className={styles.kicker}>NEW PROFILE</p>
           <h1>Who is watching?</h1>
           <p className={styles.lede}>Select the name field to use the television keyboard, or keep the suggested name.</p>
