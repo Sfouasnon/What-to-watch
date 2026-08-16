@@ -48,17 +48,25 @@ class MainActivity : ComponentActivity() {
         "prime-video" to primeVideoContract(),
         "max-amazon-channel" to primeVideoContract(),
         "paramount-plus-amazon-channel" to primeVideoContract(),
+        "apple-tv-plus" to ProviderContract(
+            packages = setOf("com.apple.atve.amazon.appletv"),
+            hosts = setOf("tv.apple.com"),
+            forcedPackage = "com.apple.atve.amazon.appletv",
+            forcedClass = "com.apple.atve.amazon.appletv.MainActivity",
+        ),
         "hulu" to ProviderContract(
             packages = setOf("com.hulu.plus"),
             webHosts = setOf("hulu.com"),
             forcedPackage = "com.hulu.plus",
-            action = "hulu.intent.action.PLAY_CONTENT",
-            contentExtra = "content_id",
+            forcedClass = "com.hulu.plus.SplashActivity",
+            action = Intent.ACTION_VIEW,
+            dataExtraName = "content_id",
         ),
         "disney-plus" to ProviderContract(
             packages = setOf("com.disney.disneyplus"),
             hosts = setOf("disneyplus.com"),
             forcedPackage = "com.disney.disneyplus",
+            forcedClass = "com.bamtechmedia.dominguez.main.MainActivity",
         ),
         "max" to ProviderContract(
             packages = setOf("com.hbo.hbonow"),
@@ -228,7 +236,13 @@ class MainActivity : ComponentActivity() {
         }
 
         return Intent(Intent.ACTION_VIEW, data)
-            .apply { (parsedPackage ?: contract.forcedPackage)?.let(::setPackage) }
+            .apply {
+                if (contract.forcedPackage != null && contract.forcedClass != null) {
+                    setClassName(contract.forcedPackage, contract.forcedClass)
+                } else {
+                    (parsedPackage ?: contract.forcedPackage)?.let(::setPackage)
+                }
+            }
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 

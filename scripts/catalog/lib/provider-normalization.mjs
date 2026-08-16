@@ -6,7 +6,7 @@ const knownServices = [
   { slug: "hulu", label: "Hulu", matches: (name) => name === "hulu" },
   { slug: "criterion-channel", label: "Criterion Channel", matches: (name) => name === "criterion channel" },
   { slug: "disney-plus", label: "Disney+", matches: (name) => name === "disney+" },
-  { slug: "apple-tv-plus", label: "Apple TV+", matches: (name) => name === "apple tv+" },
+  { slug: "apple-tv-plus", label: "Apple TV+", matches: (name) => name === "apple tv" || name === "apple tv+" },
   { slug: "max", label: "Max", matches: (name) => name === "max" || name === "hbo max" },
   { slug: "paramount-plus", label: "Paramount+", matches: (name) => name.startsWith("paramount plus") || name.startsWith("paramount+") },
   { slug: "peacock", label: "Peacock", matches: (name) => name.startsWith("peacock") },

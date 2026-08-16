@@ -7,6 +7,7 @@
 
     <queries>
         <package android:name="com.amazon.tv.launcher" />
+        <package android:name="com.apple.atve.amazon.appletv" />
         <package android:name="com.netflix.ninja" />
         <package android:name="com.hulu.plus" />
         <package android:name="com.disney.disneyplus" />
@@ -18,7 +19,7 @@
     <application
         android:allowBackup="false"
         android:banner="@drawable/tv_banner"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/what_to_watch_logo"
         android:label="What to Watch"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"

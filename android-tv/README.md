@@ -48,9 +48,13 @@ Resolver-provided Android intent strings are never forwarded wholesale. The shel
 
 ### Production Fire TV evidence, 2026-08-15
 
-Device `AFTDCT31`, Fire OS build `PS7713.5443N`, exposed signed-in PLAY capabilities for Netflix, Hulu, Disney+, and Peacock. Max exposed SIGN_IN because that app was signed out; Paramount+ was not installed. Netflix 13.1.2 advertised `android.intent.action.VIEW`, `com.netflix.ninja.MainActivity`, flags `268435456`, and the scalar extra `amzn_deeplink_data`.
+Device `AFTDCT31`, Fire OS build `PS7713.5443N`, exposed PLAY capabilities for Netflix, Hulu, Disney+, and Apple TV. The device-owner verification scope is Netflix, Hulu, Disney+, Apple TV+, and Prime Video. Netflix 13.1.2 advertised `android.intent.action.VIEW`, `com.netflix.ninja.MainActivity`, flags `268435456`, and the scalar extra `amzn_deeplink_data`.
 
 For *Bo Burnham: Inside*, the WatchHub HTTPS/intent candidate opened Netflix's top page and is rejected. A cold-start replay with `amzn_deeplink_data=81289483` opened the exact title and is the verified Fire TV target. Raw device fingerprints, package declarations, and logcat captures live under the Git-ignored `.firetv-captures/` directory.
+
+Hulu's advertised `VIEW` contract uses `com.hulu.plus.SplashActivity` and the scalar extra `content_id`; `55349764-323e-4d0e-898f-a4c12c9bf615` continued to *Prey* after sign-in and is verified. Disney+'s explicit `MainActivity` plus its official entity URI continued to *Finding Nemo* after sign-in and is verified. Apple TV 16.2.0 advertised an explicit URI-based `VIEW` contract; its official *Severance* URI opened the exact series page and is verified.
+
+Prime Video remains unverified on this build. Fire launcher `amzn://.../detail` candidates produced an error, the constructed Prime app `detail?gti=` route produced error 5004, and the official public *Fallout* URL opened Prime Video without retaining the title. None of those targets may be published as content-specific.
 
 ## Verify a launch target on the television
 
