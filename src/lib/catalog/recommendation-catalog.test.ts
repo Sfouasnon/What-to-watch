@@ -178,6 +178,7 @@ describe("recommendation catalog mapping", () => {
       },
       [],
       [{
+        id: "offer-expanded-title",
         title_id: "expanded-title-id",
         provider_key: "prime-video",
         provider_name: "Amazon Prime Video",
@@ -194,11 +195,70 @@ describe("recommendation catalog mapping", () => {
       watchOptions: [{
         provider: "Prime Video",
         offerType: "subscription",
-        deeplinkUrl: "https://example.com/title/999999",
       }],
       watchOptionsUrl: "https://www.themoviedb.org/movie/999999/watch?locale=US",
       availabilityType: "subscription",
     }));
+  });
+
+  it("exposes only verified content-specific launch targets and prefers Fire TV", () => {
+    const title = buildAppCatalogTitle(
+      { ...pulpFictionTitle, id: "launch-title", tmdb_id: 999997 },
+      { ...pulpFictionInput, title_id: "launch-title", raw_payload: {} },
+      { ...pulpFictionClassification, title_id: "launch-title", review_status: "accepted" },
+      [],
+      [{
+        id: "launch-offer",
+        title_id: "launch-title",
+        provider_key: "netflix",
+        provider_name: "Netflix",
+        offer_type: "subscription",
+        deeplink_url: null,
+        launch_targets: [
+          {
+            availability_offer_id: "launch-offer",
+            platform: "android_tv",
+            target_kind: "android_intent_uri",
+            target_uri: "intent://www.netflix.com/watch/1#Intent;package=com.netflix.ninja;scheme=https;end",
+            package_name: "com.netflix.ninja",
+            component_name: null,
+            action: null,
+            content_specific: true,
+            verification_status: "verified",
+          },
+          {
+            availability_offer_id: "launch-offer",
+            platform: "fire_tv",
+            target_kind: "android_intent_uri",
+            target_uri: "intent://www.netflix.com/watch/1#Intent;package=com.netflix.ninja;scheme=https;end",
+            package_name: "com.netflix.ninja",
+            component_name: null,
+            action: null,
+            content_specific: true,
+            verification_status: "verified",
+          },
+          {
+            availability_offer_id: "launch-offer",
+            platform: "web",
+            target_kind: "uri",
+            target_uri: "https://www.netflix.com/title/1",
+            package_name: null,
+            component_name: null,
+            action: null,
+            content_specific: true,
+            verification_status: "unverified",
+          },
+        ],
+      }],
+    );
+
+    expect(title?.watchOptions[0].launchTarget).toEqual(expect.objectContaining({
+      providerKey: "netflix",
+      platform: "fire_tv",
+      contentSpecific: true,
+      verificationStatus: "verified",
+    }));
+    expect(title?.watchOptions[0].launchTarget).not.toHaveProperty("webUrl");
   });
 
   it("keeps a classified catalog title even when no current US provider is known", () => {

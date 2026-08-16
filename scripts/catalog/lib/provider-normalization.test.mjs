@@ -9,7 +9,9 @@ import {
 describe("provider normalization", () => {
   it("keeps profile service labels stable across TMDB provider variants", () => {
     expect(normalizedProvider("Amazon Prime Video")).toEqual({ providerName: "Prime Video", serviceSlug: "prime-video" });
-    expect(normalizedProvider("HBO Max Amazon Channel")).toEqual({ providerName: "Max", serviceSlug: "max" });
+    expect(normalizedProvider("Amazon Video")).toEqual({ providerName: "Prime Video", serviceSlug: "prime-video" });
+    expect(normalizedProvider("HBO Max Amazon Channel")).toEqual({ providerName: "Max Amazon Channel", serviceSlug: "max-amazon-channel" });
+    expect(normalizedProvider("Paramount+ Amazon Channel")).toEqual({ providerName: "Paramount+ Amazon Channel", serviceSlug: "paramount-plus-amazon-channel" });
     expect(normalizedProvider("Lionsgate+ Amazon Channels")).toEqual({ providerName: "Lionsgate+ Amazon Channels", serviceSlug: null });
   });
 

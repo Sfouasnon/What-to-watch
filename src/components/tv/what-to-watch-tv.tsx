@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ArrowLeft, ArrowRight, Check, ChevronDown, ChevronUp, Play, Plus, RefreshCw, Sparkles } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import type { AppCatalogTitle } from "@/lib/catalog/recommendation-catalog";
+import type { AppCatalogTitle, AppLaunchTarget } from "@/lib/catalog/recommendation-catalog";
 import { defaultRecommendationConfig, recommendForProfile } from "@/lib/recommendation/engine";
 import { mapQuestionnaireAnswers } from "@/lib/recommendation/intake";
 import { ANSWER_LABELS, CORE_QUESTIONS } from "@/lib/recommendation/onboarding";
@@ -135,7 +135,6 @@ function toEngineTitle(title: AppCatalogTitle, region: string): EngineTitle {
       kind: option.offerType === "purchase" ? "purchase" : option.offerType,
       checkedAt: CHECKED_AT,
       source: "tmdb",
-      deepLink: option.deeplinkUrl,
     })),
     posterUrl: title.poster,
     backdropUrl: title.backdrop,
@@ -272,10 +271,32 @@ function useTvNavigation(
   return rootRef;
 }
 
-function launchUrl(url: string) {
-  const nativeBridge = (window as Window & { WhatToWatchNative?: { openExternal: (target: string) => void } }).WhatToWatchNative;
-  if (nativeBridge) nativeBridge.openExternal(url);
-  else window.location.assign(url);
+function safeHttpUrl(value: string | undefined) {
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
+function launchWatchTarget(target: AppLaunchTarget | undefined) {
+  const nativeBridge = (window as Window & {
+    WhatToWatchNative?: {
+      openExternal: (url: string) => void;
+      openLaunchTarget: (payload: string) => void;
+    };
+  }).WhatToWatchNative;
+  if (target && nativeBridge) {
+    nativeBridge.openLaunchTarget(JSON.stringify(target));
+    return true;
+  }
+  const browserUrl = safeHttpUrl(target?.platform === "web" ? target.targetUri : target?.webUrl);
+  if (!browserUrl) return false;
+  if (nativeBridge) nativeBridge.openExternal(browserUrl);
+  else window.location.assign(browserUrl);
+  return true;
 }
 
 export function WhatToWatchTv() {
@@ -457,7 +478,9 @@ export function WhatToWatchTv() {
       return bIncluded - aIncluded || a.provider.localeCompare(b.provider);
     });
   }, [profile?.subscriptions, result]);
-  const exactWatch = displayWatchOptions.find((option) => option.deeplinkUrl && profile?.subscriptions.includes(option.provider));
+  const exactWatch = displayWatchOptions.find((option) =>
+    option.launchTarget && profile?.subscriptions.includes(option.provider),
+  );
   const availableProviders = useMemo(() => result?.title.providers.filter((provider) => profile?.subscriptions.includes(provider)) ?? [], [profile?.subscriptions, result]);
   const vibePreviewTitles = useMemo(() => {
     if (!profile || !moods.length) return new Map<string, AppCatalogTitle>();
@@ -629,8 +652,7 @@ export function WhatToWatchTv() {
             <p className={styles.providerLine}>{availableProviders.length ? `Available with ${availableProviders.join(" · ")}` : "No included provider is currently known"}</p>
             <div className={`${styles.actionRow} ${styles.resultsActions}`}>
               <button data-tv-focus className={styles.primaryAction} onClick={() => {
-                if (exactWatch?.deeplinkUrl) launchUrl(exactWatch.deeplinkUrl);
-                else {
+                if (!exactWatch || !launchWatchTarget(exactWatch.launchTarget)) {
                   setWatchNotice("");
                   setScreen("watch");
                 }
@@ -663,9 +685,10 @@ export function WhatToWatchTv() {
               {displayWatchOptions.map((option) => {
                 const included = profile?.subscriptions.includes(option.provider);
                 return <button data-tv-focus className={styles.providerCard} key={`${option.provider}-${option.offerType}`} onClick={() => {
-                  if (option.deeplinkUrl) launchUrl(option.deeplinkUrl);
-                  else setWatchNotice(`${option.provider} reports this title in the United States, but an exact Fire TV title link has not been verified yet.`);
-                }}><span>{included ? "YOUR SERVICE" : option.offerType.replaceAll("_", " ")}</span><strong>{option.provider}</strong><small>{option.deeplinkUrl ? "Select to open the title" : included ? "Available in this profile · direct launch pending" : "Not included in this profile"}</small></button>;
+                  if (!launchWatchTarget(option.launchTarget)) {
+                    setWatchNotice(`${option.provider} reports this title in the United States, but an exact Fire TV title link has not been verified yet.`);
+                  }
+                }}><span>{included ? "YOUR SERVICE" : option.offerType.replaceAll("_", " ")}</span><strong>{option.provider}</strong><small>{option.launchTarget ? "Select to open the verified title target" : included ? "Available in this profile · direct launch pending" : "Not included in this profile"}</small></button>;
               })}
             </div>
             {watchNotice ? <p className={styles.watchNotice} role="status">{watchNotice}</p> : null}

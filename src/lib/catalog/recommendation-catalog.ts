@@ -26,7 +26,7 @@ export type AppCatalogTitle = {
   watchOptions: Array<{
     provider: string;
     offerType: "subscription" | "free" | "rental" | "purchase";
-    deeplinkUrl?: string;
+    launchTarget?: AppLaunchTarget;
   }>;
   watchOptionsUrl: string;
   availabilityType: "subscription" | "free" | "rental";
@@ -35,6 +35,19 @@ export type AppCatalogTitle = {
   canonicalScore: number;
   popularity: number;
   baseline: number;
+};
+
+export type AppLaunchTarget = {
+  providerKey: string;
+  platform: "web" | "android_tv" | "fire_tv";
+  targetKind: "uri" | "android_intent_uri";
+  targetUri: string;
+  packageName?: string;
+  componentName?: string;
+  action?: string;
+  contentSpecific: true;
+  verificationStatus: "verified";
+  webUrl?: string;
 };
 
 type GoldSampleTitle = {
@@ -98,11 +111,25 @@ export type CatalogCastContextRow = {
 };
 
 export type CatalogAvailabilityRow = {
+  id: string;
   title_id: string;
   provider_key: string;
   provider_name: string;
   offer_type: "subscription" | "free_ad_supported" | "rent" | "buy";
   deeplink_url: string | null;
+  launch_targets?: CatalogLaunchTargetRow[];
+};
+
+export type CatalogLaunchTargetRow = {
+  availability_offer_id: string;
+  platform: "web" | "android_tv" | "fire_tv";
+  target_kind: "uri" | "android_intent_uri";
+  target_uri: string;
+  package_name: string | null;
+  component_name: string | null;
+  action: string | null;
+  content_specific: boolean;
+  verification_status: "unverified" | "verified" | "rejected";
 };
 
 export type CatalogClassificationRow = {
@@ -296,6 +323,28 @@ function appOfferType(value: CatalogAvailabilityRow["offer_type"]): AppCatalogTi
   return "subscription";
 }
 
+function appLaunchTarget(row: CatalogAvailabilityRow): AppLaunchTarget | undefined {
+  const verified = (row.launch_targets ?? []).filter((target) =>
+    target.verification_status === "verified" && target.content_specific,
+  );
+  const platformRank = { fire_tv: 0, android_tv: 1, web: 2 };
+  const selected = [...verified].sort((a, b) => platformRank[a.platform] - platformRank[b.platform])[0];
+  if (!selected) return undefined;
+  const webUrl = verified.find((target) => target.platform === "web")?.target_uri;
+  return {
+    providerKey: row.provider_key,
+    platform: selected.platform,
+    targetKind: selected.target_kind,
+    targetUri: selected.target_uri,
+    ...(selected.package_name ? { packageName: selected.package_name } : {}),
+    ...(selected.component_name ? { componentName: selected.component_name } : {}),
+    ...(selected.action ? { action: selected.action } : {}),
+    contentSpecific: true,
+    verificationStatus: "verified",
+    ...(webUrl ? { webUrl } : {}),
+  };
+}
+
 export function buildAppCatalogTitle(
   title: CatalogTitleRow,
   input: CatalogInputRow,
@@ -309,11 +358,14 @@ export function buildAppCatalogTitle(
     ...sampledProviders(input.raw_payload),
     ...availability.map((row) => normalizeGoldProviderName(row.provider_name)),
   ]);
-  const watchOptions = availability.map((row) => ({
-    provider: normalizeGoldProviderName(row.provider_name),
-    offerType: appOfferType(row.offer_type),
-    ...(row.deeplink_url ? { deeplinkUrl: row.deeplink_url } : {}),
-  }));
+  const watchOptions = availability.map((row) => {
+    const launchTarget = appLaunchTarget(row);
+    return {
+      provider: normalizeGoldProviderName(row.provider_name),
+      offerType: appOfferType(row.offer_type),
+      ...(launchTarget ? { launchTarget } : {}),
+    };
+  });
 
   const canonicalScore = asNumber(title.canonical_score);
   const titleYear = releaseYear(title, sampleTitle);

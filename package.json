@@ -22,6 +22,8 @@
     "catalog:validate-local": "node scripts/catalog/validate-local-catalog.mjs",
     "catalog:publish-classifications": "node scripts/catalog/publish-classification-catalog.mjs",
     "catalog:refresh-providers": "node scripts/catalog/refresh-provider-availability.mjs",
+    "catalog:refresh-launch-targets": "node scripts/catalog/refresh-watchhub-launch-targets.mjs",
+    "catalog:verify-launch-target": "node scripts/catalog/verify-offer-launch-target.mjs",
     "catalog:refresh-canon": "node scripts/catalog/refresh-rotten-tomatoes-canon.mjs",
     "catalog:prepare-standup": "node scripts/catalog/prepare-standup-batch.mjs",
     "catalog:prepare-standup-ontology": "node scripts/catalog/prepare-standup-ontology-pass.mjs",

@@ -8,6 +8,7 @@ import {
   type CatalogCastContextRow,
   type CatalogClassificationRow,
   type CatalogInputRow,
+  type CatalogLaunchTargetRow,
   type CatalogTitleRow,
 } from "@/lib/catalog/recommendation-catalog";
 
@@ -97,7 +98,7 @@ export async function GET() {
       .in("title_id", ids)),
     fetchInChunks<CatalogAvailabilityRow>(titleIds, (ids) => supabase
       .from("availability_offers")
-      .select("title_id,provider_key,provider_name,offer_type,deeplink_url")
+      .select("id,title_id,provider_key,provider_name,offer_type,deeplink_url")
       .in("title_id", ids)
       .eq("region", "US")
       .gt("expires_at", new Date().toISOString())),
@@ -110,6 +111,24 @@ export async function GET() {
     );
   }
 
+  const offerIds = (availability ?? []).map((offer) => offer.id);
+  const { data: launchTargets, error: launchTargetError } = await fetchInChunks<CatalogLaunchTargetRow>(
+    offerIds,
+    (ids) => supabase
+      .from("offer_launch_targets")
+      .select("availability_offer_id,platform,target_kind,target_uri,package_name,component_name,action,content_specific,verification_status")
+      .in("availability_offer_id", ids)
+      .eq("verification_status", "verified")
+      .eq("content_specific", true)
+      .gt("expires_at", new Date().toISOString()),
+  );
+  if (launchTargetError) {
+    return NextResponse.json(
+      { error: "Unable to load verified launch targets." },
+      { status: 502, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+
   const titleById = new Map((titles ?? []).map((title) => [title.id, title as CatalogTitleRow]));
   const inputById = new Map((inputs ?? []).map((input) => [input.title_id, input as CatalogInputRow]));
   const castContextById = new Map((castContexts ?? []).map((context) => [
@@ -117,8 +136,16 @@ export async function GET() {
     (context as CatalogCastContextRow).cast_context,
   ]));
   const availabilityById = new Map<string, CatalogAvailabilityRow[]>();
+  const launchTargetsByOfferId = new Map<string, CatalogLaunchTargetRow[]>();
+  for (const target of launchTargets ?? []) {
+    launchTargetsByOfferId.set(target.availability_offer_id, [
+      ...(launchTargetsByOfferId.get(target.availability_offer_id) ?? []),
+      target,
+    ]);
+  }
   for (const offer of availability ?? []) {
-    availabilityById.set(offer.title_id, [...(availabilityById.get(offer.title_id) ?? []), offer]);
+    const enrichedOffer = { ...offer, launch_targets: launchTargetsByOfferId.get(offer.id) ?? [] };
+    availabilityById.set(offer.title_id, [...(availabilityById.get(offer.title_id) ?? []), enrichedOffer]);
   }
   const catalog = classifications.flatMap((classification) => {
     const title = titleById.get(classification.title_id);

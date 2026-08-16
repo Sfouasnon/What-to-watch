@@ -22,6 +22,11 @@ The gold set is a benchmark, not a template to mutate. New classifier versions s
 5. Reconciliation/finalization scripts validate model output against the ontology before classifications are eligible for publication.
 6. `npm run catalog:publish-classifications` performs a dry run by default, then publishes an explicitly supplied manifest and final artifacts only when `--write` is present. A matching legacy provider cache may be supplied with `--providers`; otherwise availability is left unchanged for the refresh job.
 7. `npm run catalog:refresh-providers -- --limit=100 --offset=0` refreshes a bounded TMDB availability segment with polite concurrency. Supply `--manifest=<path>` to target an exact controlled release. Add `--write` only after reviewing a dry run; continue from the reported `nextOffset`.
+8. `npm run catalog:refresh-launch-targets -- --limit=10 --offset=0` probes WatchHub for separate web, Android TV, and Fire TV launch artifacts. It is dry-run and deliberately small by default. `--tmdb=movie:<id>` targets one published movie, and `--write` stores candidates as unverified offer launch targets. Series are skipped until recommendations identify a specific episode.
+
+Launch-target refresh is a research and device-validation path, not authorization to depend on WatchHub as an unlicensed production feed. Production ingestion should use a source with appropriate commercial terms and an availability/deep-link SLA. Resolver payloads retain provenance and expire after seven days by default.
+
+Imported launch targets never become executable automatically. Use `npm run catalog:verify-launch-target -- --tmdb=movie:<id> --provider=<provider-key> --platform=fire_tv` to inspect the candidate and produce the structured ADB test payload. After a successful real-device test, rerun with `--status=verified --notes=<evidence> --write`. Changed resolver targets reset to unverified, and contentless app-launch targets cannot be marked verified.
 
 Dedicated stand-up batches use `npm run catalog:prepare-standup-ontology -- --packet=<packet-path>` after hydration. The pass requires a Stand-Up-family primary style, permits one distinct secondary style, requires two or three controlled audience-experience tones, and requires a non-null performance rhythm. It preserves any pre-v0.2.0 model responses in a sibling `<batch>-pre-v0.2.0-audit/` directory outside the upload packet instead of treating them as publishable classifications.
 
@@ -38,3 +43,5 @@ Git contains the reusable ontology, benchmark, workflow documentation, scripts, 
 Maintenance scripts require `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`. Hydration also requires `TMDB_TOKEN`. These are server/maintenance credentials and must not be exposed to the browser.
 
 Provider refresh also requires `TMDB_TOKEN`. It defaults to two concurrent requests, 200 ms between requests per worker, a 14-day availability TTL, and four bounded retry attempts that honor TMDB `Retry-After` responses. Successful empty responses intentionally clear stale TMDB offers; failures keep existing offers and schedule the title for a one-day retry in `availability_refresh_state`.
+
+WatchHub launch-target probing requires only the Supabase maintenance credentials. It defaults to two concurrent requests, 300 ms between requests per worker, and a seven-day TTL. Keep these bounds conservative and do not bulk-ingest until the resolver's production-use terms are established.

@@ -19,10 +19,58 @@ import androidx.activity.addCallback
 import androidx.activity.ComponentActivity
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
+import org.json.JSONObject
 
 class MainActivity : ComponentActivity() {
+    private data class ProviderContract(
+        val packages: Set<String>,
+        val schemes: Set<String> = setOf("https"),
+        val hosts: Set<String> = emptySet(),
+        val webHosts: Set<String> = hosts,
+        val forcedPackage: String? = null,
+        val action: String? = null,
+        val contentExtra: String? = null,
+    )
+
     private lateinit var webView: WebView
     private val appOrigin by lazy { Uri.parse(BuildConfig.WEB_APP_URL).host.orEmpty() }
+    private val providerContracts = mapOf(
+        "netflix" to ProviderContract(
+            packages = setOf("com.netflix.ninja"),
+            hosts = setOf("netflix.com"),
+            forcedPackage = "com.netflix.ninja",
+        ),
+        "prime-video" to primeVideoContract(),
+        "max-amazon-channel" to primeVideoContract(),
+        "paramount-plus-amazon-channel" to primeVideoContract(),
+        "hulu" to ProviderContract(
+            packages = setOf("com.hulu.plus"),
+            webHosts = setOf("hulu.com"),
+            forcedPackage = "com.hulu.plus",
+            action = "hulu.intent.action.PLAY_CONTENT",
+            contentExtra = "content_id",
+        ),
+        "disney-plus" to ProviderContract(
+            packages = setOf("com.disney.disneyplus"),
+            hosts = setOf("disneyplus.com"),
+            forcedPackage = "com.disney.disneyplus",
+        ),
+        "max" to ProviderContract(
+            packages = setOf("com.hbo.hbonow"),
+            hosts = setOf("max.com", "play.max.com"),
+        ),
+        "peacock" to ProviderContract(
+            packages = setOf("com.peacock.peacockfiretv"),
+            hosts = setOf("peacocktv.com"),
+            forcedPackage = "com.peacock.peacockfiretv",
+        ),
+        "paramount-plus" to ProviderContract(
+            packages = setOf("com.cbs.app"),
+            schemes = setOf("https", "pplus"),
+            hosts = setOf("paramountplus.com"),
+            forcedPackage = "com.cbs.app",
+        ),
+    )
 
     @SuppressLint("SetJavaScriptEnabled", "AddJavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +103,12 @@ class MainActivity : ComponentActivity() {
         else webView.restoreState(savedInstanceState)
         webView.requestFocus()
 
+        if (BuildConfig.DEBUG) {
+            intent.getStringExtra(TEST_LAUNCH_TARGET_EXTRA)?.let { payload ->
+                webView.post { openLaunchTarget(payload, allowUnverified = true) }
+            }
+        }
+
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (webView.canGoBack()) webView.goBack() else finish()
@@ -65,6 +119,16 @@ class MainActivity : ComponentActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         webView.saveState(outState)
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        if (BuildConfig.DEBUG) {
+            intent.getStringExtra(TEST_LAUNCH_TARGET_EXTRA)?.let { payload ->
+                openLaunchTarget(payload, allowUnverified = true)
+            }
+        }
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
@@ -88,6 +152,83 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun hostAllowed(host: String?, allowedHosts: Set<String>): Boolean {
+        val value = host?.lowercase() ?: return false
+        return allowedHosts.any { allowed -> value == allowed || value.endsWith(".$allowed") }
+    }
+
+    private fun sanitizedLaunchIntent(payload: JSONObject, allowUnverified: Boolean): Intent? {
+        val providerKey = payload.optString("providerKey")
+        val contract = providerContracts[providerKey] ?: return null
+        if (!payload.optBoolean("contentSpecific", false)) return null
+        if (!allowUnverified && payload.optString("verificationStatus") != "verified") return null
+        if (payload.optString("platform") !in setOf("web", "android_tv", "fire_tv")) return null
+
+        val targetUri = payload.optString("targetUri")
+        if (targetUri.length !in 1..4096) return null
+        val targetKind = payload.optString("targetKind")
+        val isIntentUri = targetUri.startsWith("intent:")
+        if (targetKind !in setOf("uri", "android_intent_uri")) return null
+        if ((targetKind == "android_intent_uri") != isIntentUri) return null
+        val parsed = runCatching {
+            if (isIntentUri) Intent.parseUri(targetUri, Intent.URI_INTENT_SCHEME)
+            else Intent(Intent.ACTION_VIEW, Uri.parse(targetUri))
+        }.getOrNull() ?: return null
+
+        val parsedPackage = parsed.`package` ?: parsed.component?.packageName
+        if (parsedPackage != null && parsedPackage !in contract.packages) return null
+
+        if (contract.action != null && contract.contentExtra != null) {
+            if (parsed.action != contract.action) return null
+            val contentId = parsed.getStringExtra(contract.contentExtra) ?: return null
+            if (!contentId.matches(Regex("^[A-Za-z0-9._:-]{1,240}$"))) return null
+            return Intent(contract.action)
+                .setPackage(contract.forcedPackage)
+                .putExtra(contract.contentExtra, contentId)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        if (parsed.action != null && parsed.action != Intent.ACTION_VIEW) return null
+        val data = parsed.data ?: return null
+        val scheme = data.scheme?.lowercase() ?: return null
+        if (scheme !in contract.schemes) return null
+        if (scheme == "http" || scheme == "https") {
+            if (!hostAllowed(data.host, contract.hosts)) return null
+        } else if (providerKey == "prime-video" || providerKey.endsWith("-amazon-channel")) {
+            if (scheme != "amzn" || data.host != "com.amazon.tv.launcher" || data.path != "/detail") return null
+            if (data.getQueryParameter("provider") != "aiv" || data.getQueryParameter("providerId").isNullOrBlank()) return null
+        } else if (providerKey == "paramount-plus") {
+            val nativeVideoRoute = data.host == "play" && data.path?.startsWith("/video/") == true
+            if (scheme != "pplus" || (!nativeVideoRoute && !hostAllowed(data.host, contract.hosts))) return null
+        } else {
+            return null
+        }
+
+        return Intent(Intent.ACTION_VIEW, data)
+            .apply { (parsedPackage ?: contract.forcedPackage)?.let(::setPackage) }
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+
+    private fun openLaunchTarget(payload: String, allowUnverified: Boolean = false) {
+        val target = runCatching { JSONObject(payload) }.getOrNull() ?: return
+        val launchIntent = sanitizedLaunchIntent(target, allowUnverified)
+        val contract = providerContracts[target.optString("providerKey")]
+        val webFallback = target.optString("webUrl").takeIf { url ->
+            val uri = runCatching { Uri.parse(url) }.getOrNull()
+            uri?.scheme in setOf("https", "http") &&
+                contract != null && hostAllowed(uri?.host, contract.webHosts)
+        }
+        if (launchIntent == null || launchIntent.resolveActivity(packageManager) == null) {
+            webFallback?.let(::openExternal)
+            return
+        }
+        try {
+            startActivity(launchIntent)
+        } catch (_: ActivityNotFoundException) {
+            webFallback?.let(::openExternal)
+        }
+    }
+
     private inner class TrustedAppWebViewClient : WebViewClient() {
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
             val uri = request.url
@@ -104,5 +245,23 @@ class MainActivity : ComponentActivity() {
                 (activity as? MainActivity)?.openExternal(target)
             }
         }
+
+        @JavascriptInterface
+        fun openLaunchTarget(payload: String) {
+            activity.runOnUiThread {
+                (activity as? MainActivity)?.openLaunchTarget(payload)
+            }
+        }
+    }
+
+    companion object {
+        private const val TEST_LAUNCH_TARGET_EXTRA = "launch_target_json"
+
+        private fun primeVideoContract() = ProviderContract(
+            packages = setOf("com.amazon.tv.launcher"),
+            schemes = setOf("amzn"),
+            webHosts = setOf("amazon.com"),
+            forcedPackage = "com.amazon.tv.launcher",
+        )
     }
 }

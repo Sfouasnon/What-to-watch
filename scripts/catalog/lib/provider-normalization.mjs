@@ -1,11 +1,13 @@
 const knownServices = [
+  { slug: "max-amazon-channel", label: "Max Amazon Channel", matches: (name) => name === "hbo max amazon channel" || name === "max amazon channel" },
+  { slug: "paramount-plus-amazon-channel", label: "Paramount+ Amazon Channel", matches: (name) => name === "paramount+ amazon channel" || name === "paramount plus amazon channel" },
   { slug: "netflix", label: "Netflix", matches: (name) => name.startsWith("netflix") },
-  { slug: "prime-video", label: "Prime Video", matches: (name) => name.includes("prime video") },
+  { slug: "prime-video", label: "Prime Video", matches: (name) => name.includes("prime video") || name === "amazon video" },
   { slug: "hulu", label: "Hulu", matches: (name) => name === "hulu" },
   { slug: "criterion-channel", label: "Criterion Channel", matches: (name) => name === "criterion channel" },
   { slug: "disney-plus", label: "Disney+", matches: (name) => name === "disney+" },
   { slug: "apple-tv-plus", label: "Apple TV+", matches: (name) => name === "apple tv+" },
-  { slug: "max", label: "Max", matches: (name) => name === "max" || name.startsWith("hbo max ") },
+  { slug: "max", label: "Max", matches: (name) => name === "max" || name === "hbo max" },
   { slug: "paramount-plus", label: "Paramount+", matches: (name) => name.startsWith("paramount plus") || name.startsWith("paramount+") },
   { slug: "peacock", label: "Peacock", matches: (name) => name.startsWith("peacock") },
 ];
