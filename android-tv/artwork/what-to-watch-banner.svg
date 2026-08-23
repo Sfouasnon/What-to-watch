@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#090a0b"/>
+  <rect x="250" y="190" width="340" height="340" fill="#111315" stroke="#d6aa63" stroke-width="8"/>
+  <text x="412" y="442" fill="#d6aa63" font-family="Iowan Old Style, Palatino Linotype, Book Antiqua, Georgia, serif" font-size="250" font-style="italic" text-anchor="middle" transform="rotate(-3 420 360)">W</text>
+  <text x="675" y="345" fill="#f0ece3" font-family="Avenir Next, Helvetica, Arial, sans-serif" font-size="58" font-weight="700" letter-spacing="14">WHAT TO</text>
+  <text x="675" y="425" fill="#f0ece3" font-family="Avenir Next, Helvetica, Arial, sans-serif" font-size="58" font-weight="700" letter-spacing="14">WATCH</text>
+</svg>

@@ -92,7 +92,7 @@ const packetRoot = path.join(
 );
 if (await exists(packetRoot)) throw new Error(`Experiment packet already exists: ${packetRoot}`);
 
-const ontologyPath = path.join(repoRoot, "curation", "ontology", "v0.1.1", "ontology.json");
+const ontologyPath = path.join(repoRoot, "curation", "ontology", "v0.3.0", "ontology.json");
 const ontology = JSON.parse(await readFile(ontologyPath, "utf8"));
 const subgenreIds = unique(
   (ontology.subgenre_families ?? []).flatMap((family) =>

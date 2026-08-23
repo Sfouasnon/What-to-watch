@@ -6,11 +6,11 @@ import {
   ArrowLeft,
   BarChart3,
   Bookmark,
+  CalendarClock,
   Check,
   ChevronDown,
   ChevronRight,
   CircleUserRound,
-  Clock3,
   Compass,
   Download,
   Film,
@@ -48,20 +48,20 @@ import {
 } from "@/lib/recommendation/engine";
 import {
   actorOptionsForSubscriptions,
+  defaultActorOptionsForSubscriptions,
+  directorOptionsForSubscriptions,
   filterTitlesForFavoriteActors,
+  filterTitlesForFavoriteDirectors,
   hasProminentActor,
+  leadTitlesForActors,
+  representativeTitlesForDirectors,
 } from "@/lib/recommendation/actor-discovery";
 import { mapQuestionnaireAnswers } from "@/lib/recommendation/intake";
 import {
   ANSWER_LABELS,
-  buildStartingTasteSummary,
-  conditionalQuestions,
   CORE_QUESTIONS,
-  GENRE_LABELS,
-  GENRE_RATING_LABELS,
-  GENRES,
-  selectCalibrationTitle,
 } from "@/lib/recommendation/onboarding";
+import { canonicalTitleKey, newReleasePool, newReleaseScore, suggestPerson } from "@/lib/recommendation/discovery";
 import type {
   CastContextPerson as EngineCastContextPerson,
   FriendContext as EngineFriendContext,
@@ -74,10 +74,23 @@ import type {
   Title as EngineTitle,
   Vibe as EngineVibe,
 } from "@/lib/recommendation/types";
+import { isNewSeasonSince } from "@/lib/tmdb/seasons";
+import type { TvSeasonRelease } from "@/lib/tmdb/types";
 
+import { BrandMark, BrandSting } from "./brand-sting";
 import { ProviderSelector } from "./provider-selector";
 
-type Screen = "home" | "actor" | "results" | "rate" | "taste" | "settings";
+type Screen = "home" | "browse" | "vibe" | "actor" | "director" | "results" | "rate" | "taste" | "settings";
+type ContentMode = "mixed" | "movie" | "series";
+type DiscoveryMode = "content" | "actor" | "director" | "vibe" | "new-releases";
+
+type ResultContext = {
+  contentMode: ContentMode;
+  discoveryMode: DiscoveryMode;
+  people?: string[];
+  moods?: string[];
+  vibe?: string;
+};
 type ContentKind = "Movie" | "Series" | "Stand-up";
 type AvailabilityType = "subscription" | "free" | "rental";
 type RentalMode = "never" | "exceptional" | "always";
@@ -88,10 +101,13 @@ type ModelWeights = RecommendationWeights;
 
 type Title = {
   id: string;
+  tmdbId?: number;
   name: string;
   year: number;
+  releaseDate?: string | null;
   kind: ContentKind;
   runtime: string;
+  seasonCount?: number;
   poster: string;
   backdrop: string;
   synopsis: string;
@@ -114,6 +130,11 @@ type Title = {
   baseline: number;
 };
 
+type WatchActivity = {
+  watchedAt: string;
+  knownSeasonCount?: number;
+};
+
 type ViewerProfile = {
   id: string;
   name: string;
@@ -125,6 +146,8 @@ type ViewerProfile = {
   subscriptions: string[];
   favoriteActors: string[];
   ratings: Record<string, number>;
+  ratingDates: Record<string, string>;
+  watchHistory: Record<string, WatchActivity>;
   questionnaire: Record<string, number>;
   rentalMode: RentalMode;
   modelVersion: number;
@@ -187,6 +210,12 @@ type Recommendation = {
   narrative: RecommendationNarrative;
   rental: boolean;
   friendContext?: FriendContext;
+  personMatch?: {
+    kind: "exact" | "inspired";
+    person: string;
+    role: "actor" | "director";
+    note?: string;
+  };
 };
 
 type FeedbackEvent = {
@@ -441,6 +470,7 @@ const fallbackCatalog: Title[] = [
     year: 2021,
     kind: "Series",
     runtime: "3 seasons · 25–35m",
+    seasonCount: 3,
     poster: "https://image.tmdb.org/t/p/w780/t6hqwD5oQRGgNrZKN71BQYxteC1.jpg",
     backdrop: "https://image.tmdb.org/t/p/original/4vC3CijGu8g2Z1UobwkJpRQHOVO.jpg",
     synopsis:
@@ -457,10 +487,12 @@ const fallbackCatalog: Title[] = [
   },
   {
     id: "the-bear",
+    tmdbId: 136315,
     name: "The Bear",
     year: 2022,
     kind: "Series",
     runtime: "4 seasons · 25–45m",
+    seasonCount: 4,
     poster: "https://image.tmdb.org/t/p/w780/sHFlbKS3WLqMnp9t2ghADIJFnuQ.jpg",
     backdrop: "https://image.tmdb.org/t/p/w780/sHFlbKS3WLqMnp9t2ghADIJFnuQ.jpg",
     synopsis:
@@ -608,6 +640,7 @@ const fallbackCatalog: Title[] = [
     year: 2022,
     kind: "Series",
     runtime: "6 seasons · 42–53m",
+    seasonCount: 6,
     poster: "https://image.tmdb.org/t/p/w780/dnpatlJrEPiDSn5fzgzvxtiSnMo.jpg",
     backdrop: "https://image.tmdb.org/t/p/original/qhXdYysiamRu6moMGMZPQ4oVLvd.jpg",
     synopsis: "A brilliant but irascible spymaster leads a team of disgraced intelligence officers through failures that keep becoming real threats.",
@@ -624,6 +657,70 @@ const fallbackCatalog: Title[] = [
 ];
 
 let catalog: Title[] = fallbackCatalog;
+
+const QUESTION_TITLE_NAMES: Record<string, readonly string[]> = {
+  cerebral: ["Inception", "Severance", "The Game", "Chinatown"],
+  emotional: ["Manchester by the Sea", "Aftersun", "This Is Us", "The Last of Us"],
+  darkness: ["Breaking Bad", "The Sopranos", "Sicario", "Nightcrawler"],
+  slowPace: ["Better Call Saul", "Perfect Days", "The Power of the Dog", "There Will Be Blood"],
+  character: ["Mad Men", "The Bear", "Lady Bird", "Lost in Translation"],
+  ambiguity: ["The Leftovers", "Mulholland Drive", "Enemy", "The Sopranos"],
+  discovery: ["Coherence", "The Vast of Night", "Patriot", "Rectify"],
+  classics: ["12 Angry Men", "Casablanca", "The Twilight Zone", "Columbo"],
+  international: ["Parasite", "Dark", "Squid Game", "Pan’s Labyrinth"],
+  tvCommitment: ["The Wire", "The Sopranos", "Game of Thrones", "Better Call Saul"],
+  binge: ["The Bear", "Beef", "Slow Horses", "Only Murders in the Building"],
+};
+
+const QUESTION_FALLBACK_TITLE_NAMES: Record<string, readonly string[]> = {
+  cerebral: ["Arrival", "The Conversation", "Burning", "Zodiac"],
+  emotional: ["Arrival", "Perfect Days", "After Yang", "Paddington 2"],
+  darkness: ["Prisoners", "The Handmaiden", "Burning", "Zodiac"],
+  slowPace: ["Perfect Days", "Burning", "The Conversation", "After Yang"],
+  character: ["The Bear", "Reservation Dogs", "Perfect Days", "The Grand Budapest Hotel"],
+  ambiguity: ["Burning", "Nope", "Arrival", "The Handmaiden"],
+  discovery: ["After Yang", "BlackBerry", "Reservation Dogs", "Bo Burnham: Inside"],
+  classics: ["The Conversation", "Zodiac", "The Handmaiden", "The Grand Budapest Hotel"],
+  international: ["Parasite", "The Handmaiden", "Burning", "Perfect Days"],
+  tvCommitment: ["Slow Horses", "The Bear", "Reservation Dogs", "Zodiac"],
+  binge: ["The Bear", "Slow Horses", "Reservation Dogs", "BlackBerry"],
+};
+
+const normalizeTitleName = (value: string) => value
+  .toLocaleLowerCase()
+  .normalize("NFKD")
+  .replace(/[’']/g, "")
+  .replace(/[^a-z0-9]+/g, " ")
+  .trim();
+
+const hasUsablePoster = (title: Title) => Boolean(
+  title.poster
+  && !title.poster.endsWith("/icons/icon-512.png")
+  && !title.poster.endsWith("/icons/icon-source.svg"),
+);
+
+function questionPosterDecks() {
+  const byName = new Map(catalog.map((title) => [normalizeTitleName(title.name), title]));
+  const artworkCatalog = catalog.filter(hasUsablePoster);
+  const used = new Set<string>();
+  const assigned = new Map<string, Title[]>();
+  CORE_QUESTIONS.forEach((question, questionIndex) => {
+    const preferred = [
+      ...(QUESTION_TITLE_NAMES[question.id] ?? []),
+      ...(QUESTION_FALLBACK_TITLE_NAMES[question.id] ?? []),
+    ]
+      .map((name) => byName.get(normalizeTitleName(name)))
+      .filter((title): title is Title => Boolean(title && hasUsablePoster(title) && !used.has(canonicalTitleKey(title))));
+    const offset = (questionIndex * 17) % Math.max(artworkCatalog.length, 1);
+    const fillers = [...artworkCatalog.slice(offset), ...artworkCatalog.slice(0, offset)]
+      .filter((title) => !used.has(canonicalTitleKey(title)));
+    const unique = new Map([...preferred, ...fillers].map((title) => [canonicalTitleKey(title), title]));
+    const picks = [...unique.values()].slice(0, 2);
+    picks.forEach((title) => used.add(canonicalTitleKey(title)));
+    assigned.set(question.id, picks);
+  });
+  return assigned;
+}
 
 const seedProfiles: ViewerProfile[] = [
   {
@@ -643,6 +740,8 @@ const seedProfiles: ViewerProfile[] = [
       nope: 8,
       "paddington-2": 9,
     },
+    ratingDates: { "the-bear": "2023-06-01T19:00:00.000Z" },
+    watchHistory: { "the-bear": { watchedAt: "2023-06-01T19:00:00.000Z", knownSeasonCount: 1 } },
     questionnaire: {
       cerebral: 84,
       darkness: 76,
@@ -670,6 +769,14 @@ const seedProfiles: ViewerProfile[] = [
       "paddington-2": 8,
       "the-bear": 8,
     },
+    ratingDates: {
+      "reservation-dogs": "2022-09-01T19:00:00.000Z",
+      "the-bear": "2023-06-01T19:00:00.000Z",
+    },
+    watchHistory: {
+      "reservation-dogs": { watchedAt: "2022-09-01T19:00:00.000Z", knownSeasonCount: 1 },
+      "the-bear": { watchedAt: "2023-06-01T19:00:00.000Z", knownSeasonCount: 1 },
+    },
     questionnaire: {
       cerebral: 68,
       emotional: 87,
@@ -692,6 +799,8 @@ const seedProfiles: ViewerProfile[] = [
     subscriptions: ["Netflix", "Hulu", "Disney+", "Apple TV+", "Prime Video", "Max", "Peacock", "Paramount+", "Criterion Channel"],
     favoriteActors: [],
     ratings: {},
+    ratingDates: {},
+    watchHistory: {},
     questionnaire: {},
     rentalMode: "never",
     modelVersion: 1,
@@ -783,7 +892,12 @@ function migrateCatalogTitleIds(store: AppStore, nextCatalog: readonly Title[]):
 
   return {
     ...store,
-    profiles: store.profiles.map((profile) => ({ ...profile, ratings: migrateRecord(profile.ratings) })),
+    profiles: store.profiles.map((profile) => ({
+      ...profile,
+      ratings: migrateRecord(profile.ratings),
+      ratingDates: migrateRecord(profile.ratingDates ?? {}),
+      watchHistory: migrateRecord(profile.watchHistory ?? {}),
+    })),
     feedback: store.feedback.map((event) => ({ ...event, titleId: migrateId(event.titleId) })),
     friendProfiles: store.friendProfiles.map((friend) => ({
       ...friend,
@@ -1054,11 +1168,23 @@ function buildRecommendations(
   selectedMoods: string[],
   selectedVibe: string,
   store: AppStore,
-  options: { favoriteActors?: readonly string[]; excludeTitleIds?: readonly string[]; limit?: number } = {},
+  options: {
+    favoriteActors?: readonly string[];
+    favoriteDirectors?: readonly string[];
+    contentKind?: "Movie" | "Series";
+    newReleases?: boolean;
+    excludeTitleIds?: readonly string[];
+    limit?: number;
+    strictPeople?: boolean;
+  } = {},
 ): Recommendation[] {
-  const sourceCatalog = options.favoriteActors?.length
+  const strictPeople = options.strictPeople ?? true;
+  let sourceCatalog = strictPeople && options.favoriteActors?.length
     ? filterTitlesForFavoriteActors(catalog, options.favoriteActors, profile.subscriptions)
     : catalog;
+  if (strictPeople && options.favoriteDirectors?.length) sourceCatalog = filterTitlesForFavoriteDirectors(sourceCatalog, options.favoriteDirectors, profile.subscriptions);
+  if (options.contentKind) sourceCatalog = sourceCatalog.filter((title) => title.kind === options.contentKind);
+  if (options.newReleases) sourceCatalog = newReleasePool(sourceCatalog);
   const engineCatalog = sourceCatalog.map((title) => toEngineTitle(title, profile.region));
   const config: RecommendationConfig = {
     ...defaultRecommendationConfig,
@@ -1086,7 +1212,12 @@ function buildRecommendations(
       source: "search" as const,
     })),
     questionnaire: mapQuestionnaireAnswers(profile.questionnaire),
-    favoritePeople: { actors: profile.favoriteActors, directors: [], writers: [], cinematographers: [] },
+    favoritePeople: {
+      actors: options.favoriteActors?.length ? [...options.favoriteActors] : profile.favoriteActors,
+      directors: options.favoriteDirectors?.length ? [...options.favoriteDirectors] : [],
+      writers: [],
+      cinematographers: [],
+    },
   };
   const recommendations = recommendForProfile({
     profile: engineProfile,
@@ -1110,7 +1241,7 @@ function buildRecommendations(
       createdAt: item.createdAt,
     })),
   });
-  return recommendations.flatMap((recommendation) => {
+  const mapped = recommendations.flatMap((recommendation) => {
     const title = titleById(recommendation.title.id);
     if (!title) return [];
     return [{
@@ -1124,6 +1255,178 @@ function buildRecommendations(
       friendContext: recommendation.friendContext as EngineFriendContext | undefined,
     } satisfies Recommendation];
   });
+  if (!options.newReleases) return mapped;
+  return mapped
+    .sort((a, b) => newReleaseScore(b.title, b.match) - newReleaseScore(a.title, a.match) || a.title.name.localeCompare(b.title.name))
+    .map((recommendation, index) => ({ ...recommendation, rank: index + 1 }));
+}
+
+function contentKindForMode(contentMode: ContentMode): "Movie" | "Series" | undefined {
+  if (contentMode === "movie") return "Movie";
+  if (contentMode === "series") return "Series";
+  return undefined;
+}
+
+function dedupeRecommendations(recommendations: readonly Recommendation[]) {
+  const seen = new Set<string>();
+  return recommendations.filter((recommendation) => {
+    const key = canonicalTitleKey(recommendation.title);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function interleaveRecommendations(movieRecommendations: readonly Recommendation[], seriesRecommendations: readonly Recommendation[], limit: number) {
+  const result: Recommendation[] = [];
+  const maximum = Math.max(movieRecommendations.length, seriesRecommendations.length);
+  for (let index = 0; index < maximum && result.length < limit; index += 1) {
+    const movie = movieRecommendations[index];
+    const series = seriesRecommendations[index];
+    if (movie) result.push(movie);
+    if (series && result.length < limit) result.push(series);
+  }
+  return dedupeRecommendations(result).slice(0, limit).map((recommendation, index) => ({ ...recommendation, rank: index + 1 }));
+}
+
+function buildModeRecommendations(
+  profile: ViewerProfile,
+  store: AppStore,
+  contentMode: ContentMode,
+  options: {
+    favoriteActors?: readonly string[];
+    favoriteDirectors?: readonly string[];
+    newReleases?: boolean;
+    moods?: readonly string[];
+    vibe?: string;
+    excludeTitleIds?: readonly string[];
+    limit?: number;
+    strictPeople?: boolean;
+  } = {},
+) {
+  const limit = options.limit ?? 11;
+  const build = (contentKind?: "Movie" | "Series") => buildRecommendations(
+    profile,
+    [...(options.moods ?? [])],
+    options.vibe ?? "Surprise",
+    store,
+    {
+      favoriteActors: options.favoriteActors,
+      favoriteDirectors: options.favoriteDirectors,
+      newReleases: options.newReleases,
+      excludeTitleIds: options.excludeTitleIds,
+      contentKind,
+      limit,
+      strictPeople: options.strictPeople,
+    },
+  );
+
+  if (contentMode !== "mixed") return dedupeRecommendations(build(contentKindForMode(contentMode))).slice(0, limit).map((recommendation, index) => ({ ...recommendation, rank: index + 1 }));
+
+  const movies = build("Movie");
+  const series = build("Series");
+  if (options.newReleases) {
+    return dedupeRecommendations([...movies, ...series])
+      .sort((left, right) => newReleaseScore(right.title, right.match) - newReleaseScore(left.title, left.match) || left.title.name.localeCompare(right.title.name))
+      .slice(0, limit)
+      .map((recommendation, index) => ({ ...recommendation, rank: index + 1 }));
+  }
+  return interleaveRecommendations(movies, series, limit);
+}
+
+type PersonDiscoveryOption = {
+  name: string;
+  availableTitleCount: number;
+  poster?: string;
+};
+
+function personOptionsForDiscovery(role: "actor" | "director", contentMode: ContentMode, profile: ViewerProfile): PersonDiscoveryOption[] {
+  const contentKind = contentKindForMode(contentMode);
+  const included = (title: Title) => !contentKind || title.kind === contentKind;
+  const subscribed = new Set(profile.subscriptions.map((provider) => provider.toLocaleLowerCase()));
+  const eligible = catalog.filter((title) => included(title)
+    && profile.ratings[title.id] === undefined
+    && (!subscribed.size || title.providers.some((provider) => subscribed.has(provider.toLocaleLowerCase()))));
+  if (role === "actor") {
+    const all = actorOptionsForSubscriptions(eligible, profile.subscriptions);
+    const defaults = defaultActorOptionsForSubscriptions(eligible, profile.subscriptions, 10);
+    const defaultNames = new Set(defaults.map((option) => option.name.toLocaleLowerCase()));
+    const ordered = [...defaults, ...all.filter((option) => !defaultNames.has(option.name.toLocaleLowerCase()))];
+    const leadTitles = leadTitlesForActors(eligible.filter(hasUsablePoster), ordered.map((option) => option.name));
+    return ordered.map((option) => ({
+      ...option,
+      poster: leadTitles.get(option.name)?.poster,
+    }));
+  }
+  const options = directorOptionsForSubscriptions(eligible, profile.subscriptions);
+  const representativeTitles = representativeTitlesForDirectors(eligible.filter(hasUsablePoster), options.map((option) => option.name));
+  return options.map((option) => ({ ...option, poster: representativeTitles.get(option.name)?.poster }));
+}
+
+type DiscoveryContent = {
+  movieAndTv: Recommendation[];
+  movie?: Recommendation;
+  series?: Recommendation;
+  vibe: Recommendation[];
+  actor?: { name: string; recommendations: Recommendation[]; preview: Recommendation[] };
+  director?: { name: string; recommendations: Recommendation[]; preview: Recommendation[] };
+  newReleases: Recommendation[];
+  newReleasePreview: Recommendation[];
+};
+
+function balancedPreview(recommendations: readonly Recommendation[]) {
+  const movie = recommendations.find((item) => item.title.kind === "Movie");
+  const series = recommendations.find((item) => item.title.kind === "Series");
+  return [movie, series].filter((item): item is Recommendation => Boolean(item)).length
+    ? [movie, series].filter((item): item is Recommendation => Boolean(item))
+    : recommendations.slice(0, 2);
+}
+
+function buildDiscoveryContent(profile: ViewerProfile, store: AppStore, contentMode: ContentMode = "mixed"): DiscoveryContent {
+  const movies = buildRecommendations(profile, [], "Surprise", store, { contentKind: "Movie", limit: 6 });
+  const series = buildRecommendations(profile, [], "Surprise", store, { contentKind: "Series", limit: 6 });
+  const fallbackTitles = [...movies, ...series].map((item) => item.title);
+  const actorName = profile.favoriteActors[0] ?? suggestPerson("actor", profile.ratings, catalog, fallbackTitles);
+  const directorName = suggestPerson("director", profile.ratings, catalog, fallbackTitles);
+  const actorRecommendations = actorName
+    ? buildModeRecommendations(profile, store, contentMode, { favoriteActors: [actorName], limit: 10 })
+    : [];
+  const directorRecommendations = directorName
+    ? buildModeRecommendations(profile, store, contentMode, { favoriteDirectors: [directorName], limit: 10 })
+    : [];
+  const newReleases = buildModeRecommendations(profile, store, contentMode, { newReleases: true, limit: 10 });
+
+  const movieAndTv = [movies[0], series[0]]
+    .filter((item): item is Recommendation => Boolean(item))
+    .map((item, index) => ({ ...item, rank: index + 1 }));
+
+  const usedPreviewKeys = new Set<string>();
+  const takeUniquePreview = (recommendations: readonly Recommendation[], count: number) => {
+    const preview: Recommendation[] = [];
+    for (const recommendation of recommendations) {
+      const key = canonicalTitleKey(recommendation.title);
+      if (usedPreviewKeys.has(key)) continue;
+      usedPreviewKeys.add(key);
+      preview.push(recommendation);
+      if (preview.length === count) break;
+    }
+    return preview;
+  };
+  const actorPreview = takeUniquePreview(actorRecommendations, 1);
+  const directorPreview = takeUniquePreview(directorRecommendations, 1);
+  const vibePreview = takeUniquePreview([movies[2] ?? movies[0], series[2] ?? series[0]].filter((item): item is Recommendation => Boolean(item)), 2);
+  const newReleasePreview = takeUniquePreview(balancedPreview(dedupeRecommendations(newReleases)), 2);
+
+  return {
+    movieAndTv,
+    movie: movies[1] ?? movies[0],
+    series: series[1] ?? series[0],
+    vibe: vibePreview,
+    ...(actorName ? { actor: { name: actorName, recommendations: actorRecommendations, preview: actorPreview.length ? actorPreview : takeUniquePreview([...movies, ...series], 1) } } : {}),
+    ...(directorName ? { director: { name: directorName, recommendations: directorRecommendations, preview: directorPreview.length ? directorPreview : takeUniquePreview([...movies, ...series], 1) } } : {}),
+    newReleases,
+    newReleasePreview,
+  };
 }
 
 function displayProvider(profile: ViewerProfile, title: Title) {
@@ -1148,7 +1451,7 @@ function ProfileAvatar({ profile, large = false }: { profile: ViewerProfile; lar
 function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <div className={`brand ${compact ? "brand--compact" : ""}`}>
-      <span className="brand__mark">W</span>
+      <BrandMark className="brand__mark" markSize={compact ? 31 : 34} />
       {!compact && <span className="brand__name">WHAT TO WATCH</span>}
     </div>
   );
@@ -1189,7 +1492,7 @@ function BottomNav({ screen, onChange }: { screen: Screen; onChange: (screen: Sc
     <nav className="bottom-nav" aria-label="Primary navigation">
       {items.map((item) => {
         const Icon = item.icon;
-        const active = item.screen === screen || (["actor", "results"].includes(screen) && item.screen === "home");
+        const active = item.screen === screen || (["browse", "vibe", "actor", "director", "results"].includes(screen) && item.screen === "home");
         return (
           <button key={item.screen} className={active ? "is-active" : ""} onClick={() => onChange(item.screen)}>
             <Icon size={20} strokeWidth={active ? 2.2 : 1.7} />
@@ -1274,6 +1577,8 @@ function ProfileEditor({
       subscriptions: source ? [...source.subscriptions] : [],
       favoriteActors: [],
       ratings: {},
+      ratingDates: {},
+      watchHistory: {},
       questionnaire: {},
       rentalMode: source?.rentalMode ?? "exceptional",
       modelVersion: 1,
@@ -1313,239 +1618,78 @@ function ProfileEditor({
 }
 
 function Onboarding({ profile, onChange, onFinish }: { profile: ViewerProfile; onChange: (profile: ViewerProfile) => void; onFinish: () => void }) {
-  const [step, setStep] = useState<"welcome" | "services" | "questionnaire" | "genreLoves" | "genreAvoids" | "genreFineTune" | "conditional" | "calibrate" | "searchTitles" | "summary">("welcome");
+  const [phase, setPhase] = useState<"services" | "questions">("services");
   const [questionIndex, setQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, number>>({});
-  const [soughtGenres, setSoughtGenres] = useState<string[]>([]);
-  const [avoidedGenres, setAvoidedGenres] = useState<string[]>([]);
-  const [genreAnswers, setGenreAnswers] = useState<Record<string, number>>(
-    Object.fromEntries(GENRES.map((genre) => [genre, 4])),
-  );
-  const [genreIndex, setGenreIndex] = useState(0);
-  const [ratings, setRatings] = useState<Record<string, number>>(profile.ratings);
-  const [calibrationRatedIds, setCalibrationRatedIds] = useState<string[]>([]);
-  const [calibrationAskedIds, setCalibrationAskedIds] = useState<string[]>([]);
-  const [skippedIds, setSkippedIds] = useState<string[]>([]);
-  const [titleSearch, setTitleSearch] = useState("");
-  const followUpQuestions = useMemo(
-    () => conditionalQuestions(soughtGenres, genreAnswers),
-    [genreAnswers, soughtGenres],
-  );
-  const activeQuestions = step === "conditional" ? followUpQuestions : CORE_QUESTIONS;
-  const questionnaireScores = useMemo(
-    () => Object.fromEntries(Object.entries(answers).map(([key, value]) => [key, Math.round((value - 1) * 25)])),
-    [answers],
-  );
-  const summary = useMemo(
-    () => buildStartingTasteSummary(questionnaireScores, genreAnswers),
-    [genreAnswers, questionnaireScores],
-  );
-  const excludedCalibrationIds = new Set([
-    ...Object.keys(profile.ratings),
-    ...calibrationAskedIds,
-    ...skippedIds,
-  ]);
-  const calibrationTitle = calibrationRatedIds.length >= 8 ? undefined : selectCalibrationTitle(catalog, {
-    targetGenres: [...soughtGenres, ...avoidedGenres],
-    excludedIds: excludedCalibrationIds,
-    askedTitles: calibrationAskedIds.map((id) => catalog.find((title) => title.id === id)).filter((title): title is Title => Boolean(title)),
-  }) as Title | undefined;
-  const progress = step === "welcome" ? 5
-    : step === "services" ? 13
-      : step === "questionnaire" ? 18 + (questionIndex / CORE_QUESTIONS.length) * 34
-        : step === "genreLoves" ? 56
-          : step === "genreAvoids" || step === "genreFineTune" ? 65
-            : step === "conditional" ? 70 + (questionIndex / Math.max(followUpQuestions.length, 1)) * 10
-              : step === "calibrate" || step === "searchTitles" ? 84
-                : 100;
-  const genreOutlierScores = () => Object.fromEntries(GENRES.map((genre) => [
-      genre,
-      soughtGenres.includes(genre) ? 7 : avoidedGenres.includes(genre) ? 1 : 4,
-    ]));
-  const continueAfterGenres = (nextGenreAnswers: Record<string, number>) => {
-    setGenreAnswers(nextGenreAnswers);
-    setQuestionIndex(0);
-    setStep(conditionalQuestions(soughtGenres, nextGenreAnswers).length ? "conditional" : "calibrate");
-  };
-  const answerQuestion = (score: number) => {
-    const question = activeQuestions[questionIndex];
-    if (!question) return;
-    setAnswers((current) => ({ ...current, [question.id]: score }));
-    if (questionIndex < activeQuestions.length - 1) setQuestionIndex((index) => index + 1);
-    else {
-      setQuestionIndex(0);
-      setStep(step === "questionnaire" ? "genreLoves" : "calibrate");
-    }
-  };
-  const toggleGenre = (genre: string, selected: string[], setter: (genres: string[]) => void) => {
-    if (selected.includes(genre)) setter(selected.filter((item) => item !== genre));
-    else if (selected.length < 5) setter([...selected, genre]);
-  };
-  const rateCalibrationTitle = (title: Title, score: number) => {
-    setRatings((current) => ({ ...current, [title.id]: score }));
-    setCalibrationRatedIds((current) => current.includes(title.id) ? current : [...current, title.id]);
-    setCalibrationAskedIds((current) => current.includes(title.id) ? current : [...current, title.id]);
-    setTitleSearch("");
-    setStep("calibrate");
-  };
-  const skipCalibrationTitle = () => {
-    if (!calibrationTitle) return;
-    setSkippedIds((current) => [...current, calibrationTitle.id]);
-    setCalibrationAskedIds((current) => [...current, calibrationTitle.id]);
-  };
-  const finish = () => {
-    const storedScores = { ...questionnaireScores };
-    GENRES.forEach((genre) => { storedScores[`genre:${genre}`] = Math.round(((genreAnswers[genre] ?? 4) - 1) * (100 / 6)); });
-    onChange({ ...profile, questionnaire: storedScores, ratings, onboardingCompleted: true });
+  const [answers, setAnswers] = useState<Record<string, number>>(() => Object.fromEntries(
+    CORE_QUESTIONS.flatMap((question) => {
+      const stored = profile.questionnaire[question.id];
+      return typeof stored === "number" ? [[question.id, Math.round(stored / 25) + 1]] : [];
+    }),
+  ));
+  const activeQuestion = CORE_QUESTIONS[questionIndex];
+  const questionVisuals = activeQuestion ? questionPosterDecks().get(activeQuestion.id) ?? [] : [];
+  const progress = ((questionIndex + 1) / CORE_QUESTIONS.length) * 100;
+  const finish = (nextAnswers = answers) => {
+    const questionnaire = {
+      ...profile.questionnaire,
+      ...Object.fromEntries(Object.entries(nextAnswers).map(([key, value]) => [key, Math.round((value - 1) * 25)])),
+    };
+    onChange({ ...profile, questionnaire, onboardingCompleted: true });
     onFinish();
   };
+  const answerQuestion = (score: number) => {
+    if (!activeQuestion) return;
+    const nextAnswers = { ...answers, [activeQuestion.id]: score };
+    setAnswers(nextAnswers);
+    if (questionIndex < CORE_QUESTIONS.length - 1) setQuestionIndex((index) => index + 1);
+    else finish(nextAnswers);
+  };
+
+  if (phase === "services") {
+    return (
+      <main className="onboarding">
+        <header className="onboarding__header"><Logo compact /><span>PROFILE FOR {profile.name.toUpperCase()}</span><div className="progress-track"><span style={{ width: "4%" }} /></div></header>
+        <section className="onboarding-panel onboarding-services">
+          <p className="kicker">YOUR STREAMING SERVICES</p>
+          <h1>What do you subscribe to?</h1>
+          <p className="lede">Choose the services you use so Watch Now can send you to an included title.</p>
+          <ProviderSelector region={profile.region} selected={profile.subscriptions} onChange={(subscriptions) => onChange({ ...profile, subscriptions })} />
+          <div className="onboarding-actions">
+            <span className="form-note">You can change these later in Settings.</span>
+            <button className="primary-button" onClick={() => setPhase("questions")}>Start questionnaire <ChevronRight size={18} /></button>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  if (!activeQuestion) return null;
   return (
     <main className="onboarding">
       <header className="onboarding__header"><Logo compact /><span>PROFILE FOR {profile.name.toUpperCase()}</span><div className="progress-track"><span style={{ width: `${progress}%` }} /></div></header>
-      {step === "welcome" && (
-        <section className="onboarding-panel onboarding-welcome">
-          <span className="onboarding-orbit"><Sparkles size={28} /></span>
-          <p className="kicker">A BETTER STARTING POINT</p>
-          <h1>Build your taste profile.</h1>
-          <p>Tell us what you seek out, answer a few plain-language questions, and rate a handful of titles chosen for your taste.</p>
-          <div className="onboarding-time"><Clock3 size={17} /><span><strong>About 4–6 minutes</strong><small>You can skip any part and refine it later.</small></span></div>
-          <button className="primary-button" onClick={() => setStep("services")}>Let&apos;s begin <ChevronRight size={18} /></button>
-          <button className="text-button" onClick={() => { onChange({ ...profile, onboardingCompleted: true }); onFinish(); }}>Skip for now</button>
-        </section>
-      )}
-      {step === "services" && (
-        <section className="onboarding-panel">
-          <p className="kicker">STEP 1</p><h1>Where do you watch?</h1><p className="lede">Choose the services available to {profile.name}. We use these as a hard filter before recommending.</p>
-          <ProviderSelector
-            region={profile.region}
-            selected={profile.subscriptions}
-            onChange={(subscriptions) => onChange({ ...profile, subscriptions })}
-          />
-          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("welcome")}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => { setQuestionIndex(0); setStep("questionnaire"); }}>Build my taste <ChevronRight size={18} /></button></div>
-        </section>
-      )}
-      {(step === "questionnaire" || step === "conditional") && activeQuestions[questionIndex] && (
-        <section className="onboarding-panel question-panel">
-          <div className="question-count"><span>{questionIndex + 1} / {activeQuestions.length}</span><button className="text-button" onClick={() => { setQuestionIndex(0); setStep(step === "questionnaire" ? "genreLoves" : "calibrate"); }}>Skip questions</button></div>
-          <p className="kicker">{step === "questionnaire" ? "WHAT PULLS YOU IN?" : "A LITTLE MORE DETAIL"}</p>
+      <section className="onboarding-panel question-panel question-panel--posters">
+        <div className="question-poster-deck" aria-hidden="true">
+          {questionVisuals.map((title, index) => (
+            <div className="question-poster" key={title.id}>
+              <Image src={title.poster} alt="" fill sizes="(min-width: 1500px) 18vw, 22vw" loading={index === 0 ? "eager" : "lazy"} />
+            </div>
+          ))}
+          <span className="question-poster-fade" />
+        </div>
+        <div className="question-content">
+          <div className="question-count"><span>{questionIndex + 1} / {CORE_QUESTIONS.length}</span><button className="text-button" onClick={() => finish()}>Skip questionnaire</button></div>
+          <p className="kicker">WHAT PULLS YOU IN?</p>
           <p className="question-support">Choose what usually feels like you—not what you want to watch tonight.</p>
-          <h2>{activeQuestions[questionIndex].prompt}</h2>
-          <p className="question-example">{activeQuestions[questionIndex].example}</p>
+          <h2>{activeQuestion.prompt}</h2>
+          <p className="question-example">{activeQuestion.example}</p>
           <div className="answer-scale" role="radiogroup" aria-label="How much this sounds like you">
-            {ANSWER_LABELS.map((label, index) => <button key={label} role="radio" className={answers[activeQuestions[questionIndex].id] === index + 1 ? "is-active" : ""} onClick={() => answerQuestion(index + 1)} aria-checked={answers[activeQuestions[questionIndex].id] === index + 1}><span>{index + 1}</span><strong>{label}</strong></button>)}
+            {ANSWER_LABELS.map((label, index) => <button key={label} role="radio" className={answers[activeQuestion.id] === index + 1 ? "is-active" : ""} onClick={() => answerQuestion(index + 1)} aria-checked={answers[activeQuestion.id] === index + 1}><span>{index + 1}</span><strong>{label}</strong></button>)}
           </div>
           <p className="question-note">Haven’t seen the examples? Just answer based on the statement.</p>
-          <button className="text-button question-back" onClick={() => questionIndex > 0 ? setQuestionIndex((index) => index - 1) : setStep(step === "questionnaire" ? "services" : "genreAvoids")}><ArrowLeft size={16} /> Previous</button>
-        </section>
-      )}
-      {step === "genreLoves" && (
-        <GenreOutlierStep
-          kicker="YOUR GENRE BASELINE"
-          title="What do you actively look for?"
-          copy="Choose up to five. These become strong starting signals; everything else stays neutral."
-          selected={soughtGenres}
-          disabled={[]}
-          onToggle={(genre) => toggleGenre(genre, soughtGenres, setSoughtGenres)}
-        >
-          <div className="onboarding-actions"><button className="text-button" onClick={() => { setQuestionIndex(CORE_QUESTIONS.length - 1); setStep("questionnaire"); }}><ArrowLeft size={16} /> Back</button><button className="primary-button" onClick={() => setStep("genreAvoids")}>Continue <ChevronRight size={18} /></button></div>
-        </GenreOutlierStep>
-      )}
-      {step === "genreAvoids" && (
-        <GenreOutlierStep
-          kicker="YOUR GENRE BASELINE"
-          title="What do you usually avoid?"
-          copy="Choose up to five. We’ll use these as cautions, not permanent bans."
-          selected={avoidedGenres}
-          disabled={soughtGenres}
-          onToggle={(genre) => toggleGenre(genre, avoidedGenres, setAvoidedGenres)}
-        >
-          <div className="onboarding-actions stacked-actions"><button className="text-button" onClick={() => setStep("genreLoves")}><ArrowLeft size={16} /> Back</button><div><button className="secondary-button" onClick={() => { setGenreAnswers(genreOutlierScores()); setGenreIndex(0); setStep("genreFineTune"); }}>Fine-tune genres</button><button className="primary-button" onClick={() => continueAfterGenres(genreOutlierScores())}>Continue <ChevronRight size={18} /></button></div></div>
-        </GenreOutlierStep>
-      )}
-      {step === "genreFineTune" && (
-        <section className="onboarding-panel question-panel">
-          <div className="question-count"><span>{genreIndex + 1} / {GENRES.length}</span><button className="text-button" onClick={() => continueAfterGenres(genreAnswers)}>Finish fine-tuning</button></div>
-          <p className="kicker">FINE-TUNE YOUR GENRES</p><h2>{GENRE_LABELS[GENRES[genreIndex]]}</h2>
-          <div className="genre-answer-scale" role="radiogroup" aria-label={`${GENRE_LABELS[GENRES[genreIndex]]} preference`}>
-            {GENRE_RATING_LABELS.map((label, index) => <button key={label} role="radio" className={genreAnswers[GENRES[genreIndex]] === index + 1 ? "is-active" : ""} aria-checked={genreAnswers[GENRES[genreIndex]] === index + 1} onClick={() => { const next = { ...genreAnswers, [GENRES[genreIndex]]: index + 1 }; setGenreAnswers(next); if (genreIndex < GENRES.length - 1) setGenreIndex((current) => current + 1); else continueAfterGenres(next); }}><span>{index + 1}</span><strong>{label}</strong></button>)}
-          </div>
-          {genreIndex > 0 && <button className="text-button question-back" onClick={() => setGenreIndex((index) => index - 1)}><ArrowLeft size={16} /> Previous</button>}
-        </section>
-      )}
-      {step === "calibrate" && (
-        <section className="onboarding-panel calibration-panel">
-          <p className="kicker">A FEW USEFUL RATINGS</p><h1>Help us sharpen the picture.</h1><p className="lede">Each title is chosen to clarify the preferences you just shared. Four to six useful ratings is plenty.</p>
-          {calibrationTitle ? (
-            <div className="calibration-card">
-              <div className="calibration-poster"><Image src={calibrationTitle.poster} alt={`Poster for ${calibrationTitle.name}`} fill sizes="180px" /></div>
-              <div><p className="kicker">RATE 1–10</p><h2>{calibrationTitle.name}</h2><p>{calibrationTitle.year} · {calibrationTitle.kind} · {calibrationTitle.genres.join(", ")}</p><RatingPicker value={ratings[calibrationTitle.id]} onRate={(score) => rateCalibrationTitle(calibrationTitle, score)} /></div>
-            </div>
-          ) : <div className="calibration-empty"><Check size={24} /><strong>That’s enough signal for now.</strong></div>}
-          <div className="calibration-options">
-            {calibrationTitle && <><button className="secondary-button" onClick={skipCalibrationTitle}>Haven&apos;t seen it</button><button className="secondary-button" onClick={skipCalibrationTitle}>Don&apos;t remember it well enough</button></>}
-            <button className="secondary-button" onClick={() => setStep("searchTitles")}><Search size={16} /> Search for something I&apos;ve seen</button>
-          </div>
-          <div className="onboarding-actions"><span className="rating-count"><strong>{calibrationRatedIds.length}</strong> useful rating{calibrationRatedIds.length === 1 ? "" : "s"}</span><button className="primary-button" onClick={() => setStep("summary")}>{calibrationRatedIds.length >= 4 ? "See my starting taste" : "Finish for now"} <ChevronRight size={18} /></button></div>
-        </section>
-      )}
-      {step === "searchTitles" && (
-        <section className="onboarding-panel title-search-panel">
-          <p className="kicker">CHOOSE SOMETHING YOU KNOW</p><h1>Search for a title.</h1><p className="lede">Pick a movie, series, or stand-up special you remember well enough to rate.</p>
-          <label className="calibration-search"><Search size={18} /><input autoFocus value={titleSearch} onChange={(event) => setTitleSearch(event.target.value)} placeholder="Start typing a title" /></label>
-          <div className="calibration-list">
-            {titleSearch.trim().length >= 2 && catalog.filter((title) => title.name.toLowerCase().includes(titleSearch.trim().toLowerCase()) && !calibrationRatedIds.includes(title.id)).slice(0, 8).map((title) => <CompactRatingRow key={title.id} title={title} value={ratings[title.id]} onRate={(score) => rateCalibrationTitle(title, score)} />)}
-          </div>
-          <div className="onboarding-actions"><button className="text-button" onClick={() => setStep("calibrate")}><ArrowLeft size={16} /> Back</button></div>
-        </section>
-      )}
-      {step === "summary" && (
-        <section className="onboarding-panel onboarding-summary">
-          <span className="summary-ring"><Check size={27} /></span><p className="kicker">YOUR STARTING TASTE</p><h1>{summary.headline}</h1><p>{summary.description}</p>
-          {summary.tags.length > 0 && <div className="taste-tags">{summary.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>}
-          <p className="form-note"><Info size={16} /> These are starting assumptions. Every rating makes them more personal.</p>
-          <button className="primary-button" onClick={finish}>Find something tonight <ChevronRight size={18} /></button>
-        </section>
-      )}
+          {questionIndex > 0 && <button className="text-button question-back" onClick={() => setQuestionIndex((index) => index - 1)}><ArrowLeft size={16} /> Previous</button>}
+        </div>
+      </section>
     </main>
-  );
-}
-
-function GenreOutlierStep({
-  kicker,
-  title,
-  copy,
-  selected,
-  disabled,
-  onToggle,
-  children,
-}: {
-  kicker: string;
-  title: string;
-  copy: string;
-  selected: string[];
-  disabled: string[];
-  onToggle: (genre: string) => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="onboarding-panel genre-panel">
-      <p className="kicker">{kicker}</p><h1>{title}</h1><p className="lede">{copy}</p>
-      <div className="genre-selection-count">{selected.length} / 5 selected</div>
-      <div className="genre-chip-grid">
-        {GENRES.map((genre) => <button key={genre} type="button" disabled={disabled.includes(genre)} className={selected.includes(genre) ? "is-active" : ""} onClick={() => onToggle(genre)} aria-pressed={selected.includes(genre)}><span>{GENRE_LABELS[genre]}</span>{selected.includes(genre) && <Check size={15} />}</button>)}
-      </div>
-      {children}
-    </section>
-  );
-}
-
-function CompactRatingRow({ title, value, onRate }: { title: Title; value?: number; onRate: (score: number) => void }) {
-  return (
-    <div className="compact-rating-row">
-      <div className="rating-thumb"><Image src={title.poster} alt="" fill sizes="48px" /></div>
-      <div className="compact-rating-row__title"><strong>{title.name}</strong><span>{title.year} · {title.kind}</span></div>
-      <RatingPicker value={value} onRate={onRate} compact />
-    </div>
   );
 }
 
@@ -1570,14 +1714,124 @@ function AppHeader({ profile, onProfiles, onMenu }: { profile: ViewerProfile; on
   );
 }
 
+function DiscoveryCard({
+  eyebrow,
+  title,
+  description,
+  recommendations,
+  onClick,
+  featured = false,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+  recommendations: Recommendation[];
+  onClick: () => void;
+  featured?: boolean;
+}) {
+  const posters = recommendations.slice(0, 2);
+  return (
+    <button className={`discovery-card ${featured ? "discovery-card--featured" : ""}`} onClick={onClick}>
+      <span className={`discovery-card__posters discovery-card__posters--${Math.max(1, posters.length)}`} aria-hidden="true">
+        {posters.map((recommendation) => <span className="discovery-card__poster" key={recommendation.title.id}><Image src={recommendation.title.poster} alt="" fill sizes={featured ? "(min-width: 980px) 25vw, 48vw" : "(min-width: 980px) 18vw, 48vw"} /></span>)}
+        <span className="discovery-card__shade" />
+      </span>
+      <span className="discovery-card__copy"><small>{eyebrow}</small><strong>{title}</strong><span>{description}</span></span>
+      <ChevronRight className="discovery-card__arrow" size={21} />
+    </button>
+  );
+}
+
 function HomeScreen({
+  profile,
+  discovery,
+  onChooseContent,
+  onFriends,
+  onSuggestions,
+}: {
+  profile: ViewerProfile;
+  discovery: DiscoveryContent;
+  onChooseContent: (contentMode: ContentMode) => void;
+  onFriends: () => void;
+  onSuggestions: () => void;
+}) {
+  return (
+    <main className="discovery-home page-content">
+      <div className="discovery-home__intro">
+        <p className="kicker">TONIGHT · {profile.name.toUpperCase()}</p>
+        <h1>Find your way in.</h1>
+        <p>Start broad, follow a person, or set the mood.</p>
+      </div>
+      <section className="discovery-group" aria-labelledby="search-by-heading">
+        <div className="discovery-heading"><p className="section-number">01</p><h2 id="search-by-heading">You search by</h2></div>
+        <div className="discovery-grid discovery-grid--primary">
+          <DiscoveryCard featured eyebrow="ONE OF EACH" title="Movies & TV" description="A movie and a series chosen for you." recommendations={discovery.movieAndTv} onClick={() => onChooseContent("mixed")} />
+          <DiscoveryCard eyebrow="FEATURE" title="Movies" description={discovery.movie ? `${discovery.movie.title.name} is a strong next fit.` : "A film selected for your taste."} recommendations={discovery.movie ? [discovery.movie] : []} onClick={() => onChooseContent("movie")} />
+          <DiscoveryCard eyebrow="SERIES" title="TV" description={discovery.series ? `${discovery.series.title.name} is worth starting.` : "A series selected for your taste."} recommendations={discovery.series ? [discovery.series] : []} onClick={() => onChooseContent("series")} />
+        </div>
+      </section>
+      <section className="discovery-group discovery-group--tools" aria-labelledby="taste-tools-heading">
+        <div className="discovery-heading"><p className="section-number">02</p><h2 id="taste-tools-heading">Your taste, in motion</h2></div>
+        <div className="discovery-tools">
+          <button className="discovery-tool" onClick={onSuggestions}>
+            <span><small>PERSONALIZED</small><strong>Suggestions</strong><span>Ten considered picks shaped by your questionnaire, ratings, and feedback.</span></span><ChevronRight className="discovery-card__arrow" size={21} />
+          </button>
+          <button className="discovery-tool" onClick={onFriends}>
+            <span><small>TRUSTED TASTE</small><strong>Friend&apos;s Picks</strong><span>See titles where a friend&apos;s taste or recommendation adds useful context.</span></span><ChevronRight className="discovery-card__arrow" size={21} />
+          </button>
+        </div>
+      </section>
+      <div className="home-trust"><ShieldCheck size={15} /><p><strong>Personal, not generic.</strong> Every card uses your questionnaire, ratings, and feedback.</p></div>
+    </main>
+  );
+}
+
+function BrowseScreen({
+  contentMode,
+  discovery,
+  onActor,
+  onDirector,
+  onVibe,
+  onNewReleases,
+  onBack,
+}: {
+  contentMode: ContentMode;
+  discovery: DiscoveryContent;
+  onActor: () => void;
+  onDirector: () => void;
+  onVibe: () => void;
+  onNewReleases: () => void;
+  onBack: () => void;
+}) {
+  const heading = contentMode === "mixed" ? "Movies & TV" : contentMode === "movie" ? "Movies" : "TV";
+  return (
+    <main className="discovery-home page-content">
+      <div className="discovery-home__intro">
+        <button className="icon-button" onClick={onBack} aria-label="Back to search type"><ArrowLeft size={20} /></button>
+        <p className="kicker">{heading.toUpperCase()} · CHOOSE A LANE</p>
+        <h1>Find your way in.</h1>
+        <p>Follow a person, set the mood, or see what&apos;s new.</p>
+      </div>
+      <section className="discovery-group" aria-labelledby="browse-by-heading">
+        <div className="discovery-heading"><p className="section-number">02</p><h2 id="browse-by-heading">Browse by</h2></div>
+        <div className="discovery-grid discovery-grid--secondary">
+          <DiscoveryCard eyebrow="BY ACTOR" title="Actor" description="Search performers, then see ten matches." recommendations={discovery.actor?.preview ?? []} onClick={onActor} />
+          <DiscoveryCard eyebrow="BY DIRECTOR" title="Director" description="Search filmmakers, then see ten matches." recommendations={discovery.director?.preview ?? []} onClick={onDirector} />
+          <DiscoveryCard eyebrow="MOVIE + TV" title="By Vibe" description="Make me laugh, scare me, surprise me, and more." recommendations={discovery.vibe} onClick={onVibe} />
+          <DiscoveryCard eyebrow="RECENT + POPULAR" title="New Releases" description="Fresh TMDB releases, filtered through your taste." recommendations={discovery.newReleasePreview} onClick={onNewReleases} />
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function VibeDiscoveryScreen({
   profile,
   selectedMoods,
   setSelectedMoods,
   selectedVibe,
   setSelectedVibe,
   onFind,
-  onActorFind,
 }: {
   profile: ViewerProfile;
   selectedMoods: string[];
@@ -1585,7 +1839,6 @@ function HomeScreen({
   selectedVibe: string;
   setSelectedVibe: (vibe: string) => void;
   onFind: () => void;
-  onActorFind: () => void;
 }) {
   const ratingCount = Object.keys(profile.ratings).length;
   return (
@@ -1612,95 +1865,94 @@ function HomeScreen({
         </div>
       </section>
       <button className="find-button" onClick={onFind}><span><Sparkles size={19} /> Find something</span><small>{ratingCount > 0 ? `Tuned from ${ratingCount} ratings` : "Using your starting taste"}</small></button>
-      <button className="actor-find-button" onClick={onActorFind}>
-        <span className="actor-find-button__icon"><UserCheck size={21} /></span>
-        <span><strong>Find something with your favorite actor</strong><small>Prominent roles available on your services</small></span>
-        <ChevronRight size={18} />
-      </button>
       <div className="home-trust"><ShieldCheck size={15} /><p><strong>No chatbot. No taste feed.</strong> Ten considered picks from an explainable model.</p></div>
     </main>
   );
 }
 
-function ActorDiscoveryScreen({
+function PersonDiscoveryScreen({
   profile,
+  role,
+  options,
+  selectedPeople,
   onChange,
   onFind,
   onBack,
 }: {
   profile: ViewerProfile;
-  onChange: (actors: string[]) => void;
-  onFind: (actors: string[]) => void;
+  role: "actor" | "director";
+  options: PersonDiscoveryOption[];
+  selectedPeople: string[];
+  onChange: (people: string[]) => void;
+  onFind: (people: string[]) => void;
   onBack: () => void;
 }) {
   const [query, setQuery] = useState("");
-  const options = actorOptionsForSubscriptions(catalog, profile.subscriptions);
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const suggestions = options
     .filter((option) => !normalizedQuery || option.name.toLocaleLowerCase().includes(normalizedQuery))
-    .slice(0, normalizedQuery ? 12 : 8);
-  const toggleActor = (name: string) => {
-    const selected = profile.favoriteActors.some((actor) => actor.toLocaleLowerCase() === name.toLocaleLowerCase());
-    onChange(selected
-      ? profile.favoriteActors.filter((actor) => actor.toLocaleLowerCase() !== name.toLocaleLowerCase())
-      : [...profile.favoriteActors, name]);
+    .slice(0, 10);
+  const togglePerson = (name: string) => {
+    onChange([name]);
   };
+  const noun = role === "actor" ? "actor" : "director";
+  const pluralNoun = role === "actor" ? "actors" : "directors";
 
   return (
     <main className="actor-screen page-content">
       <div className="subpage-heading actor-screen__heading">
         <button className="icon-button" onClick={onBack} aria-label="Back"><ArrowLeft size={20} /></button>
-        <div><p className="kicker">CAST-LED DISCOVERY</p><h1>Who do you want to watch?</h1></div>
+        <div><p className="kicker">{role === "actor" ? "CAST-LED DISCOVERY" : "DIRECTOR-LED DISCOVERY"}</p><h1>Who do you want to watch?</h1></div>
       </div>
-      <p className="actor-screen__intro">Choose one or more favorites. We&apos;ll only show movies and series where they have a prominent role and the title is included with one of {profile.name}&apos;s services.</p>
+      <p className="actor-screen__intro">Choose one {noun}. We&apos;ll return ten personalized titles where they are a prominent {role === "actor" ? "performer" : "filmmaker"}{profile.subscriptions.length ? ` and the title is included with one of ${profile.name}'s services` : " from the published catalog"}.</p>
 
-      {profile.favoriteActors.length > 0 && (
+      {selectedPeople.length > 0 && (
         <section className="actor-selection" aria-labelledby="favorite-actors-heading">
-          <div className="section-heading"><div><p className="section-number">01</p><h2 id="favorite-actors-heading">Your favorite actors</h2></div><span>{profile.favoriteActors.length} selected</span></div>
+          <div className="section-heading"><div><p className="section-number">01</p><h2 id="favorite-actors-heading">Your selected {pluralNoun}</h2></div><span>{selectedPeople.length} selected</span></div>
           <div className="actor-chips">
-            {profile.favoriteActors.map((actor) => <button key={actor} onClick={() => toggleActor(actor)}>{actor}<X size={14} aria-hidden="true" /><span className="visually-hidden">Remove</span></button>)}
+            {selectedPeople.map((person) => <button key={person} onClick={() => togglePerson(person)}>{person}<X size={14} aria-hidden="true" /><span className="visually-hidden">Remove</span></button>)}
           </div>
         </section>
       )}
 
       <section className="actor-search-section" aria-labelledby="actor-search-heading">
-        <div className="section-heading"><div><p className="section-number">{profile.favoriteActors.length ? "02" : "01"}</p><h2 id="actor-search-heading">Search actors</h2></div><span>Prominent cast only</span></div>
+        <div className="section-heading"><div><p className="section-number">{selectedPeople.length ? "02" : "01"}</p><h2 id="actor-search-heading">Search {pluralNoun}</h2></div><span>{profile.subscriptions.length ? role === "actor" ? "Prominent cast only" : "Catalog directors only" : "Published catalog"}</span></div>
         <label className="actor-search">
           <Search size={19} aria-hidden="true" />
-          <span className="visually-hidden">Actor name</span>
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try Samuel L. Jackson" autoComplete="off" />
-          {query && <button type="button" onClick={() => setQuery("")} aria-label="Clear actor search"><X size={16} /></button>}
+          <span className="visually-hidden">{noun} name</span>
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={role === "actor" ? "Try Samuel L. Jackson" : "Try Akira Kurosawa"} autoComplete="off" />
+          {query && <button type="button" onClick={() => setQuery("")} aria-label={`Clear ${noun} search`}><X size={16} /></button>}
         </label>
         <div className="actor-suggestions" aria-live="polite">
           {suggestions.map((option) => {
-            const selected = profile.favoriteActors.some((actor) => actor.toLocaleLowerCase() === option.name.toLocaleLowerCase());
+            const selected = selectedPeople.some((person) => person.toLocaleLowerCase() === option.name.toLocaleLowerCase());
             return (
-              <button key={option.name} className={selected ? "is-active" : ""} onClick={() => toggleActor(option.name)}>
-                <span className="actor-suggestion__avatar">{option.name.split(/\s+/).slice(0, 2).map((part) => part[0]).join("")}</span>
-                <span><strong>{option.name}</strong><small>{option.availableTitleCount} prominent role{option.availableTitleCount === 1 ? "" : "s"} on your services</small></span>
+              <button key={option.name} className={selected ? "is-active" : ""} onClick={() => onFind([option.name])} aria-label={`Show ten titles featuring ${option.name}`}>
+                <span className="actor-suggestion__avatar" style={option.poster ? { backgroundImage: `linear-gradient(rgba(8,8,7,.35), rgba(8,8,7,.72)), url(${option.poster})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined} aria-hidden="true" />
+                <span><strong>{option.name}</strong><small>{option.availableTitleCount} title{option.availableTitleCount === 1 ? "" : "s"} {profile.subscriptions.length ? "on your services" : "in the catalog"}</small></span>
                 {selected ? <Check size={17} /> : <Plus size={17} />}
               </button>
             );
           })}
-          {!suggestions.length && <div className="actor-empty"><Search size={22} /><strong>No available prominent roles found</strong><p>Try another actor or update your subscribed services.</p></div>}
+          {!suggestions.length && <div className="actor-empty"><Search size={22} /><strong>No matching {pluralNoun} found</strong><p>Try another name or broaden the selected format.</p></div>}
         </div>
       </section>
 
-      <button className="find-button actor-results-button" disabled={!profile.favoriteActors.length} onClick={() => onFind(profile.favoriteActors)}>
-        <span><UserCheck size={19} /> Show available titles</span>
-        <small>{profile.favoriteActors.length ? `Featuring ${profile.favoriteActors.join(", ")}` : "Choose at least one actor"}</small>
+      <button className="find-button actor-results-button" disabled={!selectedPeople.length} onClick={() => onFind(selectedPeople)}>
+        <span><UserCheck size={19} /> Show ten titles</span>
+        <small>{selectedPeople.length ? `Featuring ${selectedPeople.join(", ")}` : `Choose at least one ${noun}`}</small>
       </button>
-      <div className="actor-screen__note"><ShieldCheck size={15} /><p>“Prominent” means the actor is in the catalog&apos;s principal cast, not a cameo or incidental credit.</p></div>
+      <div className="actor-screen__note"><ShieldCheck size={15} /><p>{role === "actor" ? "“Prominent” means the actor is in the catalog's principal cast, not a cameo or incidental credit." : "Director matches use the catalog's credited director field."}</p></div>
     </main>
   );
 }
 
 function ResultsScreen({ profile, recommendations, focusActors = [], page = 0, hasMore = false, onMore, onBack, onDetails, onFeedback }: { profile: ViewerProfile; recommendations: Recommendation[]; focusActors?: string[]; page?: number; hasMore?: boolean; onMore: () => void; onBack: () => void; onDetails: (title: Title) => void; onFeedback: (message: string, title?: Title) => void }) {
   const actorFocused = focusActors.length > 0;
-  const heading = page > 0 ? "Ten more for tonight." : recommendations.length === 10 ? "Here’s your top ten." : `${recommendations.length} picks fit tonight.`;
+  const heading = page > 0 ? "Ten more for tonight." : recommendations.length === 10 ? "Here’s your top ten." : recommendations.length === 1 ? "Here’s your pick." : `${recommendations.length} picks fit tonight.`;
   return (
     <main className="results-screen page-content">
-      <div className="results-heading"><button className="icon-button" onClick={onBack} aria-label="Back"><ArrowLeft size={20} /></button><div><p className="kicker">{actorFocused ? `${recommendations.length} ON YOUR SERVICES · PROMINENT ROLES` : page > 0 ? `ANOTHER ${recommendations.length} · ONE GOOD NIGHT` : `TOP ${recommendations.length} · ONE GOOD NIGHT`}</p><h1>{actorFocused ? `With ${focusActors.join(" or ")}.` : heading}</h1></div><button className="icon-button" onClick={onBack} aria-label={actorFocused ? "Change actors" : "Adjust choices"}><RefreshCw size={18} /></button></div>
+      <div className="results-heading"><button className="icon-button" onClick={onBack} aria-label="Back"><ArrowLeft size={20} /></button><div><p className="kicker">{actorFocused ? `${recommendations.length} PICKS · FEATURED ROLES FIRST` : page > 0 ? `ANOTHER ${recommendations.length} · ONE GOOD NIGHT` : `TOP ${recommendations.length} · ONE GOOD NIGHT`}</p><h1>{actorFocused ? `Chosen around ${focusActors.join(" or ")}.` : heading}</h1></div><button className="icon-button" onClick={onBack} aria-label={actorFocused ? "Change actors" : "Adjust choices"}><RefreshCw size={18} /></button></div>
       <div className="recommendation-stack">
         {recommendations.map((recommendation, index) => <RecommendationCard key={recommendation.title.id} profile={profile} recommendation={recommendation} priority={index === 0} focusActors={focusActors} onDetails={onDetails} onFeedback={onFeedback} />)}
         {!recommendations.length && <div className="results-empty"><UserCheck size={28} /><h2>Nothing prominent is included right now.</h2><p>Try another favorite actor or update your services. Rentals and incidental credits stay out of this list.</p><button className="secondary-button" onClick={onBack}>Choose another actor</button></div>}
@@ -1723,6 +1975,7 @@ function RecommendationCard({ profile, recommendation, priority, focusActors = [
         <div className="title-meta"><span>{title.year}</span><span>{title.kind}</span><span>{title.runtime}</span></div>
         <div className="title-row"><h2>{title.name}</h2><button className="icon-button" onClick={() => onFeedback("Saved to your watchlist")} aria-label="Save"><Bookmark size={19} /></button></div>
         {matchedActors.length > 0 && <div className="actor-match"><UserCheck size={16} /><span><strong>Prominent role</strong> · {matchedActors.join(", ")}</span></div>}
+        {recommendation.personMatch?.kind === "inspired" && recommendation.personMatch.note && <div className="person-match-note"><Info size={16} /><span>{recommendation.personMatch.note}</span></div>}
         <div className="recommendation-story">
           <h3>{recommendation.narrative.heading}</h3>
           <p className="recommendation-reason">{recommendation.narrative.fit}</p>
@@ -1757,8 +2010,9 @@ function FriendBanner({ context }: { context: FriendContext }) {
   );
 }
 
-function DetailsSheet({ profile, title, friendContext, onClose, onPerson, onRate, onRecommend }: { profile: ViewerProfile; title: Title; friendContext?: FriendContext; onClose: () => void; onPerson: (person: string) => void; onRate: (score: number) => void; onRecommend: () => void }) {
+function DetailsSheet({ profile, title, friendContext, onClose, onPerson, onRate, onRecommend, onWatched }: { profile: ViewerProfile; title: Title; friendContext?: FriendContext; onClose: () => void; onPerson: (person: string) => void; onRate: (score: number) => void; onRecommend: () => void; onWatched: () => void }) {
   const availability = displayProvider(profile, title);
+  const watched = Boolean(profile.ratings[title.id] || profile.watchHistory[title.id]);
   return (
     <div className="modal-scrim modal-scrim--full" role="dialog" aria-modal="true" aria-label={`${title.name} details`}>
       <article className="details-sheet">
@@ -1775,6 +2029,7 @@ function DetailsSheet({ profile, title, friendContext, onClose, onPerson, onRate
           <dl className="credits-list"><div><dt>Director</dt><dd><button onClick={() => onPerson(title.director)}>{title.director}</button></dd></div><div><dt>Written by</dt><dd>{title.writers.map((writer) => <button key={writer} onClick={() => onPerson(writer)}>{writer}</button>)}</dd></div>{title.cinematographer && <div><dt>Cinematography</dt><dd><button onClick={() => onPerson(title.cinematographer!)}>{title.cinematographer}</button></dd></div>}<div><dt>Featuring</dt><dd>{title.cast.map((actor) => <button key={actor} onClick={() => onPerson(actor)}>{actor}</button>)}</dd></div></dl>
           {(title.criterion || title.canonical?.length) && <div className="editorial-signals">{title.criterion && <span>Criterion associated</span>}{title.canonical?.map((list) => <span key={list}>{list}</span>)}</div>}
           {(profile.ratings[title.id] ?? 0) >= 8 && <button className="secondary-button details-recommend" onClick={onRecommend}><Send size={16} /> Recommend to a friend</button>}
+          <button className="secondary-button details-watched" disabled={watched && title.kind !== "Series"} onClick={onWatched}><Check size={17} />{watched ? title.kind === "Series" ? "Mark current season watched" : "Watched" : "Mark as watched"}</button>
           <button className="primary-button details-primary" onClick={() => onClose()}><Play size={17} /> Keep this pick</button>
           <p className="tmdb-note">Metadata and images supplied by TMDB. Watch-provider data may be supplied by JustWatch. Neither service endorses this app.</p>
         </div>
@@ -1798,23 +2053,106 @@ function PersonSheet({ person, profile, onClose, onTitle }: { person: string; pr
   );
 }
 
+const seasonDateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function seasonReleaseLabel(season: TvSeasonRelease) {
+  return `Season ${season.seasonNumber} released ${seasonDateFormatter.format(new Date(`${season.releaseDate}T00:00:00Z`))}`;
+}
+
 function RateScreen({ profile, onRate, onDetails }: { profile: ViewerProfile; onRate: (id: string, score: number) => void; onDetails: (title: Title) => void }) {
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<"all" | "rated">("all");
-  const filtered = catalog.filter((title) => title.name.toLowerCase().includes(query.toLowerCase()) && (filter === "all" || profile.ratings[title.id]));
+  const [filter, setFilter] = useState<"all" | "rated" | "new-seasons">("all");
+  const [seasonRequest, setSeasonRequest] = useState<{
+    key: string;
+    status: "ready" | "error";
+    seasons: Record<number, TvSeasonRelease>;
+  }>({ key: "", status: "ready", seasons: {} });
+  const trackedSeries = catalog.filter((title) =>
+    title.kind === "Series" && title.tmdbId && (
+      profile.ratings[title.id]
+      || profile.ratingDates[title.id]
+      || profile.watchHistory[title.id]
+    ),
+  );
+  const trackedIds = [...new Set(trackedSeries.flatMap((title) => title.tmdbId ? [title.tmdbId] : []))]
+    .sort((a, b) => a - b)
+    .join(",");
+  const seasonStatus = !trackedIds
+    ? "ready"
+    : seasonRequest.key === trackedIds
+      ? seasonRequest.status
+      : "loading";
+  const latestSeasons = seasonRequest.key === trackedIds ? seasonRequest.seasons : {};
+
+  useEffect(() => {
+    if (!trackedIds) return;
+    const controller = new AbortController();
+    const ids = trackedIds.split(",");
+    const batches = Array.from({ length: Math.ceil(ids.length / 25) }, (_, index) =>
+      ids.slice(index * 25, index * 25 + 25).join(","),
+    );
+    Promise.all(batches.map(async (batch) => {
+      const response = await fetch(`/api/tmdb/new-seasons?ids=${batch}`, { signal: controller.signal });
+      if (!response.ok) throw new Error(`Season check returned ${response.status}`);
+      return response.json() as Promise<{ seasons?: TvSeasonRelease[] }>;
+    }))
+      .then((payloads) => {
+        const seasons = payloads.flatMap((payload) => payload.seasons ?? []);
+        setSeasonRequest({
+          key: trackedIds,
+          status: "ready",
+          seasons: Object.fromEntries(seasons.map((season) => [season.providerId, season])),
+        });
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        setSeasonRequest({ key: trackedIds, status: "error", seasons: {} });
+      });
+    return () => controller.abort();
+  }, [trackedIds]);
+
+  const newSeasonByTitleId = new Map<string, TvSeasonRelease>();
+  trackedSeries.forEach((title) => {
+    const season = title.tmdbId ? latestSeasons[title.tmdbId] : undefined;
+    if (!season) return;
+    const activityAt = [profile.ratingDates[title.id], profile.watchHistory[title.id]?.watchedAt]
+      .filter((value): value is string => Boolean(value))
+      .sort()
+      .at(-1);
+    if (isNewSeasonSince(season, activityAt, profile.watchHistory[title.id]?.knownSeasonCount)) {
+      newSeasonByTitleId.set(title.id, season);
+    }
+  });
+
+  const normalizedQuery = query.trim().toLowerCase();
+  const filtered = catalog.filter((title) => {
+    if (!title.name.toLowerCase().includes(normalizedQuery)) return false;
+    if (filter === "rated") return Boolean(profile.ratings[title.id]);
+    if (filter === "new-seasons") return newSeasonByTitleId.has(title.id);
+    return true;
+  });
   return (
     <main className="rate-screen page-content">
       <div className="page-heading"><p className="kicker">TEACH THE MODEL</p><h1>Rate what you&apos;ve seen.</h1><p>Every real rating matters more than a questionnaire answer.</p></div>
       <div className="search-box"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search movies and shows you've seen" aria-label="Search titles" />{query && <button onClick={() => setQuery("")} aria-label="Clear search"><X size={17} /></button>}</div>
-      <div className="filter-row"><button className={filter === "all" ? "is-active" : ""} onClick={() => setFilter("all")}>All titles <span>{catalog.length}</span></button><button className={filter === "rated" ? "is-active" : ""} onClick={() => setFilter("rated")}>My ratings <span>{Object.keys(profile.ratings).length}</span></button></div>
+      <div className="filter-row"><button className={filter === "all" ? "is-active" : ""} onClick={() => setFilter("all")}>All titles <span>{catalog.length}</span></button><button className={filter === "rated" ? "is-active" : ""} onClick={() => setFilter("rated")}>My ratings <span>{Object.keys(profile.ratings).length}</span></button><button className={filter === "new-seasons" ? "is-active" : ""} onClick={() => setFilter("new-seasons")} disabled={seasonStatus === "loading"}>New seasons <span>{seasonStatus === "loading" ? "…" : newSeasonByTitleId.size}</span></button></div>
+      <p className="season-filter-status" aria-live="polite">{seasonStatus === "loading" ? "Checking rated and watched series for newly released seasons…" : seasonStatus === "error" ? "New-season updates are temporarily unavailable." : newSeasonByTitleId.size ? `${newSeasonByTitleId.size} watched ${newSeasonByTitleId.size === 1 ? "series has" : "series have"} a newer season.` : "New seasons will appear here after a rated or watched series returns."}</p>
       <div className="rating-list">
-        {filtered.map((title) => (
+        {filtered.map((title) => {
+          const newSeason = newSeasonByTitleId.get(title.id);
+          return (
           <article className="rating-row" key={title.id}>
-            <button className="rating-row__title" onClick={() => onDetails(title)}><span className="rating-thumb"><Image src={title.poster} alt="" fill sizes="54px" /></span><span><strong>{title.name}</strong><small>{title.year} · {title.kind} · {title.runtime}</small></span></button>
+            <button className="rating-row__title" onClick={() => onDetails(newSeason ? { ...title, seasonCount: Math.max(title.seasonCount ?? 0, newSeason.seasonNumber) } : title)}><span className="rating-thumb"><Image src={title.poster} alt="" fill sizes="54px" /></span><span><strong>{title.name}</strong><small>{title.year} · {title.kind} · {title.runtime}</small>{newSeason && <span className="new-season-note"><CalendarClock size={13} />{seasonReleaseLabel(newSeason)}</span>}</span></button>
             <RatingPicker value={profile.ratings[title.id]} onRate={(score) => onRate(title.id, score)} compact />
           </article>
-        ))}
-        {!filtered.length && <div className="empty-state"><Search size={24} /><strong>No matching title in the catalog</strong><p>Try a different title or clear the current filter.</p></div>}
+          );
+        })}
+        {!filtered.length && seasonStatus !== "loading" && <div className="empty-state">{filter === "new-seasons" ? <CalendarClock size={24} /> : <Search size={24} />}<strong>{filter === "new-seasons" ? "No new seasons yet" : "No matching title in the catalog"}</strong><p>{filter === "new-seasons" ? "When a series you rated or marked watched returns, its release date will appear here." : "Try a different title or clear the current filter."}</p></div>}
       </div>
     </main>
   );
@@ -1974,24 +2312,28 @@ function FeedbackSheet({ title, onClose, onSubmit }: { title?: Title; onClose: (
 export function WhatToWatchApp() {
   const [store, setStore] = useState<AppStore>({ profiles: seedProfiles, feedback: [], friendProfiles: seedFriendProfiles, friendships: seedFriendships, friendReviews: seedFriendReviews, friendRecommendations: seedFriendRecommendations });
   const [hydrated, setHydrated] = useState(false);
+  const [introComplete, setIntroComplete] = useState(false);
   const [activeProfileId, setActiveProfileId] = useState<string | null>(null);
   const [showProfiles, setShowProfiles] = useState(true);
   const [profileEditor, setProfileEditor] = useState<"create" | "manage" | null>(null);
   const [screen, setScreen] = useState<Screen>("home");
+  const [contentMode, setContentMode] = useState<ContentMode>("mixed");
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
   const [selectedVibe, setSelectedVibe] = useState("");
+  const [selectedDirectors, setSelectedDirectors] = useState<string[]>([]);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [seenRecommendationIds, setSeenRecommendationIds] = useState<string[]>([]);
   const [hasMoreRecommendations, setHasMoreRecommendations] = useState(false);
   const [resultPage, setResultPage] = useState(0);
   const [resultActors, setResultActors] = useState<string[]>([]);
+  const [resultContext, setResultContext] = useState<ResultContext | null>(null);
   const [detailsTitle, setDetailsTitle] = useState<Title | null>(null);
   const [person, setPerson] = useState<string | null>(null);
   const [feedbackTitle, setFeedbackTitle] = useState<Title | undefined>();
   const [showFeedback, setShowFeedback] = useState(false);
   const [postRating, setPostRating] = useState<{ title: Title; rating: number } | null>(null);
   const [toast, setToast] = useState("");
-  const [, forceCatalogRender] = useState(0);
+  const [catalogVersion, forceCatalogRender] = useState(0);
 
   useEffect(() => {
     const initialize = window.setTimeout(() => {
@@ -2000,11 +2342,24 @@ export function WhatToWatchApp() {
         if (saved) {
           const parsed = JSON.parse(saved) as Partial<AppStore>;
           if (Array.isArray(parsed.profiles)) setStore({
-            profiles: parsed.profiles.map((savedProfile) => ({
-              ...savedProfile,
-              favoriteActors: Array.isArray(savedProfile.favoriteActors) ? savedProfile.favoriteActors : [],
-              shareWithFriends: savedProfile.shareWithFriends ?? "ratings_and_reviews",
-            })),
+            profiles: parsed.profiles.map((savedProfile) => {
+              const migrationTime = new Date().toISOString();
+              const savedRatingDates = savedProfile.ratingDates && typeof savedProfile.ratingDates === "object"
+                ? savedProfile.ratingDates
+                : {};
+              return {
+                ...savedProfile,
+                favoriteActors: Array.isArray(savedProfile.favoriteActors) ? savedProfile.favoriteActors : [],
+                ratingDates: Object.fromEntries(Object.keys(savedProfile.ratings ?? {}).map((titleId) => [
+                  titleId,
+                  savedRatingDates[titleId] ?? migrationTime,
+                ])),
+                watchHistory: savedProfile.watchHistory && typeof savedProfile.watchHistory === "object"
+                  ? savedProfile.watchHistory
+                  : {},
+                shareWithFriends: savedProfile.shareWithFriends ?? "ratings_and_reviews",
+              };
+            }),
             feedback: Array.isArray(parsed.feedback) ? parsed.feedback : [],
             friendProfiles: Array.isArray(parsed.friendProfiles) ? parsed.friendProfiles : seedFriendProfiles,
             friendships: Array.isArray(parsed.friendships) ? parsed.friendships : seedFriendships,
@@ -2017,6 +2372,10 @@ export function WhatToWatchApp() {
     }, 0);
     if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => undefined);
     return () => window.clearTimeout(initialize);
+  }, []);
+  useEffect(() => {
+    const timer = window.setTimeout(() => setIntroComplete(true), 3200);
+    return () => window.clearTimeout(timer);
   }, []);
   useEffect(() => {
     if (!hydrated) return;
@@ -2049,41 +2408,176 @@ export function WhatToWatchApp() {
   useEffect(() => { if (!toast) return; const timer = window.setTimeout(() => setToast(""), 2800); return () => window.clearTimeout(timer); }, [toast]);
 
   const profile = store.profiles.find((item) => item.id === activeProfileId) ?? null;
+  const discovery = useMemo(
+    () => {
+      void catalogVersion;
+      return profile ? buildDiscoveryContent(profile, store, contentMode) : null;
+    },
+    [catalogVersion, contentMode, profile, store],
+  );
+  const actorOptions = useMemo(
+    () => profile ? personOptionsForDiscovery("actor", contentMode, profile) : [],
+    [contentMode, profile],
+  );
+  const directorOptions = useMemo(
+    () => profile ? personOptionsForDiscovery("director", contentMode, profile) : [],
+    [contentMode, profile],
+  );
   const updateProfile = (next: ViewerProfile) => setStore((current) => ({ ...current, profiles: current.profiles.map((item) => item.id === next.id ? next : item) }));
-  const chooseProfile = (next: ViewerProfile) => { setActiveProfileId(next.id); setShowProfiles(false); setScreen("home"); };
+  const chooseProfile = (next: ViewerProfile) => { setActiveProfileId(next.id); setShowProfiles(false); setContentMode("mixed"); setSelectedDirectors([]); setResultContext(null); setScreen("home"); };
   const addProfile = (next: ViewerProfile) => { setStore((current) => ({ ...current, profiles: [...current.profiles, next] })); setActiveProfileId(next.id); setProfileEditor(null); setShowProfiles(false); };
   const deleteProfile = (id: string) => { if (store.profiles.length <= 1) { setToast("Keep at least one profile"); return; } setStore((current) => ({ ...current, profiles: current.profiles.filter((item) => item.id !== id), feedback: current.feedback.filter((item) => item.profileId !== id), friendships: current.friendships.filter((item) => item.requesterProfileId !== id && item.addresseeProfileId !== id), friendReviews: current.friendReviews.filter((item) => item.authorProfileId !== id), friendRecommendations: current.friendRecommendations.filter((item) => item.senderProfileId !== id && item.recipientProfileId !== id) })); if (activeProfileId === id) { setActiveProfileId(null); setShowProfiles(true); } };
-  const rate = (id: string, score: number) => { if (!profile) return; const title = titleById(id); updateProfile({ ...profile, ratings: { ...profile.ratings, [id]: score } }); setToast(`${title?.name ?? "Title"} rated ${score}/10`); if (title && score >= 8) setPostRating({ title, rating: score }); };
-  const showRecommendationPage = (result: Recommendation[], actors: string[] = [], page = 0) => {
-    const visible = result.slice(0, 10);
+  const rate = (id: string, score: number) => {
+    if (!profile) return;
+    const title = titleById(id);
+    const timestamp = new Date().toISOString();
+    updateProfile({
+      ...profile,
+      ratings: { ...profile.ratings, [id]: score },
+      ratingDates: { ...profile.ratingDates, [id]: profile.ratingDates[id] ?? timestamp },
+      watchHistory: {
+        ...profile.watchHistory,
+        [id]: profile.watchHistory[id] ?? {
+          watchedAt: timestamp,
+          ...(title?.kind === "Series" && title.seasonCount !== undefined
+            ? { knownSeasonCount: title.seasonCount }
+            : {}),
+        },
+      },
+    });
+    setToast(`${title?.name ?? "Title"} rated ${score}/10`);
+    if (title && score >= 8) setPostRating({ title, rating: score });
+  };
+  const markWatched = (title: Title) => {
+    if (!profile) return;
+    updateProfile({
+      ...profile,
+      watchHistory: {
+        ...profile.watchHistory,
+        [title.id]: {
+          watchedAt: new Date().toISOString(),
+          ...(title.kind === "Series" && title.seasonCount !== undefined
+            ? { knownSeasonCount: title.seasonCount }
+            : {}),
+        },
+      },
+    });
+    setToast(title.kind === "Series" ? `${title.name} is caught up` : `${title.name} marked watched`);
+  };
+  const showRecommendationPage = (result: Recommendation[], actors: string[] = [], page = 0, context?: ResultContext) => {
+    const visible = dedupeRecommendations(result).slice(0, 10);
     setResultActors(actors);
     setRecommendations(visible);
     setSeenRecommendationIds((current) => page === 0 ? visible.map((item) => item.title.id) : [...current, ...visible.map((item) => item.title.id)]);
-    setHasMoreRecommendations(result.length > 10);
+    setHasMoreRecommendations(dedupeRecommendations(result).length > 10);
     setResultPage(page);
+    if (context) setResultContext(context);
     setScreen("results");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  const chooseContentMode = (nextMode: ContentMode) => {
+    setContentMode(nextMode);
+    setResultContext(null);
+    setScreen("browse");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const buildResultsForContext = (context: ResultContext, excludeTitleIds: readonly string[] = []) => {
+    if (!profile) return [];
+    const primary = buildModeRecommendations(profile, store, context.contentMode, {
+      favoriteActors: context.discoveryMode === "actor" ? context.people : undefined,
+      favoriteDirectors: context.discoveryMode === "director" ? context.people : undefined,
+      newReleases: context.discoveryMode === "new-releases",
+      moods: context.moods,
+      vibe: context.vibe ?? "Surprise",
+      excludeTitleIds,
+      limit: 11,
+    });
+    if (!["actor", "director"].includes(context.discoveryMode) || primary.length >= 11) return primary;
+    const person = context.people?.[0];
+    const role: "actor" | "director" = context.discoveryMode === "actor" ? "actor" : "director";
+    const exact = primary.map((recommendation) => ({
+      ...recommendation,
+      personMatch: person ? { kind: "exact" as const, person, role } : undefined,
+    }));
+    const fallback = buildModeRecommendations(profile, store, context.contentMode, {
+      favoriteActors: role === "actor" ? context.people : undefined,
+      favoriteDirectors: role === "director" ? context.people : undefined,
+      strictPeople: false,
+      excludeTitleIds: [...excludeTitleIds, ...primary.map((item) => item.title.id)],
+      limit: 11,
+    }).map((recommendation) => ({
+      ...recommendation,
+      personMatch: person ? {
+        kind: "inspired" as const,
+        person,
+        role,
+        note: role === "director"
+          ? `Not directed by ${person}, but aligned with films directed by ${person}.`
+          : `Not featuring ${person}, but reminiscent of ${person}'s work.`,
+      } : undefined,
+    }));
+    return dedupeRecommendations([...exact, ...fallback]).slice(0, 11).map((recommendation, index) => ({ ...recommendation, rank: index + 1 }));
+  };
   const find = () => {
     if (!profile) return;
-    showRecommendationPage(buildRecommendations(profile, selectedMoods, selectedVibe || "Surprise", store, { limit: 11 }));
+    const context: ResultContext = { contentMode, discoveryMode: "vibe", moods: [...selectedMoods], vibe: selectedVibe || "Surprise" };
+    showRecommendationPage(
+      buildResultsForContext(context),
+      [],
+      0,
+      context,
+    );
+  };
+  const findSuggestions = () => {
+    if (!profile) return;
+    const context: ResultContext = { contentMode, discoveryMode: "content", vibe: "Surprise" };
+    showRecommendationPage(buildResultsForContext(context), [], 0, context);
+  };
+  const findFriends = () => {
+    if (!profile) return;
+    const context: ResultContext = { contentMode, discoveryMode: "content", vibe: "Friends" };
+    showRecommendationPage(buildResultsForContext(context), [], 0, context);
   };
   const findWithActors = (actors: string[]) => {
     if (!profile) return;
     const favoriteActors = [...new Set(actors.map((actor) => actor.trim()).filter(Boolean))];
     const nextProfile = { ...profile, favoriteActors };
     updateProfile(nextProfile);
-    showRecommendationPage(buildRecommendations(nextProfile, [], "Surprise", store, { favoriteActors, limit: 11 }), favoriteActors);
+    const context: ResultContext = { contentMode, discoveryMode: "actor", people: favoriteActors };
+    showRecommendationPage(
+      buildResultsForContext(context),
+      favoriteActors,
+      0,
+      context,
+    );
+  };
+  const findWithDirectors = (directors: string[]) => {
+    if (!profile) return;
+    const favoriteDirectors = [...new Set(directors.map((director) => director.trim()).filter(Boolean))];
+    const context: ResultContext = { contentMode, discoveryMode: "director", people: favoriteDirectors };
+    showRecommendationPage(
+      buildResultsForContext(context),
+      [],
+      0,
+      context,
+    );
+  };
+  const findNewReleases = () => {
+    if (!profile) return;
+    const context: ResultContext = { contentMode, discoveryMode: "new-releases" };
+    showRecommendationPage(
+      buildResultsForContext(context),
+      [],
+      0,
+      context,
+    );
   };
   const anotherTen = () => {
     if (!profile) return;
-    const result = buildRecommendations(profile, resultActors.length ? [] : selectedMoods, resultActors.length ? "Surprise" : selectedVibe || "Surprise", store, {
-      favoriteActors: resultActors,
-      excludeTitleIds: seenRecommendationIds,
-      limit: 11,
-    });
+    const context = resultContext ?? { contentMode, discoveryMode: "content" as const };
+    const result = buildResultsForContext(context, seenRecommendationIds);
     if (!result.length) { setHasMoreRecommendations(false); return; }
-    showRecommendationPage(result, resultActors, resultPage + 1);
+    showRecommendationPage(result, resultActors, resultPage + 1, context);
   };
   const recordFeedback = (title: Title, value: { reason?: RecommendationFeedbackReason; recommendationScore?: number; label: string }) => {
     if (!profile) return;
@@ -2137,21 +2631,24 @@ export function WhatToWatchApp() {
     setToast(recipientIds.length ? `Recommended to ${recipientIds.length} friend${recipientIds.length === 1 ? "" : "s"}` : "Review saved");
   };
 
-  if (!hydrated) return <div className="app-loading"><Logo /><span /></div>;
+  if (!hydrated || !introComplete) return <div className="app-loading"><BrandSting className="app-loading__sting" /></div>;
   if (showProfiles || !profile) return <><ProfilePicker profiles={store.profiles} onSelect={chooseProfile} onCreate={() => setProfileEditor("create")} onEdit={() => setProfileEditor("manage")} />{profileEditor && <ProfileEditor profiles={store.profiles} mode={profileEditor} onClose={() => setProfileEditor(null)} onSave={addProfile} onUpdate={updateProfile} onDelete={deleteProfile} />}{toast && <div className="toast"><Check size={16} />{toast}</div>}</>;
   if (!profile.onboardingCompleted) return <Onboarding profile={profile} onChange={updateProfile} onFinish={() => setScreen("home")} />;
 
   return (
     <div className="app-shell">
       <AppHeader profile={profile} onProfiles={() => setShowProfiles(true)} onMenu={() => setScreen("settings")} />
-      {screen === "home" && <HomeScreen profile={profile} selectedMoods={selectedMoods} setSelectedMoods={setSelectedMoods} selectedVibe={selectedVibe} setSelectedVibe={setSelectedVibe} onFind={find} onActorFind={() => setScreen("actor")} />}
-      {screen === "actor" && <ActorDiscoveryScreen profile={profile} onChange={(favoriteActors) => updateProfile({ ...profile, favoriteActors })} onFind={findWithActors} onBack={() => setScreen("home")} />}
-      {screen === "results" && <ResultsScreen profile={profile} recommendations={recommendations} focusActors={resultActors} page={resultPage} hasMore={hasMoreRecommendations} onMore={anotherTen} onBack={() => setScreen(resultActors.length ? "actor" : "home")} onDetails={setDetailsTitle} onFeedback={feedback} />}
+      {screen === "home" && discovery && <HomeScreen profile={profile} discovery={discovery} onChooseContent={chooseContentMode} onFriends={findFriends} onSuggestions={findSuggestions} />}
+      {screen === "browse" && discovery && <BrowseScreen contentMode={contentMode} discovery={discovery} onActor={() => setScreen("actor")} onDirector={() => setScreen("director")} onVibe={() => setScreen("vibe")} onNewReleases={findNewReleases} onBack={() => setScreen("home")} />}
+      {screen === "vibe" && <VibeDiscoveryScreen profile={profile} selectedMoods={selectedMoods} setSelectedMoods={setSelectedMoods} selectedVibe={selectedVibe} setSelectedVibe={setSelectedVibe} onFind={find} />}
+      {screen === "actor" && <PersonDiscoveryScreen role="actor" options={actorOptions} selectedPeople={profile.favoriteActors} profile={profile} onChange={(favoriteActors) => updateProfile({ ...profile, favoriteActors })} onFind={findWithActors} onBack={() => setScreen("browse")} />}
+      {screen === "director" && <PersonDiscoveryScreen role="director" options={directorOptions} selectedPeople={selectedDirectors} profile={profile} onChange={setSelectedDirectors} onFind={findWithDirectors} onBack={() => setScreen("browse")} />}
+      {screen === "results" && <ResultsScreen profile={profile} recommendations={recommendations} focusActors={resultActors} page={resultPage} hasMore={hasMoreRecommendations} onMore={anotherTen} onBack={() => setScreen(resultContext?.discoveryMode === "actor" ? "actor" : resultContext ? "browse" : "home")} onDetails={setDetailsTitle} onFeedback={feedback} />}
       {screen === "rate" && <RateScreen profile={profile} onRate={rate} onDetails={setDetailsTitle} />}
       {screen === "taste" && <TasteScreen profile={profile} onRate={() => setScreen("rate")} />}
       {screen === "settings" && <SettingsScreen profile={profile} feedback={store.feedback.filter((item) => item.profileId === profile.id)} store={store} onChange={updateProfile} onProfiles={() => setProfileEditor("manage")} onToast={setToast} onFriendship={changeFriendship} />}
       <BottomNav screen={screen} onChange={(next) => { setScreen(next); window.scrollTo({ top: 0, behavior: "smooth" }); }} />
-      {detailsTitle && <DetailsSheet profile={profile} title={detailsTitle} friendContext={friendEvidence(profile, detailsTitle.id, store).context} onClose={() => setDetailsTitle(null)} onPerson={(name) => { setPerson(name); setDetailsTitle(null); }} onRate={(score) => rate(detailsTitle.id, score)} onRecommend={() => setPostRating({ title: detailsTitle, rating: profile.ratings[detailsTitle.id] })} />}
+      {detailsTitle && <DetailsSheet profile={profile} title={detailsTitle} friendContext={friendEvidence(profile, detailsTitle.id, store).context} onClose={() => setDetailsTitle(null)} onPerson={(name) => { setPerson(name); setDetailsTitle(null); }} onRate={(score) => rate(detailsTitle.id, score)} onRecommend={() => setPostRating({ title: detailsTitle, rating: profile.ratings[detailsTitle.id] })} onWatched={() => markWatched(detailsTitle)} />}
       {person && <PersonSheet person={person} profile={profile} onClose={() => setPerson(null)} onTitle={(title) => { setPerson(null); setDetailsTitle(title); }} />}
       {profileEditor && <ProfileEditor profiles={store.profiles} mode={profileEditor} onClose={() => setProfileEditor(null)} onSave={addProfile} onUpdate={updateProfile} onDelete={deleteProfile} />}
       {showFeedback && <FeedbackSheet title={feedbackTitle} onClose={() => setShowFeedback(false)} onSubmit={(value) => {

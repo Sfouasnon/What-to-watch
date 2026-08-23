@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#090a0b"/>
+  <rect x="104" y="104" width="304" height="304" fill="#111315" stroke="#d6aa63" stroke-width="7"/>
+  <text x="248" y="334" fill="#d6aa63" font-family="Iowan Old Style, Palatino Linotype, Book Antiqua, Georgia, serif" font-size="222" font-style="italic" text-anchor="middle" transform="rotate(-3 256 256)">W</text>
+</svg>

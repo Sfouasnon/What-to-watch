@@ -546,6 +546,17 @@ function scoreTitle(
   });
   add("tradeoffMatch", config.weights.tradeoffMatch * effectiveTradeoffFit);
 
+  // A positive release preference should keep very old titles from winning a
+  // normal lane merely because their canonical/classic signals are strong.
+  // Classic openness remains available through its own independent feature and
+  // can still offset this when the viewer explicitly asks for classics.
+  const releasePreference = profile.questionnaire?.tradeoffScores?.release ?? 0;
+  if (releasePreference > 0) {
+    const ageYears = Math.max(0, REFERENCE_YEAR - title.year);
+    const agePenalty = clamp((ageYears - 8) / 50, 0, 1);
+    add("releaseAgePenalty", -releasePreference * agePenalty * 10);
+  }
+
   const learnedFeedback = feedbackPreference(title, feedback, titleById);
   add(
     "feedbackMatch",

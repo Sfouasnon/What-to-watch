@@ -34,6 +34,8 @@ ANDROID_HOME=/opt/homebrew/share/android-commandlinetools \
 ./gradlew lintDebug testDebugUnitTest assembleDebug
 ```
 
+The launcher uses separate raster assets in `app/src/main/res/drawable-nodpi/`: `what_to_watch_logo_sting.png` is a 1024 × 1024 square application icon, while `what_to_watch_banner_v5.png` is an opaque 1280 × 720 Fire TV banner. The manifest uses the square asset for `android:icon` and the rectangular asset for `android:banner` on the application, activity, and launcher alias. Fire TV launchers may cache both assets, so uninstall/reinstall the debug app when validating artwork changes.
+
 ## Sideload
 
 ```bash

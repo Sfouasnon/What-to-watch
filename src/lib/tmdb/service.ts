@@ -4,12 +4,14 @@ import type {
   MetadataProvider,
   TitleSearchPage,
   TitleSearchResult,
+  TvSeasonRelease,
   WatchProviderCatalogItem,
   WatchProviderCatalogResult,
   WatchProviderKind,
   WatchProviderMediaType,
   WatchProviderResult,
 } from "./types";
+import { latestReleasedSeason, type TmdbSeasonSummary } from "./seasons";
 
 const TMDB_API_BASE = "https://api.themoviedb.org/3";
 const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p";
@@ -66,6 +68,12 @@ type TmdbWatchRegion = {
 type TmdbWatchResponse = {
   id: number;
   results: Record<string, TmdbWatchRegion>;
+  status_message?: string;
+};
+
+type TmdbTvDetailResponse = {
+  id: number;
+  seasons?: TmdbSeasonSummary[];
   status_message?: string;
 };
 
@@ -139,6 +147,26 @@ async function parseProviderList(response: Response): Promise<TmdbProviderListRe
 }
 
 export class TmdbMetadataProvider implements MetadataProvider {
+  async getLatestReleasedSeason(providerId: number): Promise<TvSeasonRelease | null> {
+    const token = process.env.TMDB_TOKEN?.trim();
+    if (!token) throw new TmdbConfigurationError();
+
+    const response = await fetch(`${TMDB_API_BASE}/tv/${providerId}?language=en-US`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+      signal: AbortSignal.timeout(8_000),
+      next: { revalidate: 21_600 },
+    });
+    const payload = (await response.json().catch(() => null)) as TmdbTvDetailResponse | null;
+    if (!response.ok || !payload) {
+      throw new TmdbUpstreamError(
+        payload?.status_message || `TMDB television details request failed with status ${response.status}`,
+        response.status,
+      );
+    }
+
+    return latestReleasedSeason(providerId, payload.seasons ?? []);
+  }
+
   async searchTitles(query: string, page = 1): Promise<TitleSearchPage> {
     const token = process.env.TMDB_TOKEN?.trim();
     if (!token) throw new TmdbConfigurationError();

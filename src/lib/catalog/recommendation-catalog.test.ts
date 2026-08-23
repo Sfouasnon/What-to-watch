@@ -76,8 +76,10 @@ describe("recommendation catalog mapping", () => {
 
     expect(title).not.toBeNull();
     expect(title?.id).toBe("tmdb:movie:680");
+    expect(title?.tmdbId).toBe(680);
     expect(title?.name).toBe("Pulp Fiction");
     expect(title?.year).toBe(1994);
+    expect(title?.releaseDate).toBeNull();
     expect(title?.providers).toEqual(["Max", "Prime Video"]);
     expect(title?.genres).toEqual(["Thriller", "Crime"]);
     expect(title?.tags).toEqual(expect.arrayContaining(["crime-drama", "crime-thriller", "wry", "stylized", "visceral", "fast"]));
@@ -125,7 +127,9 @@ describe("recommendation catalog mapping", () => {
   it("prefers the hydrated release date over the pilot sample year", () => {
     const hydrated = { ...pulpFictionTitle, release_date: "1994-09-10" };
     expect(releaseYear(hydrated, { year: 1900 } as never)).toBe(1994);
-    expect(buildAppCatalogTitle(hydrated, pulpFictionInput, pulpFictionClassification)?.year).toBe(1994);
+    expect(buildAppCatalogTitle(hydrated, pulpFictionInput, pulpFictionClassification)).toEqual(
+      expect.objectContaining({ year: 1994, releaseDate: "1994-09-10" }),
+    );
   });
 
   it("ignores an unusable release date rather than emitting NaN", () => {

@@ -302,6 +302,15 @@ export interface RecommendationNarrative {
   setup: string;
 }
 
+export type PersonMatchKind = "exact" | "inspired";
+
+export interface PersonMatchProvenance {
+  kind: PersonMatchKind;
+  person: string;
+  role: "actor" | "director";
+  note?: string;
+}
+
 export interface Recommendation {
   rank: number;
   lane: RecommendationLane;
@@ -318,6 +327,8 @@ export interface Recommendation {
   requiresPayment: boolean;
   modelVersion: string;
   friendContext?: FriendContext;
+  /** Present when a person-led lane distinguishes credited matches from inspired picks. */
+  personMatch?: PersonMatchProvenance;
 }
 
 export type FriendShareMode = "ratings_and_reviews" | "ratings_only" | "nothing";

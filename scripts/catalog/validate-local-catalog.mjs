@@ -70,7 +70,7 @@ function validatePreviewTitle(title, allowed, errors) {
 const options = parseArguments(process.argv.slice(2));
 const manifestPath = options.get("manifest")?.[0];
 const artifactPaths = options.get("artifact") ?? [];
-const ontologyPath = options.get("ontology")?.[0] ?? "curation/ontology/v0.1.1/ontology.json";
+const ontologyPath = options.get("ontology")?.[0] ?? "curation/ontology/v0.3.0/ontology.json";
 const previewPath = options.get("preview")?.[0];
 if (!manifestPath || !artifactPaths.length) {
   throw new Error(
@@ -97,6 +97,13 @@ if (manifest.titleCount !== manifestTitles.length) {
 }
 if (expectedIdentities.size !== manifestTitles.length) errors.push("Manifest contains duplicate title identities");
 
+for (const [artifactIndex, artifact] of artifacts.entries()) {
+  if (artifact.ontology_version !== ontology.ontology_version) {
+    errors.push(
+      `Ontology version mismatch for ${artifactPaths[artifactIndex]}: artifact ${artifact.ontology_version ?? "missing"}, ontology ${ontology.ontology_version}`,
+    );
+  }
+}
 const classifications = artifacts.flatMap((artifact) => artifact.classifications ?? []);
 const classifiedIdentities = new Set();
 for (const classification of classifications) {

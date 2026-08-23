@@ -67,6 +67,8 @@ export function selectDiversifiedCandidates(candidates, target, {
   excludedIdentities = new Set(),
   minimumVotes = 200,
   minimumOverviewLength = 40,
+  minimumReleaseDate = null,
+  maximumReleaseDate = null,
 } = {}) {
   if (!Number.isInteger(target) || target < 1) throw new Error("target must be a positive integer");
 
@@ -79,6 +81,8 @@ export function selectDiversifiedCandidates(candidates, target, {
     && candidate.voteCount >= minimumVotes
     && candidate.overview.length >= minimumOverviewLength
     && candidate.releaseDate
+    && (!minimumReleaseDate || candidate.releaseDate >= minimumReleaseDate)
+    && (!maximumReleaseDate || candidate.releaseDate <= maximumReleaseDate)
     && candidate.posterPath
     && candidate.genreIds.length > 0,
   );
@@ -188,6 +192,12 @@ export function validateHydrationManifest(manifest) {
         errors.push(`Invalid title identity ${key}.`);
       }
       if (identities.has(key)) errors.push(`Duplicate title identity ${key}.`);
+      if (manifest?.selector?.minimumReleaseDate && title.releaseDate < manifest.selector.minimumReleaseDate) {
+        errors.push(`Title ${key} predates selector minimumReleaseDate.`);
+      }
+      if (manifest?.selector?.maximumReleaseDate && title.releaseDate > manifest.selector.maximumReleaseDate) {
+        errors.push(`Title ${key} exceeds selector maximumReleaseDate.`);
+      }
       identities.add(key);
     }
   }

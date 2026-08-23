@@ -255,6 +255,34 @@ describe("personal taste behavior", () => {
       .toBe("novel-fast-release");
   });
 
+  it("keeps a 1962 comedy below a newer fit when release preference is positive", () => {
+    const oldComedy = title("jessica", {
+      year: 1962,
+      genres: ["Comedy"],
+      primarySubgenre: "comedy",
+      canonicalScore: 100,
+      popularity: 100,
+      trendingScore: 20,
+    });
+    const newerComedy = title("newer-comedy", {
+      year: 2025,
+      genres: ["Comedy"],
+      primarySubgenre: "comedy",
+      canonicalScore: 20,
+      popularity: 20,
+      trendingScore: 80,
+    });
+    const viewer = profile({
+      questionnaire: {
+        dimensionScores: { classicOpenness: 0 },
+        genreScores: { Comedy: 6 },
+        tradeoffScores: { release: 1 },
+      },
+    });
+    expect(recommendForProfile({ profile: viewer, catalog: [oldComedy, newerComedy], moods: ["comedy"] })[0].title.id)
+      .toBe("newer-comedy");
+  });
+
   it("excludes watched titles normally and selects favorites in rewatch mode", () => {
     const watched = title("watched");
     const unseen = title("unseen");

@@ -83,7 +83,7 @@ const options = parseArguments(process.argv.slice(2));
 const manifestPath = options.get("manifest")?.[0];
 const artifactPaths = options.get("artifact") ?? [];
 const providersPath = options.get("providers")?.[0];
-const ontologyPath = options.get("ontology")?.[0] ?? "curation/ontology/v0.1.1/ontology.json";
+const ontologyPath = options.get("ontology")?.[0] ?? "curation/ontology/v0.3.0/ontology.json";
 const overridesPath = options.get("overrides")?.[0] ?? "curation/editorial-overrides-v1.json";
 if (!manifestPath || !artifactPaths.length) {
   throw new Error(
@@ -126,6 +126,11 @@ for (const override of overridesArtifact.overrides ?? []) {
 }
 const classificationsByIdentity = new Map();
 for (const [artifactIndex, artifact] of artifacts.entries()) {
+  if (artifact.ontology_version !== ontology.ontology_version) {
+    throw new Error(
+      `Ontology version mismatch for ${artifactPaths[artifactIndex]}: artifact ${artifact.ontology_version ?? "missing"}, ontology ${ontology.ontology_version}.`,
+    );
+  }
   for (const row of artifact.classifications ?? []) {
     const rowIdentity = identity(row);
     const override = overridesByIdentity.get(rowIdentity);

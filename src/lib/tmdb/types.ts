@@ -63,8 +63,17 @@ export type WatchProviderCatalogResult = {
   providers: WatchProviderCatalogItem[];
 };
 
+export type TvSeasonRelease = {
+  providerId: number;
+  seasonNumber: number;
+  name: string;
+  releaseDate: string;
+  episodeCount: number;
+};
+
 export interface MetadataProvider {
   searchTitles(query: string, page?: number): Promise<TitleSearchPage>;
   getWatchProviders(mediaType: WatchProviderMediaType, providerId: number, region: string): Promise<WatchProviderResult>;
   getProviderCatalog(region: string): Promise<WatchProviderCatalogResult>;
+  getLatestReleasedSeason(providerId: number): Promise<TvSeasonRelease | null>;
 }

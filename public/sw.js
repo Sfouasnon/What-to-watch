@@ -1,4 +1,4 @@
-const CACHE_NAME = "what-to-watch-v2-social";
+const CACHE_NAME = "what-to-watch-v4-serif-w";
 const APP_SHELL = [
   "/",
   "/manifest.webmanifest",

@@ -1,0 +1,112 @@
+.stage {
+  --sting-bg: #020202;
+  --sting-copper: #b77a45;
+  position: relative;
+  display: grid;
+  min-height: 100%;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  background: radial-gradient(circle at 50% 48%, rgba(20, 15, 11, .38), transparent 35%), var(--sting-bg);
+}
+
+.mark {
+  position: relative;
+  display: grid;
+  width: var(--brand-mark-size, 96px);
+  aspect-ratio: 1;
+  place-items: center;
+  color: var(--sting-copper);
+}
+
+.frame { position: absolute; inset: 0; }
+.frameLine { position: absolute; display: block; background: currentColor; box-shadow: 0 0 2px rgba(183, 122, 69, .12); }
+.top, .bottom { width: 100%; height: clamp(2px, .21vw, 3px); }
+.left, .right { width: clamp(2px, .21vw, 3px); height: 100%; }
+.top { top: 0; left: 0; }
+.right { top: 0; right: 0; }
+.bottom { right: 0; bottom: 0; }
+.left { bottom: 0; left: 0; }
+
+.letter {
+  position: relative;
+  z-index: 1;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 67%;
+  font-weight: 400;
+  letter-spacing: -.15em;
+  text-indent: -.15em;
+  line-height: .78;
+  text-shadow: 0 1px rgba(255, 239, 221, .2), 0 0 26px rgba(183, 122, 69, .1);
+}
+
+.ghost, .echo {
+  position: absolute;
+  z-index: 1;
+  color: #fff8ee;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 67%;
+  font-weight: 400;
+  letter-spacing: -.15em;
+  text-indent: -.15em;
+  line-height: .78;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+.ghost { color: #f7f3ef; }
+.echo { filter: blur(2px); }
+.echoOne { clip-path: inset(8% 0 55%); }
+.echoTwo { clip-path: inset(54% 0 8%); }
+
+.bloom { position: absolute; z-index: 0; width: 112%; aspect-ratio: 1; border-radius: 50%; opacity: 0; filter: blur(18px); background: radial-gradient(circle, rgba(191, 127, 69, .34), rgba(118, 67, 31, .14) 34%, transparent 70%); }
+
+.grain {
+  position: absolute;
+  z-index: 2;
+  inset: -30%;
+  pointer-events: none;
+  opacity: .12;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");
+  mix-blend-mode: screen;
+  animation: grain 180ms steps(2, end) infinite;
+}
+
+.projector, .aperture {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+}
+.projector { inset: 0 -15%; width: 130%; filter: blur(13px); transform-origin: left center; mix-blend-mode: screen; background: linear-gradient(90deg, transparent 18%, rgba(255, 247, 235, .22) 50%, transparent 82%), radial-gradient(rgba(255, 239, 218, .18), transparent 56%); }
+.aperture { top: 48.5%; left: -10%; width: 120%; height: 3px; filter: blur(.7px); transform-origin: left center; background: #fff9f1; box-shadow: 0 0 18px 5px rgba(255, 238, 218, .45); }
+
+.animatedMark .letter { opacity: 0; transform: translateX(-8px) scale(1.22); filter: blur(0); animation: letter-in 3.2s cubic-bezier(.22, 1, .36, 1) forwards; }
+.animatedMark .top { width: 0; animation: draw-horizontal 3.2s cubic-bezier(.22, 1, .36, 1) forwards; }
+.animatedMark .right { height: 0; animation: draw-vertical 3.2s cubic-bezier(.22, 1, .36, 1) .18s forwards; }
+.animatedMark .bottom { width: 0; animation: draw-horizontal 3.2s cubic-bezier(.22, 1, .36, 1) .34s forwards; }
+.animatedMark .left { height: 0; animation: draw-vertical 3.2s cubic-bezier(.22, 1, .36, 1) .5s forwards; }
+.animatedMark .ghost { animation: ghost 3.2s cubic-bezier(.22, 1, .36, 1) forwards; }
+.animatedMark .echoOne { animation: echo-one 3.2s ease-out forwards; }
+.animatedMark .echoTwo { animation: echo-two 3.2s ease-out forwards; }
+.animatedMark .bloom { animation: bloom 3.2s ease-out forwards; }
+.stage .projector { animation: projector 3.2s ease-out forwards; }
+.stage .aperture { animation: aperture 3.2s ease-out forwards; }
+
+@keyframes letter-in { 0%, 10% { opacity: 0; transform: translateX(-8px) scale(1.22); } 18% { opacity: .52; color: #d7bba8; filter: blur(5.8px); transform: translateX(-4px) scale(1.11); } 32%, 100% { opacity: 1; color: var(--sting-copper); filter: blur(0); transform: none; } }
+@keyframes draw-horizontal { 0%, 14% { width: 0; } 34%, 100% { width: 100%; } }
+@keyframes draw-vertical { 0%, 14% { height: 0; } 34%, 100% { height: 100%; } }
+@keyframes ghost { 0%, 7% { opacity: 0; filter: blur(0); transform: translateX(-14px) scaleX(1.08); } 12% { opacity: .46; filter: blur(5px); } 24%, 100% { opacity: 0; filter: blur(0); transform: none; } }
+@keyframes echo-one { 0%, 6% { opacity: 0; transform: none; } 11% { opacity: .25; transform: translateX(18px) scaleX(1.1); } 20%, 100% { opacity: 0; transform: translateX(28px) scaleX(1.16); } }
+@keyframes echo-two { 0%, 6% { opacity: 0; transform: none; } 11% { opacity: .22; transform: translateX(-10px) scaleX(.96); } 20%, 100% { opacity: 0; transform: translateX(-20px) scaleX(.92); } }
+@keyframes bloom { 0%, 16% { opacity: 0; transform: scale(.56); } 25% { opacity: .34; transform: scale(.9); } 42%, 100% { opacity: 0; transform: scale(1.18); } }
+@keyframes projector { 0% { opacity: .05; transform: scaleX(.7); } 10% { opacity: .08; transform: scaleX(.85); } 19%, 100% { opacity: 0; transform: scaleX(1.2); } }
+@keyframes aperture { 0% { opacity: .52; transform: scaleX(.59); } 8%, 100% { opacity: 0; transform: scaleX(1.3); } }
+@keyframes grain { from { transform: translate(0, 0); } to { transform: translate(3%, -2%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .animatedMark .frameLine, .animatedMark .letter, .animatedMark .ghost, .animatedMark .echo, .animatedMark .bloom, .projector, .aperture, .grain { animation: none; }
+  .animatedMark .top, .animatedMark .bottom { width: 100%; }
+  .animatedMark .left, .animatedMark .right { height: 100%; }
+  .animatedMark .letter { opacity: 1; transform: none; }
+  .grain { opacity: .04; }
+}

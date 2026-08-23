@@ -1,396 +1,1761 @@
-# What to Watch — Current Style Book
+# What to Watch — Unified Product Style Book v2
 
-Implementation baseline: 2026-08-15, commit `7048f1f`  
-Surfaces: responsive web/PWA, account page, Fire TV/Android TV web shell, native TV launcher artwork
+**Revision date:** 2026-08-15
+**Status:** Proposed design baseline
+**Target surfaces:** smartphone displays, laptop/desktop displays, home televisions
+**Product:** What to Watch
 
-This document describes the product as currently implemented. It is a revision baseline, not a claim that every current decision is final. Items marked **Current inconsistency** should be resolved deliberately rather than copied automatically.
+---
 
 ## 1. Brand in one paragraph
 
-What to Watch is a personal movie concierge with the atmosphere of a thoughtful film journal. It should feel editorial, warm, quiet, intelligent, and selective—not like a streaming storefront, social feed, or chatbot. The product narrows the evening to ten considered recommendations, explains why they fit, and respects the viewer's subscriptions, mood, and private taste profile.
+**What to Watch** is a personal movie concierge with the atmosphere of a thoughtful film journal.
 
-Primary product line:
+It should feel:
 
-> Ten considered picks. One good night.
+* editorial;
+* warm;
+* quiet;
+* intelligent;
+* selective;
+* cinematic without becoming theatrical;
+* premium without becoming glossy;
+* personalized without becoming invasive.
 
-Supporting proposition:
+It should **not** feel like:
 
-> Tell us the mood. Get ten considered picks—not another endless feed.
+* a streaming storefront;
+* an endless content feed;
+* a social network;
+* an operating-system launcher;
+* an analytics dashboard;
+* a chatbot;
+* a generic “AI recommendation” product.
 
-## 2. Design principles
+The product's core job is simple:
 
-1. **Editorial before algorithmic.** Recommendations should resemble a well-considered program note, not a machine-generated scorecard.
-2. **One calm decision at a time.** Screens should have a clear question, a restrained set of choices, and one obvious next action.
-3. **Dark, warm, cinematic.** Near-black fields, ivory type, copper/gold accents, restrained neutral panels, and film artwork carry the experience.
-4. **Hierarchy through typography and space.** Large serif questions and titles lead; compact sans-serif labels organize.
-5. **Evidence without dashboard noise.** Match, availability, cast context, and rationale are visible, but secondary to the title and recommendation story.
-6. **Private by design.** Avoid social-feed patterns, notification pressure, unread counts, or language suggesting surveillance.
-7. **Finite, not addictive.** The product offers ranked sets of ten. Do not introduce infinite scroll or engagement loops.
-8. **Platform-native interaction.** Touch targets and bottom navigation serve phones; D-pad focus, overscan safety, and large type serve televisions.
+> Narrow the evening to ten considered recommendations and help the viewer confidently choose one.
 
-## 3. Identity and logo
+### Primary product line
 
-### Name and casing
+> **Ten considered picks. One good night.**
 
-- Product name: `What to Watch`
-- Display wordmark: `WHAT TO WATCH`
-- Sentence case is preferred in prose.
-- All-caps is reserved for the wordmark, kickers, compact metadata, and navigational labels.
+### Supporting proposition
 
-### Primary icon
+> **Tell us the mood. Get ten considered picks—not another endless feed.**
 
-The current primary icon is a dark rounded square containing a hand-drawn copper `W` and a small ivory dot in the upper-right.
+---
 
-- Canvas: `512 × 512`
-- Base: `#090A0B`
-- Inner radial field: `#2B2118` → `#11110F` → `#080908`
-- Copper stroke: `#D09454` → `#A65D2E` → `#57301F`
-- Accent dot: `#F2E8D9`
-- Inner keyline: `#D09454` at 32% opacity
-- Shape character: rounded, gestural, slightly imperfect, premium rather than technological
+# 2. Revision summary
 
-Canonical source: [`public/icons/icon-source.svg`](public/icons/icon-source.svg)  
-Production PNG: [`public/icons/icon-512.png`](public/icons/icon-512.png)  
-TV launcher PNG: [`android-tv/app/src/main/res/drawable-nodpi/what_to_watch_logo.png`](android-tv/app/src/main/res/drawable-nodpi/what_to_watch_logo.png)
+This revision keeps most of the existing visual philosophy but changes several important expressions of it.
 
-### Header mark
+## Major decisions
 
-The current web and TV page headers use a simplified serif `W` inside a thin square keyline, followed by `WHAT TO WATCH` in tracked sans-serif capitals.
+### 2.1 Large gold surfaces are removed
 
-**Current inconsistency:** the native icon uses the finished gestural copper `W`, while web headers use a typeset boxed `W`. A revision may unify these, but should not invent a third mark.
+The previous metallic-gold primary action treatment is no longer recommended.
 
-### Logo rules
+Gold/yellow across a large button surface feels:
 
-- Preserve generous clear space around the mark.
-- Keep it on near-black or dark neutral fields.
-- Do not recolor it with saturated yellow, neon orange, or cool metallic effects.
-- Do not add a play triangle, film reel, television outline, or streaming-service motif.
-- Do not stretch, bevel, emboss, or apply a heavy glow.
+* too luminous;
+* too caramel-like;
+* too conventionally “premium”;
+* too visually dominant;
+* less editorial than the rest of the product.
 
-## 4. Core visual language
+### New principle
 
-The visual system combines:
+> **Copper is jewelry, not upholstery.**
 
-- near-black backgrounds;
-- warm ivory foreground type;
-- copper/gold as a selective action and emphasis color;
-- neutral charcoal panels with low-contrast keylines;
-- large classic serif display type;
-- compact, highly tracked sans-serif labels;
-- rounded rectangles and circles, used with restraint;
-- poster/backdrop artwork with dark gradient shading;
-- subtle depth rather than glass-heavy or glossy effects.
+Copper should be used for:
 
-Avoid blue-black sci-fi styling, saturated brand colors, dense carousels, gratuitous gradients, and excessive pill-shaped UI.
+* the brand mark;
+* small kickers;
+* selected-state details;
+* focus outlines;
+* keylines;
+* small indicators;
+* occasional iconography.
 
-## 5. Color system
+Copper should generally **not** fill large interface surfaces.
 
-### Responsive web/PWA tokens
+---
 
-| Role | Token | Value | Use |
-|---|---|---:|---|
-| Background | `--ink` | `#090A0B` | App and page background |
-| Soft background | `--ink-soft` | `#111315` | Full-height sheets and details |
-| Panel | `--panel` | `#151719` | Cards, search, list rows |
-| Raised panel | `--panel-raised` | `#1B1E20` | Elevated surfaces |
-| Hairline | `--line` | `rgba(244,239,228,.12)` | Dividers and quiet borders |
-| Strong hairline | `--line-strong` | `rgba(244,239,228,.22)` | Inputs and active structure |
-| Primary foreground | `--paper` | `#F0ECE3` | Headings and important copy |
-| Muted foreground | `--muted` | `#9C9C96` | Secondary copy |
-| Bright muted | `--muted-bright` | `#B9B8B0` | Supporting editorial copy |
-| Accent | `--accent` | `#D6AA63` | Primary actions and selected details |
-| Deep accent | `--accent-deep` | `#A87A39` | Darker copper emphasis |
-| Text on accent | `--accent-ink` | `#16110B` | Text/icons on gold buttons |
-| Success | `--green` | `#8BA88F` | Completed or trusted states |
-| Danger | `--danger` | `#D78A83` | Destructive actions only |
+### 2.2 Primary actions become warm ivory
 
-The app shell adds only a very subtle warm radial glow: `rgba(214,170,99,.055)`. Selected surfaces typically use the accent at 8–10% opacity rather than a solid fill.
+Primary actions now use a warm parchment/ivory surface.
 
-### Television tokens
+This produces a cleaner hierarchy and feels more like a printed editorial object than a streaming-service CTA.
 
-| Role | Value | Use |
-|---|---:|---|
-| TV background | `linear-gradient(90deg, #030303 0%, #111111 48%, #3B3B3B 100%)` | Default left-to-right screen field |
-| TV panel | `#1D1D1D` | Choice and provider cards |
-| TV raised panel | `#303030` | Brighter panel state |
-| TV paper | `#FFF8E9` | Large display type and controls |
-| TV muted | `#CEC6B8` | Supporting copy |
-| TV accent fallback | `#C99745` | Solid fallback for older WebViews |
-| TV gold | `linear-gradient(90deg, #86531E 0%, #D6A955 44%, #F0D084 57%, #A96727 100%)` | Primary actions, profile medallions, supported gold type |
-| TV focus edge | `#D2A34F` | Six-pixel D-pad focus outline |
+**Primary action:**
 
-### Gold rendering rule
+* Background: `#E7DED0`
+* Text: `#171512`
+* Hover/active: `#F1E8D9`
+* Focus edge: `#C09259`
+* Optional inner keyline: `rgba(23,21,18,.10)`
 
-Televisions must not rely on a single bright yellow. Use explicit sRGB stops—not `color-mix()`, OKLCH, filters, or blend modes—for critical gold rendering. Gold text must retain `#C99745` as its fallback and apply gradient clipping only inside a supported feature query. Large gold surfaces should visibly move from bronze through a restrained highlight back to copper.
+This treatment applies across smartphone, laptop, and television surfaces.
 
-## 6. Typography
+---
 
-### Families
+### 2.3 Copper becomes deeper and quieter
 
-| Role | Stack |
-|---|---|
-| Interface/body | Manrope, `Avenir Next`, Helvetica, Arial, sans-serif |
-| Web display/editorial | `Iowan Old Style`, `Palatino Linotype`, `Book Antiqua`, Georgia, serif |
-| TV display fallback | Georgia, serif |
+The previous bright gold family is replaced by a more restrained copper family.
 
-Manrope is loaded through Next's font system. The display face currently uses system fonts; therefore line breaks can vary by platform.
+**Core accent:**
 
-### Typographic character
+* Copper: `#A87945`
+* Deep copper: `#78502F`
+* Bright focus copper: `#C09259`
 
-- Display type is classic, literary, and lightly weighted (`400`).
-- Major headings use tight tracking around `-0.045em` and line-height around `.94–.98`.
-- Editorial explanation copy may use the serif at a relaxed `1.5–1.6` line-height.
-- Interface copy uses Manrope with clear weight contrast.
-- Kickers are small, bold, uppercase, and widely tracked (`.18–.20em`).
-- Metadata is compact, uppercase, and separated with centered dots.
-- Avoid bold serif headings, condensed fonts, geometric display sans-serifs, and novelty cinema typefaces.
+These colors should feel oxidized, printed, or burnished rather than metallic or glowing.
 
-### Typical web scale
+---
 
-- Home hero: `clamp(3.1rem, 14vw, 6.8rem)`; wide-screen override `clamp(3.8rem, 4.5vw, 5.2rem)`
-- Page hero: `clamp(3rem, 13vw, 5.6rem)`
-- Result heading: `clamp(2rem, 8vw, 3.5rem)`
-- Title in recommendation card: `2.3rem` hero / `1.45rem` compact
-- Section heading: `1.34rem`
-- Body/interface text: roughly `.62rem–.9rem` in the current mobile-first system
+### 2.4 The product hierarchy becomes more editorial
 
-### Typical television scale
+The redesigned home experience should prioritize:
 
-- Primary questions: `clamp(52px, 5.2vw, 88px)`
-- Result title: `clamp(54px, 4.8vw, 84px)`
-- Supporting lede: `25px`
-- Kicker: `18px`
-- Primary control: `22px`, weight `900`
-- Mood label: `29px`
-- Result synopsis: `24px`, serif
+1. tonight's decision;
+2. the top recommendation;
+3. the finite set of ten;
+4. explanation and availability;
+5. continuation content;
+6. service-launching utility.
 
-## 7. Shape, borders, and depth
+Service logos must no longer dominate the primary screen.
 
-### Web
+---
 
-- Radius small: `10px`
-- Radius medium: `16px`
-- Radius large: `26px`
-- Recommendation cards: `22px`
-- Pills are reserved for tags, filters, rental labels, and compact identity/status elements.
-- Default border is a one-pixel ivory hairline at 12% opacity.
-- Primary shadow: `0 26px 70px rgba(0,0,0,.38)`
-- Cards more commonly use quiet depth: `0 18px 44px rgba(0,0,0,.22)`.
+### 2.5 The brand mark is unified
+
+Use the canonical gestural copper **W** everywhere practical.
+
+Do not continue developing the boxed typeset W as a competing mark.
+
+---
+
+# 3. Design principles
+
+## 3.1 Editorial before algorithmic
+
+Recommendations should resemble a well-considered program note rather than a machine-generated scorecard.
+
+The title and rationale come before:
+
+* match percentage;
+* provider;
+* metadata;
+* model evidence.
+
+---
+
+## 3.2 One calm decision at a time
+
+Each screen should have:
+
+* one clear question;
+* a restrained set of choices;
+* one obvious primary action.
+
+Avoid presenting several equally important decisions simultaneously.
+
+---
+
+## 3.3 Finite rather than addictive
+
+The product offers a ranked set of ten.
+
+Do not introduce:
+
+* infinite scrolling;
+* endless recommendation feeds;
+* algorithmic content waterfalls;
+* autoplay recommendation loops;
+* engagement streaks;
+* “keep browsing” pressure.
+
+The finite nature of the product should be visible.
+
+Use language such as:
+
+* `1 of 10`
+* `Tonight's ten`
+* `Your ten`
+* `Ten considered picks`
+
+---
+
+## 3.4 Dark, warm, cinematic
+
+The visual field should be predominantly:
+
+* near-black;
+* charcoal;
+* warm ivory;
+* restrained copper;
+* real film artwork.
+
+Avoid cold blue-black styling.
+
+Warmth should be **felt rather than visibly tinted**.
+
+---
+
+## 3.5 Hierarchy through typography and space
+
+Large editorial serif typography leads.
+
+Compact sans-serif typography organizes.
+
+Do not create hierarchy primarily through:
+
+* bright color;
+* card borders;
+* shadows;
+* gradients;
+* badges.
+
+Whitespace is an active design material.
+
+---
+
+## 3.6 Evidence without dashboard noise
+
+Match quality, availability, cast context, service status, and rationale may be visible.
+
+They should remain subordinate to:
+
+1. title;
+2. artwork;
+3. editorial explanation.
+
+---
+
+## 3.7 Private by design
+
+Avoid:
+
+* unread badges;
+* social-feed metaphors;
+* notification pressure;
+* public taste scores;
+* surveillance-like language;
+* competitive recommendation systems.
+
+---
+
+## 3.8 Platform-native interaction
+
+The same design language should adapt to three fundamentally different interaction environments:
+
+### Smartphone
+
+Touch-first, portrait-dominant, close viewing distance.
+
+### Laptop
+
+Pointer + keyboard, wider information field, close-to-medium viewing distance.
 
 ### Television
 
-- Major cards: `14–18px` radius with `3px` borders.
-- Buttons: `12px` radius.
-- D-pad focus: `6px` gold outline, `5px` offset, secondary halo, and `1.035` scale.
-- Focus must be unmistakable at viewing distance; do not reduce it to a color-only change.
+D-pad + Select + Back, distant viewing, 16:9 composition, unmistakable focus.
 
-## 8. Layout and spacing
+Do not force identical layouts across all three.
 
-### Responsive web/PWA
+---
 
-- Mobile-first content width: maximum `1180px`, centered.
-- Standard page padding: `36px 20px 56px` plus bottom-navigation clearance.
-- Bottom navigation is fixed, four equal columns, and respects iOS safe-area insets.
-- Header is sticky, centered brand, with blurred near-black backing.
-- At `980px+`, the home page becomes a two-column composition with a sticky editorial intro and the choice controls beside it.
-- At `640px+`, profile and option grids expand; recommendation cards gain wider arrangements.
-- Horizontal overflow is clipped globally; intentional rails use controlled horizontal scrolling and scroll snapping.
+# 4. Platform model
 
-### Television
+The product uses **one design system with three layout expressions**.
 
-- Design target: 16:9, verified at a `1920 × 1080` Fire TV capture.
-- Fixed header: `92px` high normally, `70px` when the reported viewport is short/narrow.
-- Standard choice-screen padding: `126px 7vw 52px`.
-- Compact guard activates at `max-width: 1100px` or `max-height: 700px`.
-- Profile creation uses a dedicated compact layout with `44px` of reserved bottom space so action buttons remain inside the visible/overscan-safe area.
-- Key action rows may wrap, but primary and secondary actions should remain visually grouped.
-- Result screens use a strong left copy/right artwork split rather than a grid of posters.
-- D-pad targets should be at least `64–76px` tall; large choice cards are substantially taller.
+## Smartphone
 
-## 9. Component language
+Primary assumptions:
 
-### Primary action
+* narrow viewport;
+* portrait orientation;
+* thumb interaction;
+* short scan distances;
+* frequent one-handed use;
+* bottom-safe-area requirements.
 
-- Web: solid muted gold, dark text, minimum height `54px`.
-- TV: metallic bronze/gold gradient, dark text, minimum height `76px` or `64px` in compact-height setup.
-- One primary action per decision region.
-- Hover/focus may brighten; it must not become lemon yellow.
+Primary goals:
 
-### Secondary action
+* reduce simultaneous information;
+* preserve large touch targets;
+* favor vertical reading;
+* make each recommendation feel considered rather than compressed.
 
-- Transparent or charcoal fill with a visible neutral border.
-- Ivory text, never competing with the primary action.
-- Back/Cancel actions normally include a left arrow.
+---
 
-### Text and ghost actions
+## Laptop
 
-- Muted by default, ivory on hover/focus.
-- Use for clearing, editing, or low-risk navigation—not for the main decision.
+Primary assumptions:
 
-### Selection cards and chips
+* landscape orientation;
+* pointer;
+* keyboard;
+* larger viewport;
+* greater information density is acceptable.
 
-- Resting state: charcoal or nearly transparent panel, quiet neutral border.
-- Selected state: copper border, warm 8–10% fill, ivory text, and an accent icon/check.
-- Television selection must also survive grayscale and viewing distance through border weight and focus geometry.
+Primary goals:
 
-### Profile cards
+* use whitespace rather than filling the canvas;
+* allow editorial two-column compositions;
+* keep controls and evidence visually secondary;
+* avoid turning the experience into a dashboard.
 
-- Centered identity, circular avatar/medallion, concise name and service count.
-- New-profile state uses a dashed or visibly distinct boundary.
-- Profile colors are muted ochre, plum, slate, and olive—not saturated avatar colors.
+---
 
-### Recommendation cards
+## Home television
 
-- Poster/artwork leads.
-- A small uppercase lane label and short editorial rationale establish why the title is present.
-- Title uses the display serif.
-- Match badge is circular, dark translucent, and secondary to artwork.
-- Availability is separated by hairlines and names the provider and offer type.
-- Compact cards reduce detail rather than shrinking every element proportionally.
+Primary assumptions:
 
-### Detail view
+* 16:9 target;
+* approximately 6–12 foot viewing distance;
+* D-pad navigation;
+* overscan/safe-area concerns;
+* variable television processing;
+* lower precision input.
 
-- Backdrop fills the upper field with a strong bottom shade into `--ink-soft`.
-- Title anchors the bottom of the artwork.
-- Synopsis is serif and editorial.
-- Credits use quiet definition-list rows.
-- One full-width primary action follows the evidence.
+Primary goals:
 
-### Inputs
+* strong geometry;
+* large type;
+* obvious focus;
+* restrained vertical depth;
+* fewer visible controls;
+* left-copy/right-art compositions where appropriate.
 
-- Dark panel, ivory value, muted label, visible neutral border.
-- Web minimum height: `52–54px`.
-- TV name input: `82px` normally / `64px` in compact-height mode.
-- Focus ring must not be clipped by its container.
+---
 
-### Navigation
+# 5. Identity and logo
 
-- Web/PWA: sticky top bar plus fixed four-item bottom navigation.
-- TV: persistent top brand bar; D-pad, Select, and Back are the only assumed controls.
-- TV focus order follows visual geometry and scrolls the next target into view.
+## Product name
 
-## 10. Artwork and imagery
+`What to Watch`
 
-- Use real poster or backdrop art when available.
-- Poster ratio is approximately `4 / 5.15` for the web hero recommendation; compact cards crop more tightly.
-- TV results use landscape backdrops on the right, shaded into the black copy field.
-- TV questionnaire artwork may use a layered, slightly rotated poster deck.
-- Apply dark gradients to protect type; do not wash artwork with a uniform brand color.
-- Avoid decorative stock photography, generated popcorn imagery, red curtains, ticket stubs, and literal theater clichés.
-- Missing artwork falls back to a restrained charcoal field with serif title treatment.
+## Display wordmark
 
-## 11. Motion
+`WHAT TO WATCH`
 
-- Page entry: `360ms ease`, opacity plus `8px` upward settle.
-- Sheets/details: `260–320ms`, restrained vertical movement.
-- Standard controls: `160–180ms` transitions.
-- Poster hover: slow, subtle scale (`1.025`) over `700ms`.
-- TV focus: immediate enough for D-pad confidence; modest scale only.
-- Respect `prefers-reduced-motion` by removing nonessential animation and smooth scrolling.
-- Do not add looping ambient motion, autoplay video, parallax, or attention-seeking pulses.
+Sentence case is preferred in prose.
 
-## 12. Accessibility and platform rules
+All caps are reserved for:
 
-- Foreground/background contrast must remain readable on dim and aggressively processed televisions.
-- Do not encode selection or errors through color alone.
-- Keep visible focus rings for keyboard and remote users.
-- Minimum touch targets are approximately `42–54px`; TV targets are `64px+`.
-- Respect `env(safe-area-inset-*)` on iPhone/PWA surfaces.
-- Reserve a TV overscan-safe bottom area; no action may touch the physical screen edge.
-- Use semantic buttons, labels, headings, radio roles, and `aria-checked` where implemented.
-- Decorative artwork should have empty alt text; content-bearing posters need title-aware alternatives.
-- Remote Back should move to the preceding product screen, not unexpectedly launch or exit another app.
+* wordmark;
+* kickers;
+* compact metadata;
+* navigational labels.
 
-## 13. Voice and copy
+---
 
-### Voice
+## Primary mark
 
-- Informed but not academic
-- Warm but not chatty
-- Decisive but not absolute
-- Concise, calm, and human
-- Specific about evidence and uncertainty
+The canonical mark is the gestural copper `W`.
 
-### Preferred language
+### Character
 
-- “What are you in the mood for?”
-- “What kind of night?”
-- “Here’s your top ten.”
-- “Why it fits”
-- “Streaming availability”
-- “Ten considered picks from an explainable model.”
+It should feel:
+
+* hand-drawn;
+* slightly imperfect;
+* premium;
+* human;
+* editorial.
+
+It should not feel:
+
+* technological;
+* geometric;
+* neon;
+* glossy;
+* embossed.
+
+---
+
+## Core icon palette
+
+* Canvas: `#090A0B`
+* Copper: `#A87945`
+* Deep copper: `#78502F`
+* Ivory detail: `#E7DED0`
+* Inner keyline: copper at approximately 28–32% opacity
+
+---
+
+## Header treatment
+
+Preferred horizontal brand lockup:
+
+**gestural W + WHAT TO WATCH**
+
+The wordmark should be:
+
+* small;
+* sans-serif;
+* bold;
+* highly tracked;
+* visually subordinate to page-level editorial typography.
+
+---
+
+## Logo rules
+
+Preserve generous clear space.
+
+Use primarily on:
+
+* near-black;
+* charcoal;
+* very dark neutral imagery.
+
+Do not:
+
+* add a play icon;
+* add a film reel;
+* add a television outline;
+* introduce a third W treatment;
+* bevel;
+* emboss;
+* apply heavy glow;
+* recolor with saturated gold.
+
+---
+
+# 6. Core color system
+
+## Shared core palette
+
+| Role                 | Token            | Value     |
+| -------------------- | ---------------- | --------- |
+| Deep background      | `--ink`          | `#080807` |
+| Soft background      | `--ink-soft`     | `#10100F` |
+| Panel                | `--panel`        | `#181816` |
+| Raised panel         | `--panel-raised` | `#22221F` |
+| Primary foreground   | `--paper`        | `#F2ECE2` |
+| Primary action       | `--action`       | `#E7DED0` |
+| Primary action hover | `--action-hover` | `#F1E8D9` |
+| Action text          | `--action-ink`   | `#171512` |
+| Muted foreground     | `--muted`        | `#AAA399` |
+| Bright muted         | `--muted-bright` | `#C9C1B5` |
+| Copper               | `--copper`       | `#A87945` |
+| Deep copper          | `--copper-deep`  | `#78502F` |
+| Focus copper         | `--focus`        | `#C09259` |
+| Success              | `--success`      | `#8BA88F` |
+| Danger               | `--danger`       | `#D78A83` |
+
+---
+
+## Hairlines
+
+Default:
+
+`rgba(242,236,226,.12)`
+
+Strong:
+
+`rgba(242,236,226,.22)`
+
+Selected copper:
+
+`rgba(168,121,69,.74)`
+
+---
+
+## Background atmosphere
+
+The default background should remain essentially black.
+
+A very restrained warm radial field may be used:
+
+`rgba(168,121,69,.04–.055)`
+
+It must never become an obvious brown/orange glow.
+
+---
+
+# 7. Color usage rule
+
+## Large surfaces
+
+Use:
+
+* black;
+* near-black;
+* charcoal;
+* warm ivory.
+
+## Small emphasis
+
+Use copper.
+
+### Good copper applications
+
+* W mark;
+* kicker;
+* focused edge;
+* selected check;
+* selected keyline;
+* small icon;
+* rank marker;
+* active progress indicator.
 
 ### Avoid
 
-- “AI-powered magic,” “perfect for you,” or unsupported certainty
-- Chatbot greetings and conversational filler
-- Engagement language such as “keep scrolling,” “trending now” without evidence, or “you won’t believe”
-- False urgency, countdowns, streaks, or notifications
-- Claims that an unverified provider link will play a title
-- Long technical explanations in the primary flow
+* full copper page backgrounds;
+* large metallic gradients;
+* yellow cards;
+* multiple copper buttons competing on one screen;
+* bright copper body text.
 
-## 14. Screen inventory
+---
 
-### Web/PWA
+# 8. Television rendering rule
 
-- Profile picker and profile editor
-- Questionnaire/onboarding and calibration
-- Home: mood + kind-of-night selection
-- Actor discovery
-- Ranked recommendation results
-- Title details
-- Ratings
-- Taste dashboard
-- Settings: services, friends, algorithm, privacy, attributions
-- Account/sign-in
+Television-critical colors must use explicit sRGB values.
 
-### Fire TV
+Do not rely on:
 
-- Profiles
-- Create profile
-- Services
-- Taste questionnaire
-- Mood
-- Kind of night/vibe
-- Results deck
-- Watch/provider chooser
+* OKLCH;
+* `color-mix()`;
+* blend-mode tricks;
+* CSS filters;
+* unsupported clipping;
+* browser-dependent metallic rendering.
 
-## 15. Current inconsistencies and revision opportunities
+The television UI should remain coherent if all advanced visual effects fail.
 
-These are observations, not automatic instructions to change them.
+Primary action fallback:
 
-1. **Logo implementation:** native launcher uses the gestural copper `W`; web headers use a typeset boxed `W`.
-2. **Accent families:** core web uses `#D6AA63`; account/sign-in uses the more orange `#C98143`; TV uses `#C99745` plus a metallic gradient.
-3. **Display font:** web prefers Iowan/Palatino while TV declares Georgia directly, so typography varies by device.
-4. **TV neutral cleanup:** the new page background and shared panels are neutral gray, while a few older borders and result overlays still retain slightly plum values such as `#504950` and `#242126`.
-5. **Token architecture:** web has global design tokens; account and TV styles maintain separate local values rather than a fully shared token layer.
-6. **Type scale:** current mobile interface labels are sometimes very small (`.56–.68rem`), which deserves a deliberate accessibility review.
-7. **Gold text:** gradient-clipped TV kickers are device-compatible in the tested Fire TV WebView, but every future target device still needs a solid-color fallback.
+`#E7DED0`
 
-## 16. Non-negotiables for a revision
+Copper fallback:
 
-- Preserve the finite ten-pick product model.
-- Preserve the editorial serif/sans hierarchy unless proposing a fully reasoned replacement.
-- Preserve privacy-forward, non-feed behavior.
-- Preserve clear provider and rental distinctions.
-- Preserve verified-vs-unverified deep-link honesty.
-- Preserve D-pad focus visibility and TV safe-area handling.
-- Preserve the canonical gestural copper `W` source asset.
-- Keep production-critical TV colors in explicit sRGB.
-- Do not introduce secrets, third-party tracking, or provider trademark misuse into visual assets.
+`#A87945`
 
-## 17. Source-of-truth files
+Focus fallback:
 
-- Global web system: [`src/app/globals.css`](src/app/globals.css)
-- Wide-screen guardrails: [`src/app/responsive.css`](src/app/responsive.css)
-- Main responsive UI: [`src/components/what-to-watch-app.tsx`](src/components/what-to-watch-app.tsx)
-- TV system: [`src/components/tv/what-to-watch-tv.module.css`](src/components/tv/what-to-watch-tv.module.css)
-- TV UI: [`src/components/tv/what-to-watch-tv.tsx`](src/components/tv/what-to-watch-tv.tsx)
-- Account-specific styling: [`src/app/account/account.module.css`](src/app/account/account.module.css)
-- Font and metadata setup: [`src/app/layout.tsx`](src/app/layout.tsx)
-- Canonical icon: [`public/icons/icon-source.svg`](public/icons/icon-source.svg)
+`#C09259`
 
-## 18. Compact token payload for another LLM
+---
+
+# 9. Typography
+
+## Interface/body family
+
+Preferred:
+
+`Manrope, Avenir Next, Helvetica, Arial, sans-serif`
+
+---
+
+## Editorial/display family
+
+Preferred:
+
+`Iowan Old Style, Palatino Linotype, Book Antiqua, Georgia, serif`
+
+TV may use Georgia when the richer stack is unavailable.
+
+---
+
+## Character
+
+Display typography should feel:
+
+* literary;
+* calm;
+* classic;
+* lightly weighted;
+* confident.
+
+Use serif weight approximately `400`.
+
+Avoid bold serif display headings.
+
+---
+
+## Kicker typography
+
+Kickers should be:
+
+* uppercase;
+* sans-serif;
+* bold;
+* highly tracked;
+* small relative to display type.
+
+Typical tracking:
+
+`.18em–.20em`
+
+Copper is appropriate here.
+
+---
+
+# 10. Smartphone typography
+
+Recommended scale:
+
+### Hero question
+
+`clamp(2.75rem, 12vw, 4.2rem)`
+
+### Page title
+
+`clamp(2.3rem, 10vw, 3.6rem)`
+
+### Recommendation title
+
+`1.8rem–2.4rem`
+
+### Section heading
+
+`1.20rem–1.4rem`
+
+### Editorial rationale
+
+`1rem–1.1rem`
+
+### Interface copy
+
+`0.9rem–1rem`
+
+### Metadata
+
+Minimum approximately `0.75rem`
+
+Do not return to extremely small `0.56rem–0.68rem` interface labels.
+
+---
+
+# 11. Laptop typography
+
+Recommended scale:
+
+### Home hero
+
+`clamp(3.8rem, 5vw, 5.4rem)`
+
+### Page hero
+
+`clamp(3.2rem, 4.4vw, 4.8rem)`
+
+### Recommendation hero title
+
+`3rem–4.5rem`
+
+### Card title
+
+`1.35rem–1.8rem`
+
+### Editorial explanation
+
+`1.05rem–1.25rem`
+
+### Interface
+
+`0.85rem–1rem`
+
+Use wider line measures cautiously.
+
+Editorial body text should generally remain below approximately `68ch`.
+
+---
+
+# 12. Television typography
+
+Recommended 1920×1080 scale:
+
+### Primary question
+
+`64–82px`
+
+### Recommendation hero
+
+`58–76px`
+
+### Supporting lede
+
+`23–27px`
+
+### Kicker
+
+`16–18px`
+
+### Primary button
+
+`21–23px`
+
+### Choice label
+
+`26–30px`
+
+### Recommendation synopsis
+
+`22–26px`
+
+### Metadata
+
+`16–19px`
+
+Typography should remain readable on lower-quality displays and aggressive television picture modes.
+
+---
+
+# 13. Shape and borders
+
+## Smartphone
+
+* Small radius: `10px`
+* Medium radius: `14px`
+* Large radius: `20px`
+* Recommendation feature card: `20–22px`
+
+---
+
+## Laptop
+
+* Small: `10px`
+* Medium: `16px`
+* Large: `24–26px`
+* Feature card: `22px`
+
+---
+
+## Television
+
+* Major card: `14–18px`
+* Button: `12px`
+* Focus outline radius should track component radius.
+
+Do not over-round every component.
+
+Pills remain reserved for:
+
+* tags;
+* compact filters;
+* offer type;
+* short status.
+
+---
+
+# 14. Depth
+
+Use subtle depth.
+
+Recommended large shadow:
+
+`0 26px 70px rgba(0,0,0,.38)`
+
+Typical card shadow:
+
+`0 18px 44px rgba(0,0,0,.22)`
+
+Most structure should come from:
+
+* contrast;
+* typography;
+* space;
+* quiet keylines.
+
+Not shadow.
+
+---
+
+# 15. Primary action
+
+## Surface
+
+Warm ivory.
+
+### Default
+
+* Background: `#E7DED0`
+* Text: `#171512`
+
+### Hover / active
+
+* Background: `#F1E8D9`
+
+### Focus
+
+Use a copper focus edge.
+
+On close-range devices:
+
+`3px solid #C09259`
+
+On television:
+
+`6px solid #C09259`
+
+---
+
+## Shape
+
+### Smartphone
+
+Minimum height: `54px`
+
+### Laptop
+
+Minimum height: `54–58px`
+
+### Television
+
+Minimum height: `68–76px`
+
+---
+
+## Rule
+
+One dominant primary action per decision region.
+
+Do not create multiple ivory buttons of equal prominence.
+
+---
+
+# 16. Secondary action
+
+Secondary actions use:
+
+* `#181816` or transparent fill;
+* warm ivory text;
+* visible neutral keyline.
+
+They should never visually compete with the primary action.
+
+Back/Cancel actions should normally include a directional cue where useful.
+
+---
+
+# 17. Ghost and text actions
+
+Default:
+
+Muted foreground.
+
+Hover/focus:
+
+Primary foreground.
+
+Use for:
+
+* clear;
+* edit;
+* skip;
+* secondary navigation;
+* low-risk utility.
+
+Do not use as the main decision.
+
+---
+
+# 18. Selection cards
+
+## Resting
+
+* dark charcoal;
+* neutral hairline;
+* ivory title;
+* muted explanation.
+
+## Selected
+
+* dark surface remains;
+* copper keyline;
+* subtle warm fill;
+* optional copper icon/check.
+
+Recommended selected fill:
+
+`rgba(168,121,69,.08)`
+
+Do not fill the card with copper.
+
+---
+
+# 19. Focus system
+
+Focus must be unmistakable.
+
+## Smartphone
+
+Native pressed and selected states are usually more relevant than persistent focus.
+
+Keyboard-accessible mobile web must still show visible focus.
+
+---
+
+## Laptop
+
+Focus:
+
+* `3px` copper outline;
+* `3px` offset;
+* no heavy glow;
+* approximately `1.01–1.015` scale only where appropriate.
+
+---
+
+## Television
+
+Focus:
+
+* `6px solid #C09259`;
+* `5px` offset;
+* secondary restrained halo;
+* approximately `1.03–1.035` scale.
+
+Focus must survive grayscale perception.
+
+Do not rely on color alone.
+
+The focused component may additionally:
+
+* reveal explanatory copy;
+* increase image clarity slightly;
+* strengthen its keyline.
+
+---
+
+# 20. Smartphone layout
+
+## App shell
+
+* mobile-first;
+* full-height;
+* near-black;
+* safe-area aware.
+
+Typical page padding:
+
+`28px 18px 48px`
+
+plus navigation/safe-area clearance.
+
+---
+
+## Navigation
+
+Use:
+
+* compact sticky top brand bar;
+* fixed bottom navigation where appropriate.
+
+Avoid excessive header chrome.
+
+---
+
+## Home composition
+
+The smartphone home should generally be vertical:
+
+1. brand/header;
+2. tonight's question or top recommendation;
+3. primary decision controls;
+4. Tonight's ten;
+5. continuation;
+6. services/settings utility.
+
+Do not place provider launching above the recommendation experience.
+
+---
+
+# 21. Laptop layout
+
+At approximately `980px+`, use wider editorial compositions.
+
+Preferred home structure:
+
+### Left
+
+* kicker;
+* large editorial question/title;
+* rationale;
+* mood controls;
+* primary action.
+
+### Right
+
+* artwork;
+* recommendation context;
+* subtle visual storytelling.
+
+A sticky editorial intro is appropriate on longer screens.
+
+Maximum app content width:
+
+approximately `1180–1280px`
+
+Do not expand content indefinitely on wide monitors.
+
+---
+
+# 22. Television layout
+
+Design target:
+
+`1920 × 1080`, 16:9
+
+Primary content should remain within an overscan-safe region.
+
+Recommended screen padding:
+
+approximately:
+
+`110–126px 6–7vw 48–56px`
+
+Adjust for compact viewports.
+
+---
+
+## Header
+
+Persistent but visually quiet.
+
+Recommended height:
+
+`80–92px`
+
+Compact:
+
+`68–72px`
+
+Contains:
+
+* W mark;
+* wordmark;
+* profile;
+* minimal utility.
+
+Avoid a tab-heavy television header.
+
+---
+
+# 23. Television home architecture
+
+The home screen should no longer visually behave like an app launcher.
+
+## Before recommendations
+
+Primary hero:
+
+**TONIGHT**
+
+# What kind of night?
+
+Supporting explanation.
+
+A restrained set of mood or vibe choices.
+
+Primary action:
+
+**Find tonight's ten**
+
+Artwork occupies the opposing field.
+
+---
+
+## After recommendations
+
+Hero becomes recommendation #1.
+
+Example:
+
+**#1 FOR TONIGHT**
+
+# The Holdovers
+
+*Warm, funny, and just melancholy enough for a quieter night.*
+
+Metadata:
+
+`94% MATCH · 2H 13M · COMEDY / DRAMA`
+
+Availability:
+
+`Included with Hulu`
+
+Primary action:
+
+**Watch**
+
+Secondary:
+
+**Details**
+
+---
+
+# 24. Tonight's ten
+
+The recommendation collection should visibly communicate finiteness.
+
+Use:
+
+* `#1`
+* `#2`
+* `#3`
+* …
+* `#10`
+
+or:
+
+* `1 of 10`
+* `2 of 10`
+
+Never visually imply endless continuation.
+
+---
+
+## Recommendation card hierarchy
+
+1. artwork;
+2. editorial lane;
+3. title;
+4. short reason;
+5. evidence.
+
+Example:
+
+**#4 · CROWD-PLEASER**
+
+**X2: X-Men United**
+
+*Big, fast, and better written than it needs to be.*
+
+---
+
+# 25. Recommendation rationale
+
+Every recommendation should answer:
+
+> **Why is this here?**
+
+Rationales should be:
+
+* one or two lines;
+* human;
+* specific;
+* confident but not absolute.
+
+Good:
+
+> Warm, funny, and easy to settle into.
+
+Better:
+
+> A sharp mystery for a night when you want something intelligent without feeling like homework.
+
+Avoid:
+
+> 97% personalized AI match.
+
+---
+
+# 26. Provider treatment
+
+Provider identity is evidence, not the product.
+
+The recommendation should visually dominate the provider.
+
+---
+
+## Provider utility
+
+Service-launching can remain available under a quieter section such as:
+
+**Your services**
+
+Use smaller neutral service tiles.
+
+Do not allow provider brand colors to flood the page.
+
+---
+
+## Availability
+
+Use explicit language:
+
+* Included with Hulu
+* Included with Max
+* Rent on Prime Video
+* Buy on Apple TV
+
+Do not imply a verified direct playback action unless it is actually verified.
+
+---
+
+# 27. Continue watching
+
+Continuation is useful but secondary.
+
+Recommended hierarchy:
+
+1. Tonight's decision;
+2. Tonight's ten;
+3. Continue watching;
+4. Service utility.
+
+Continue watching should not visually overpower fresh recommendations.
+
+---
+
+# 28. Missing artwork
+
+Never show a generic broken-image icon in a production-facing recommendation card.
+
+Fallback artwork should be intentionally designed.
+
+## Movie fallback
+
+* near-black / charcoal background;
+* title in editorial serif;
+* subtle copper keyline;
+* optional small W;
+* no generic image-error symbol.
+
+## Service fallback
+
+* neutral dark tile;
+* provider name;
+* optional approved monochrome mark.
+
+A missing asset should look intentional.
+
+---
+
+# 29. Artwork
+
+Use real movie poster or backdrop art where licensing/data permits.
+
+## Smartphone
+
+Portrait artwork may lead recommendation cards.
+
+Use gradients to preserve type.
+
+---
+
+## Laptop
+
+Use either:
+
+* poster-forward cards;
+* editorial split layouts;
+* large landscape hero backdrops.
+
+---
+
+## Television
+
+Prefer landscape backdrops in hero/results.
+
+Fade imagery into the dark copy field.
+
+Questionnaire screens may use:
+
+* two or three layered posters;
+* restrained rotation;
+* strong edge shading.
+
+Avoid:
+
+* generated popcorn;
+* red theater curtains;
+* film reels;
+* ticket imagery;
+* stock cinema photography;
+* decorative fake movie posters.
+
+---
+
+# 30. Image grading
+
+Artwork may be slightly:
+
+* desaturated;
+* darkened;
+* contrast-controlled.
+
+Do not apply a heavy uniform brand-color wash.
+
+The film should still look like itself.
+
+---
+
+# 31. Motion
+
+Motion should feel deliberate and almost invisible.
+
+## Page entry
+
+`320–360ms ease`
+
+Opacity + approximately `8px` vertical settle.
+
+---
+
+## Sheets/detail transitions
+
+`260–320ms`
+
+---
+
+## Standard controls
+
+`150–180ms`
+
+---
+
+## Artwork hover
+
+Laptop only where appropriate:
+
+approximately `1.02–1.025`
+
+over `500–700ms`
+
+---
+
+## TV focus
+
+Fast enough to preserve remote confidence.
+
+No sluggish cinematic easing on every D-pad movement.
+
+---
+
+## Avoid
+
+* autoplay video;
+* looping ambient animation;
+* parallax;
+* shimmer;
+* pulse;
+* bouncing attention indicators.
+
+Respect `prefers-reduced-motion`.
+
+---
+
+# 32. Accessibility
+
+## Contrast
+
+Foreground/background contrast must remain legible on:
+
+* dim phones;
+* bright laptops;
+* aggressively processed televisions.
+
+---
+
+## Targets
+
+### Smartphone
+
+Minimum approximately `44–54px`
+
+### Laptop
+
+Minimum approximately `42–48px`
+
+### Television
+
+Minimum approximately `64px`
+
+---
+
+## Selection
+
+Never encode selection with color alone.
+
+Combine:
+
+* border;
+* icon;
+* geometry;
+* fill;
+* label where useful.
+
+---
+
+## Focus
+
+Never remove visible keyboard focus.
+
+TV focus must remain visible at normal viewing distance.
+
+---
+
+## Safe areas
+
+Smartphones:
+
+Respect:
+
+`env(safe-area-inset-*)`
+
+Televisions:
+
+Reserve bottom and side breathing room for overscan and device variation.
+
+No critical action should sit against the physical edge.
+
+---
+
+# 33. Voice
+
+The product voice is:
+
+* informed but not academic;
+* warm but not chatty;
+* decisive but not absolute;
+* concise;
+* calm;
+* human;
+* specific about uncertainty.
+
+---
+
+# 34. Preferred language
+
+Good:
+
+* What are you in the mood for?
+* What kind of night?
+* Tonight's ten
+* Here's your top ten.
+* Why it fits
+* Streaming availability
+* Included with Hulu
+* Ten considered picks.
+* Change the mood
+* Something easier
+* Surprise me
+
+---
+
+# 35. Language to avoid
+
+Avoid:
+
+* AI-powered magic
+* Perfect for you
+* You’ll love this
+* Keep scrolling
+* Trending now, unless genuinely evidenced
+* Don't miss out
+* Only tonight
+* Personalized just for you, when unnecessary
+* Chatbot greetings
+* Long technical recommendation explanations
+
+Avoid false urgency.
+
+Avoid algorithmic self-congratulation.
+
+---
+
+# 36. Content architecture
+
+Across platforms, separate three jobs clearly.
+
+## Job 1: Decide
+
+> What should I watch tonight?
+
+This is primary.
+
+---
+
+## Job 2: Continue
+
+> What was I already watching?
+
+Secondary.
+
+---
+
+## Job 3: Launch
+
+> Which service do I want to open?
+
+Utility.
+
+Do not visually blend these three jobs into equivalent rows.
+
+---
+
+# 37. Smartphone screen inventory
+
+* Profile selection
+* Profile editing
+* Service setup
+* Taste calibration
+* Home / mood selection
+* Tonight's ten
+* Recommendation details
+* Provider chooser
+* Actor discovery
+* Ratings
+* Taste profile
+* Settings
+* Privacy
+* Account/sign-in
+
+---
+
+# 38. Laptop screen inventory
+
+Same functional inventory as smartphone, but layouts may expand to:
+
+* two-column home;
+* wider recommendation arrangements;
+* richer detail evidence;
+* persistent editorial side regions;
+* expanded settings panes.
+
+Do not introduce laptop-only complexity without functional value.
+
+---
+
+# 39. Television screen inventory
+
+* Profiles
+* Create profile
+* Services
+* Taste questionnaire
+* Mood
+* Kind of night
+* Tonight's ten
+* Recommendation hero/results
+* Title details
+* Provider chooser
+
+Television settings should remain minimal and remote-friendly.
+
+---
+
+# 40. Responsive philosophy
+
+Do not merely shrink the desktop interface.
+
+## Smartphone
+
+Reduce detail.
+
+Stack.
+
+Reveal secondary evidence progressively.
+
+---
+
+## Laptop
+
+Expand whitespace first.
+
+Expand information second.
+
+---
+
+## Television
+
+Reduce simultaneous decisions.
+
+Increase scale.
+
+Strengthen focus.
+
+Favor horizontal spatial relationships.
+
+---
+
+# 41. Compact-card rule
+
+When available room decreases:
+
+**remove secondary detail rather than shrinking every element proportionally.**
+
+Example:
+
+Large card:
+
+* lane;
+* title;
+* rationale;
+* match;
+* provider.
+
+Compact card:
+
+* lane;
+* title;
+* provider.
+
+Do not reduce all text to illegibly small sizes.
+
+---
+
+# 42. Home-page hierarchy
+
+Preferred priority across all platforms:
+
+1. brand;
+2. tonight's question or hero recommendation;
+3. primary action;
+4. Tonight's ten;
+5. recommendation rationale;
+6. availability;
+7. Continue watching;
+8. Your services;
+9. settings/utility.
+
+---
+
+# 43. What should feel premium
+
+Premium should come from:
+
+* typography;
+* edit quality;
+* spacing;
+* image treatment;
+* restraint;
+* focus;
+* copy.
+
+Not from:
+
+* shiny gold;
+* glass;
+* glowing edges;
+* metallic gradients;
+* excessive shadow;
+* animation.
+
+---
+
+# 44. Resolved inconsistencies
+
+## Logo implementation
+
+**Resolved direction:** use the gestural copper W as the canonical mark.
+
+---
+
+## Accent families
+
+**Resolved direction:** unify around:
+
+* `#A87945`
+* `#78502F`
+* `#C09259`
+
+Account, web, laptop, and TV should no longer maintain visibly different orange/gold families.
+
+---
+
+## Gold primary action
+
+**Resolved direction:** replace with warm ivory.
+
+---
+
+## Television metallic gradient
+
+**Resolved direction:** remove as a critical primary-action treatment.
+
+Explicit sRGB remains mandatory.
+
+---
+
+## TV neutral cleanup
+
+**Resolved direction:** remove legacy plum values and return panels to warm-neutral charcoal.
+
+---
+
+## Mobile micro-type
+
+**Resolved direction:** increase minimum interface sizes.
+
+---
+
+# 45. Still-open decisions
+
+The following items still deserve owner approval or testing.
+
+## Display font consistency
+
+Current serif stacks can vary noticeably between:
+
+* iOS;
+* Windows;
+* macOS;
+* Fire TV;
+* Android TV.
+
+Decision needed:
+
+* continue relying on high-quality system serif fallbacks;
+* or license/embed a consistent display family.
+
+---
+
+## Recommendation card aspect ratio
+
+The ideal card format may differ by platform:
+
+* portrait-forward smartphone;
+* mixed laptop;
+* landscape-forward television.
+
+This should be usability tested.
+
+---
+
+## Service branding
+
+Determine how much official provider color is required for quick recognition versus how strongly it disrupts the product palette.
+
+Default recommendation: brand logos may retain approved colors inside restrained neutral containers.
+
+---
+
+## Television header density
+
+Test whether profile/service status should remain persistently visible or collapse after interaction.
+
+---
+
+# 46. Non-negotiables
+
+Preserve:
+
+* the finite ten-pick model;
+* editorial serif/sans hierarchy;
+* private, non-feed behavior;
+* clear provider distinctions;
+* rental versus included distinctions;
+* verified-versus-unverified deep-link honesty;
+* obvious D-pad focus;
+* television safe-area handling;
+* canonical gestural W;
+* explicit sRGB TV-critical colors;
+* semantic controls;
+* reduced-motion support;
+* no third-party tracking introduced through design revisions.
+
+---
+
+# 47. Shared token payload
 
 ```json
 {
@@ -398,66 +1763,94 @@ These are observations, not automatic instructions to change them.
     "name": "What to Watch",
     "wordmark": "WHAT TO WATCH",
     "tagline": "Ten considered picks. One good night.",
-    "personality": ["editorial", "cinematic", "warm", "quiet", "intelligent", "selective"]
+    "personality": [
+      "editorial",
+      "cinematic",
+      "warm",
+      "quiet",
+      "intelligent",
+      "selective"
+    ]
   },
-  "web": {
-    "colors": {
-      "ink": "#090A0B",
-      "inkSoft": "#111315",
-      "panel": "#151719",
-      "panelRaised": "#1B1E20",
-      "paper": "#F0ECE3",
-      "muted": "#9C9C96",
-      "mutedBright": "#B9B8B0",
-      "accent": "#D6AA63",
-      "accentDeep": "#A87A39",
-      "accentInk": "#16110B",
-      "success": "#8BA88F",
-      "danger": "#D78A83"
+  "colors": {
+    "ink": "#080807",
+    "inkSoft": "#10100F",
+    "panel": "#181816",
+    "panelRaised": "#22221F",
+    "paper": "#F2ECE2",
+    "muted": "#AAA399",
+    "mutedBright": "#C9C1B5",
+    "action": "#E7DED0",
+    "actionHover": "#F1E8D9",
+    "actionInk": "#171512",
+    "copper": "#A87945",
+    "copperDeep": "#78502F",
+    "focus": "#C09259",
+    "success": "#8BA88F",
+    "danger": "#D78A83"
+  },
+  "typography": {
+    "body": "Manrope, Avenir Next, Helvetica, Arial, sans-serif",
+    "display": "Iowan Old Style, Palatino Linotype, Book Antiqua, Georgia, serif"
+  },
+  "radiiPx": {
+    "small": 10,
+    "medium": 16,
+    "large": 24
+  },
+  "interaction": {
+    "phoneMinTargetPx": 44,
+    "laptopMinTargetPx": 42,
+    "tvMinTargetPx": 64,
+    "tvFocusWidthPx": 6,
+    "tvFocusOffsetPx": 5,
+    "tvFocusScale": 1.035
+  },
+  "platforms": {
+    "smartphone": {
+      "interaction": "touch",
+      "layout": "vertical editorial"
     },
-    "radiiPx": { "small": 10, "medium": 16, "large": 26 },
-    "fonts": {
-      "body": "Manrope, Avenir Next, Helvetica, Arial, sans-serif",
-      "display": "Iowan Old Style, Palatino Linotype, Book Antiqua, Georgia, serif"
+    "laptop": {
+      "interaction": "pointer + keyboard",
+      "layout": "wide editorial"
+    },
+    "television": {
+      "interaction": "d-pad + select + back",
+      "layout": "16:9 distant-view editorial",
+      "verifiedCanvas": "1920x1080"
     }
-  },
-  "tv": {
-    "background": "linear-gradient(90deg, #030303 0%, #111111 48%, #3B3B3B 100%)",
-    "panel": "#1D1D1D",
-    "paper": "#FFF8E9",
-    "muted": "#CEC6B8",
-    "goldFallback": "#C99745",
-    "goldGradient": "linear-gradient(90deg, #86531E 0%, #D6A955 44%, #F0D084 57%, #A96727 100%)",
-    "focus": "6px solid #D2A34F with 5px offset",
-    "minimumTargetPx": 64,
-    "verifiedCanvas": "1920x1080"
   },
   "avoid": [
     "infinite feeds",
     "chatbot visual language",
+    "large gold surfaces",
+    "metallic primary buttons",
     "neon yellow",
     "streaming-service clone UI",
     "cinema clichés",
-    "color-only focus or selection",
+    "color-only focus",
     "unverified playback claims"
   ]
 }
 ```
 
-## 19. Suggested revision prompt
+---
 
-Copy this document and append:
+# 48. Revision note
 
-```text
-Revise this style book for the following objective: [OBJECTIVE].
+The redesign should not look like a dramatically different brand.
 
-Return:
-1. the proposed design direction in one paragraph;
-2. a token-level before/after table;
-3. component-level changes by platform;
-4. accessibility and Fire TV rendering risks;
-5. which current inconsistencies the proposal resolves;
-6. a list of decisions that still require owner approval.
+It should feel like the existing product has become more certain of what it is.
 
-Do not write implementation code yet. Preserve every non-negotiable unless you explicitly identify and justify an exception.
-```
+The defining visual shift is:
+
+> **Less streaming storefront. More personal programming desk.**
+
+And the defining color shift is:
+
+> **Ivory carries action. Copper carries identity.**
+
+The user should notice the recommendation before the interface, the title before the algorithm, and the product before the streaming provider.
+
+That is the target.

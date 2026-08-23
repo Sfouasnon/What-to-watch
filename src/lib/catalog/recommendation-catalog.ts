@@ -4,10 +4,13 @@ import type { CastContextPerson } from "../recommendation/types";
 
 export type AppCatalogTitle = {
   id: string;
+  tmdbId: number;
   name: string;
   year: number;
+  releaseDate: string | null;
   kind: "Movie" | "Series" | "Stand-up";
   runtime: string;
+  seasonCount?: number;
   poster: string;
   backdrop: string;
   synopsis: string;
@@ -389,10 +392,15 @@ export function buildAppCatalogTitle(
 
   return {
     id: `tmdb:${title.tmdb_media_type}:${title.tmdb_id}`,
+    tmdbId: title.tmdb_id,
     name: displayTitleName(title.name),
     year: titleYear,
+    releaseDate: title.release_date,
     kind: contentKind(title, classification),
     runtime: runtimeLabel(title, sampleTitle),
+    ...(title.content_type === "tv_series" && title.season_count !== null
+      ? { seasonCount: title.season_count }
+      : {}),
     poster: artwork,
     backdrop,
     synopsis: title.overview ?? sampleTitle?.overview ?? "No synopsis available yet.",

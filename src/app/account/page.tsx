@@ -45,7 +45,7 @@ export default function AccountPage() {
     <main className={styles.page}>
       <section className={styles.card}>
         <Link className={styles.back} href="/">← Back to tonight</Link>
-        <div className={styles.mark}>W</div>
+        <div className={styles.mark} aria-hidden="true">W</div>
         <p className={styles.kicker}>ACCOUNT</p>
         <h1>{user ? "You’re signed in." : "Keep your taste with you."}</h1>
         {!ready ? <p className={styles.muted}>Checking your session…</p> : null}

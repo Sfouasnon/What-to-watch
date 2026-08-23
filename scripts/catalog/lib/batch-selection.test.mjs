@@ -54,6 +54,20 @@ describe("catalog batch selection", () => {
     expect(first.some((title) => title.tmdbId === 12)).toBe(false);
   });
 
+  it("enforces a bounded release-date window", () => {
+    const pool = [
+      candidate(1, "movie", { releaseDate: "2019-12-31", year: 2019 }),
+      candidate(2, "movie", { releaseDate: "2020-01-01", year: 2020 }),
+      candidate(3, "movie", { releaseDate: "2026-08-22", year: 2026 }),
+      candidate(4, "movie", { releaseDate: "2026-08-23", year: 2026 }),
+    ];
+    const selected = selectDiversifiedCandidates(pool, 2, {
+      minimumReleaseDate: "2020-01-01",
+      maximumReleaseDate: "2026-08-22",
+    });
+    expect(selected.map((title) => title.tmdbId).sort()).toEqual([2, 3]);
+  });
+
   it("builds balanced, unique batches and validates the manifest", () => {
     const movies = Array.from({ length: 9 }, (_, index) => candidate(index + 1, "movie"));
     const television = Array.from({ length: 9 }, (_, index) => candidate(index + 101, "tv"));

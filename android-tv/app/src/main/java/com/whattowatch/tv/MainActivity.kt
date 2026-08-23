@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
@@ -102,6 +103,12 @@ class MainActivity : ComponentActivity() {
             settings.allowFileAccess = false
             settings.allowContentAccess = false
             settings.mediaPlaybackRequiresUserGesture = true
+            settings.cacheMode = WebSettings.LOAD_NO_CACHE
+            settings.useWideViewPort = true
+            settings.loadWithOverviewMode = true
+            settings.textZoom = 100
+            settings.builtInZoomControls = false
+            settings.displayZoomControls = false
             webChromeClient = WebChromeClient()
             webViewClient = TrustedAppWebViewClient()
             addJavascriptInterface(StreamerBridge(this@MainActivity), "WhatToWatchNative")
@@ -112,8 +119,13 @@ class MainActivity : ComponentActivity() {
         }
 
         setContentView(webView)
-        if (savedInstanceState == null) webView.loadUrl(BuildConfig.WEB_APP_URL)
-        else webView.restoreState(savedInstanceState)
+        webView.clearCache(true)
+        val launchUrl = Uri.parse(BuildConfig.WEB_APP_URL)
+            .buildUpon()
+            .appendQueryParameter("nativeVersion", BuildConfig.VERSION_CODE.toString())
+            .build()
+            .toString()
+        webView.loadUrl(launchUrl)
         webView.requestFocus()
 
         if (BuildConfig.DEBUG) {

@@ -35,16 +35,26 @@ function integerArgument(name, fallback, { min, max }) {
   return value;
 }
 
+function dateArgument(name, fallback) {
+  const value = argument(name) ?? fallback;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || Number.isNaN(Date.parse(`${value}T00:00:00Z`))) {
+    throw new Error(`--${name} must be a valid date in YYYY-MM-DD format.`);
+  }
+  return value;
+}
+
 const TOTAL = integerArgument("total", 900, { min: 20, max: 5000 });
 const BATCH_SIZE = integerArgument("batch-size", 100, { min: 10, max: 500 });
 const MOVIE_PERCENT = integerArgument("movie-percent", 50, { min: 0, max: 100 });
 const POOL_PAGES = integerArgument("pool-pages", 30, { min: 1, max: 100 });
 const MINIMUM_VOTES = integerArgument("min-votes", 250, { min: 0, max: 1000000 });
+const FROM_DATE = dateArgument("from-date", "1900-01-01");
 const RUN_ID = argument("run-id") ?? `catalog-${TOTAL}-${new Date().toISOString().slice(0, 10).replaceAll("-", "")}`;
 const OUTPUT = path.resolve(argument("output") ?? `curation/batches/${RUN_ID}.json`);
 const movieTarget = Math.round(TOTAL * MOVIE_PERCENT / 100);
 const tvTarget = TOTAL - movieTarget;
 const today = new Date().toISOString().slice(0, 10);
+if (FROM_DATE > today) throw new Error("--from-date cannot be later than today.");
 
 const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
@@ -84,7 +94,9 @@ async function discoverPool(mediaType, sortBy) {
   const pages = Array.from({ length: POOL_PAGES }, (_, index) => index + 1);
   const responses = await mapConcurrent(pages, 4, (page) => tmdb(`/discover/${mediaType}`, {
     include_adult: false,
-    ...(mediaType === "movie" ? { include_video: false, "primary_release_date.lte": today } : { include_null_first_air_dates: false, "first_air_date.lte": today }),
+    ...(mediaType === "movie"
+      ? { include_video: false, "primary_release_date.gte": FROM_DATE, "primary_release_date.lte": today }
+      : { include_null_first_air_dates: false, "first_air_date.gte": FROM_DATE, "first_air_date.lte": today }),
     language: "en-US",
     page,
     sort_by: sortBy,
@@ -119,8 +131,14 @@ const excludedIdentities = new Set([
 
 const moviePool = mergeCandidatePools([movieVotePool, moviePopularityPool]);
 const tvPool = mergeCandidatePools([tvVotePool, tvPopularityPool]);
-const movies = selectDiversifiedCandidates(moviePool, movieTarget, { excludedIdentities, minimumVotes: MINIMUM_VOTES });
-const television = selectDiversifiedCandidates(tvPool, tvTarget, { excludedIdentities, minimumVotes: MINIMUM_VOTES });
+const selectionOptions = {
+  excludedIdentities,
+  minimumVotes: MINIMUM_VOTES,
+  minimumReleaseDate: FROM_DATE,
+  maximumReleaseDate: today,
+};
+const movies = selectDiversifiedCandidates(moviePool, movieTarget, selectionOptions);
+const television = selectDiversifiedCandidates(tvPool, tvTarget, selectionOptions);
 const batches = buildHydrationBatches(movies, television, BATCH_SIZE);
 
 const manifest = {
@@ -135,6 +153,7 @@ const manifest = {
     poolPagesPerSort: POOL_PAGES,
     minimumVotes: MINIMUM_VOTES,
     moviePercent: MOVIE_PERCENT,
+    minimumReleaseDate: FROM_DATE,
     maximumReleaseDate: today,
     requiredEvidence: ["overview>=40", "release_date", "poster_path", "genre_ids"],
     excludedExistingIdentityCount: excludedIdentities.size,
