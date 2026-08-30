@@ -53,3 +53,7 @@ next-env.d.ts
 /src/data/preview-catalog-*.json
 /scripts/catalog/build-preview-catalog.mjs
 /.firetv-captures/
+
+# Local Android/Amazon SDK payloads
+/platform-tools/
+/com.amazon.tv.developer.sdk.content/
